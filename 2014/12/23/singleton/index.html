@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="设计模式之单件。确保一个类只有一个实例，并只提供一个全局访问点。适用性、结构与示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Singleton">
+<meta property="og:url" content="http://conglang.github.io/2014/12/23/singleton/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="设计模式之单件。确保一个类只有一个实例，并只提供一个全局访问点。适用性、结构与示例代码。">
+<meta property="og:image" content="http://conglang.github.io/img/singleton_uml.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:43:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Singleton">
+<meta name="twitter:description" content="设计模式之单件。确保一个类只有一个实例，并只提供一个全局访问点。适用性、结构与示例代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/singleton_uml.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Singleton</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2014/12/24/adapter/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2014/12/22/brute-force/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/23/singleton/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/23/singleton/&text=Singleton"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/23/singleton/&is_video=false&description=Singleton"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Singleton&body=Check out this article: http://conglang.github.io/2014/12/23/singleton/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/23/singleton/&name=Singleton&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单件"><span class="toc-number">1.</span> <span class="toc-text"> 单件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">3.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">4.</span> <span class="toc-text"> 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">5.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Singleton
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2014-12-23T13:06:50.000Z" itemprop="datePublished">2014-12-23</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Design-Pattern/">Design Pattern</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="单件"><a class="markdownIt-Anchor" href="#单件"></a> 单件</h2>
+<blockquote>
+<p>确保一个类只有一个实例，并只提供一个全局访问点。</p>
+</blockquote>
+<h2 id="适用性"><a class="markdownIt-Anchor" href="#适用性"></a> 适用性</h2>
+<ul>
+<li>当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时。</li>
+<li>当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。</li>
+</ul>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/singleton_uml.jpg" alt="Singleton Class"></p>
+<blockquote>
+<p><strong>Singleton</strong> - 定义一个Instance操作，允许客户访问它的唯一实例。Instance是一个类操作（即C++中的一个静态成员函数）。可能负责创建它自己的唯一实例。</p>
+<blockquote>
+<p>协作：<br>
+客户只能通过Singleton的Instance操作访问一个Singleton的实例。</p>
+</blockquote>
+</blockquote>
+<h2 id="示例"><a class="markdownIt-Anchor" href="#示例"></a> 示例</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 《剑指Offer》上提到的多线程下正常的实现</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Singleton</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">static</span> Singleton* <span class="title">get_instance</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">static</span> Singleton m_instance;</span><br><span class="line">		<span class="keyword">return</span> &amp;m_instance;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_test</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> ++m_test;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	Singleton() &#123;m_test = <span class="number">0</span>;&#125;</span><br><span class="line">	<span class="keyword">int</span> m_test;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Singleton* singleton = Singleton::get_instance();</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;singleton-&gt;get_test()&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	singleton = Singleton::get_instance();</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;singleton-&gt;get_test()&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="相关模式"><a class="markdownIt-Anchor" href="#相关模式"></a> 相关模式</h2>
+<ul>
+<li>很多模式可以使用Singleton实现。如Abstract Factory/Builder/Prototype。</li>
+</ul>
+<p>[1] 设计模式：可复用面向对象软件的基础<br>
+[2] Head First 设计模式<br>
+[3] 剑指Offer</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单件"><span class="toc-number">1.</span> <span class="toc-text"> 单件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">3.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">4.</span> <span class="toc-text"> 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">5.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/23/singleton/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/23/singleton/&text=Singleton"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/23/singleton/&is_video=false&description=Singleton"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Singleton&body=Check out this article: http://conglang.github.io/2014/12/23/singleton/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/23/singleton/&title=Singleton"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/23/singleton/&name=Singleton&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Visual Studio 2010里进行调试的技巧以及一些好用的快捷键。工欲善其事，必先利其器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Visual Studio Debug and Shortcuts">
+<meta property="og:url" content="http://conglang.github.io/2015/02/05/vs-shortcut/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="Visual Studio 2010里进行调试的技巧以及一些好用的快捷键。工欲善其事，必先利其器。">
+<meta property="og:updated_time" content="2018-07-03T02:04:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Visual Studio Debug and Shortcuts">
+<meta name="twitter:description" content="Visual Studio 2010里进行调试的技巧以及一些好用的快捷键。工欲善其事，必先利其器。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Visual Studio Debug and Shortcuts</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/02/06/python-tools-for-visual-studio/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/02/04/uml_class_sequence/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/02/05/vs-shortcut/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/02/05/vs-shortcut/&text=Visual Studio Debug and Shortcuts"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/02/05/vs-shortcut/&is_video=false&description=Visual Studio Debug and Shortcuts"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Visual Studio Debug and Shortcuts&body=Check out this article: http://conglang.github.io/2015/02/05/vs-shortcut/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/02/05/vs-shortcut/&name=Visual Studio Debug and Shortcuts&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#快捷键"><span class="toc-number">1.</span> <span class="toc-text"> 快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">2.</span> <span class="toc-text"> 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用调试窗口"><span class="toc-number">2.1.</span> <span class="toc-text"> 使用调试窗口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#断点调试"><span class="toc-number">2.2.</span> <span class="toc-text"> 断点调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#断点"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 断点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪点"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 跟踪点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#执行点"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 执行点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#edit-and-continue功能"><span class="toc-number">2.2.4.</span> <span class="toc-text"> Edit and Continue功能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据提示"><span class="toc-number">2.3.</span> <span class="toc-text"> 数据提示</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Visual Studio Debug and Shortcuts
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-02-05T13:08:07.000Z" itemprop="datePublished">2015-02-05</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Visual-Studio/">Visual Studio</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl+Tab</td>
+<td>在所有打开的窗口之间移动切换</td>
+</tr>
+<tr>
+<td>Shift+Alt+Enter</td>
+<td>进入或退出编辑窗口全屏模式</td>
+</tr>
+<tr>
+<td>Ctrl±</td>
+<td>在项目中已修改的元素间向后切换</td>
+</tr>
+<tr>
+<td>Ctrl+Shift±</td>
+<td>在项目中已修改的元素间向前切换</td>
+</tr>
+<tr>
+<td>Alt+鼠标左键</td>
+<td>选择文本块</td>
+</tr>
+<tr>
+<td>Shift+Alt+Arrow</td>
+<td>选中代码的一个垂直部分(比如修改一个变量声明中的前缀)</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+V</td>
+<td>遍历剪贴板上的最后20个代码段</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+A</td>
+<td>打开命令窗口，快捷执行vs里的命令</td>
+</tr>
+<tr>
+<td>Ctrl+Alt+I</td>
+<td>打开即时窗口，在编译时可做计算</td>
+</tr>
+<tr>
+<td>Ctrl+,Ctrl+D</td>
+<td>打开代码定义窗口，双击某函数可以看到其定义</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+F</td>
+<td>快速查找</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+H</td>
+<td>快速替换，如果用正则表达式会很方便</td>
+</tr>
+<tr>
+<td>Ctrl+D</td>
+<td>输入的内容前面加上前缀&gt;，就相当于命令窗口</td>
+</tr>
+<tr>
+<td>Ctrl+K,Ctrl+K</td>
+<td>添加/删除书签</td>
+</tr>
+<tr>
+<td>Ctrl+K,Ctrl+W</td>
+<td>显示书签管理窗口</td>
+</tr>
+<tr>
+<td>Window-&gt;Split</td>
+<td>把代码编辑器窗口分成两部分，同时显示同一个文件的不同部分。</td>
+</tr>
+<tr>
+<td>Architecture-&gt;New Diagram</td>
+<td>可以绘制UML</td>
+</tr>
+<tr>
+<td>右键选择&quot;查看调用层次结构&quot;</td>
+<td>处理不熟悉的项目或重构项目时很有用</td>
+</tr>
+</tbody>
+</table>
+<p>对.sln文件进行一个快速编辑，用如下代码替换文件的前两行，就能用vs2008打开vs2010的项目。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Visual Studio Solution File, Format Version 10.00</span><br><span class="line"># Visual Studio 2008</span><br></pre></td></tr></table></figure>
+<h2 id="调试"><a class="markdownIt-Anchor" href="#调试"></a> 调试</h2>
+<h3 id="使用调试窗口"><a class="markdownIt-Anchor" href="#使用调试窗口"></a> 使用调试窗口</h3>
+<p>这些窗口均可在此菜单路径下打开：Debug-&gt;Windows。</p>
+<ul>
+<li><strong>Breakpoints窗口</strong>。该窗口显示应用程序中已经设置的所有断点信息。方便定位、禁用和删除断点。</li>
+<li><strong>Output窗口</strong>。可用作标准输出。</li>
+<li><strong>监视窗口</strong>。<strong>Quick Watch</strong>，在变量上右键选择快速监视，显示特定时刻的变量值。<strong>Watch1-4窗口</strong>，在用户单步调试代码时监视变量的值。<strong>Autos窗口</strong>，包含了当前行、前一行和后一行中的变量。<strong>Locals窗口</strong>包含了当前方法中使用的所有变量。</li>
+<li><strong>代码执行窗口</strong>。<strong>Call Stack窗口</strong>显示调用堆栈，跟踪执行路径，右键可以设置断点或选择要显示的信息。<strong>Threads窗口</strong>列出应用程序的所有活跃线程。<strong>Modules窗口</strong>显示了当前执行的程序所引用的程序集列表。<strong>Processes窗口</strong>用于多进程端对端调试。</li>
+<li><strong>内存窗口</strong>。<strong>Memory1-4窗口</strong>用于查看特定位置处的内存数据。<strong>Disasembly窗口</strong>查看反汇编。<strong>Registers窗口</strong>查看寄存器。</li>
+</ul>
+<h3 id="断点调试"><a class="markdownIt-Anchor" href="#断点调试"></a> 断点调试</h3>
+<h4 id="断点"><a class="markdownIt-Anchor" href="#断点"></a> 断点</h4>
+<p>**断点(breakpoint)**可以在指定的位置暂停或者中断应用程序的执行。当暂停的程序处于中断模式时，VS会显示各种调试窗口。</p>
+<p>设置断点</p>
+<blockquote>
+<p>三种断点：<br>
+<strong>普通断点</strong>(F9/左边栏点击/右键菜单/Debug菜单)，<strong>函数断点</strong>(Debug-&gt;New Breakpoint-&gt;Break at Function，随后指定要设置断点的函数名称)，<strong>地址断点</strong>(在Call Stack窗口，中断模式时添加断点)。</p>
+</blockquote>
+<p>为断点指定条件</p>
+<blockquote>
+<p>1.<strong>条件</strong>。右击断点设置。通过布尔表达式指定启用断点的条件，为false的话程序就会跳过断点继续执行。或设置条件发生改变时中断应用程序。红点和白色的十字。<br>
+2.<strong>计数</strong>。断点经历一定数目的迭代以后再启用。计数器的条件可以是：Always, Is equal to, Multiple of, Is greater than or equal to。</p>
+</blockquote>
+<p>过滤</p>
+<blockquote>
+<p>主要用于在多线程应用程序上把断点限制在一个特定的线程上。</p>
+</blockquote>
+<p>断点操作</p>
+<blockquote>
+<p>删除断点、禁用断点、移动断点、给断点加标签(这样可以在Breakpoints窗口对它们进行批处理操作)、导入和导出断点(可以备份和恢复断点，在开发人员之间共享。在Breakpoints窗口点击工具栏上的&quot;导出满足当前条件的所有断点&quot;)。</p>
+</blockquote>
+<h4 id="跟踪点"><a class="markdownIt-Anchor" href="#跟踪点"></a> 跟踪点</h4>
+<p>**跟踪点(tracepoint)**与断点不同，在遇到跟踪点时，跟踪点会触发附加的事件。在调试程序时，可以动态地调整跟踪点而不影响代码的功能。</p>
+<p>创建跟踪点</p>
+<blockquote>
+<p>在一个已有断点上右键菜单中选择When Hit(命中条件)，可以向控制台窗口写入信息或者运行宏命令。红色的菱形。</p>
+</blockquote>
+<p>跟踪点操作</p>
+<blockquote>
+<p>向控制台窗口打印信息或者运行一个宏。<br>
+输出消息默认是<code>Function: $FUNCTION, Thread: $TID $TNAME</code>，除了对话框提示之外还有两个关键字：<code>$FILEPOS</code>指定了当前文件的位置；<code>$TICKS</code>用作关联时间指示器。<br>
+宏是用VB编写的。如果在VS中重复执行同一组动作，宏就很好用。View-&gt;Other Windows-&gt;Macro Explorer中可以选择和编辑宏。除了自己写VB之外，还可以自动记录，Tools-&gt;Macros-&gt;Record Temporary Macro(Ctrl+Shift+R)，会立即启动记录器，记录用户在VS中执行的所有动作。</p>
+</blockquote>
+<h4 id="执行点"><a class="markdownIt-Anchor" href="#执行点"></a> 执行点</h4>
+<p>正在执行的代码行。黄色箭头。</p>
+<p>代码的执行</p>
+<blockquote>
+<p>1.Stepping Over(F10)。执行当前焦点所在的行并前进到当前代码块的下一行。如果到达了代码段的末尾，就返回调用块中。<br>
+2.Stepping in(F11)。如果是一个复杂的行，会执行所有的用户代码，进入被调用的子代码段。<br>
+3.Stepping Out(Shift+F11)。如果不小心进入一个很长的方法时，此功能将光标移动到调用当前方法的位置。</p>
+</blockquote>
+<p>移动执行点</p>
+<blockquote>
+<p>如果不小心跳过了关心的代码，拖动黄色箭头。小心使用此功能，可能导致无法预料的行为和变量值。</p>
+</blockquote>
+<h4 id="edit-and-continue功能"><a class="markdownIt-Anchor" href="#edit-and-continue功能"></a> Edit and Continue功能</h4>
+<p>允许用户在执行过程中对程序进行修改。只要暂停程序，就可以更改代码，再恢复执行。新代码或者修改以后的代码会在程序中动态添加，所作的修改会立刻生效。</p>
+<p>原始编辑</p>
+<blockquote>
+<p>可以进行的修改存在一些限制。原始编辑是应用程序必须停止并重新构建的代码修改。比如：修改当前或者活动的语句、对全局符号的修改(比如，新的类型和方法，或者修改方法、事件和属性的签名)、对特性的修改。</p>
+</blockquote>
+<p>停止应用修改</p>
+<blockquote>
+<p>VS把修改整合或者应用到正在运行的程序中需要时间，如果希望取消，Debug-&gt;Stop Applying Code Changes。</p>
+</blockquote>
+<h3 id="数据提示"><a class="markdownIt-Anchor" href="#数据提示"></a> 数据提示</h3>
+<p>把光标停放在变量上，就会在数据提示中显示变量的值。<br>
+右击数据提示可以执行很多操作，如复制所显示的值、把变量添加到监视窗口中、编辑简单类型的变量的当前值。<br>
+可以固定数据提示。<br>
+数据提示可以导入和导出到外部的XML文件中。Debug-&gt;Import(Export) DataTips。</p>
+<p>[1] Visual Studio 2010高级编程</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#快捷键"><span class="toc-number">1.</span> <span class="toc-text"> 快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">2.</span> <span class="toc-text"> 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用调试窗口"><span class="toc-number">2.1.</span> <span class="toc-text"> 使用调试窗口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#断点调试"><span class="toc-number">2.2.</span> <span class="toc-text"> 断点调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#断点"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 断点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪点"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 跟踪点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#执行点"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 执行点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#edit-and-continue功能"><span class="toc-number">2.2.4.</span> <span class="toc-text"> Edit and Continue功能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据提示"><span class="toc-number">2.3.</span> <span class="toc-text"> 数据提示</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/02/05/vs-shortcut/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/02/05/vs-shortcut/&text=Visual Studio Debug and Shortcuts"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/02/05/vs-shortcut/&is_video=false&description=Visual Studio Debug and Shortcuts"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Visual Studio Debug and Shortcuts&body=Check out this article: http://conglang.github.io/2015/02/05/vs-shortcut/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/02/05/vs-shortcut/&title=Visual Studio Debug and Shortcuts"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/02/05/vs-shortcut/&name=Visual Studio Debug and Shortcuts&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

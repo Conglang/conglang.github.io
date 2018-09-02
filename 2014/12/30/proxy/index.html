@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="设计模式之代理。适用性、结构与示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proxy">
+<meta property="og:url" content="http://conglang.github.io/2014/12/30/proxy/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="设计模式之代理。适用性、结构与示例代码。">
+<meta property="og:image" content="http://conglang.github.io/img/proxy_class.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/proxy_class2.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/proxy_object.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/remote_proxy.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/virtual_proxy.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:50:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Proxy">
+<meta name="twitter:description" content="设计模式之代理。适用性、结构与示例代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/proxy_class.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Proxy</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2014/12/31/chain-of-responsibility/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2014/12/30/flyweight/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/30/proxy/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/30/proxy/&text=Proxy"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/30/proxy/&is_video=false&description=Proxy"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Proxy&body=Check out this article: http://conglang.github.io/2014/12/30/proxy/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/30/proxy/&name=Proxy&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#代理"><span class="toc-number">1.</span> <span class="toc-text"> 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">3.</span> <span class="toc-text"> 结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#远程代理"><span class="toc-number">3.1.</span> <span class="toc-text"> 远程代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#虚拟代理"><span class="toc-number">3.2.</span> <span class="toc-text"> 虚拟代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">4.</span> <span class="toc-text"> 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#virtual-proxy"><span class="toc-number">4.1.</span> <span class="toc-text"> Virtual Proxy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">5.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Proxy
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2014-12-30T13:10:30.000Z" itemprop="datePublished">2014-12-30</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Design-Pattern/">Design Pattern</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="代理"><a class="markdownIt-Anchor" href="#代理"></a> 代理</h2>
+<blockquote>
+<p>代理模式为另一个对象提供一个替身或占位符以控制对这个对象的访问。被代理的对象可以是远程的对象、创建开销大的对象或需要安全控制的对象。</p>
+</blockquote>
+<h2 id="适用性"><a class="markdownIt-Anchor" href="#适用性"></a> 适用性</h2>
+<ul>
+<li>在需要用比较通用和复杂的对象指针代替简单的指针的时候，使用Proxy模式。下面是一些可以使用Proxy模式常见情况：</li>
+</ul>
+<blockquote>
+<ol>
+<li>远程代理（Remote Proxy）为一个对象在不同的地址空间提供局部代表。</li>
+<li>虚代理（Virtual Proxy）根据需要创建开销很大的对象。</li>
+<li>保护代理（Protection Proxy）控制对原始对象的访问。保护代理用于对象应该有不同的访问权限的时候。</li>
+<li>智能指引（Smart Reference）取代了简单的指针，它在访问对象时执行一些附加操作。典型用途如：对指向实际对象的引用计数，这样当该对象没有引用时，可以自动释放它（Smart Pointers）；当第一次引用一个持久对象时，将它装入内存；在访问一个实际对象前，检查是否已经锁定了它，以确保其他对象不能改变它。</li>
+<li>防火墙代理（Firewall Proxy）控制网络资源的访问，保护主题免于“坏客户”的侵害。</li>
+<li>缓存代理（Caching Proxy）为开销大的运算结果提供暂时存储；它也允许多个客户共享结果，以减少计算或网络延迟。常用于Web服务器代理，以及内容管理与出版系统。</li>
+<li>同步代理（Synchronization Proxy）在多线程的情况下为主题提供安全的访问。</li>
+<li>复杂隐藏代理（Complexity Hiding Proxy）用来隐藏一个类的复杂几何的复杂度，并进行访问控制。有时候也成为外观代理（Facade Proxy），这不难理解。复杂隐藏代理和外观模式是不一样的，因为代理控制访问，而外观模式只提供另一组接口。</li>
+<li>写入时复制代理（Copy-On-Write Proxy）用来控制对象的复制，方法是延迟对象的复制，知道客户真的需要为止。这是虚拟代理的变体。</li>
+</ol>
+</blockquote>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/proxy_class.jpg" alt="Proxy Class"><br>
+<img src="/img/proxy_class2.jpg" alt="Proxy Class2"><br>
+<img src="/img/proxy_object.jpg" alt="Proxy Object"></p>
+<h3 id="远程代理"><a class="markdownIt-Anchor" href="#远程代理"></a> 远程代理</h3>
+<p><img src="/img/remote_proxy.jpg" alt="Remote Proxy"></p>
+<h3 id="虚拟代理"><a class="markdownIt-Anchor" href="#虚拟代理"></a> 虚拟代理</h3>
+<p><img src="/img/virtual_proxy.jpg" alt="Virtual Proxy"></p>
+<blockquote>
+<p><strong>Proxy</strong></p>
+<ul>
+<li>保存一个引用使得代理可以访问实体。若RealSubject和Subject的接口相同，Proxy会引用Subject。</li>
+<li>提供一个与Subject的接口相同的接口，这样代理就可以用来替代实体。</li>
+<li>控制对实体的存取，并可能负责创建和删除它。</li>
+<li>其他功能依赖于代理的类型：</li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><em>Remote Proxy</em>负责对请求及其参数进行编码，并向不同地址空间中的实体发送已编码的请求。<br>
+<em>Virtual Proxy</em>可以缓存实体的附加信息，以便延迟对它的访问。如ImageProxy缓存图像实体的尺寸。<br>
+<em>Protection Proxy</em>检查调用者是否具有实现一个请求所必须的访问权限。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>Subject</strong> - 定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy。<br>
+<strong>RealSubject</strong> - 定义Proxy所代表的实体。</p>
+<blockquote>
+<p>协作：<br>
+代理根据其种类，在适当的时候向RealSubject转发请求。</p>
+</blockquote>
+</blockquote>
+<h2 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h2>
+<h3 id="virtual-proxy"><a class="markdownIt-Anchor" href="#virtual-proxy"></a> Virtual Proxy</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Example of Virtual Proxy</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Subject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">virtual</span> <span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">request</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> RealSubject : <span class="keyword">public</span> Subject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	RealSubject():Subject()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"RealSubject Create Once"</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">virtual</span> <span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">request</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">std</span>::<span class="built_in">string</span>(<span class="string">"I'm Real!"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Proxy : <span class="keyword">public</span> Subject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Proxy(): Subject(), m_summary(<span class="string">""</span>), m_real(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">	<span class="keyword">virtual</span> <span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">request</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_summary.empty())</span><br><span class="line">		&#123;</span><br><span class="line">			m_summary = get_real_subject()-&gt;request();	<span class="comment">// creat RealSubject only when needed.</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> m_summary;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">RealSubject* <span class="title">get_real_subject</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!m_real) m_real = <span class="keyword">new</span> RealSubject();</span><br><span class="line">		<span class="keyword">return</span> m_real;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	RealSubject* m_real;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_summary;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Client</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">print_summary</span><span class="params">(Subject* s)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;s-&gt;request()&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Client s;</span><br><span class="line">	Proxy p;</span><br><span class="line">	s.print_summary(&amp;p);</span><br><span class="line">	s.print_summary(&amp;p);</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="相关模式"><a class="markdownIt-Anchor" href="#相关模式"></a> 相关模式</h2>
+<ul>
+<li>Adapter：适配器Adapter为它所适配的对象提供了一个不同的接口。相反，代理提供了与它的实体相同的接口。然而，用于访问保护的代理可能会拒绝执行实体会执行的操作，因此，它的接口实际上可能只是实体接口的一个子集。</li>
+<li>Decorator：尽管decorator的实现部分与代理相似，但decorator的目的不一样。Decorator为对象添加一个或多个功能，而代理则控制对对象的访问。</li>
+</ul>
+<p>[1] 设计模式：可复用面向对象软件的基础<br>
+[2] Head First 设计模式</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#代理"><span class="toc-number">1.</span> <span class="toc-text"> 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">3.</span> <span class="toc-text"> 结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#远程代理"><span class="toc-number">3.1.</span> <span class="toc-text"> 远程代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#虚拟代理"><span class="toc-number">3.2.</span> <span class="toc-text"> 虚拟代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">4.</span> <span class="toc-text"> 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#virtual-proxy"><span class="toc-number">4.1.</span> <span class="toc-text"> Virtual Proxy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">5.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/30/proxy/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/30/proxy/&text=Proxy"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/30/proxy/&is_video=false&description=Proxy"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Proxy&body=Check out this article: http://conglang.github.io/2014/12/30/proxy/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/30/proxy/&title=Proxy"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/30/proxy/&name=Proxy&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

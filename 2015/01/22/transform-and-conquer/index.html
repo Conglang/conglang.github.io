@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="算法之变治法。有三类：实例化简、改变表现、问题化简。介绍了使用这些技巧的一些算法和思想，如预排序、高斯消去法(经典高斯消去法、LU分解及其他应用、计算矩阵的逆)、平衡查找树(AVL树、2-3树)、堆和堆排序、霍纳法则和二进制幂以及问题化简思想的几个典型问题(求最小公倍数、计算图中的路径数量、优化问题的化简、线性规划、简化为图)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transform and Conquer">
+<meta property="og:url" content="http://conglang.github.io/2015/01/22/transform-and-conquer/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="算法之变治法。有三类：实例化简、改变表现、问题化简。介绍了使用这些技巧的一些算法和思想，如预排序、高斯消去法(经典高斯消去法、LU分解及其他应用、计算矩阵的逆)、平衡查找树(AVL树、2-3树)、堆和堆排序、霍纳法则和二进制幂以及问题化简思想的几个典型问题(求最小公倍数、计算图中的路径数量、优化问题的化简、线性规划、简化为图)。">
+<meta property="og:image" content="http://conglang.github.io/img/shortest_path_across_all_points.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/shortest_path_across_all_points_solution.png">
+<meta property="og:image" content="http://conglang.github.io/img/gaussian_elimination.png">
+<meta property="og:image" content="http://conglang.github.io/img/gaussian_elimination_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/gauss_lu_ma.png">
+<meta property="og:image" content="http://conglang.github.io/img/gauss_lu_ml.png">
+<meta property="og:image" content="http://conglang.github.io/img/gauss_lu_mu.png">
+<meta property="og:image" content="http://conglang.github.io/img/gauss_inverse_matrix.png">
+<meta property="og:image" content="http://conglang.github.io/img/gauss_jordan_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/lights_out_matrix.png">
+<meta property="og:image" content="http://conglang.github.io/img/lights_out_formula.png">
+<meta property="og:image" content="http://conglang.github.io/img/lights_out_2_2_formula.png">
+<meta property="og:image" content="http://conglang.github.io/img/2-3_tree_nodes_type.png">
+<meta property="og:image" content="http://conglang.github.io/img/2-3_tree_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/construct_heap.png">
+<meta property="og:image" content="http://conglang.github.io/img/delete_root_from_heap.png">
+<meta property="og:image" content="http://conglang.github.io/img/polynomial.png">
+<meta property="og:image" content="http://conglang.github.io/img/horner_formular.png">
+<meta property="og:image" content="http://conglang.github.io/img/horner_example_formular.png">
+<meta property="og:image" content="http://conglang.github.io/img/horner_example_table.png">
+<meta property="og:image" content="http://conglang.github.io/img/pow_a_n_left_to_right.png">
+<meta property="og:image" content="http://conglang.github.io/img/left_right_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/pow_a_n_right_to_left.png">
+<meta property="og:image" content="http://conglang.github.io/img/right_left_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/lcm_formula.png">
+<meta property="og:image" content="http://conglang.github.io/img/graph_path_matrix.png">
+<meta property="og:image" content="http://conglang.github.io/img/linear_programming.png">
+<meta property="og:image" content="http://conglang.github.io/img/state_space_of_peasant_puzzle.png">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Transform and Conquer">
+<meta name="twitter:description" content="算法之变治法。有三类：实例化简、改变表现、问题化简。介绍了使用这些技巧的一些算法和思想，如预排序、高斯消去法(经典高斯消去法、LU分解及其他应用、计算矩阵的逆)、平衡查找树(AVL树、2-3树)、堆和堆排序、霍纳法则和二进制幂以及问题化简思想的几个典型问题(求最小公倍数、计算图中的路径数量、优化问题的化简、线性规划、简化为图)。">
+<meta name="twitter:image" content="http://conglang.github.io/img/shortest_path_across_all_points.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Transform and Conquer</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/25/space-and-time-trade-offs/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/16/devide-and-conquer/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/22/transform-and-conquer/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&text=Transform and Conquer"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&is_video=false&description=Transform and Conquer"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Transform and Conquer&body=Check out this article: http://conglang.github.io/2015/01/22/transform-and-conquer/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&name=Transform and Conquer&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#变治法"><span class="toc-number">1.</span> <span class="toc-text"> 变治法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预排序"><span class="toc-number">1.1.</span> <span class="toc-text"> 预排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高斯消去法"><span class="toc-number">1.2.</span> <span class="toc-text"> 高斯消去法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#经典高斯消去法"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 经典高斯消去法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lu分解及其他应用"><span class="toc-number">1.2.2.</span> <span class="toc-text"> LU分解及其他应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#计算矩阵的逆"><span class="toc-number">1.2.3.</span> <span class="toc-text"> 计算矩阵的逆</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目-2"><span class="toc-number">1.2.4.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡查找树"><span class="toc-number">1.3.</span> <span class="toc-text"> 平衡查找树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#avl树"><span class="toc-number">1.3.1.</span> <span class="toc-text"> AVL树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3树"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 2-3树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆和堆排序"><span class="toc-number">1.4.</span> <span class="toc-text"> 堆和堆排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构造一个堆"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 构造一个堆</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从堆中删除一个元素"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 从堆中删除一个元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#堆排序"><span class="toc-number">1.4.3.</span> <span class="toc-text"> 堆排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目-3"><span class="toc-number">1.4.4.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#霍纳法则和二进制幂"><span class="toc-number">1.5.</span> <span class="toc-text"> 霍纳法则和二进制幂</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#霍纳法则"><span class="toc-number">1.5.1.</span> <span class="toc-text"> 霍纳法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二进制幂"><span class="toc-number">1.5.2.</span> <span class="toc-text"> 二进制幂</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题化简"><span class="toc-number">1.6.</span> <span class="toc-text"> 问题化简</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#求最小公倍数"><span class="toc-number">1.6.1.</span> <span class="toc-text"> 求最小公倍数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#计算图中的路径数量"><span class="toc-number">1.6.2.</span> <span class="toc-text"> 计算图中的路径数量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化问题的化简"><span class="toc-number">1.6.3.</span> <span class="toc-text"> 优化问题的化简</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线性规划"><span class="toc-number">1.6.4.</span> <span class="toc-text"> 线性规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简化为图问题"><span class="toc-number">1.6.5.</span> <span class="toc-text"> 简化为图问题</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Transform and Conquer
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-22T14:09:13.000Z" itemprop="datePublished">2015-01-22</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Algorithm/">Algorithm</a>, <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Transform-and-Conquer/">Transform and Conquer</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="变治法"><a class="markdownIt-Anchor" href="#变治法"></a> 变治法</h2>
+<blockquote>
+<p><strong>变治法</strong>是一组基于变换思想的技术，用来把问题变换成一种更容易解决的类型。</p>
+</blockquote>
+<p>变治法有3种主要的类型：</p>
+<ul>
+<li><strong>实例化简</strong>。是一种把问题的实例变换成相同问题的另一个实例的技术，这个新的实例有一些特殊的属性，使得它更容易被解决。列表预排序、<strong>高斯消去法</strong>和<strong>AVL树</strong>都是这种技术的好例子。</li>
+<li><strong>改变表现</strong>。是将一个问题实例的表现改变为同样实例的另一种表现。比如<strong>2-3树</strong>表示集合、<strong>堆和堆排序</strong>、求多项式的<strong>霍纳法则</strong>以及两种二进制幂算法。</li>
+<li><strong>问题化简</strong>。提倡把一个给定的问题变换为另一个可以用已知算法求解的问题。如化简为线性规划问题和化简为图问题。</li>
+</ul>
+<h3 id="预排序"><a class="markdownIt-Anchor" href="#预排序"></a> 预排序</h3>
+<blockquote>
+<p>如果列表是有序的话，很多关于列表的问题更容易求解。排序算法的效率超不过nlogn。</p>
+</blockquote>
+<ul>
+<li>**例1：检验数组中元素的唯一性。**先对数组排序，然后只检查它的连续元素：如果该数组有相等的元素，则一定有一对元素是相互紧挨着的，反之亦然。</li>
+<li><strong>例2：模式计算。<strong>在给定的数字列表中最经常出现的一个数值成为</strong>模式</strong>。可以先对输入排序。然后所有相等的数值都会邻接在一起。为了求出模式，我们需要做的全部工作就是求出在该有序数组中邻接次数最多的等值元素。</li>
+</ul>
+<p>许多处理点集合的几何算法都使用了这样或那样的预排序。点的排序依据可以是它们的一个坐标，或者是它们到一条特定直线的距离，或者是根据某种角度等。如之前解决的<a href="/2015/01/16/devide-and-conquer/#%E6%9C%80%E8%BF%91%E5%AF%B9%E9%97%AE%E9%A2%98">最近对问题</a>和<a href="/2015/01/16/devide-and-conquer/#%E5%87%B8%E5%8C%85%E9%97%AE%E9%A2%98">凸包问题</a>的分治算法。</p>
+<h4 id="相关题目"><a class="markdownIt-Anchor" href="#相关题目"></a> 相关题目</h4>
+<ol>
+<li>
+<p>给定一个集合，里面包含<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>⩾</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">n\geqslant3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.78111em;vertical-align:-0.13667em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span><span class="mrel amsrm">⩾</span><span class="mord mathrm">3</span></span></span></span>个在x-y坐标平面上的点，用简单多边形把它们连接起来，也就是一条<strong>穿过所有点的最短路径</strong>，并且它的线段(多边形的边)不能相互交叉(除了公共顶点上的两条相邻边)。如下图。为该问题设计一个较为高效的算法。<br>
+<img src="/img/shortest_path_across_all_points.jpg" alt="穿过所有点的最短路径"><br>
+<strong>答案</strong>：该问题在点不是全共线的时候有解，且解可能不唯一。思路是：先找到y值最小的点P^\*，再求其它n-1的点在<strong>极坐标</strong>下的角度，排序。最后按顺序连接这些点。如图：<br>
+<img src="/img/shortest_path_across_all_points_solution.png" alt="解答思路"><br>
+极坐标(在平面内取一个定点O，叫极点，引一条射线Ox，叫做极轴，再选定一个长度单位和角度的正方向（通常取逆时针方向）。对于平面内任何一点M，用ρ表示线段OM的长度，θ表示从Ox到OM的角度，ρ叫做点M的极径，θ叫做点M的极角，有序数对 (ρ,θ)就叫点M的极坐标)。</p>
+</li>
+<li>
+<p>我们有一个n个数字构成的数组以及一个整数s。确定该<strong>数组是否包含两个和为s的元素</strong>(例如，对于数组5,9,1,3和s=6，答案为是，但对于相同的数组和s=7，答案为否)。为该问题设计一个算法，使它的时间效率要好于平方级。<br>
+<strong>思路</strong>：1. 先对所有的点减s/2，变成s=0的情况。2. 如果数组值唯一，把A[i]变成abs(A[i])排序，看看是否有重复元素。3. 如果数组值不唯一，按abs(A[i])排序，看有无相邻相加为0的元素对。<br>
+<strong>相关leetcode题目</strong>，算法不同：<br>
+[Arrays] | <a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Two_Sum.cpp" target="_blank" rel="external">Two Sum</a><br>
+[Arrays] | <a href="https://github.com/Conglang/MyLeetCode/blob/master/src/3Sum.cpp" target="_blank" rel="external">3Sum</a><br>
+[Arrays] | <a href="https://github.com/Conglang/MyLeetCode/blob/master/src/3Sum_Closest.cpp" target="_blank" rel="external">3Sum Closest</a><br>
+[Arrays] | <a href="https://github.com/Conglang/MyLeetCode/blob/master/src/4Sum.cpp" target="_blank" rel="external">4Sum</a></p>
+</li>
+<li>
+<p>我们在实数域上有n个开区间<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msub><mi>a</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>b</mi><mn>1</mn></msub><mo>)</mo><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><mo>(</mo><msub><mi>a</mi><mi>n</mi></msub><mo separator="true">,</mo><msub><mi>b</mi><mi>n</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">(a_1,b_1),...,(a_n,b_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span>(开区间(a,b)是由严格位于端点a和b之间的所有点构成的，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo>)</mo><mo>=</mo><mrow><mi>x</mi><mi mathvariant="normal">∣</mi><mi>a</mi><mo>&lt;</mo><mi>x</mi><mo>&lt;</mo><mi>b</mi></mrow></mrow><annotation encoding="application/x-tex">(a,b)={x|a&lt;x&lt;b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">b</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord textstyle uncramped"><span class="mord mathit">x</span><span class="mord mathrm">∣</span><span class="mord mathit">a</span><span class="mrel">&lt;</span><span class="mord mathit">x</span><span class="mrel">&lt;</span><span class="mord mathit">b</span></span></span></span></span>)。求<strong>包含共同点的区间的最大数量</strong>。例如，对于区间(1,4),(0,3),(-1.5,2),(3.6,5)来说，这个数量是3。为这个问题设计一个算法，要求效率要好于平方级。<br>
+<strong>思路</strong>：把a和b放在同一个数组里排序，遇到a和b相等时认为b比较小。然后遍历此数组，遇到a加1，遇到b减1，求得此过程中的最大值。<br>
+类似<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Longest_Valid_Parentheses.cpp" target="_blank" rel="external">括号那个问题[Stacks]</a>，如题目中的描述其实等价于&quot;((())())&quot;。</p>
+</li>
+</ol>
+<h3 id="高斯消去法"><a class="markdownIt-Anchor" href="#高斯消去法"></a> 高斯消去法</h3>
+<blockquote>
+<p><strong>高斯消去法</strong>是一种解线性方程组的算法，它是线性代数中的一种基本算法。它通过把方程组变换为一种具有上三角形系数矩阵的方程组来解题，这种方程组很容易用反向替换法求解。高斯消去法大约需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>3</mn></mrow></mfrac><msup><mi>n</mi><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">\frac{1}{3}n^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.845108em;"></span><span class="strut bottom" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.345em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">3</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>次乘法运算。</p>
+</blockquote>
+<h4 id="经典高斯消去法"><a class="markdownIt-Anchor" href="#经典高斯消去法"></a> 经典高斯消去法</h4>
+<p><img src="/img/gaussian_elimination.png" alt="高斯消去法"><br>
+可以通过一系列<strong>初等变换</strong>将一个具有任意系数矩阵的方程组<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span></span></span></span>推导为一个具有上三角系数矩阵的等价方程组<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow><annotation encoding="application/x-tex">A&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.751892em;"></span><span class="strut bottom" style="height:0.751892em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>。<br>
+<img src="/img/gaussian_elimination_example.png" alt="用高斯消去法解方程组示例"><br>
+优化：为防止比例因子过大而有舍入误差，可以每次都去找第i列系数的绝对值最大的行，作为第i次迭代的基点。<strong>部分选主元法</strong>，保证比例因子的绝对值永远不会大于1。<br>
+<strong>高斯消去法消去阶段使用部分选主元法的一个实现。</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">better_gauss_elimination</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; &gt;&amp; matrix)</span>	<span class="comment">// n行*n+1列，matrix[行n][列n+1]</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 用部分选主元法实现高斯消去法</span></span><br><span class="line">	<span class="comment">// 输入：矩阵和列向量集合在matrix中，第n+1列是列向量。</span></span><br><span class="line">	<span class="comment">// 输出：一个代替原始系数的上三角形等价矩阵图，相应的右边的值位于第(n+1)列中。</span></span><br><span class="line">	<span class="keyword">if</span> (matrix.empty()) <span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">int</span> n = matrix.size();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n<span class="number">-1</span>; ++i)	<span class="comment">// 消去第几个参数，既是第几行也是第几列</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">int</span> <span class="title">pivot_row</span><span class="params">(i)</span></span>;</span><br><span class="line">		<span class="comment">// 寻找其他行该参数最大的那行</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> row = i+<span class="number">1</span>; row &lt; n; ++row)	</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (<span class="built_in">abs</span>(matrix[row][i]) &gt; <span class="built_in">abs</span>(matrix[pivot_row][i]))</span><br><span class="line">			&#123;</span><br><span class="line">				pivot_row = row;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 把刚才找到的基点行交换到当前行</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> column = i; column &lt; n+<span class="number">1</span>; ++column)</span><br><span class="line">		&#123;</span><br><span class="line">			swap(matrix[i][column], matrix[pivot_row][column]);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 以当前行为基点，开始消元</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> row = i+<span class="number">1</span>; row &lt; n; ++row)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="function"><span class="keyword">float</span> <span class="title">temp</span><span class="params">(matrix[row][i] / matrix[i][i])</span></span>;</span><br><span class="line">			matrix[row][i] = <span class="number">0.0f</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> column = i+<span class="number">1</span>; column &lt; n+<span class="number">1</span>; ++column)</span><br><span class="line">			&#123;</span><br><span class="line">				matrix[row][column] -= matrix[i][column]*temp;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">float</span> t1[<span class="number">4</span>] = &#123;<span class="number">2</span>,<span class="number">-1</span>,<span class="number">1</span>,<span class="number">1</span>&#125;;</span><br><span class="line">	<span class="keyword">float</span> t2[<span class="number">4</span>] = &#123;<span class="number">4</span>,<span class="number">1</span>,<span class="number">-1</span>,<span class="number">5</span>&#125;;</span><br><span class="line">	<span class="keyword">float</span> t3[<span class="number">4</span>] = &#123;<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; row1(t1, t1+<span class="number">4</span>);</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; row2(t2, t2+<span class="number">4</span>);</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; row3(t3, t3+<span class="number">4</span>);</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; &gt; matrix;</span><br><span class="line">	matrix.push_back(row1);</span><br><span class="line">	matrix.push_back(row2);</span><br><span class="line">	matrix.push_back(row3);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"Before:"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	for_each(matrix.begin(), matrix.end(),</span><br><span class="line">		[](<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; row)</span><br><span class="line">	&#123;</span><br><span class="line">		for_each(row.begin(), row.end(), [](<span class="keyword">float</span> v)&#123;<span class="built_in">cout</span> &lt;&lt; v &lt;&lt; <span class="string">"	"</span>;&#125;);</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;);</span><br><span class="line">	better_gauss_elimination(matrix);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"After:"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	for_each(matrix.begin(), matrix.end(),</span><br><span class="line">		[](<span class="built_in">vector</span>&lt;<span class="keyword">float</span>&gt; row)</span><br><span class="line">		&#123;</span><br><span class="line">			for_each(row.begin(), row.end(), [](<span class="keyword">float</span> v)&#123;<span class="built_in">cout</span> &lt;&lt; v &lt;&lt; <span class="string">"	"</span>;&#125;);</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		&#125;);</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="lu分解及其他应用"><a class="markdownIt-Anchor" href="#lu分解及其他应用"></a> LU分解及其他应用</h4>
+<p>对于如图的矩阵A：<br>
+<img src="/img/gauss_lu_ma.png" alt="示例矩阵"><br>
+考虑下三角矩阵L，它是由主对角线上的1以及在高斯消去过程中行的乘数所构成的：<br>
+<img src="/img/gauss_lu_ml.png" alt="下三角矩阵L，由主对角线上的1以及在高斯消去过程中行的乘数所构成"><br>
+而上三角矩阵U是消去的结果：<br>
+<img src="/img/gauss_lu_mu.png" alt="上三角矩阵U是消去的结果"><br>
+可以看出，这两个矩阵的乘积LU等于矩阵A。</p>
+<p>所以解方程组Ax=b等价于解方程组LUx=b。于是可以先求出Ux，再求出x。<br>
+LU分解实际上并不需要额外的存储空间，因为我们可以把U的非零部分存储在A的上三角部分(包括主对角线)，并把L中的有效部分存储在A的主对角线的下方。</p>
+<h4 id="计算矩阵的逆"><a class="markdownIt-Anchor" href="#计算矩阵的逆"></a> 计算矩阵的逆</h4>
+<p>一个n阶方阵的逆也是一个n阶方阵，记作<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">A^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，使得<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><msup><mi>A</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">AA^{-1}=I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.07847em;">I</span></span></span></span>。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span></span></span></span>是一个n阶的单位矩阵。<br>
+不是每一个方阵都有逆，当且仅当矩阵的某一行是其他行的一个线性组合(某些乘积的和)时，没有逆，称为<strong>退化矩阵</strong>。<br>
+<strong>检查矩阵是否退化</strong>的一个简便方法是应用高斯消去法：如果高斯消去法生成的上三角矩阵的主对角线不包含0，该矩阵是非退化的；否则，是退化的。<br>
+<strong>计算矩阵的逆</strong>可以视为解n个具有相同系数矩阵<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span></span></span></span>的线性方程组。可以使用高斯消去法求出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span></span></span></span>的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mi>U</mi></mrow><annotation encoding="application/x-tex">LU</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">L</span><span class="mord mathit" style="margin-right:0.10903em;">U</span></span></span></span>分解，然后再对方程组<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mi>U</mi><msup><mi>x</mi><mi>j</mi></msup><mo>=</mo><msup><mi>e</mi><mi>j</mi></msup><mo separator="true">,</mo><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">LUx^j=e^j, j=1,...,n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.824664em;"></span><span class="strut bottom" style="height:1.019104em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">L</span><span class="mord mathit" style="margin-right:0.10903em;">U</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mord mathit">n</span></span></span></span>求解。<br>
+<img src="/img/gauss_inverse_matrix.png" alt="计算A的逆矩阵"></p>
+<h4 id="相关题目-2"><a class="markdownIt-Anchor" href="#相关题目-2"></a> 相关题目</h4>
+<ol>
+<li><strong>高斯-若尔当消去法</strong>和高斯消去法的不同在于，在系数矩阵的主对角线下方的元素变为0的同时，它用主元行把主对角线上方的元素也变成了0。如：<br>
+<img src="/img/gauss_jordan_example.png" alt="高斯-若尔当消去法示例"></li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;vector&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;algorithm&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">void gauss_jordan(vector&lt;vector&lt;float&gt; &gt;&amp; matrix)</span><br><span class="line">&#123;</span><br><span class="line">	if (matrix.empty()) return;</span><br><span class="line">	int n(matrix.size());</span><br><span class="line">	for (int i = 0; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		for (int j = 0; j &lt; n; ++j)</span><br><span class="line">		&#123;</span><br><span class="line">			if (i != j)</span><br><span class="line">			&#123;</span><br><span class="line">				float temp(matrix[j][i] / matrix[i][i]);	// assume matrix[i][i] is not 0</span><br><span class="line">				for (int k = i; k &lt; n+1; ++k)</span><br><span class="line">				&#123;</span><br><span class="line">					matrix[j][k] -= matrix[i][k]*temp;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	float t1[4] = &#123;1,1,1,2&#125;;</span><br><span class="line">	float t2[4] = &#123;2,1,1,3&#125;;</span><br><span class="line">	float t3[4] = &#123;1,-1,3,8&#125;;</span><br><span class="line">	vector&lt;float&gt; row1(t1, t1+4);</span><br><span class="line">	vector&lt;float&gt; row2(t2, t2+4);</span><br><span class="line">	vector&lt;float&gt; row3(t3, t3+4);</span><br><span class="line">	vector&lt;vector&lt;float&gt; &gt; matrix;</span><br><span class="line">	matrix.push_back(row1);</span><br><span class="line">	matrix.push_back(row2);</span><br><span class="line">	matrix.push_back(row3);</span><br><span class="line">	cout &lt;&lt; "Before:" &lt;&lt; endl;</span><br><span class="line">	for_each(matrix.begin(), matrix.end(),</span><br><span class="line">		[](vector&lt;float&gt; row)</span><br><span class="line">	&#123;</span><br><span class="line">		for_each(row.begin(), row.end(), [](float v)&#123;cout &lt;&lt; v &lt;&lt; "	";&#125;);</span><br><span class="line">		cout &lt;&lt; endl;</span><br><span class="line">	&#125;);</span><br><span class="line">	gauss_jordan(matrix);</span><br><span class="line">	cout &lt;&lt; "After:" &lt;&lt; endl;</span><br><span class="line">	for_each(matrix.begin(), matrix.end(),</span><br><span class="line">		[](vector&lt;float&gt; row)</span><br><span class="line">		&#123;</span><br><span class="line">			for_each(row.begin(), row.end(), [](float v)&#123;cout &lt;&lt; v &lt;&lt; "	";&#125;);</span><br><span class="line">			cout &lt;&lt; endl;</span><br><span class="line">		&#125;);</span><br><span class="line">	system("Pause");</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><strong>关灯问题</strong>。这个单人游戏中有一块<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n\times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.58333em;"></span><span class="strut bottom" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span><span class="mbin">×</span><span class="mord mathit">n</span></span></span></span>的面板，都是由<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1\times 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mbin">×</span><span class="mord mathrm">1</span></span></span></span>的电灯小面板组成的。每个小面板都有一个开关可以打开或关闭，这会同时打开或关闭水平和垂直邻接的4块小面板的灯(因此，拨动角上的面板开关会改变3个面板的灯，拨动边界上的非角落的面板开关会改变4个面板的灯)。如果知道初始时哪些灯是点亮的，如何关闭所有的灯呢？（利用高斯消去法解该问题的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2\times2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>全1实例。）<br>
+<strong>思路</strong>：一个<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3\times3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">3</span><span class="mbin">×</span><span class="mord mathrm">3</span></span></span></span>面板点击中间(2,2)可以用矩阵这样表示：<br>
+<img src="/img/lights_out_matrix.png" alt="关灯问题的矩阵表示"><br>
+所以可以列出等式：<img src="/img/lights_out_formula.png" alt="Image Loading"><br>
+那么<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2\times2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>的问题可以列出下面的式子，得到4个四项式方程。然后用高斯消去法求解即可。<br>
+<img src="/img/lights_out_2_2_formula.png" alt="的等式"></li>
+</ol>
+<h3 id="平衡查找树"><a class="markdownIt-Anchor" href="#平衡查找树"></a> 平衡查找树</h3>
+<blockquote>
+<p>维持平衡的两种思路：</p>
+<ol>
+<li><strong>实例化简</strong>。把一棵不平衡的二叉查找树转变为平衡的形式。这个思想的特定实现之间的区别在于它们对平衡的定义是不同的。<strong>AVL树</strong>要求它的每个节点的左右子树的高度差不能超过1。<strong>红黑树</strong>能够容忍同一节点的一棵子树的高度是另一棵的两倍。如果一个节点的插入或删除产生了一棵违背平衡要求的树，我们就从一系列成为<strong>旋转</strong>的特定变换中选择一种，重新构造这棵树，使得这棵树重新满足平衡要求。</li>
+<li><strong>改变表现</strong>。允许一棵查找树的单个节点不止包含一个元素。这种树的特例是<strong>2-3树</strong>，<strong>2-3-4树</strong>，以及更一般和更重要的<strong>B树</strong>。</li>
+</ol>
+</blockquote>
+<h4 id="avl树"><a class="markdownIt-Anchor" href="#avl树"></a> AVL树</h4>
+<blockquote>
+<p><strong>AVL树</strong>是一种在二叉树可能达到的广度上尽量平衡的二叉查找树。平衡是由四种称为<strong>旋转</strong>的变换来维持的。AVL树上的所有基本操作都属于O(logn)，它消除了经典二叉查找树在最差效率上的弊端。</p>
+</blockquote>
+<p>对于<a href="/2015/01/10/tree/#AVL_tree">AVL树的详细说明和实现看这里</a>。</p>
+<h4 id="2-3树"><a class="markdownIt-Anchor" href="#2-3树"></a> 2-3树</h4>
+<blockquote>
+<p><strong>2-3树</strong>是一种得到了完美平衡的查找树，它允许一个节点最多包含两个键和三个子女。这个思想推而广之，会产生一种非常重要的B树。</p>
+</blockquote>
+<p><strong>2-3树</strong>是一种可以包含两种类型节点的树：2节点和3节点。一个<strong>2节点</strong>只包含一个键K和两个子女：左子女作为一棵所有键都小于K的子树的根，而右子女作为一棵所有键都大于K的子树的根。一个<strong>3节点</strong>包含两个有序的键K1和K2(K1&lt;K2)并且有3个子女。最左边的子女作为键值小于K1的子树的根，中间的子女作为键值位于K1和K2之间的子树的根，最右边的子女作为键值大于K2的子树的根。<br>
+<img src="/img/2-3_tree_nodes_type.png" alt="2-3树的两种节点类型"><br>
+2-3树的最后一个要求是，<strong>树中的所有叶子必须位于同一层</strong>，也就是说，一棵2-3树总是<strong>高度平衡</strong>的。</p>
+<ul>
+<li><strong>查找</strong>。如果是2节点，与二叉查找树一样。如果是3节点，在不超过两次比较之后，就知道是停止查找还是应该在根的3棵子树的哪一棵继续查找。</li>
+<li><strong>插入</strong>。首先，除非空树，否则总是把一个新的键K插入到一个叶子里。通过查找K来确定一个合适的插入位置。如果找到的叶子是一个2节点，根据K是小于还是大于节点中原来的键，我们把K作为第一个键或者第二个键进行插入。如果叶子是一个3节点，我们把叶子分裂成两个节点：三个键(两个原来的键和一个新键)中最小的放入第一个叶子里，最大的键放到第二个叶子里，同时中间的键提升到原来叶子的父母中去(如果这个叶子恰好是树的根，我们就创建一个新的根来接纳这个中间键)。注意，中间键提升到父母中去可能会导致父母的溢出(如果它是一个3节点)，并且因此会导致沿着该叶子的祖先链条发生多个节点的分裂。<br>
+<img src="/img/2-3_tree_example.png" alt="为列表9,5,8,3,2,4,7构造一棵2-3树"></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造一棵2-3树</span></span><br><span class="line"><span class="comment">// TODO</span></span><br></pre></td></tr></table></figure>
+<p>2-3树有一种重要的一般性形式，<strong>B树</strong>，详细看<a href="/2015/01/25/space-and-time-trade-offs/#B%E6%A0%91">这里</a>。</p>
+<h3 id="堆和堆排序"><a class="markdownIt-Anchor" href="#堆和堆排序"></a> 堆和堆排序</h3>
+<blockquote>
+<p><strong>堆</strong>是一棵基本完备二叉树，它的键都满足父母优势的要求(即每一个节点的键都要大于或等于它子女的键)。虽然定义为二叉树，但一般用数组来实现堆。堆对于优先队列的高效实现来说尤为重要，同时，堆还是堆排序的基础。<br>
+<strong>堆排序</strong>的基本思路是，在排列好堆中的数组元素后，再从剩余的堆中连续删除最大的元素。无论在最差情况还是在平均情况下，该算法的运行时间都属于O(nlogn)，而且，它还是在位的排序算法。</p>
+</blockquote>
+<p><strong>堆的一些性质</strong>：</p>
+<ul>
+<li>只存在一棵n个节点的完全二叉树，它的高度等于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi></mrow><annotation encoding="application/x-tex">log_2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">n</span></span></span></span>。</li>
+<li>堆的根总是包含了堆的最大元素。</li>
+<li>堆的一个节点以及该节点的子孙也是一个堆。</li>
+<li>可以用数组来实现堆，方法是用从上到下、从左到右的方式来记录堆的元素。为了方便起见，可以在这种数组从1到n的位置上存放堆元素，留下H[0]，要么让它空着，要么在其中放一个限位器，它的值大于堆中任何一个元素。在这种表示法中：</li>
+<li>
+<ul>
+<li>父母节点的键将会位于数组的前n/2个位置中，而叶子节点的键将会占据后n/2个位置。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>在数组中，对于一个位于父母位置<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>(</mo><mn>1</mn><mo>⩽</mo><mi>i</mi><mo>⩽</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">i(1\leqslant i \leqslant n/2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">i</span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mrel amsrm">⩽</span><span class="mord mathit">i</span><span class="mrel amsrm">⩽</span><span class="mord mathit">n</span><span class="mord mathrm">/</span><span class="mord mathrm">2</span><span class="mclose">)</span></span></span></span>的键来说，它的子女将会位于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi></mrow><annotation encoding="application/x-tex">2i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.65952em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mord mathit">i</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2i+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mord mathit">i</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span>，相应地，对于一个位于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>(</mo><mn>2</mn><mo>⩽</mo><mi>i</mi><mo>⩽</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">i(2\leqslant i \leqslant n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">i</span><span class="mopen">(</span><span class="mord mathrm">2</span><span class="mrel amsrm">⩽</span><span class="mord mathit">i</span><span class="mrel amsrm">⩽</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>的键来说，它的父母将会位于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">i/2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">i</span><span class="mord mathrm">/</span><span class="mord mathrm">2</span></span></span></span>。</li>
+</ul>
+</li>
+<li>因此数组前半部分每个位置i上的元素总是大于等于位置2i和2i+1中的元素。</li>
+</ul>
+<h4 id="构造一个堆"><a class="markdownIt-Anchor" href="#构造一个堆"></a> 构造一个堆</h4>
+<p><strong>自底向上堆构造</strong>：按照给定的顺序放置键，然后按照下面的方法对树进行“堆化”：</p>
+<ol>
+<li>从最后的父母节点，到根为止，检查这些节点的键是否满足父母优势要求。</li>
+<li>如果该节点不满足，把节点的键K和它子女的最大键进行交换，然后再检查在新位置上，K是不是满足父母优势要求。</li>
+<li>持续这个过程直到对K的父母优势要求满足为止。</li>
+<li>对以当前父母节点为根的子树，完成它的“堆化”后，对该节点的前一节点继续同样的操作。直到对树的根也完成以上操作。</li>
+</ol>
+<p><img src="/img/construct_heap.png" alt="对于列表2,9,7,6,5,8自底向上构造堆"></p>
+<h4 id="从堆中删除一个元素"><a class="markdownIt-Anchor" href="#从堆中删除一个元素"></a> 从堆中删除一个元素</h4>
+<ol>
+<li>如果该节点时叶子节点，直接删除，并将堆的规模减1。</li>
+<li>否则，该节点的键和堆的最后一个键K作交换。</li>
+<li>堆的规模减1.</li>
+<li>严格按照自底向上堆构造算法中的做法，把K沿着树向下筛选，来对这棵较小的树进行“堆化”。</li>
+</ol>
+<p><img src="/img/delete_root_from_heap.png" alt="从一个堆中删除根的键"></p>
+<h4 id="堆排序"><a class="markdownIt-Anchor" href="#堆排序"></a> 堆排序</h4>
+<p>第一步：(构造堆)为一个给定的数组构造一个堆。<br>
+第二步：(删除最大键)对剩下的堆应用n-1次根删除操作。<br>
+<a href="/2014/12/25/sorting/#%E5%A0%86%E6%8E%92%E5%BA%8F">堆排序的详细解释和实现看这里</a>。</p>
+<h4 id="相关题目-3"><a class="markdownIt-Anchor" href="#相关题目-3"></a> 相关题目</h4>
+<ol>
+<li><strong>面条排序</strong>。想象一把意大利生面条，每一根面条代表一个需要排序的数字。描述这个“面条排序”以及它和堆排序的关系。<br>
+<strong>解答</strong>：把面条一把挂起来，垂直下来，不断拿走最长的那根。和堆排序一样，针对最大元素的寻找和删除都很容易。</li>
+</ol>
+<h3 id="霍纳法则和二进制幂"><a class="markdownIt-Anchor" href="#霍纳法则和二进制幂"></a> 霍纳法则和二进制幂</h3>
+<blockquote>
+<p>已知x，求多项式<img src="/img/polynomial.png" alt="Image Loading">的值的问题。以及该问题的一个特例——计算<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>x</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">x^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.664392em;"></span><span class="strut bottom" style="height:0.664392em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>。</p>
+</blockquote>
+<p>目前最重要的算法是<strong>快速傅立叶变换(fast Fourier transform, FFT)</strong>，基本思想史用多项式在某些特定点上的值来表示该对象式。[快速傅立叶变换详情见这里]。<br>
+在无需对系数进行预处理的多项式求解算法中，<strong>霍纳法则</strong>是最优的。它只需要n次乘法和n次加法。它还有一些有用的副产品，比如综合除法算法。</p>
+<h4 id="霍纳法则"><a class="markdownIt-Anchor" href="#霍纳法则"></a> 霍纳法则</h4>
+<blockquote>
+<p>相当于不断地把x作为公因子从降次以后的剩余多项式中提取出来。<img src="/img/horner_formular.png" alt="Image Loading"></p>
+</blockquote>
+<p>可以方便地用一个两行的表来帮助笔算。第一行包含了该多项式的系数(如果有0也包含进来)，从最高的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">a_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>到最低的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">a_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>。第二行中，除了第一个单元格用来存储<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">a_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，其他单元格都用来存储中间结果。做了这样的初始化以后，<strong>用第二行的前一个有值的单元格乘以x的值再加上第一行的下一个参数</strong>，来算出表格下一个单元格的值。最后一个单元格的值就是多项式的值。</p>
+<p><strong>例如</strong>：对于多项式<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>2</mn><msup><mi>x</mi><mn>4</mn></msup><mo>−</mo><msup><mi>x</mi><mn>3</mn></msup><mo>+</mo><mn>3</mn><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>x</mi><mo>−</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">p(x)=2x^4-x^3+3x^2+x-5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">2</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">4</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">−</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">3</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathit">x</span><span class="mbin">−</span><span class="mord mathrm">5</span></span></span></span>，改变形式的话就是：<br>
+<img src="/img/horner_example_formular.png" alt="Image Loading"><br>
+当x=3时，用表格的方式进行计算：<br>
+<img src="/img/horner_example_table.png" alt="Image Loading"><br>
+答案就是160。观察可以发现，表格第二行每个元素恰好就是前面公式改变形式后每个单独子式。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;vector&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">int horner(const vector&lt;float&gt;&amp; coordinates, float x)</span><br><span class="line">&#123;</span><br><span class="line">	// 用霍纳法则求一个多项式在一个给定点的值</span><br><span class="line">	// 输入：一个n次多项式的系数数组(从低到高存储)，以及一个数字x</span><br><span class="line">	// 输出：多项式在x点的值</span><br><span class="line">	if (coordinates.empty() || !x) return 0;</span><br><span class="line">	float temp(coordinates.back());</span><br><span class="line">	for (auto i = coordinates.rbegin()+1; i != coordinates.rend(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		temp = x * temp + *i;</span><br><span class="line">	&#125;</span><br><span class="line">	return temp;</span><br><span class="line">&#125;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	float temp[5] = &#123;-5,1,3,-1,2&#125;;	// 2x^4 - x^3 +3x^2 + x - 5</span><br><span class="line">	vector&lt;float&gt; coordinates(temp, temp+5);</span><br><span class="line">	cout &lt;&lt; "When x = 3, 2x^4 - x^3 +3x^2 + x - 5 = " &lt;&lt; horner(coordinates, 3) &lt;&lt; endl;</span><br><span class="line">	system("Pause");</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="二进制幂"><a class="markdownIt-Anchor" href="#二进制幂"></a> 二进制幂</h4>
+<p>当用霍纳法则计算<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>a</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">a^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.664392em;"></span><span class="strut bottom" style="height:0.664392em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>时，它惊人的效率就失去了光芒，退化成为对x自乘的蛮力算法，还夹杂着一些无用的加法。</p>
+<blockquote>
+<p>有两种基于改变表现思想的解决算法。这两种算法都使用了指数n的二进制表示，但一个算法从左到右处理这个二进制，而另一个从右到左进行处理。</p>
+</blockquote>
+<p>设n=b1…bi…b0是在二进制系统中，表示一个正整数n的比特串。可以用这个多项式的值来计算n的值：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msub><mi>b</mi><mn>1</mn></msub><msup><mi>x</mi><mn>1</mn></msup><mo>+</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>+</mo><msub><mi>b</mi><mi>i</mi></msub><msup><mi>x</mi><mi>i</mi></msup><mo>+</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>+</mo><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">p(x)=b_1x^1+..+b_ix^i+...+b_0
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8746639999999999em;"></span><span class="strut bottom" style="height:1.1246639999999999em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mbin">+</span><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></p>
+<p>如<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mn>3</mn><mo>=</mo><mn>1</mn><mo>×</mo><msup><mn>2</mn><mn>3</mn></msup><mo>+</mo><mn>1</mn><mo>×</mo><msup><mn>2</mn><mn>2</mn></msup><mo>+</mo><mn>0</mn><mo>×</mo><msup><mn>2</mn><mn>1</mn></msup><mo>+</mo><mn>1</mn><mo>×</mo><msup><mn>2</mn><mn>0</mn></msup></mrow><annotation encoding="application/x-tex">13=1\times2^3+1\times2^2+0\times2^1+1\times2^0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mord mathrm">3</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mbin">×</span><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">1</span><span class="mbin">×</span><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mbin">×</span><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">1</span><span class="mbin">×</span><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></p>
+<ul>
+<li><strong>从左至右二进制幂算法</strong>，将多项式用霍纳方式表示与迭代计算。<br>
+对这个多项式应用霍纳法则，这个过程对<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>a</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">a^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.664392em;"></span><span class="strut bottom" style="height:0.664392em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>意味着什么：<br>
+<img src="/img/pow_a_n_left_to_right.png" alt="从左至右二进制幂算法"><br>
+<img src="/img/left_right_example.png" alt="解法示例"></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">left_right_binary_exponentiation</span><span class="params">(<span class="keyword">float</span> x, <span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; exponent)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 用从左至右二进制幂算法计算x^n</span></span><br><span class="line">	<span class="comment">// 输入：一个数字x；二进制位exponent列表，这些位来自于一个正整数n的二进制展开式</span></span><br><span class="line">	<span class="comment">// 输出：x^n的值</span></span><br><span class="line">	<span class="function"><span class="keyword">float</span> <span class="title">product</span><span class="params">(x)</span></span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; exponent.size(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		product *= product;</span><br><span class="line">		<span class="keyword">if</span> (exponent[i] == <span class="number">1</span>) &#123;product *= x;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> product;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> temp[<span class="number">3</span>] = &#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;;	<span class="comment">// 5</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; exponent(temp, temp+<span class="number">3</span>);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"When x = 2, x^5= "</span> &lt;&lt; left_right_binary_exponentiation(<span class="number">2</span>, exponent) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>从右至左二进制幂算法</strong>，以分解的方式使用该多项式，然后用各项积来计算结果。<br>
+<img src="/img/pow_a_n_right_to_left.png" alt="从右至左二进制幂算法"><br>
+<img src="/img/right_left_example.png" alt="解法示例"></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">right_left_binary_exponentiation</span><span class="params">(<span class="keyword">float</span> x, <span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; exponent)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 用从右至左二进制幂算法计算x^n</span></span><br><span class="line">	<span class="comment">// 输入：一个数字x；二进制位exponent列表，这些位来自于一个正整数n的二进制展开式</span></span><br><span class="line">	<span class="comment">// 输出：x^n的值</span></span><br><span class="line">	<span class="function"><span class="keyword">float</span> <span class="title">term</span><span class="params">(x)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">float</span> <span class="title">product</span><span class="params">(<span class="number">1.0f</span>)</span></span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = exponent.size()<span class="number">-1</span>; i &gt;= <span class="number">0</span>; --i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (exponent[i] == <span class="number">1</span>) &#123;product *= term;&#125;</span><br><span class="line">		term *= term;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> product;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> temp[<span class="number">3</span>] = &#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;;	<span class="comment">// 5</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; exponent(temp, temp+<span class="number">3</span>);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"When x = 2, x^5= "</span> &lt;&lt; right_left_binary_exponentiation(<span class="number">2</span>, exponent) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="问题化简"><a class="markdownIt-Anchor" href="#问题化简"></a> 问题化简</h3>
+<blockquote>
+<p>将一个待解问题化简为一个已知可以用某解法求解的问题，然后求解。</p>
+</blockquote>
+<p>解析几何的根本思想就是把几何问题化简为代数问题。</p>
+<h4 id="求最小公倍数"><a class="markdownIt-Anchor" href="#求最小公倍数"></a> 求最小公倍数</h4>
+<blockquote>
+<p>最小公倍数，记作lcm(m,n)，定义为能够被m和n整除的最小整数。原始计算方法是，给出m和n的质因数，把m和n的所有公共质因数的积乘以m的不在n中的质因数，再乘以n的不在m中的质因数。</p>
+</blockquote>
+<p>我们已知求最大公约数的欧几里得算法gcd(m,n)，找到它俩的联系，即lcm(m,n)和gcd(m,n)的积把m和n的每一个因子都恰好包含了一次，因此就等于m和n的积。<br>
+注：最大公约数的算法是：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gcd</span><span class="params">(inta,intb)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp;</span><br><span class="line">    <span class="keyword">while</span>(b)</span><br><span class="line">    &#123;    </span><br><span class="line">        <span class="comment">/*利用辗除法，直到b为0为止*/</span></span><br><span class="line">        temp = b;</span><br><span class="line">        b = a % b;</span><br><span class="line">        a = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为<code>最小公倍数=重复的*A中单独的*B中单独的</code>。<code>最大公约数=重复的</code>。<br>
+<img src="/img/lcm_formula.png" alt="最小公倍数公式"></p>
+<blockquote>
+<p>gcd(m,n) = gcd(n, m%n)</p>
+</blockquote>
+<h4 id="计算图中的路径数量"><a class="markdownIt-Anchor" href="#计算图中的路径数量"></a> 计算图中的路径数量</h4>
+<blockquote>
+<p>图两节点间路径的数量可以从邻接矩阵上看出。可以用一个算法来计算图的邻接矩阵的相应幂，来得出图中的路径数量。</p>
+</blockquote>
+<p><img src="/img/graph_path_matrix.png" alt="一个图，它的邻接矩阵及其平方。和分别指出了长度分别为1和2的路径数量"></p>
+<h4 id="优化问题的化简"><a class="markdownIt-Anchor" href="#优化问题的化简"></a> 优化问题的化简</h4>
+<blockquote>
+<p>最大化问题和最小化问题的关系：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>−</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo>[</mo><mo>−</mo><mi>f</mi><mrow><mi>x</mi></mrow><mo>]</mo></mrow><annotation encoding="application/x-tex">min f(x) = -max[-f{x}]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">m</span><span class="mord mathit">i</span><span class="mord mathit">n</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord">−</span><span class="mord mathit">m</span><span class="mord mathit">a</span><span class="mord mathit">x</span><span class="mopen">[</span><span class="mord">−</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord textstyle uncramped"><span class="mord mathit">x</span></span><span class="mclose">]</span></span></span></span>。即求一个函数的最小值，可以先求负函数的最大值，再取反。</p>
+</blockquote>
+<h4 id="线性规划"><a class="markdownIt-Anchor" href="#线性规划"></a> 线性规划</h4>
+<blockquote>
+<p><strong>线性规划</strong>关心的是最优化一个包含若干变量的线性函数，这个函数受到一些形式为线性等式和线性不等式的约束。有一些高效的算法可以对这个问题的庞大实例求解，它们包含了成千上万的变量和约束，但不能要求变量必须是整数。如果变量一定要是整数，我们称之为<strong>整数线性规划</strong>问题，这类问题的难度要高很多。</p>
+</blockquote>
+<p><img src="/img/linear_programming.png" alt="一个一般的线性规划问题的实例"><br>
+这个问题的经典算法称为<a href="/2015/01/31/iterative-improvement/#%E5%8D%95%E7%BA%AF%E5%BD%A2%E6%B3%95">单纯形法</a>。</p>
+<h4 id="简化为图问题"><a class="markdownIt-Anchor" href="#简化为图问题"></a> 简化为图问题</h4>
+<blockquote>
+<p>许多问题可以化简为一种标准的图问题。图的顶点一般用来表示所讨论问题的可能状态，而边则表示这些状态之间的可能转变。称为<strong>状态空间图</strong>。</p>
+</blockquote>
+<p>比如狼、羊、白菜、农夫问题。P,w,g,c表示农夫、狼、羊和白菜。<br>
+<img src="/img/state_space_of_peasant_puzzle.png" alt="农夫、狼、羊、白菜谜题的状态空间图"><br>
+这是人工智能的一个分支。</p>
+<p>[1] 算法设计与分析基础(第2版)</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#变治法"><span class="toc-number">1.</span> <span class="toc-text"> 变治法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预排序"><span class="toc-number">1.1.</span> <span class="toc-text"> 预排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高斯消去法"><span class="toc-number">1.2.</span> <span class="toc-text"> 高斯消去法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#经典高斯消去法"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 经典高斯消去法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lu分解及其他应用"><span class="toc-number">1.2.2.</span> <span class="toc-text"> LU分解及其他应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#计算矩阵的逆"><span class="toc-number">1.2.3.</span> <span class="toc-text"> 计算矩阵的逆</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目-2"><span class="toc-number">1.2.4.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡查找树"><span class="toc-number">1.3.</span> <span class="toc-text"> 平衡查找树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#avl树"><span class="toc-number">1.3.1.</span> <span class="toc-text"> AVL树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3树"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 2-3树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆和堆排序"><span class="toc-number">1.4.</span> <span class="toc-text"> 堆和堆排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构造一个堆"><span class="toc-number">1.4.1.</span> <span class="toc-text"> 构造一个堆</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从堆中删除一个元素"><span class="toc-number">1.4.2.</span> <span class="toc-text"> 从堆中删除一个元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#堆排序"><span class="toc-number">1.4.3.</span> <span class="toc-text"> 堆排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目-3"><span class="toc-number">1.4.4.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#霍纳法则和二进制幂"><span class="toc-number">1.5.</span> <span class="toc-text"> 霍纳法则和二进制幂</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#霍纳法则"><span class="toc-number">1.5.1.</span> <span class="toc-text"> 霍纳法则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二进制幂"><span class="toc-number">1.5.2.</span> <span class="toc-text"> 二进制幂</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题化简"><span class="toc-number">1.6.</span> <span class="toc-text"> 问题化简</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#求最小公倍数"><span class="toc-number">1.6.1.</span> <span class="toc-text"> 求最小公倍数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#计算图中的路径数量"><span class="toc-number">1.6.2.</span> <span class="toc-text"> 计算图中的路径数量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化问题的化简"><span class="toc-number">1.6.3.</span> <span class="toc-text"> 优化问题的化简</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线性规划"><span class="toc-number">1.6.4.</span> <span class="toc-text"> 线性规划</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简化为图问题"><span class="toc-number">1.6.5.</span> <span class="toc-text"> 简化为图问题</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/22/transform-and-conquer/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&text=Transform and Conquer"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&is_video=false&description=Transform and Conquer"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Transform and Conquer&body=Check out this article: http://conglang.github.io/2015/01/22/transform-and-conquer/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&title=Transform and Conquer"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/22/transform-and-conquer/&name=Transform and Conquer&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

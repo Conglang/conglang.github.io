@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="算法之时空权衡。其中空间换时间更为普遍。主要有两种类型：输入增强和预构造。应用此思想的算法如：计数排序、字符串匹配中的Horspool算法和Boyer-Moore算法、散列法中的开散列和闭散列、B树等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Space and Time Trade-Offs">
+<meta property="og:url" content="http://conglang.github.io/2015/01/25/space-and-time-trade-offs/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="算法之时空权衡。其中空间换时间更为普遍。主要有两种类型：输入增强和预构造。应用此思想的算法如：计数排序、字符串匹配中的Horspool算法和Boyer-Moore算法、散列法中的开散列和闭散列、B树等。">
+<meta property="og:image" content="http://conglang.github.io/img/distribution_counting_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/distribution_counting_example_data.png">
+<meta property="og:image" content="http://conglang.github.io/img/distribution_counting_example_process.png">
+<meta property="og:image" content="http://conglang.github.io/img/virtual_initialization_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_example.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_example_situation_1.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_example_situation_2.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_example_situation_3.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_example_situation_4.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_pattern_shit_table_formula.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/horspool_example1.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/boyer_moore_good_table.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/boyer_moore_calculate_d.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/boyer_moore_example_bad.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/boyer_moore_example_good.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/boyer_moore_example.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/hash_table_linked_list_example.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/hash_table_array_example.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/birthday_paradox_solution.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/adt_big_o.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/b_tree_n_node.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/b_tree_4_example.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/b_tree_4_insert_example.jpg">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Space and Time Trade-Offs">
+<meta name="twitter:description" content="算法之时空权衡。其中空间换时间更为普遍。主要有两种类型：输入增强和预构造。应用此思想的算法如：计数排序、字符串匹配中的Horspool算法和Boyer-Moore算法、散列法中的开散列和闭散列、B树等。">
+<meta name="twitter:image" content="http://conglang.github.io/img/distribution_counting_example.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Space and Time Trade-Offs</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/27/dynamic-programming/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/22/transform-and-conquer/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&text=Space and Time Trade-Offs"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&is_video=false&description=Space and Time Trade-Offs"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Space and Time Trade-Offs&body=Check out this article: http://conglang.github.io/2015/01/25/space-and-time-trade-offs/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&name=Space and Time Trade-Offs&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#时空权衡"><span class="toc-number">1.</span> <span class="toc-text"> 时空权衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#计数排序"><span class="toc-number">1.1.</span> <span class="toc-text"> 计数排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串匹配中的输入增强技术"><span class="toc-number">1.2.</span> <span class="toc-text"> 字符串匹配中的输入增强技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#horspool算法"><span class="toc-number">1.2.1.</span> <span class="toc-text"> Horspool算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#boyer-moore算法"><span class="toc-number">1.2.2.</span> <span class="toc-text"> Boyer-Moore算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#散列法"><span class="toc-number">1.3.</span> <span class="toc-text"> 散列法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#开散列分离链"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 开散列(分离链)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#闭散列开式寻址"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 闭散列(开式寻址)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目-2"><span class="toc-number">1.3.3.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b树"><span class="toc-number">1.4.</span> <span class="toc-text"> B树</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Space and Time Trade-Offs
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-25T07:43:03.000Z" itemprop="datePublished">2015-01-25</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Algorithm/">Algorithm</a>, <a class="tag-link" href="/tags/C/">C++</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="时空权衡"><a class="markdownIt-Anchor" href="#时空权衡"></a> 时空权衡</h2>
+<blockquote>
+<p>算法设计中的时空权衡是一个众所周知的问题。在应用中，空间换时间比时间换空间普遍得多。</p>
+</blockquote>
+<p>空间换时间技术有两种主要的类型：</p>
+<ol>
+<li><strong>输入增强</strong>。思想是对问题输入的部分或全部做预处理，然后对获得的额外信息进行存储，以加速后面问题的解决。用分布计数进行排序以及一些重要的字符串匹配算法都是基于这个技术的算法。</li>
+<li><strong>预构造</strong>。使用额外的空间来实现更快和更方便的数据存取。散列和B树是预构造的重要例子。</li>
+<li>还有一种相关的技术<strong>动态规划</strong>，是把给定问题中重复子问题的解记录在表中，然后求得所讨论问题的解。<a href="/2015/01/27/dynamic-programming/">关于动态规划的详细讲解看这里</a>。</li>
+</ol>
+<p>注意，时间和空间并不是此消彼长的关系，如果选用了一种空间效率很高的数据结构来表示问题的输入，这种结构反过来又能提高算法的时间效率。比如稀疏图和稠密图应该分别用邻接链表和邻接矩阵。</p>
+<h3 id="计数排序"><a class="markdownIt-Anchor" href="#计数排序"></a> 计数排序</h3>
+<blockquote>
+<p><strong>分布排序</strong>是一种特殊的方法，用来对元素取值来自于一个小集合的列表排序。</p>
+</blockquote>
+<p>例如：对于下面的数组。<br>
+<img src="/img/distribution_counting_example.png" alt="示例数组"><br>
+我们知道它们的值来自于集合{11,12,13}，并且在排序的过程中不能改写。下面是它们的频率数组和分布数组：<br>
+<img src="/img/distribution_counting_example_data.png" alt="频率数组和分布数组"><br>
+分布值指出了在最后的有序数组中，它们的元素最后一次出现时的正确位置。<br>
+处理过程：从右到左处理数组。最后的值是12，因为它的分布值是4，把这个12放到数组S的第3个位置上(S将会存放有序列表)。把12的分布值减1，再处理给定数组中的下一个(从右边数)元素。<br>
+<img src="/img/distribution_counting_example_process.png" alt="用分布计数法排序的例子。减一的分布值用粗体字表示"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">distribution_counting</span><span class="params">(<span class="keyword">const</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; origional, <span class="keyword">int</span> min_num, <span class="keyword">int</span> max_num, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; result)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 用分布计数法，对来自于有限范围整数的一个数组进行排序</span></span><br><span class="line">	<span class="comment">// 输入：数组origional，数组中的整数位于min_num和max_num之间</span></span><br><span class="line">	<span class="comment">// 输出：origional中元素构成的非降序数组result</span></span><br><span class="line">	result.resize(origional.size());</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; distribution(origional.size());	<span class="comment">// 初始化频率数组</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; origional.size(); ++i)	<span class="comment">// 计算频率值</span></span><br><span class="line">	&#123;</span><br><span class="line">		++distribution[origional[i]-min_num];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= max_num - min_num; ++i)	<span class="comment">// 重用于分布</span></span><br><span class="line">	&#123;</span><br><span class="line">		distribution[i] += distribution[i<span class="number">-1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = origional.size()<span class="number">-1</span>; i &gt;= <span class="number">0</span>; --i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">int</span> <span class="title">index</span><span class="params">(origional[i]-min_num)</span></span>;</span><br><span class="line">		result[distribution[index]<span class="number">-1</span>] = origional[i];</span><br><span class="line">		--distribution[index];</span><br><span class="line">	&#125;</span><br><span class="line">	copy(result.begin(), result.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; origional(<span class="number">6</span>, <span class="number">12</span>);</span><br><span class="line">	origional[<span class="number">0</span>]=<span class="number">13</span>;</span><br><span class="line">	origional[<span class="number">1</span>]=<span class="number">11</span>;</span><br><span class="line">	origional[<span class="number">3</span>]=<span class="number">13</span>;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; result;</span><br><span class="line">	distribution_counting(origional, <span class="number">11</span>, <span class="number">13</span>, result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个线性效率的算法，仅对输入数组从头到尾连续处理两边。它的高效是因为空间换时间，以及输入列表独特的自然属性。</p>
+<h4 id="相关题目"><a class="markdownIt-Anchor" href="#相关题目"></a> 相关题目</h4>
+<ol>
+<li>设计一个只有一行语句的算法，对任意规模为n、元素值是n个从1+x到n+x的不同整数的数组排序。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;S[A[i]<span class="number">-1</span>] = A[i];&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>下面这个技术称为<strong>虚拟初始化</strong>。如果仅仅对一个给定数组A[0…n-1]中的某些元素进行初始化，这是一种时间效率很高的方法。对于数组的每一个元素，这个方法可以在常数时间内告诉我们，该元素是不是被初始化了；如果是，它的值是什么。这是因为该方法使用了一个变量counter来表示A中已初始化元素的个数，外加两个大小相同的辅助数组，比如说是B[0…n-1]和C[0…n-1]。这两个数组是这样定义的。B[0]，…，B[counter-1]包含了A中已初始化元素的下标：B[0]包含了第一个已初始化元素的下标，B[1]包含了第二个已初始化元素的下标，以此类推。而且，如果A[i]是第k个已初始化的元素(0&lt;=k&lt;=counter-1)，C[i]包含k。<br>
+下面3个赋值操作完成后，描述数组ABC的状态。以及我们如何确定A[i]已经被初始化了。<br>
+A[3]=x;A[7]=z;A[1]=y;<br>
+<img src="/img/virtual_initialization_example.png" alt="数组ABC的状态"><br>
+确定A[i]已被初始化的方式：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn><mo>⩽</mo><mi>C</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>⩽</mo><mi>c</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>r</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 \leqslant C[i] \leqslant counter-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">0</span><span class="mrel amsrm">⩽</span><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="mopen">[</span><span class="mord mathit">i</span><span class="mclose">]</span><span class="mrel amsrm">⩽</span><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">u</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span> &amp;&amp; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>B</mi><mo>[</mo><mi>C</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>]</mo><mo>=</mo><mo>=</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">B[C[i]]==i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05017em;">B</span><span class="mopen">[</span><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="mopen">[</span><span class="mord mathit">i</span><span class="mclose">]</span><span class="mclose">]</span><span class="mrel">=</span><span class="mrel">=</span><span class="mord mathit">i</span></span></span></span></li>
+</ol>
+<h3 id="字符串匹配中的输入增强技术"><a class="markdownIt-Anchor" href="#字符串匹配中的输入增强技术"></a> 字符串匹配中的输入增强技术</h3>
+<blockquote>
+<p>在一个较长的n个字符的串(文本)中，寻找一个给定的m个字符的串(模式)。它的<a href="/2014/12/22/brute-force/#%E8%9B%AE%E5%8A%9B%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D">蛮力解法在这里</a>。<br>
+用于字符串匹配的<strong>Horspool</strong>算法可以看作是<strong>Boyer-Moore</strong>算法的一个简化版本。两个算法都以输入增强思想为基础，并且从右到左比较模式中的字符。两个算法都是用同样的<strong>坏符号移动表</strong>。Boyer-Moore算法还使用了第二个表，称为<strong>好后缀移动表</strong>。</p>
+</blockquote>
+<h4 id="horspool算法"><a class="markdownIt-Anchor" href="#horspool算法"></a> Horspool算法</h4>
+<p>例子：考虑在某个文本中查找模式BARBER:<br>
+<img src="/img/horspool_example.jpg" alt="在某个文本中查找模式BARBER"><br>
+从模式的最后一个R开始从右向左，比较模式和文本中的相应字符对。如果模式中所有的字符都匹配成功，就找到了一个匹配的子串。然而，如果遇到了一对不匹配字符，就需要把模式右移，希望移动幅度尽可能大。假设文本中，对齐模式最后一个字符的元素是字符c，Horspool算法根据c的不同情况来确定移动的距离。<br>
+一般来说，存在下面4种情况。</p>
+<ul>
+<li><strong>情况1</strong>：如果模式中不存在c(本例中，c就是字母S)，模式安全移动的幅度就是它的全部长度(如果我们移动的幅度较小，模式中的某些元素还是会和字符c对齐，而c又不在模式中)。<br>
+<img src="/img/horspool_example_situation_1.jpg" alt="情况1"></li>
+<li><strong>情况2</strong>：如果模式中存在c，但它不是模式的最后一个字符(本例中，c就是字母B)，移动时应该把模式中最右边的c和文本中的c对齐：<br>
+<img src="/img/horspool_example_situation_2.jpg" alt="情况2"></li>
+<li><strong>情况3</strong>：如果c正好是模式中的最后一个字符，但是在模式的其他m-1个字符中不包含c，移动的情况就类似于情况1：移动的幅度等于模式的全部长度m。例如：<br>
+<img src="/img/horspool_example_situation_3.jpg" alt="情况3"></li>
+<li><strong>情况4</strong>：如果c正好是模式中的最后一个字符，而且在模式的前m-1个字符中也包含c，移动的情况就类似于情况2：移动时应该把模式中前m-1个字符中的c和文本中的c对齐。<br>
+<img src="/img/horspool_example_situation_4.jpg" alt="情况4"></li>
+</ul>
+<p>这个算法明显比蛮力算法对模式移动得更远。但是，如果这个算法在每次尝试的时候都必须检查模式中的每个字符，也会很慢，我们可以预先算出每次移动的距离并把它们存在表中。这个表是以文本中所有可能遇到的字符为索引的，内容是每个字符对应的模式移动的距离。<br>
+模式移动距离可以这样计算：<br>
+<img src="/img/horspool_pattern_shit_table_formula.jpg" alt="计算模式移动距离"></p>
+<blockquote>
+<p>Horspool算法总结</p>
+</blockquote>
+<ol>
+<li>对于给定的长度为m的模式和在模式及文本中用到的字母表，按照上面的描述构造移动表。</li>
+<li>将模式与文本的开始处对齐。</li>
+<li>重复下面的过程，直到发现了一个匹配子串或者模式到达了文本的最后一个字符以外。从模式的最后一个字符开始，比较模式和文本中的相应字符，直到：要么所有m个字符都匹配(然后停止)，要么遇到了一对不匹配的字符。在后一种情况下，如果c是当前文本中和模式的最后一个字符相对齐的字符，从移动表的第c列中取出单元格t©的值，然后将模式沿着文本向右移动t©个字符的距离。</li>
+</ol>
+<p><img src="/img/horspool_example1.jpg" alt="一个例子"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shift_table</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; pattern, <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt;&amp; table)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 用horspool算法和boyer-moore算法填充移动表</span></span><br><span class="line">	<span class="comment">// 输入：模式以及一个可能出现字符的字母表</span></span><br><span class="line">	<span class="comment">// 输出：以字母表中字符为索引的数组table</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pattern.size()<span class="number">-1</span>; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//table.insert(make_pair(pattern.at(i), pattern.size()-1-i));</span></span><br><span class="line">		table[pattern.at(i)] = pattern.size()<span class="number">-1</span>-i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">horspool_matching</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; pattern, <span class="keyword">const</span> <span class="built_in">string</span>&amp; text)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 实现horspool字符串匹配算法</span></span><br><span class="line">	<span class="comment">// 输入：模式pattern和文本text</span></span><br><span class="line">	<span class="comment">// 输出：第一个匹配子串最左端字符的下标，如果没有匹配子串，返回-1</span></span><br><span class="line">	<span class="keyword">if</span> (pattern.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (text.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	<span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; table;</span><br><span class="line">	shift_table(pattern, table);	<span class="comment">// 生成移动表</span></span><br><span class="line">	<span class="keyword">int</span> i = pattern.size()<span class="number">-1</span>;	<span class="comment">// 主字符串上模式最右端所对齐的位置</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; text.size())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">int</span> <span class="title">matched_index</span><span class="params">(<span class="number">0</span>)</span></span>;	<span class="comment">// 匹配字符的个数</span></span><br><span class="line">		<span class="keyword">while</span> (matched_index &lt; pattern.size() &amp;&amp; pattern.at(pattern.size() - <span class="number">1</span> -matched_index) == text.at(i - matched_index))</span><br><span class="line">		&#123;</span><br><span class="line">			++matched_index;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (matched_index == pattern.size())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> i - matched_index + <span class="number">1</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			i += table.count(text[i]) ? table[text[i]] : pattern.size();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="function"><span class="built_in">string</span> <span class="title">pattern</span><span class="params">(<span class="string">"BARBER"</span>)</span></span>;</span><br><span class="line">	<span class="function"><span class="built_in">string</span> <span class="title">text</span><span class="params">(<span class="string">"JIM_SAW_ME_IN_A_BARBERSHOP"</span>)</span></span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"find "</span> &lt;&lt; pattern &lt;&lt; <span class="string">" in "</span> &lt;&lt; text &lt;&lt; <span class="string">" : "</span> &lt;&lt; horspool_matching(pattern, text) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="boyer-moore算法"><a class="markdownIt-Anchor" href="#boyer-moore算法"></a> Boyer-Moore算法</h4>
+<blockquote>
+<p>与Horspool的相同之处：如果模式最右边的字符和文本中相应字符c所做的初次比较失败了，处理操作一致；也预先计算移动表。<br>
+与Horspool的不同之处：在遇到一个不匹配字符之前，如果已经有k(0&lt;k&lt;m)个字符成功匹配了，Boyer-Moore会参考<strong>两个数值</strong>来确定移动的距离。</p>
+</blockquote>
+<ul>
+<li>第一个数值是由文本中的一个字符c所确定的，它导致了模式中的相应字符和它不匹配。称为<strong>坏符号移动</strong>。导致这种移动的原因和导致Horspool算法移动的原因是一样的。计算方法是：如果这个数值是正数，它等于shift_table©-k；如果是0或者负数，则为1。即d_1=max\\{t_1(c)-k,1\\}。</li>
+<li>第二个数值是由模式中最后k&gt;0个成功匹配的字符所确定的。我们把模式的结尾部分叫作模式的长度为k的后缀，记作suff(k)。称为<strong>好后缀移动</strong>。移动的距离是从右数第二个suff(k)(它的后继字符和最后一个suff(k)的后继不同)到最右边的suff(k)之间的距离。即好后缀之间相隔的距离。如果不存在另一个suff(k)，就减少k值继续寻找。<br>
+<img src="/img/boyer_moore_good_table.jpg" alt="ABCBAB模式的好后缀表"></li>
+</ul>
+<blockquote>
+<p>Boyer-Moore算法总结</p>
+</blockquote>
+<ol>
+<li>对于给定的模式和在模式及文本中用到的字母表，按照给出的描述构造坏符号移动表。</li>
+<li>按照给出的描述，利用模式来构造好后缀移动表。</li>
+<li>将模式与文本的开始处对齐。</li>
+<li>重复下面的过程，直到发现了一个匹配子串或者模式到达了文本的最后一个字符以外：从模式的最后一个字符开始，比较模式和文本中的相应字符，直到要么所有m个字符都匹配(然后停止)，要么在k&gt;=0对字符成功匹配以后，遇到了一堆不匹配的字符。在后一种情况下，如果c是文本中的不匹配字符，我们从坏符号移动表的第c列取出单元格t©的值。如果k&gt;0，还要从好后缀移动表中取出相应的d2的值。然后将模式沿着文本向右移动d个字符的距离，d是按照以下公式计算出来的：<br>
+<img src="/img/boyer_moore_calculate_d.jpg" alt="Image Loading"></li>
+</ol>
+<p><strong>一个例子</strong>：查找BAOBAB。<br>
+<img src="/img/boyer_moore_example_bad.jpg" alt="坏符号移动表"><br>
+<img src="/img/boyer_moore_example_good.jpg" alt="好后缀移动表"><br>
+<img src="/img/boyer_moore_example.jpg" alt="用Boyer-Moore算法进行字符串匹配的例子"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="散列法"><a class="markdownIt-Anchor" href="#散列法"></a> 散列法</h3>
+<blockquote>
+<p><strong>散列</strong>是一种非常高效的实现字典的方法。它的基本思想是把键映射到一张一维表中。这种表在大小上的限制使得它必须采用一种碰撞解决机制。散列的两种主要类型是<strong>开散列</strong>(又称为<strong>分离链</strong>，键存储在散列表以外的链表中)以及<strong>闭散列</strong>(又称为<strong>开式寻址</strong>，键存储在散列表中)。平均情况下，这两种算法的查找、插入和删除操作的效率都是属于O(1)的。</p>
+</blockquote>
+<h4 id="开散列分离链"><a class="markdownIt-Anchor" href="#开散列分离链"></a> 开散列(分离链)</h4>
+<blockquote>
+<p><strong>开散列</strong>中，键被存储在附着于散列表单元格上的链表中。每个链表包含着所有散列到该单元格的键。</p>
+</blockquote>
+<p><img src="/img/hash_table_linked_list_example.jpg" alt="用分离链构造散列表的例子"></p>
+<h4 id="闭散列开式寻址"><a class="markdownIt-Anchor" href="#闭散列开式寻址"></a> 闭散列(开式寻址)</h4>
+<blockquote>
+<p><strong>闭散列</strong>中，所有的键都存储在散列表本身。最简单的处理碰撞的策略是<strong>线性探查</strong>，它检查碰撞发生处后面的单元格。如果该单元格为空，新的键就放置在那里；如果下一个单元格也被占用了，就检查该单元格的直接后继是否可用，依次类推。到达末尾就从头开始。</p>
+</blockquote>
+<p><img src="/img/hash_table_array_example.jpg" alt="用线性探查构造散列表的例子"><br>
+删除的时候需要“延迟删除”，即只标记，不删除。</p>
+<h4 id="相关题目-2"><a class="markdownIt-Anchor" href="#相关题目-2"></a> 相关题目</h4>
+<ol>
+<li>
+<p><strong>生日悖论</strong>。当一个房间里有多少人的时候，其中两个人生日(月和日)相同的概率大于1/2？<br>
+<strong>解答</strong>：<img src="/img/birthday_paradox_solution.jpg" alt="生日悖论的解答"><br>
+第一个人有365/365个选择，第二个人有364/365种选择，…<br>
+所以n约等于22.5。</p>
+</li>
+<li>
+<p><strong>ADT字典</strong>的5种实现的平均效率类型。<br>
+<img src="/img/adt_big_o.jpg" alt="Image Loading"></p>
+</li>
+</ol>
+<h3 id="b树"><a class="markdownIt-Anchor" href="#b树"></a> B树</h3>
+<blockquote>
+<p><strong>B树</strong>是一棵平衡查找树，它把2-3树的思想推广到允许多个键位于同一个节点上。它的主要应用是维护存储在磁盘上的数据的类索引信息。通过选择恰当的树的次数，即使对于非常大的文件，我们所实现的查找、插入和删除操作也只需要执行很少几次的磁盘存取。</p>
+</blockquote>
+<p>B树所有的数据记录(或者记录的键)都按照键的升序存储在叶子中。它们的父母节点作为索引。具体来说，每个父母节点包含n-1个有序的键<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>K</mi><mn>1</mn></msup><mo>&lt;</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>&lt;</mo><msub><mi>K</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">K^1&lt;...&lt;K_{n-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.0224389999999999em;vertical-align:-0.208331em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">&lt;</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mrel">&lt;</span><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">n</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>(假设它们是唯一的)。这些键之间插入了n个指向节点子女的指针，使得子树<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>T</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">T_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>中的所有键都小于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，子树<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">T_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>中的所有键都大于等于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>小于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>K</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">K_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，而<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>等于子树<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">T_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>中最小的键，以此类推直到最后一棵子树。这样的一个节点称为<strong>n节点</strong>。<br>
+<img src="/img/b_tree_n_node.jpg" alt="B树的父母节点，n节点"></p>
+<p>一棵次数为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>⩾</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">m\geqslant2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.78111em;vertical-align:-0.13667em;"></span><span class="base textstyle uncramped"><span class="mord mathit">m</span><span class="mrel amsrm">⩾</span><span class="mord mathrm">2</span></span></span></span>的B树必须满足下面这些结构上的特性：</p>
+<ul>
+<li>它的根要么是一个叶子，要么具有2到m个子女。</li>
+<li>除了根和叶子以外的每个节点，具有m/2到m个子女(因此也具有m/2-1)到m-1个键。</li>
+<li>这棵树是(完美)平衡的，也就是说，它的所有叶子都是在同一层上。</li>
+</ul>
+<p><img src="/img/b_tree_4_example.jpg" alt="一棵次数为4的B树的例子"><br>
+<img src="/img/b_tree_4_insert_example.jpg" alt="在上图的B树中插入65的结果"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// B树中的键插入算法</span></span><br><span class="line"><span class="comment">// TODO</span></span><br></pre></td></tr></table></figure>
+<p>[1] 算法设计/与分析基础(第2版)</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#时空权衡"><span class="toc-number">1.</span> <span class="toc-text"> 时空权衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#计数排序"><span class="toc-number">1.1.</span> <span class="toc-text"> 计数排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串匹配中的输入增强技术"><span class="toc-number">1.2.</span> <span class="toc-text"> 字符串匹配中的输入增强技术</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#horspool算法"><span class="toc-number">1.2.1.</span> <span class="toc-text"> Horspool算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#boyer-moore算法"><span class="toc-number">1.2.2.</span> <span class="toc-text"> Boyer-Moore算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#散列法"><span class="toc-number">1.3.</span> <span class="toc-text"> 散列法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#开散列分离链"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 开散列(分离链)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#闭散列开式寻址"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 闭散列(开式寻址)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目-2"><span class="toc-number">1.3.3.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b树"><span class="toc-number">1.4.</span> <span class="toc-text"> B树</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&text=Space and Time Trade-Offs"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&is_video=false&description=Space and Time Trade-Offs"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Space and Time Trade-Offs&body=Check out this article: http://conglang.github.io/2015/01/25/space-and-time-trade-offs/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&title=Space and Time Trade-Offs"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/25/space-and-time-trade-offs/&name=Space and Time Trade-Offs&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

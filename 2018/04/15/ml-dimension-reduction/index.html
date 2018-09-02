@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="降维与度量学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="降维与度量学习">
+<meta property="og:url" content="http://conglang.github.io/2018/04/15/ml-dimension-reduction/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="降维与度量学习。">
+<meta property="og:image" content="http://conglang.github.io/img/554E4C80-3EA1-4895-A490-3C46C6FA08F7.png">
+<meta property="og:image" content="http://conglang.github.io/img/D878A804-B8F4-49E8-8E93-2D6B7D957C14.png">
+<meta property="og:image" content="http://conglang.github.io/img/A53EB3AF-72DC-4D69-A647-D44F872160CB.png">
+<meta property="og:image" content="http://conglang.github.io/img/131A09FA-D67B-4346-B48F-18A360B9F533.png">
+<meta property="og:image" content="http://conglang.github.io/img/A802E80C-4B72-4D07-BA49-2F564270FA1B.png">
+<meta property="og:image" content="http://conglang.github.io/img/2087E7E3-B270-49A2-88A9-2EB1694D89E6.png">
+<meta property="og:image" content="http://conglang.github.io/img/04B1ABE8-FED7-4CF8-AFC8-2104CB47011B.png">
+<meta property="og:image" content="http://conglang.github.io/img/85027FED-EAD0-4EAA-932D-1039098CABE0.png">
+<meta property="og:image" content="http://conglang.github.io/img/BA67E424-1932-4626-835D-283959930B2F.png">
+<meta property="og:image" content="http://conglang.github.io/img/BEC0DFF5-7394-4F6C-AD93-2BACC1E11C16.png">
+<meta property="og:image" content="http://conglang.github.io/img/08602574-46A6-42BD-867D-864292AD97D1.png">
+<meta property="og:image" content="http://conglang.github.io/img/27A83B10-4F5D-4F7E-A7B0-1339B45117F7.png">
+<meta property="og:image" content="http://conglang.github.io/img/52D42E73-01AF-4629-8160-43D83DB10EA5.png">
+<meta property="og:image" content="http://conglang.github.io/img/4C16B74D-AD60-4C2D-BBCC-85C35F1D4492.png">
+<meta property="og:image" content="http://conglang.github.io/img/9C4DF671-FC78-4BC3-A0AC-34598BE75367.png">
+<meta property="og:image" content="http://conglang.github.io/img/11898AC1-A0E0-4080-A7A4-569CB6A5FE90.png">
+<meta property="og:image" content="http://conglang.github.io/img/88E83F8D-8800-4C61-AE78-749BB629E919.png">
+<meta property="og:image" content="http://conglang.github.io/img/FF322A2E-F0F6-48F7-BADF-584B2CC3D5A8.png">
+<meta property="og:image" content="http://conglang.github.io/img/9EBFDC24-CC67-4553-BD44-FA97A7673400.png">
+<meta property="og:image" content="http://conglang.github.io/img/6A2483BA-1CB9-4F6E-ADC2-366165B4B3E4.png">
+<meta property="og:image" content="http://conglang.github.io/img/ED30A5F7-9C69-49F6-AD0E-30E8411ED199.png">
+<meta property="og:image" content="http://conglang.github.io/img/A5A0CE7F-CD2C-4356-9675-103757A2C45E.png">
+<meta property="og:updated_time" content="2018-08-12T06:49:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="降维与度量学习">
+<meta name="twitter:description" content="降维与度量学习。">
+<meta name="twitter:image" content="http://conglang.github.io/img/554E4C80-3EA1-4895-A490-3C46C6FA08F7.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>降维与度量学习</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/04/20/ml-feature-selection/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/04/10/ml-k-nearest-neighbour/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/04/15/ml-dimension-reduction/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&text=降维与度量学习"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&is_video=false&description=降维与度量学习"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=降维与度量学习&body=Check out this article: http://conglang.github.io/2018/04/15/ml-dimension-reduction/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&name=降维与度量学习&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k-nearest-neighbour-k-近邻学习"><span class="toc-number">1.</span> <span class="toc-text"> k Nearest Neighbour k 近邻学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#低维嵌入"><span class="toc-number">2.</span> <span class="toc-text"> 低维嵌入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#multiple-dimensional-scaling-算法-todo"><span class="toc-number">2.1.</span> <span class="toc-text"> Multiple Dimensional Scaling 算法 ? todo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线性变换"><span class="toc-number">2.2.</span> <span class="toc-text"> 线性变换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#principle-component-analysis-主成分分析"><span class="toc-number">3.</span> <span class="toc-text"> Principle Component Analysis 主成分分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#核化线性降维"><span class="toc-number">4.</span> <span class="toc-text"> 核化线性降维</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kernelized-pca-核主成分分析"><span class="toc-number">4.1.</span> <span class="toc-text"> Kernelized PCA 核主成分分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#manifold-learning-流形学习"><span class="toc-number">5.</span> <span class="toc-text"> manifold learning 流形学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#isometric-mapping-等度量映射"><span class="toc-number">5.1.</span> <span class="toc-text"> Isometric Mapping 等度量映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locally-linear-embedding-局部线性嵌入"><span class="toc-number">5.2.</span> <span class="toc-text"> Locally Linear Embedding 局部线性嵌入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#metric-learning-度量学习"><span class="toc-number">6.</span> <span class="toc-text"> Metric Learning 度量学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">7.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        降维与度量学习
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-04-15T14:00:00.000Z" itemprop="datePublished">2018-04-15</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="k-nearest-neighbour-k-近邻学习"><a class="markdownIt-Anchor" href="#k-nearest-neighbour-k-近邻学习"></a> k Nearest Neighbour k 近邻学习</h2>
+<p><a href="/2018/04/10/ml-k-nearest-neighbour/">k Nearest Neighbour k 近邻学习</a></p>
+<h2 id="低维嵌入"><a class="markdownIt-Anchor" href="#低维嵌入"></a> 低维嵌入</h2>
+<p>KNN 算法中的讨论基于一个重要假设：任意测试样本<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span></span></span></span>附近任意小的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>δ</mi></mrow><annotation encoding="application/x-tex">\delta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03785em;">δ</span></span></span></span>距离范围内总能找到一个训练样本，即训练样本的采样密度足够大，或称为密采样 dense sample。然而这个假设在现实任务中通常很难满足。<br>
+维数灾难 curse of dimensionality：高维情形下出现的数据样本稀疏、距离计算困难。<br>
+解决方法：降维 dimension reduction，因为数据样本虽然是高维的，与学习任务密切相关的也许仅是某个低维分布，即高维空间中的一个低维嵌入 embedding。<br>
+<img src="/img/554E4C80-3EA1-4895-A490-3C46C6FA08F7.png" alt="Image Loading"></p>
+<h3 id="multiple-dimensional-scaling-算法-todo"><a class="markdownIt-Anchor" href="#multiple-dimensional-scaling-算法-todo"></a> Multiple Dimensional Scaling 算法 ? todo</h3>
+<p><img src="/img/D878A804-B8F4-49E8-8E93-2D6B7D957C14.png" alt="Image Loading"><br>
+<img src="/img/A53EB3AF-72DC-4D69-A647-D44F872160CB.png" alt="Image Loading"><br>
+<img src="/img/131A09FA-D67B-4346-B48F-18A360B9F533.png" alt="Image Loading"><br>
+<img src="/img/A802E80C-4B72-4D07-BA49-2F564270FA1B.png" alt="Image Loading"><br>
+<img src="/img/2087E7E3-B270-49A2-88A9-2EB1694D89E6.png" alt="Image Loading"></p>
+<h3 id="线性变换"><a class="markdownIt-Anchor" href="#线性变换"></a> 线性变换</h3>
+<p>对原始高维空间进行线性变换以获得低维子空间。<br>
+<img src="/img/04B1ABE8-FED7-4CF8-AFC8-2104CB47011B.png" alt="Image Loading"><br>
+对降维效果的评估，通常是比较降维前后学习器的性能。如果维数降至二维或三维，则可通过可视化技术来直观地判断降维效果。</p>
+<h2 id="principle-component-analysis-主成分分析"><a class="markdownIt-Anchor" href="#principle-component-analysis-主成分分析"></a> Principle Component Analysis 主成分分析</h2>
+<p><a href="/2018/05/15/ml-principle-component-analysis/">Principle Component Analysis 主成分分析</a></p>
+<h2 id="核化线性降维"><a class="markdownIt-Anchor" href="#核化线性降维"></a> 核化线性降维</h2>
+<p>线性降维方法假设从高维空间到低维空间的函数映射是线性的。但现实问题中有时需要非线性映射才能找到恰当的低维嵌入。<br>
+<img src="/img/85027FED-EAD0-4EAA-932D-1039098CABE0.png" alt="Image Loading"><br>
+非线性降维的一种常用方法，是基于 kernel trick 对线性降维方法进行核化 kernelized。</p>
+<h3 id="kernelized-pca-核主成分分析"><a class="markdownIt-Anchor" href="#kernelized-pca-核主成分分析"></a> Kernelized PCA 核主成分分析</h3>
+<p>原始点到转换后的原始点的映射为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">ϕ</span></span></span></span>，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mi>ϕ</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">z_i = \phi (x_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.04398em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathit">ϕ</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span>。恰好 PCA 的欲求解问题里有个內积。<br>
+<img src="/img/BA67E424-1932-4626-835D-283959930B2F.png" alt="Image Loading"><br>
+<img src="/img/BEC0DFF5-7394-4F6C-AD93-2BACC1E11C16.png" alt="Image Loading"><br>
+<img src="/img/08602574-46A6-42BD-867D-864292AD97D1.png" alt="Image Loading"></p>
+<h2 id="manifold-learning-流形学习"><a class="markdownIt-Anchor" href="#manifold-learning-流形学习"></a> manifold learning 流形学习</h2>
+<p>效果通常一般，因为有效进行邻域保持需要密采样，恰是高维情形下的重大障碍。<br>
+<img src="/img/27A83B10-4F5D-4F7E-A7B0-1339B45117F7.png" alt="Image Loading"></p>
+<h3 id="isometric-mapping-等度量映射"><a class="markdownIt-Anchor" href="#isometric-mapping-等度量映射"></a> Isometric Mapping 等度量映射</h3>
+<p>保持近邻样本之间的距离。<br>
+低维流形嵌入到高维空间之后，直接在高维空间中计算直线距离具有误导性，因为高维空间中的直线距离在低维嵌入流形上是不可达的。<br>
+<img src="/img/52D42E73-01AF-4629-8160-43D83DB10EA5.png" alt="Image Loading"><br>
+那么实际的测地线距离如何测算？利用流形在局部上与欧氏空间同胚的性质，对每个点基于欧氏距离找出其近邻点，然后就能建立一个近邻连接图，图中近邻点之间存在连接，而非近邻点之间不存在连接。计算两点之间测地线的问题就变成计算邻近连接图上两点之间的最短路径问题。Dijkstra 或 Floyd 算法计算最短路径，得到任意两点距离之后，就可用 MDS 方法获得样本在低维空间中的坐标。<br>
+<img src="/img/4C16B74D-AD60-4C2D-BBCC-85C35F1D4492.png" alt="Image Loading"><br>
+<img src="/img/9C4DF671-FC78-4BC3-A0AC-34598BE75367.png" alt="Image Loading"><br>
+<img src="/img/11898AC1-A0E0-4080-A7A4-569CB6A5FE90.png" alt="Image Loading"></p>
+<h3 id="locally-linear-embedding-局部线性嵌入"><a class="markdownIt-Anchor" href="#locally-linear-embedding-局部线性嵌入"></a> Locally Linear Embedding 局部线性嵌入</h3>
+<p>保持邻域内样本之间的线性关系。<br>
+<img src="/img/88E83F8D-8800-4C61-AE78-749BB629E919.png" alt="Image Loading"><br>
+<img src="/img/FF322A2E-F0F6-48F7-BADF-584B2CC3D5A8.png" alt="Image Loading"><br>
+<img src="/img/9EBFDC24-CC67-4553-BD44-FA97A7673400.png" alt="Image Loading"><br>
+<img src="/img/6A2483BA-1CB9-4F6E-ADC2-366165B4B3E4.png" alt="Image Loading"><br>
+<img src="/img/ED30A5F7-9C69-49F6-AD0E-30E8411ED199.png" alt="Image Loading"></p>
+<h2 id="metric-learning-度量学习"><a class="markdownIt-Anchor" href="#metric-learning-度量学习"></a> Metric Learning 度量学习</h2>
+<p>降维的主要目的是找到一个合适的低维空间，在此空间中进行学习能比原始空间性能更好。事实上，每个空间对应了在样本属性上定义的一个距离度量。那可以直接尝试学习出一个合适的距离度量，这就是度量学习的基本动机。<br>
+马氏距离<br>
+<img src="/img/A5A0CE7F-CD2C-4356-9675-103757A2C45E.png" alt="Image Loading"><br>
+对 M 进行学习需要一个目标。例如提高近邻分类器的性能，将 M 嵌入其评价指标进行学习。</p>
+<h2 id="ref"><a class="markdownIt-Anchor" href="#ref"></a> Ref</h2>
+<p>[1] 机器学习 - 周志华</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#k-nearest-neighbour-k-近邻学习"><span class="toc-number">1.</span> <span class="toc-text"> k Nearest Neighbour k 近邻学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#低维嵌入"><span class="toc-number">2.</span> <span class="toc-text"> 低维嵌入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#multiple-dimensional-scaling-算法-todo"><span class="toc-number">2.1.</span> <span class="toc-text"> Multiple Dimensional Scaling 算法 ? todo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线性变换"><span class="toc-number">2.2.</span> <span class="toc-text"> 线性变换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#principle-component-analysis-主成分分析"><span class="toc-number">3.</span> <span class="toc-text"> Principle Component Analysis 主成分分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#核化线性降维"><span class="toc-number">4.</span> <span class="toc-text"> 核化线性降维</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kernelized-pca-核主成分分析"><span class="toc-number">4.1.</span> <span class="toc-text"> Kernelized PCA 核主成分分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#manifold-learning-流形学习"><span class="toc-number">5.</span> <span class="toc-text"> manifold learning 流形学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#isometric-mapping-等度量映射"><span class="toc-number">5.1.</span> <span class="toc-text"> Isometric Mapping 等度量映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locally-linear-embedding-局部线性嵌入"><span class="toc-number">5.2.</span> <span class="toc-text"> Locally Linear Embedding 局部线性嵌入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#metric-learning-度量学习"><span class="toc-number">6.</span> <span class="toc-text"> Metric Learning 度量学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">7.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/04/15/ml-dimension-reduction/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&text=降维与度量学习"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&is_video=false&description=降维与度量学习"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=降维与度量学习&body=Check out this article: http://conglang.github.io/2018/04/15/ml-dimension-reduction/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&title=降维与度量学习"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/04/15/ml-dimension-reduction/&name=降维与度量学习&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

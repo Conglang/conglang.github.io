@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="论文，DeepId 系列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文 DeepID 系列">
+<meta property="og:url" content="http://conglang.github.io/2018/08/01/essay-deepid/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="论文，DeepId 系列">
+<meta property="og:image" content="http://conglang.github.io/img/n2-process.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid1_feature_extraction_process.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid1_convnet_structure.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid1_face_regions.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid1_joint_bayesian.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid1_neural_network_for_face_verification.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2_convnet.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2_identification_signal.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2_verification_signal.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2_training.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2_patches.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2_variance_compare.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_neural_net.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_net.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_sparsity_hist.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_binary_better.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_occluded_image.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_occlusion_ratio.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid2p_occlusion_block.png">
+<meta property="og:image" content="http://conglang.github.io/img/deepid3_neural_net.png">
+<meta property="og:updated_time" content="2018-08-02T14:45:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文 DeepID 系列">
+<meta name="twitter:description" content="论文，DeepId 系列">
+<meta name="twitter:image" content="http://conglang.github.io/img/n2-process.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>论文 DeepID 系列</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/04/probability-statistics-intuition/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/07/31/essay-facenet/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/08/01/essay-deepid/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/08/01/essay-deepid/&text=论文 DeepID 系列"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/08/01/essay-deepid/&is_video=false&description=论文 DeepID 系列"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 DeepID 系列&body=Check out this article: http://conglang.github.io/2018/08/01/essay-deepid/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/08/01/essay-deepid/&name=论文 DeepID 系列&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid1"><span class="toc-number">2.</span> <span class="toc-text"> DeepID1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#deep-convnets"><span class="toc-number">2.1.</span> <span class="toc-text"> Deep ConvNets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#feature-extraction"><span class="toc-number">2.2.</span> <span class="toc-text"> Feature Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#face-verification"><span class="toc-number">2.3.</span> <span class="toc-text"> Face Verification</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#joint-bayesian"><span class="toc-number">2.3.1.</span> <span class="toc-text"> Joint Bayesian</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neural-network"><span class="toc-number">2.3.2.</span> <span class="toc-text"> Neural Network</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#experiments"><span class="toc-number">2.4.</span> <span class="toc-text"> Experiments</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid2"><span class="toc-number">3.</span> <span class="toc-text"> DeepID2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#identification-verification-guided-deep-feature-learning"><span class="toc-number">3.1.</span> <span class="toc-text"> Identification-Verification Guided Deep Feature Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#experiments-2"><span class="toc-number">3.2.</span> <span class="toc-text"> Experiments</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid2-2"><span class="toc-number">4.</span> <span class="toc-text"> DeepID2+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#deepid2-nets"><span class="toc-number">4.1.</span> <span class="toc-text"> DeepID2+ Nets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#moderate-sparsity-of-neural-activations"><span class="toc-number">4.2.</span> <span class="toc-text"> Moderate Sparsity of Neural Activations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#selectiveness-on-identities-and-attributes"><span class="toc-number">4.3.</span> <span class="toc-text"> Selectiveness on Identities and Attributes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#robustness-of-deepid-features"><span class="toc-number">4.4.</span> <span class="toc-text"> Robustness of DeepID+ Features</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid3"><span class="toc-number">5.</span> <span class="toc-text"> DeepID3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#deepid3-net"><span class="toc-number">5.1.</span> <span class="toc-text"> DeepID3 Net</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        论文 DeepID 系列
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-01T13:12:09.000Z" itemprop="datePublished">2018-08-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Essay/">Essay</a>, <a class="tag-link" href="/tags/Face-Recognition/">Face Recognition</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h2>
+<p>DeepID 已演进数次。</p>
+<ul>
+<li>DeepID1: Deep Learning Face Representation from Predicting 10,000 Classes</li>
+<li>DeepID2: deep learning face representation by joint identification-verification</li>
+<li>DeepId2+: Deeply learned face representations are sparse, selective, and robust</li>
+<li>DeepID3: Face Recognition with Very Deep Neural Networks</li>
+</ul>
+<p>卷积神经网络在DeepID中的作用是是学习特征，即将图片输入进去，学习到一个160维的向量。然后再这个160维向量上，套用各种现成的分类器，即可得到结果。</p>
+<p>DeepID 算法优化的主要手段就是增大数据集。</p>
+<p><img src="/img/n2-process.png" alt="Whole Process"><br>
+在上述的流程中，DeepID可以换为Hog，LBP等传统特征提取算法。Classifier可以是SVM，Joint Bayes，LR，NN等任意的machine learning分类算法。</p>
+<p>在引入外部数据集的情况下，训练流程是这样的。首先，外部数据集4:1进行切分，4那份用来训练DeepID，1那份作为训练DeepID的验证集；然后，1那份用来训练Classifier。这样划分的原因在于两层模型不能使用同一种数据进行训练，容易产生过拟合。</p>
+<h2 id="deepid1"><a class="markdownIt-Anchor" href="#deepid1"></a> DeepID1</h2>
+<blockquote>
+<p>face patchs ---- ConvNet ----&gt; high-level feature of last hidden layer<br>
+features ---- joint bayesian or neural network ----&gt; face verification</p>
+</blockquote>
+<p>DeepID features -&gt; Last hidden layer of each ConvNet (160d)<br>
+200+ ConvNets (each ConvNets are corresponding to one patch)<br>
+<img src="/img/deepid1_feature_extraction_process.png" alt="Feature Extraction Process"></p>
+<h3 id="deep-convnets"><a class="markdownIt-Anchor" href="#deep-convnets"></a> Deep ConvNets</h3>
+<p><img src="/img/deepid1_convnet_structure.png" alt="Convnet Structure"></p>
+<p>注意倒数第二层，DeepID feature 那一层，与 Convolutional layer 4 和 Max-pooling layer 3 相连，是为了减少信息损失，既考虑局部的特征，又考虑全局的特征。</p>
+<p>The last hidden layer of DeepID is fully connected to both the third and fourth convolutional layers (after max- pooling) such that it sees multi-scale features. This is critical to feature learning because after successive down-sampling along the cascade, the fourth convolutional layer contains too few neurons and becomes the bottleneck for information propagation.</p>
+<h3 id="feature-extraction"><a class="markdownIt-Anchor" href="#feature-extraction"></a> Feature Extraction</h3>
+<p><img src="/img/deepid1_face_regions.png" alt="Face Regions"><br>
+人脸图片的预处理方式 aligned and patch。</p>
+<ul>
+<li>Faces are globally aligned by similarity transformation according to the two eye centers and the mid-point of the two mouth corners.</li>
+<li>Features are extracted from 60 face patches with ten regions, three scales, and RGB or gray channels.</li>
+</ul>
+<h3 id="face-verification"><a class="markdownIt-Anchor" href="#face-verification"></a> Face Verification</h3>
+<h4 id="joint-bayesian"><a class="markdownIt-Anchor" href="#joint-bayesian"></a> Joint Bayesian</h4>
+<p><img src="/img/deepid1_joint_bayesian.png" alt="Joint Bayesian for Face Verification"></p>
+<h4 id="neural-network"><a class="markdownIt-Anchor" href="#neural-network"></a> Neural Network</h4>
+<p><img src="/img/deepid1_neural_network_for_face_verification.png" alt="Neural Network for Face Verification"><br>
+Input layer: 60 groups, each has [<code>2 (a patch pair) * 160 (d features of a convnet) * 2 (patch and its horizontally flipped counterpart)</code>]<br>
+Features in the same group are highly correlated.</p>
+<h3 id="experiments"><a class="markdownIt-Anchor" href="#experiments"></a> Experiments</h3>
+<ul>
+<li>使用multi-scale patches的convnet比只使用一个只有整张人脸的patch的效果要好。</li>
+<li>DeepID自身的分类错误率在40%到60%之间震荡，虽然较高，但DeepID是用来学特征的，并不需要要关注自身分类错误率。</li>
+<li>使用DeepID神经网络的最后一层softmax层作为特征表示，效果很差。</li>
+<li>随着DeepID的训练集人数的增长，DeepID本身的分类正确率和LFW的验证正确率都在增加。</li>
+</ul>
+<h2 id="deepid2"><a class="markdownIt-Anchor" href="#deepid2"></a> DeepID2</h2>
+<blockquote>
+<p>face identification signal + face verification signal</p>
+</blockquote>
+<p>DeepID1的卷积神经网络最后一层softmax使用的是Logistic Regression作为最终的目标函数，也就是识别信号 face identification signal；<br>
+但在DeepID2中，目标函数上添加了验证信号 face verification signal，两个信号使用加权的方式进行了组合。</p>
+<h3 id="identification-verification-guided-deep-feature-learning"><a class="markdownIt-Anchor" href="#identification-verification-guided-deep-feature-learning"></a> Identification-Verification Guided Deep Feature Learning</h3>
+<p><img src="/img/deepid2_convnet.png" alt="The ConvNet structure for DeepID2 extraction"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>=</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>v</mi><mo>(</mo><mi>x</mi><mo separator="true">,</mo><msub><mi>θ</mi><mi>c</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">f = Conv(x, \theta_c)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mpunct">,</span><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">c</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span><br>
+x is input face patch, f is DeepID2 vector, θc is convnet parameters to be learned.</p>
+<p>Two supervisory signals:</p>
+<ul>
+<li>face identification signal 识别信号<br>
+Classifies each face image into one of n different identities.<br>
+softmax<br>
+<img src="/img/deepid2_identification_signal.png" alt="Formular of Face Identification Signal"><br>
+f is the DeepID2 vector, t is the target class, θ is the softmax layer parameters, p is the target probability distribution, p hat is the predicted probability distribution.</li>
+<li>face verification signal 验证信号<br>
+encourages DeepID2 extracted from faces of the same identity to be similar.<br>
+Regularize DeepID2 to reduce the intra-personal variations. Can be L1/L2 norm and cosine similarity.<br>
+<img src="/img/deepid2_verification_signal.png" alt="Formular of Face Verification Signal"><br>
+f1 and f2 are DeepID2 vectors of two images; y=1 means same identity, minimize L2; y=-1 means different identity, distance larger than margin m.</li>
+</ul>
+<p>由于验证信号的计算需要两个样本，所以整个卷积神经网络的训练过程也就发生了变化，之前是将全部数据切分为小的batch来进行训练。现在则是每次迭代时随机抽取两个样本，然后进行训练。训练过程如下：<br>
+<img src="/img/deepid2_training.png" alt="The DeepID2 learning algorithm"><br>
+在训练过程中，lambda是验证信号的加权参数。参数是动态调整的，调整策略是使最近的训练样本上的验证错误率最低。</p>
+<h3 id="experiments-2"><a class="markdownIt-Anchor" href="#experiments-2"></a> Experiments</h3>
+<p>首先使用SDM算法对每张人脸检测出21个landmarks，然后根据这些landmarks，再加上位置、尺度、通道、水平翻转等因素，每张人脸形成了400张patch，使用200个CNN对其进行训练，水平翻转形成的patch跟原始图片放在一起进行训练。这样，就形成了400×160维的向量。</p>
+<p>这样形成的特征维数太高，所以要进行特征选择，不同于之前的DeepID直接采用PCA的方式，DeepID2先对patch进行选取，使用前向-后向贪心算法选取了25个最有效的patch，这样就只有25×160维向量，然后使用PCA进行降维，降维后为180维，然后再输入到联合贝叶斯模型中进行分类。</p>
+<p>DeepID2使用的外部数据集仍然是CelebFaces+，但先把CelebFaces+进行了切分，切分成了CelebFaces+A(8192个人)和CelebFaces+B(1985个人)。首先，训练DeepID2，CelebFaces+A做训练集，此时CelebFaces+B做验证集；其次，CelebFaces+B切分为1485人和500人两个部分，进行特征选择，选择25个patch。最后在CelebFaces+B整个数据集上训练联合贝叶斯模型，然后在LFW上进行测试。在上一段描述的基础上，进行了组合模型的加强，即在选取特征时进行了七次。第一次选效果最好的25个patch，第二次从剩余的patch中再选25个，以此类推。然后将七个联合贝叶斯模型使用SVM进行融合。最终达到了99.15%的结果。</p>
+<p>其中，选取的25个patch如下：<br>
+<img src="/img/deepid2_patches.png" alt="Patches selected for feature extraction"></p>
+<p>对lambda进行调整，也即对识别信号和验证信号进行平衡，发现lambda在0.05的时候最好。使用LDA中计算类间方差和类内方差的方法进行计算。得到的结果如下：<br>
+<img src="/img/deepid2_variance_compare.png" alt="Variance Compare"></p>
+<p>可以发现，在lambda=0.05的时候，类间方差几乎不变，类内方差下降了很多。这样就保证了类间区分性，而减少了类内区分性。如果lambda为无穷大，即只有验证信号时，类间方差和类内方差都变得很小，不利于最后的分类。</p>
+<ul>
+<li>DeepID的训练集人数越多，最后的验证率越高。</li>
+<li>对不同的验证信号，包括L1，L2，cosin等分别进行了实验，发现L2 Norm最好。</li>
+</ul>
+<h2 id="deepid2-2"><a class="markdownIt-Anchor" href="#deepid2-2"></a> DeepID2+</h2>
+<blockquote>
+<p>Compared with the DeepID2, DeepID2+ added the supervisory signal in the early layers and increases the dimension of hidden repsresentation.<br>
+In the DeepID2+,author discover some nice property of neural network: sparsity, selectivity and robustness.</p>
+</blockquote>
+<ul>
+<li>Sparsity<br>
+神经单元的适度稀疏性，该性质甚至可以保证即便经过二值化后，仍然可以达到较好的识别效果。</li>
+<li>Selectivity<br>
+高层的神经单元对人比较敏感，即对同一个人的头像来说，总有一些单元处于一直激活或者一直抑制的状态。</li>
+<li>Robustness<br>
+DeepID2+的输出对遮挡非常鲁棒。</li>
+</ul>
+<h3 id="deepid2-nets"><a class="markdownIt-Anchor" href="#deepid2-nets"></a> DeepID2+ Nets</h3>
+<p>和 DeepID2 相比有三点改动。</p>
+<ul>
+<li>DeepID 层从160维提高到512维。</li>
+<li>训练集将 CelebFaces+ 和 WDRef 数据集进行了融合，共有12000人，290000张图片。</li>
+<li>将 DeepID 层不仅和第四层和第三层的 max-pooling 层连接，还连接了第一层和第二层的 max-pooling层。</li>
+</ul>
+<p><img src="/img/deepid2p_neural_net.png" alt="DeepID+ Neural Net"><br>
+<img src="/img/deepid2p_net.png" alt="DeepID+ Neural Net"><br>
+joint face identification-verification<br>
+supervisory signals</p>
+<h3 id="moderate-sparsity-of-neural-activations"><a class="markdownIt-Anchor" href="#moderate-sparsity-of-neural-activations"></a> Moderate Sparsity of Neural Activations</h3>
+<ul>
+<li>Sparsity for each image<br>
+一张 image 差不多激活半数的 neuron，使不同身份的 face 更可区分。</li>
+<li>Sparsity for each neuron<br>
+一个 neuron 差不多被半数的 image 激活，使其有更大区分度。</li>
+</ul>
+<p><img src="/img/deepid2p_sparsity_hist.png" alt="Sparsity"></p>
+<p>Activation patterns are more important than precise activation values. 所以使用阈值对最后输出的512维向量进行了二值化处理，发现效果降低有限。<br>
+<img src="/img/deepid2p_binary_better.png" alt="Comparison of the Original and the Binary"><br>
+而二值化的数据更节省空间和计算能力，图片搜索更快。</p>
+<h3 id="selectiveness-on-identities-and-attributes"><a class="markdownIt-Anchor" href="#selectiveness-on-identities-and-attributes"></a> Selectiveness on Identities and Attributes</h3>
+<p>存在某个神经单元，只使用普通的阈值法，就能针对某个人得到97%的正确率。不同的神经单元针对不同的人或不同的种族或不同的年龄都有很强的区分性。这和它的激活或抑制态有关。</p>
+<h3 id="robustness-of-deepid-features"><a class="markdownIt-Anchor" href="#robustness-of-deepid-features"></a> Robustness of DeepID+ Features</h3>
+<p>在训练数据中没有遮挡数据的情况下，DeepID2+自动就对遮挡有了很好的鲁棒性。<br>
+有两种方式对人脸进行多种尺度的遮挡，第一种是从下往上进行遮挡，从10%-70%。第二种是不同大小的黑块随机放，黑块的大小从10×10到70×70。<br>
+<img src="/img/deepid2p_occluded_image.png" alt="Occluded Images"></p>
+<p>结论是遮挡在20%以内，块大小在30×30以下，DeepID2+的输出的向量的验证正确率几乎不变。<br>
+<img src="/img/deepid2p_occlusion_ratio.png" alt="Occulusion Ratio"><br>
+<img src="/img/deepid2p_occlusion_block.png" alt="Occulusion Block"></p>
+<h2 id="deepid3"><a class="markdownIt-Anchor" href="#deepid3"></a> DeepID3</h2>
+<blockquote>
+<p>Explore 2 very deep neural network architectures.<br>
+Stacked convolution in VGG net<br>
+Inception layers in GoogLeNet</p>
+</blockquote>
+<h3 id="deepid3-net"><a class="markdownIt-Anchor" href="#deepid3-net"></a> DeepID3 Net</h3>
+<p><img src="/img/deepid3_neural_net.png" alt="DeepID3 Net"><br>
+DeepID3 比起 DeepID2+ 并没有明显的优势。</p>
+<p>Ref:<br>
+[1] <a href="https://www.researchgate.net/publication/283749931_Deep_Learning_Face_Representation_from_Predicting_10000_Classes" target="_blank" rel="external">https://www.researchgate.net/publication/283749931_Deep_Learning_Face_Representation_from_Predicting_10000_Classes</a><br>
+[2] <a href="https://arxiv.org/abs/1406.4773" target="_blank" rel="external">https://arxiv.org/abs/1406.4773</a><br>
+[3] <a href="https://arxiv.org/abs/1412.1265" target="_blank" rel="external">https://arxiv.org/abs/1412.1265</a><br>
+[4] <a href="https://arxiv.org/abs/1502.00873" target="_blank" rel="external">https://arxiv.org/abs/1502.00873</a><br>
+[5] <a href="https://blog.csdn.net/stdcoutzyx/article/details/42091205" target="_blank" rel="external">https://blog.csdn.net/stdcoutzyx/article/details/42091205</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid1"><span class="toc-number">2.</span> <span class="toc-text"> DeepID1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#deep-convnets"><span class="toc-number">2.1.</span> <span class="toc-text"> Deep ConvNets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#feature-extraction"><span class="toc-number">2.2.</span> <span class="toc-text"> Feature Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#face-verification"><span class="toc-number">2.3.</span> <span class="toc-text"> Face Verification</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#joint-bayesian"><span class="toc-number">2.3.1.</span> <span class="toc-text"> Joint Bayesian</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#neural-network"><span class="toc-number">2.3.2.</span> <span class="toc-text"> Neural Network</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#experiments"><span class="toc-number">2.4.</span> <span class="toc-text"> Experiments</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid2"><span class="toc-number">3.</span> <span class="toc-text"> DeepID2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#identification-verification-guided-deep-feature-learning"><span class="toc-number">3.1.</span> <span class="toc-text"> Identification-Verification Guided Deep Feature Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#experiments-2"><span class="toc-number">3.2.</span> <span class="toc-text"> Experiments</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid2-2"><span class="toc-number">4.</span> <span class="toc-text"> DeepID2+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#deepid2-nets"><span class="toc-number">4.1.</span> <span class="toc-text"> DeepID2+ Nets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#moderate-sparsity-of-neural-activations"><span class="toc-number">4.2.</span> <span class="toc-text"> Moderate Sparsity of Neural Activations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#selectiveness-on-identities-and-attributes"><span class="toc-number">4.3.</span> <span class="toc-text"> Selectiveness on Identities and Attributes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#robustness-of-deepid-features"><span class="toc-number">4.4.</span> <span class="toc-text"> Robustness of DeepID+ Features</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deepid3"><span class="toc-number">5.</span> <span class="toc-text"> DeepID3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#deepid3-net"><span class="toc-number">5.1.</span> <span class="toc-text"> DeepID3 Net</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/08/01/essay-deepid/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/08/01/essay-deepid/&text=论文 DeepID 系列"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/08/01/essay-deepid/&is_video=false&description=论文 DeepID 系列"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 DeepID 系列&body=Check out this article: http://conglang.github.io/2018/08/01/essay-deepid/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/08/01/essay-deepid/&title=论文 DeepID 系列"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/08/01/essay-deepid/&name=论文 DeepID 系列&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

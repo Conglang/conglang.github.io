@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="一个C与C++程序较基础的通用makefile文件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Generic Makefile for C/C++ Program">
+<meta property="og:url" content="http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="一个C与C++程序较基础的通用makefile文件。">
+<meta property="og:updated_time" content="2015-04-28T14:33:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Generic Makefile for C/C++ Program">
+<meta name="twitter:description" content="一个C与C++程序较基础的通用makefile文件。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Generic Makefile for C/C++ Program</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/04/06/spf13-vim-cheat-sheet/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/03/17/programming-in-ubuntu/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&text=Generic Makefile for C/C++ Program"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&is_video=false&description=Generic Makefile for C/C++ Program"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Generic Makefile for C/C++ Program&body=Check out this article: http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&name=Generic Makefile for C/C++ Program&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Generic Makefile for C/C++ Program
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-04-04T07:15:50.000Z" itemprop="datePublished">2015-04-04</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Makefile/">Makefile</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>原文链接： <a href="http://download.csdn.net/detail/mmmm9999/949149" target="_blank" rel="external">http://download.csdn.net/detail/mmmm9999/949149</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br></pre></td><td class="code"><pre><span class="line">########################################################################################</span><br><span class="line">#</span><br><span class="line"># Generic Makefile for C/C++ Program</span><br><span class="line">#</span><br><span class="line"># Author: mengk</span><br><span class="line"># Date:   2008/08/30</span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 一 、 操作系统及shell相关</span><br><span class="line">########################################################################################</span><br><span class="line">#指定使用的shell及取得操作系统类型，宏定义常用shell命令</span><br><span class="line"> </span><br><span class="line">#指定SHELL ,SHELL := /bin/sh ,或者使用当前SHELL设置</span><br><span class="line">#SHELL := /bin/bash</span><br><span class="line"> </span><br><span class="line">#取得操作系统名称#OS_NAME=&quot;Linux:SunOS:HP-UX:AIX&quot;</span><br><span class="line">OS_NAME := $(shell uname -s)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#把常用的几个系统命令自定义名称和选现,rm命令前面加了一个小减号的意思就是，</span><br><span class="line">#也许某些文件出现问题，但不要管，继续做后面的事</span><br><span class="line"> </span><br><span class="line">AR := ar            </span><br><span class="line">SED:= sed          </span><br><span class="line">AWK:= awk</span><br><span class="line">MV := mv</span><br><span class="line">RM := rm -f</span><br><span class="line">ECHO := echo</span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 二 、C编译器选项</span><br><span class="line">########################################################################################</span><br><span class="line">#指定C编译器, 如gcc  编译器</span><br><span class="line">CC      := gcc</span><br><span class="line">#指定C编译时的选项</span><br><span class="line">#CFLAGS         C语言编译器参数,编译时使用。</span><br><span class="line">CFLAGS := -c -g  -W -Wall</span><br><span class="line"> </span><br><span class="line"># CPP ,  C 预编译器的名称，默认值为 $(CC) -E。</span><br><span class="line">CPP :=</span><br><span class="line">#   CPPFLAGS , C 预编译的选项。</span><br><span class="line">CPPFLAGS :=</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 三 、C++编译器选项</span><br><span class="line">########################################################################################</span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line">#指定C++编译器, 如g++ 编译器</span><br><span class="line">CXX      := g++</span><br><span class="line"> </span><br><span class="line">#指定C编译时的选项</span><br><span class="line">#CXXFLAGS         C++语言编译器参数,编译时使用。</span><br><span class="line">CXXFLAGS := -c -g -W -Wall</span><br><span class="line"> </span><br><span class="line"># CXXPP ,  C++ 预编译器的名称，默认值为 $(CC) -E。</span><br><span class="line">CXXPP :=</span><br><span class="line">#   CXXPPFLAGS , C++ 预编译的选项。</span><br><span class="line">CXXPPFLAGS :=</span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 四、指定额外搜索的头文件路径、库文件路径 、引入的库</span><br><span class="line">########################################################################################</span><br><span class="line">#指定搜索路径, 也可用include指定具体文件路径,编译时使用</span><br><span class="line"># The include files ( C and C++ common).</span><br><span class="line">INCLUDES := -I$(ORACLE_HOME)/rdbms/demo -I$(ORACLE_HOME)/rdbms/public  \</span><br><span class="line">  -I$(ORACLE_HOME)/plsql/public -I$(ORACLE_HOME)/network/public  -I./include -I./include/app -I./include/tools  \</span><br><span class="line">  -I./include/tools/file  -I./include/tools/common</span><br><span class="line"> </span><br><span class="line"># 指定函数库搜索路径DIRECTORY 搜寻库文件(*.a)的路径,加入需要的库搜索路径 功能同–l，由用户指定库的路径，否则编译器将只在标准库的目录找。           </span><br><span class="line">#连接时使用</span><br><span class="line">LIBDIRS :=-L$(ORACLE_HOME)/lib -L$(ORACLE_HOME)/rdbms/lib</span><br><span class="line"> </span><br><span class="line"># 链接器参数,  连接时搜索指定的函数库LDFLAGS。,引入需要的库-lLDFLAGS    指定编译的时候使用的库. 连接库文件开关。例如-lugl，则是把程序同libugl.a文件进行连接。</span><br><span class="line">#连接时使用</span><br><span class="line">#-lclntsh -lnsl -lpthread -Wl,-Bdynamic -lgcc_s    ,同时有动态库和静态库时默认使用动态库，   -Wl,-Bdynamic 指定和动态库相连， -Wl,-Bstatic 指定和静态库相连</span><br><span class="line">CLDFLAGS    :=  -lm  -lclntsh -lnsl -lpthread  -Wl,-Bdynamic  -lgcc_s</span><br><span class="line">CXXLDFLAGS  :=  -lm  -lclntsh -lnsl -lpthread  -Wl,-Bdynamic -lgcc_s  -lstdc++ </span><br><span class="line"> </span><br><span class="line">#宏定义，如果没有定义宏的值，默认是字符串1 ,定义值为数字时直接写数字，字符和字符串需用 \&quot;和\&apos;转义</span><br><span class="line">#DCPPFLAGS :=  -D$&#123;OS_NAME&#125;   -D_TEST1_  -D_TEST2_=2  -D_TEST3_=\&quot;a\&quot;  -D_TEST4_=\&apos;b\&apos; -DOS_NAME=\&quot;$&#123;OS_NAME&#125;\&quot;</span><br><span class="line">DCPPFLAGS := -D$&#123;OS_NAME&#125;   </span><br><span class="line"> </span><br><span class="line">#各平台&apos;SunOS&apos;   &apos;Linux&apos; link类库差异, 设置特定值</span><br><span class="line">ifeq &apos;$&#123;OS_NAME&#125;&apos; &apos;SunOS&apos;</span><br><span class="line">    CLDFLAGS += -lsocket</span><br><span class="line">    CXXLDFLAGS += -lsocket</span><br><span class="line">    DCPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT</span><br><span class="line">endif</span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#  五、 指定源文件的路径 、支持的源文件的扩展名 、源文件搜索路径</span><br><span class="line">########################################################################################</span><br><span class="line"># 指定SRC_DIR 源代码文件路径./src  ./src2   src2/src3</span><br><span class="line">SRC_DIR   := .  ./src  ./src/copyfile  ./src/displayfile ./include/tools/file  ./include/tools/common</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#指定支持的源代码扩展名 SFIX     := .out .a .ln  .o  .c  .cc .C  .p  .f  .F </span><br><span class="line">#.r  .y  .l  .s  .S  .mod  .sym  .def  .h  .info  .dvi  .tex  .texinfo  .texi </span><br><span class="line">#.txinfo  .w  .ch .web  .sh  .elc  .el</span><br><span class="line">SFIX     :=  .c .C .cpp  .cc .CPP  .c++  .cp  .cxx</span><br><span class="line"> </span><br><span class="line">#在当当前目录找不到的情况下，到VPATH所指定的目录中去找寻文件了。如:VPATH = src:../headers</span><br><span class="line">#（当然，当前目录永远是最高优先搜索的地方）</span><br><span class="line">VPATH := $&#123;SRC_DIR&#125;</span><br><span class="line"> </span><br><span class="line">#定义安装目录            </span><br><span class="line">BIN := ./bin</span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#  六、 得到源文件名称集合、OBJS目标文件名集合</span><br><span class="line">########################################################################################</span><br><span class="line"> </span><br><span class="line">#依次循环取得各目录下的所有源文件，在各目录下取源文件时过滤不支持的源文件格式，</span><br><span class="line">#得到源文件集合(带路径)</span><br><span class="line">SOURCES := $(foreach x,$&#123;SRC_DIR&#125;,\</span><br><span class="line">           $(wildcard  \</span><br><span class="line">             $(addprefix  $&#123;x&#125;/*,$&#123;SFIX&#125;) ) )</span><br><span class="line"> </span><br><span class="line">#去掉路径信息，去掉扩展名，再追加.o的扩展名，得到目标文件名集合 (不带路径),需要去掉路径信息，否则连接时有可能找不到.o文件</span><br><span class="line">OBJS := $(addsuffix .o ,$(basename $(notdir $&#123;SOURCES&#125;) ) )    </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#去掉路径信息，去掉扩展名，再追加.d的扩展名，得到依赖文件名集合 (不带路径)</span><br><span class="line">#DEPENDS := $(addsuffix .d ,$(basename $(notdir $&#123;SOURCES&#125;) ) )</span><br><span class="line"> </span><br><span class="line">#去掉扩展名，再追加.d的扩展名，得到依赖文件名集合 (带路径)</span><br><span class="line">DEPENDS := $(addsuffix .d ,$(basename  $&#123;SOURCES&#125; ) )  </span><br><span class="line">#DEPENDS := $(SOURCES:$(SFIX)=.d)</span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#  七、 定义生成程序的名称</span><br><span class="line">########################################################################################</span><br><span class="line"> </span><br><span class="line">#生成可执行程序的名称</span><br><span class="line">PROGRAM   := example</span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#  八、 定义依赖关系 ，编译、链接规则</span><br><span class="line">########################################################################################</span><br><span class="line"> </span><br><span class="line">#.PHONY”表示，clean是个伪目标文件。</span><br><span class="line">.PHONY : all check  clean  install</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#定义编译、链接任务all</span><br><span class="line">all :  $&#123;PROGRAM&#125;  install</span><br><span class="line"> </span><br><span class="line">#检查源码中，除了C源码外是否有C++源码 ,并定义变量LDCXX存储检查结果</span><br><span class="line">LDCXX := $(strip $(filter-out  %.c , $&#123;SOURCES&#125; ) )</span><br><span class="line"> </span><br><span class="line">#编译器重置</span><br><span class="line">ifdef LDCXX   #有C++源码时,所有源码都使用g++编译，包括C源码，将CC、CFLAGS 的值设置为对应的$&#123;CXX&#125;、 $&#123;CXXFLAGS&#125;的值</span><br><span class="line">    CC := $&#123;CXX&#125;                    #重置C编译器为C++编译器</span><br><span class="line">    CFLAGS :=  $&#123;CXXFLAGS&#125;          #重置C编译选现为C++编译选现</span><br><span class="line">    CPP :=  $&#123;CXXPP&#125;                #重置C预编译器为C++预编译器</span><br><span class="line">    CPPFLAGS := $&#123;CXXPPFLAGS&#125;       #重置C预编译的选项为C++预编译的选项</span><br><span class="line">endif</span><br><span class="line"> </span><br><span class="line">#链接</span><br><span class="line">$&#123;PROGRAM&#125; :  $&#123;DEPENDS&#125;  $&#123;OBJS&#125; </span><br><span class="line">ifeq ($(strip $(filter-out  %.c  , $&#123;SOURCES&#125; ) ),)    #只有C源码时使用gcc连接</span><br><span class="line">    $&#123;CC&#125;  $&#123;LIBDIRS&#125;  $&#123;CLDFLAGS&#125;    $&#123;OBJS&#125; -o $@    </span><br><span class="line">else                                                 #有C++源码时使用g++连接</span><br><span class="line">    $(CXX) $&#123;LIBDIRS&#125;  $&#123;CXXLDFLAGS&#125;    $&#123;OBJS&#125; -o $@     </span><br><span class="line">endif</span><br><span class="line"> </span><br><span class="line"># Rules for producing the objects. (.o) BEGIN</span><br><span class="line">#---------------------------------------------------</span><br><span class="line"> </span><br><span class="line">%.o : %.c</span><br><span class="line">    $(CC)      $&#123;DCPPFLAGS&#125;    $&#123;CFLAGS&#125;      $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.C</span><br><span class="line">    $(CXX)     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.cc</span><br><span class="line">    $&#123;CXX&#125;     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.cpp</span><br><span class="line">    $&#123;CXX&#125;     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.CPP</span><br><span class="line">    $&#123;CXX&#125;     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.c++</span><br><span class="line">    $&#123;CXX&#125;     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.cp</span><br><span class="line">    $&#123;CXX&#125;     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">%.o : %.cxx</span><br><span class="line">    $&#123;CXX&#125;     $&#123;DCPPFLAGS&#125;    $&#123;CXXFLAGS&#125;    $&#123;INCLUDES&#125;   $&lt;</span><br><span class="line"> </span><br><span class="line">#---------------------------------------------------</span><br><span class="line"># Rules for producing the objects.(.o) END</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># Rules for creating the dependency files (.d). BEGIN</span><br><span class="line">#---------------------------------------------------</span><br><span class="line">%.d : %.c</span><br><span class="line">    @$&#123;CC&#125;     -M   -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.C</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.cc</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.cpp</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.CPP</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.c++</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.cp</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">%.d : %.cxx</span><br><span class="line">    @$&#123;CXX&#125;    -MM  -MD    $&#123;INCLUDES&#125; $&lt;</span><br><span class="line"> </span><br><span class="line">#---------------------------------------------------</span><br><span class="line"># Rules for creating the dependency files (.d). END</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#  九、 定义其他 check  install clean 等任务</span><br><span class="line">########################################################################################</span><br><span class="line"> </span><br><span class="line">#定义检查环境相关的变量的任务</span><br><span class="line">check :</span><br><span class="line">    @$&#123;ECHO&#125;  MAKEFILES : $&#123;MAKEFILES&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  MAKECMDGOALS : $&#123;MAKECMDGOALS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  SHELL  : $&#123;SHELL&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  OS_NAME  : $&#123;OS_NAME&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  SRC_DIR : $&#123;SRC_DIR&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  SFIX : $&#123;SFIX&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  VPATH : $&#123;VPATH&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  BIN : $&#123;BIN&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  SOURCES : $&#123;SOURCES&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  OBJS : $&#123;OBJS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  DEPENDS : $&#123;DEPENDS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  PROGRAM : $&#123;PROGRAM&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CC :  $&#123;CC&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CFLAGS : $&#123;CFLAGS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CPP : $&#123;CPP&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CPPFLAGS : $&#123;CPPFLAGS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CXX :  $&#123;CXX&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CXXFLAGS : $&#123;CXXFLAGS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CXXPP : $&#123;CXXPP&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CXXPPFLAGS : $&#123;CXXPPFLAGS&#125;       </span><br><span class="line">    @$&#123;ECHO&#125;  INCLUDES : $&#123;INCLUDES&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  LIBDIRS : $&#123;LIBDIRS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CLDFLAGS : $&#123;CLDFLAGS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  CXXLDFLAGS : $&#123;CXXLDFLAGS&#125;</span><br><span class="line">    @$&#123;ECHO&#125;  DCPPFLAGS : $&#123;DCPPFLAGS&#125;</span><br><span class="line">    uname    -a</span><br><span class="line"> </span><br><span class="line">#定义清理的任务 core.*  ,rm命令前面加了一个小减号的意思就是， 也许某些文件出现问题，但不要管，继续做后面的事</span><br><span class="line">clean :</span><br><span class="line">    -$&#123;RM&#125; $&#123;BIN&#125;/$&#123;PROGRAM&#125;</span><br><span class="line">    -$&#123;RM&#125; $&#123;BIN&#125;/*.o</span><br><span class="line">    -$&#123;RM&#125; $&#123;BIN&#125;/*.d</span><br><span class="line">    -$&#123;RM&#125; *.o</span><br><span class="line">    -$&#123;RM&#125; *.d</span><br><span class="line"> </span><br><span class="line">#将目标文件及可执行程序拷贝到安装目录</span><br><span class="line">install :</span><br><span class="line">    -$&#123;MV&#125; $&#123;PROGRAM&#125; $&#123;BIN&#125;</span><br><span class="line">    -$&#123;MV&#125;  *.o $&#123;BIN&#125;</span><br><span class="line">    -$&#123;MV&#125;  *.d $&#123;BIN&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#=======================================================================================</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&text=Generic Makefile for C/C++ Program"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&is_video=false&description=Generic Makefile for C/C++ Program"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Generic Makefile for C/C++ Program&body=Check out this article: http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&title=Generic Makefile for C/C++ Program"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/04/04/generic-makefile-for-c-cpp-program/&name=Generic Makefile for C/C++ Program&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

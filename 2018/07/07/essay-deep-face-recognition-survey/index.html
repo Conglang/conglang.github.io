@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="论文，Deep Face Recognition - A Survey, Mei Wang, Weihong Deng">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文 Deep Face Recognition - A Survey">
+<meta property="og:url" content="http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="论文，Deep Face Recognition - A Survey, Mei Wang, Weihong Deng">
+<meta property="og:image" content="http://conglang.github.io/img/450801FC-4D16-44D1-A4E8-170A69A4F953.png">
+<meta property="og:image" content="http://conglang.github.io/img/7E338DBE-2949-48A9-9192-8A2B672C1A13.png">
+<meta property="og:image" content="http://conglang.github.io/img/B6D3DE2F-F903-424E-929E-7127D09B7D50.png">
+<meta property="og:image" content="http://conglang.github.io/img/8095B71E-4834-44CC-B52D-EA15FB31F7E5.png">
+<meta property="og:image" content="http://conglang.github.io/img/660575DF-7E8D-45AC-84E8-1CE757B1E330.png">
+<meta property="og:image" content="http://conglang.github.io/img/679C6AE0-EF3F-4200-B64D-64DAD8FAC1B2.png">
+<meta property="og:image" content="http://conglang.github.io/img/6D9D77A2-127E-4626-8D95-ADF306933403.png">
+<meta property="og:image" content="http://conglang.github.io/img/1440447A-1B7D-4F8A-81AA-848F1CAB012B.png">
+<meta property="og:image" content="http://conglang.github.io/img/343F5636-A550-4651-824A-59B4BF37A793.png">
+<meta property="og:image" content="http://conglang.github.io/img/7CE32C41-02D8-43A5-86EA-DA30674850F3.png">
+<meta property="og:image" content="http://conglang.github.io/img/C67F0DD7-0004-4906-B1EC-EAEB94A1D00C.png">
+<meta property="og:image" content="http://conglang.github.io/img/797CB06C-B790-46A5-8F7F-781FBE3385AB.png">
+<meta property="og:image" content="http://conglang.github.io/img/C8DEB72E-D43D-4E5D-80C8-4CE0EF39A803.png">
+<meta property="og:image" content="http://conglang.github.io/img/37036815-86FC-4198-BB2A-5686CAF96A6E.png">
+<meta property="og:image" content="http://conglang.github.io/img/289E934E-EBCB-4FD4-B669-7619F279E3AE.png">
+<meta property="og:image" content="http://conglang.github.io/img/B3C83C1B-EC95-400C-B2D7-01547F5C6AE7.png">
+<meta property="og:image" content="http://conglang.github.io/img/DB7C458B-A582-442C-8374-D1F96BDEBD55.png">
+<meta property="og:image" content="http://conglang.github.io/img/E3506D62-30CD-445D-8375-676A1A21712D.png">
+<meta property="og:image" content="http://conglang.github.io/img/97D4B492-1470-4C72-89A7-3CF6CD22F324.png">
+<meta property="og:image" content="http://conglang.github.io/img/B234659E-D4AE-443C-8E89-59A0DD0A77F5.png">
+<meta property="og:image" content="http://conglang.github.io/img/3C0EE0A5-4AEF-444C-81AB-4B6E390F2A99.png">
+<meta property="og:image" content="http://conglang.github.io/img/1804.06655.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/FD25275B-F7CE-4B54-9E76-01FCC748DB80.png">
+<meta property="og:image" content="http://conglang.github.io/img/DED4DE10-6E08-40EC-B28B-3594E8CF5DBB.png">
+<meta property="og:image" content="http://conglang.github.io/img/7990848C-C06F-4692-986D-AAC7DB8AD499.png">
+<meta property="og:image" content="http://conglang.github.io/img/9955978E-C49D-40C6-9633-9FF7E4AC8075.png">
+<meta property="og:image" content="http://conglang.github.io/img/AD5DF91E-1A8C-4C61-9980-5F95D120974C.png">
+<meta property="og:image" content="http://conglang.github.io/img/926335BC-E62A-40C5-A9E8-3FB4E37202B5.png">
+<meta property="og:image" content="http://conglang.github.io/img/ADCE18B1-2C28-4006-98B8-F55D960EA2D0.png">
+<meta property="og:image" content="http://conglang.github.io/img/917666BC-280B-4D2A-AD13-4350AD9951FD.png">
+<meta property="og:image" content="http://conglang.github.io/img/659A8BCD-CA71-4530-A1A7-8D20B104BE15.png">
+<meta property="og:image" content="http://conglang.github.io/img/B2D80787-498F-46D6-974B-AB5ED48176FC.png">
+<meta property="og:image" content="http://conglang.github.io/img/DCF9C670-4625-43F9-B378-D94A07A42260.png">
+<meta property="og:updated_time" content="2018-09-02T15:22:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文 Deep Face Recognition - A Survey">
+<meta name="twitter:description" content="论文，Deep Face Recognition - A Survey, Mei Wang, Weihong Deng">
+<meta name="twitter:image" content="http://conglang.github.io/img/450801FC-4D16-44D1-A4E8-170A69A4F953.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>论文 Deep Face Recognition - A Survey</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/07/10/ml-neural-networks/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/06/04/ml-convex-optimization-overview-cs229/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&text=论文 Deep Face Recognition - A Survey"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&is_video=false&description=论文 Deep Face Recognition - A Survey"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 Deep Face Recognition - A Survey&body=Check out this article: http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&name=论文 Deep Face Recognition - A Survey&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#background-concepts-and-terminology"><span class="toc-number">1.</span> <span class="toc-text"> Background Concepts and Terminology</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#components-of-face-recognition"><span class="toc-number">2.</span> <span class="toc-text"> Components of Face Recognition</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-preprocessing"><span class="toc-number">2.1.</span> <span class="toc-text"> Data Preprocessing</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#one-to-many"><span class="toc-number">2.1.1.</span> <span class="toc-text"> One to Many</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#many-to-one-normalization"><span class="toc-number">2.1.2.</span> <span class="toc-text"> Many-to-One Normalization</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deep-feature-extraction"><span class="toc-number">2.2.</span> <span class="toc-text"> Deep Feature Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#network-architecture"><span class="toc-number">2.2.1.</span> <span class="toc-text"> Network Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#single-network"><span class="toc-number">2.2.1.1.</span> <span class="toc-text"> Single Network</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#multiple-networks"><span class="toc-number">2.2.1.2.</span> <span class="toc-text"> Multiple Networks</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#loss-function"><span class="toc-number">2.2.2.</span> <span class="toc-text"> Loss Function</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#euclidean-distance-based-loss"><span class="toc-number">2.2.2.1.</span> <span class="toc-text"> Euclidean-distance-based loss</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#angularcosine-margin-based-loss"><span class="toc-number">2.2.2.2.</span> <span class="toc-text"> angular/cosine-margin-based loss</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#softmax-loss-and-its-variations"><span class="toc-number">2.2.2.3.</span> <span class="toc-text"> softmax loss and its variations</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#similarity-comparison"><span class="toc-number">2.2.3.</span> <span class="toc-text"> Similarity Comparison</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#databases-of-face-recognition"><span class="toc-number">3.</span> <span class="toc-text"> Databases of Face Recognition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#real-world-scenes"><span class="toc-number">4.</span> <span class="toc-text"> Real-World Scenes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cross-factor-fr"><span class="toc-number">4.1.</span> <span class="toc-text"> Cross-factor FR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cross-pose-face-recognition"><span class="toc-number">4.1.1.</span> <span class="toc-text"> Cross-Pose Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cross-age-face-recognition"><span class="toc-number">4.1.2.</span> <span class="toc-text"> Cross-Age Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#makeup-face-recognition"><span class="toc-number">4.1.3.</span> <span class="toc-text"> Makeup Face Recognition</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heterogenous-fr"><span class="toc-number">4.2.</span> <span class="toc-text"> Heterogenous FR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#nir-vis-face-recognition"><span class="toc-number">4.2.1.</span> <span class="toc-text"> NIR-VIS Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#low-resolution-face-recognition"><span class="toc-number">4.2.2.</span> <span class="toc-text"> Low-Resolution Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#photo-sketch-face-recognition"><span class="toc-number">4.2.3.</span> <span class="toc-text"> Photo-Sketch Face Recognition</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#multiple-or-single-media-fr"><span class="toc-number">4.3.</span> <span class="toc-text"> Multiple (or single) media FR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#low-shot-face-recognition"><span class="toc-number">4.3.1.</span> <span class="toc-text"> Low-Shot Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#settemplate-based-face-recognition"><span class="toc-number">4.3.2.</span> <span class="toc-text"> Set/Template-Based Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#video-face-recognition"><span class="toc-number">4.3.3.</span> <span class="toc-text"> Video Face Recognition</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fr-in-industry"><span class="toc-number">4.4.</span> <span class="toc-text"> FR in industry</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3d-face-recognition"><span class="toc-number">4.4.1.</span> <span class="toc-text"> 3D Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#face-anti-spoofing"><span class="toc-number">4.4.2.</span> <span class="toc-text"> Face Anti-spoofing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#face-recognition-for-mobile-devices"><span class="toc-number">4.4.3.</span> <span class="toc-text"> Face Recognition for Mobile Devices</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        论文 Deep Face Recognition - A Survey
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-07-06T22:30:00.000Z" itemprop="datePublished">2018-07-07</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Essay/">Essay</a>, <a class="tag-link" href="/tags/Face-Recognition/">Face Recognition</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>History。2014年起转向 deep-learning-based 方法。常见 network architecture 有 convolutional neural networks (CNNs)，deep belief networks (DBNs)，stacked autoencoders (SAEs)。<br>
+<img src="/img/450801FC-4D16-44D1-A4E8-170A69A4F953.png" alt="Image Loading"></p>
+<p>人脸识别的麻烦在于：太多种不同的人脸不可能拿到所有 class；一个人自身不同情况(pose, illuminations, expressions, ages, occlusions)的差异可能大于与另一个人的差异；</p>
+<p>本文从data，algorithm，FR scene 三个角度总结。</p>
+<h2 id="background-concepts-and-terminology"><a class="markdownIt-Anchor" href="#background-concepts-and-terminology"></a> Background Concepts and Terminology</h2>
+<p><img src="/img/7E338DBE-2949-48A9-9192-8A2B672C1A13.png" alt="Image Loading"><br>
+Face recognition:<br>
+Detection -&gt; Alignment (~= landmark localization) -&gt; Recognition</p>
+<ul>
+<li>face verification: one-to-one similarity. Same person?</li>
+<li>face identification: one-to-many similarity. Appears in the gallery?</li>
+</ul>
+<h2 id="components-of-face-recognition"><a class="markdownIt-Anchor" href="#components-of-face-recognition"></a> Components of Face Recognition</h2>
+<p>data preprocessing -&gt; deep feature extraction -&gt; similarity comparison<br>
+<img src="/img/B6D3DE2F-F903-424E-929E-7127D09B7D50.png" alt="Image Loading"></p>
+<h3 id="data-preprocessing"><a class="markdownIt-Anchor" href="#data-preprocessing"></a> Data Preprocessing</h3>
+<p>影响因素有 poses, illuminations, expressions, occlusions。<br>
+两个方向：<br>
+<img src="/img/8095B71E-4834-44CC-B52D-EA15FB31F7E5.png" alt="Image Loading"></p>
+<h4 id="one-to-many"><a class="markdownIt-Anchor" href="#one-to-many"></a> One to Many</h4>
+<ul>
+<li>Data Augmentation<br>
+photometric transformations and geometric transformations, such as oversampling (multiple patches obtained by cropping at different scales) , mirroring, and rotating the images.</li>
+<li>3D Model<br>
+<img src="/img/660575DF-7E8D-45AC-84E8-1CE757B1E330.png" alt="Image Loading"></li>
+<li>2D Deep Model</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>思路</th>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D model</td>
+<td>105</td>
+<td>Generated face images with new intra - class facial appearance variations, including pose, shape and expression, and then trained a 19-layer VGGNet with both real and augmented data.</td>
+<td><a href="https://arxiv.org/abs/1603.07057" target="_blank" rel="external">I. Masi, A. T. Tr?n, T. Hassner, J. T. Leksut, and G. Medioni. Do wereally need to collect millions of faces for effective face recognition?In ECCV, pages 579–596. Springer, 2016.</a></td>
+</tr>
+<tr>
+<td></td>
+<td>103</td>
+<td>Used generic 3D faces and rendered fixed views to reduce much of the computational effort.</td>
+<td>I. Masi, T. Hassner, A. T. Tran, and G. Medioni. Rapid synthesis of massive face sets for improved face recognition. In FG 2017, pages 604–611. IEEE, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>127</td>
+<td>An iterative CNN by using a secondary input channel to represent the previous network’s output as an image for reconstructing a 3D face.</td>
+<td><a href="https://arxiv.org/abs/1609.04387" target="_blank" rel="external">E. Richardson, M. Sela, and R. Kimmel. 3d face reconstruction bylearning from synthetic data. In 3DV, pages 460–469. IEEE, 2016.</a></td>
+</tr>
+<tr>
+<td></td>
+<td>128</td>
+<td></td>
+<td>E. Richardson, M. Sela, R. Or-El, and R. Kimmel. Learning detailed face reconstruction from a single image. In CVPR, pages 5553–5562. IEEE, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>45</td>
+<td>a multi-task CNN to divide 3D face reconstruction into neutral 3D reconstruction and expressive 3D reconstruction.</td>
+<td><a href="https://arxiv.org/abs/1704.05020" target="_blank" rel="external">P. Dou, S. K. Shah, and I. A. Kakadiaris. End-to-end 3d facereconstruction with deep neural networks. In CVPR, volume 5, 2017.</a></td>
+</tr>
+<tr>
+<td></td>
+<td>54</td>
+<td></td>
+<td>Y. Guo, J. Zhang, J. Cai, B. Jiang, and J. Zheng. 3dfacenet: Real-time dense face reconstruction via synthesizing photo-realistic face images.,2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>153</td>
+<td>Regressed 3D morphable face model (3DMM)  parameters from an input photo by a very deep CNN architecture.</td>
+<td><a href="https://arxiv.org/abs/1612.04904" target="_blank" rel="external">A. T. Tran, T. Hassner, I. Masi, and G. Medioni. Regressing robust and discriminative 3d morphable models with a very deep neural network.In CVPR, pages 1493–1502. IEEE, 2017.</a></td>
+</tr>
+<tr>
+<td></td>
+<td>152</td>
+<td></td>
+<td>A. Tewari, M. Zollho ̈fer, H. Kim, P. Garrido, F. Bernard, P. Perez, and C. Theobalt. Mofa: Model-based deep convolutional face autoencoder for unsupervised monocular reconstruction. In ICCV, volume 2, 2017.</td>
+</tr>
+<tr>
+<td>2D deep model</td>
+<td>220</td>
+<td></td>
+<td><a href="https://arxiv.org/abs/1406.6947" target="_blank" rel="external">Z. Zhu, P. Luo, X. Wang, and X. Tang. Multi-view perceptron: a deepmodel for learning face identity and view representations. In NIPS,pages 217–225, 2014.</a></td>
+</tr>
+<tr>
+<td></td>
+<td>211</td>
+<td>After using a 3D model to generate profile face images,  refined the images by a generative adversarial network (GAN) , which combines prior knowledge of the data distribution and knowledge of faces (pose and identity perception loss).</td>
+<td>J. Zhao, L. Xiong, P. K. Jayashree, J. Li, F. Zhao, Z. Wang, P. S. Pranata, P. S. Shen, S. Yan, and J. Feng. Dual-agent gans for photorealistic and identity preserving profile face synthesis. In NIPS, pages 65–75, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>139</td>
+<td></td>
+<td>A. Shrivastava, T. Pfister, O. Tuzel, J. Susskind, W. Wang, and R. Webb. Learning from simulated and unsupervised images through adversarial training. In CVPR, volume 3, page 6, 2017.</td>
+</tr>
+<tr>
+<td>Data Augmentation</td>
+<td>96</td>
+<td>Seven CNNs with the same structure were used on seven overlapped image patches centered at different landmarks on the face region.</td>
+<td>J. Liu, Y. Deng, T. Bai, Z. Wei, and C. Huang. Targeting ultimate accuracy: Face recognition via deep embedding. arXiv preprint arXiv:1506.07310, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>217</td>
+<td></td>
+<td>E. Zhou, Z. Cao, and Q. Yin. Naive-deep face recognition: Touching the limit of lfw benchmark or not? arXiv preprint arXiv:1501.04690, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>43</td>
+<td></td>
+<td>C. Ding and D. Tao. Robust face recognition via multimodal deep face representation. IEEE Transactions on Multimedia, 17(11):2049–2058, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>173</td>
+<td></td>
+<td>W.-S.T.WST.Deeplylearnedfacerepresentationsaresparse,selective, and robust. perception, 31:411–438, 2008.</td>
+</tr>
+<tr>
+<td></td>
+<td>143</td>
+<td>Cropped 400 face patches varying in positions, scales, and color channels and mirrored the images.</td>
+<td>Y. Sun, Y. Chen, X. Wang, and X. Tang. Deep learning face representation by joint identification-verification. In NIPS, pages 1988– 1996, 2014.</td>
+</tr>
+<tr>
+<td></td>
+<td>144</td>
+<td></td>
+<td>Y. Sun, D. Liang, X. Wang, and X. Tang. Deepid3: Face recognition with very deep neural networks. arXiv preprint arXiv:1502.00873, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>148</td>
+<td></td>
+<td>Y. Sun, X. Wang, and X. Tang. Sparsifying neural network connections for face recognition. In CVPR, pages 4856–4864, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>158</td>
+<td></td>
+<td>D. Wang, C. Otto, and A. K. Jain. Face search at scale: 80 million gallery. arXiv preprint arXiv:1507.07242, 2015.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="many-to-one-normalization"><a class="markdownIt-Anchor" href="#many-to-one-normalization"></a> Many-to-One Normalization</h4>
+<ul>
+<li>SAE</li>
+<li>CNN</li>
+<li>GAN<br>
+<img src="/img/679C6AE0-EF3F-4200-B64D-64DAD8FAC1B2.png" alt="Image Loading"></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>思路</th>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAE</td>
+<td>77</td>
+<td>The proposed stacked progressive autoencoders (SPAE) progressively map the nonfrontal face to the frontal face through a stack of several autoencoders.</td>
+<td>M. Kan, S. Shan, H. Chang, and X. Chen. Stacked progressive autoencoders (spae) for face recognition across poses. In CVPR, pages 1883–1890, 2014.</td>
+</tr>
+<tr>
+<td></td>
+<td>208</td>
+<td>A sparse many-to-one encoder by setting frontal face and multiple random faces as the target values.</td>
+<td>Y. Zhang, M. Shao, E. K. Wong, and Y. Fu. Random faces guided sparse many-to-one encoder for pose-invariant face recognition. In ICCV, pages 2416–2423. IEEE, 2013.</td>
+</tr>
+<tr>
+<td></td>
+<td>189</td>
+<td>a novel recurrent convolutional encoder-decoder network com- bined with shared identity units and recurrent pose units can render rotated objects instructed by control signals at each time step.</td>
+<td>J. Yang, S. E. Reed, M.-H. Yang, and H. Lee. Weakly-supervised disentangling with recurrent transformations for 3d view synthesis. In NIPS, pages 1099–1107, 2015.</td>
+</tr>
+<tr>
+<td>CNN</td>
+<td>219</td>
+<td>Extracted face identity-preserving features to reconstruct face images in the canonical view using a CNN that consists of a feature extraction module and a frontal face reconstruction module.</td>
+<td>Z. Zhu, P. Luo, X. Wang, and X. Tang. Deep learning identitypreserving face space. In ICCV, pages 113–120. IEEE, 2013.</td>
+</tr>
+<tr>
+<td></td>
+<td>221</td>
+<td>Selected canonical-view images according to the face images’ symmetry and sharpness and then adopted a CNN to recover the frontal view images by minimizing the reconstruction loss error.</td>
+<td>Z. Zhu, P. Luo, X. Wang, and X. Tang. Recover canonical-view faces in the wild with deep neural networks. arXiv preprint arXiv:1404.3543, 2014.</td>
+</tr>
+<tr>
+<td></td>
+<td>70</td>
+<td>Transformed nonfrontal face images to frontal images according to the displacement field of the pixels between them.</td>
+<td>L. Hu, M. Kan, S. Shan, X. Song, and X. Chen. Ldf-net: Learning a displacement field network for face recognition across pose. In FG 2017, pages 9–16. IEEE, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>32</td>
+<td></td>
+<td>F. Cole, D. Belanger, D. Krishnan, A. Sarna, I. Mosseri, and W. T. Freeman. Synthesizing normalized faces from facial identity features. In CVPR, pages 3386–3395, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>194</td>
+<td>A multi-task network that can rotate an arbitrary pose and illumination image to the target-pose face image by utilizing the user’s remote code.</td>
+<td>J. Yim, H. Jung, B. Yoo, C. Choi, D. Park, and J. Kim. Rotating your face using multi-task deep neural network. In CVPR, pages 676–684, 2015.</td>
+</tr>
+<tr>
+<td>GAN</td>
+<td>72</td>
+<td>two-pathway generative adversarial network (TP-GAN) that contains four landmark-located patch networks and a global encoder-decoder network. Through combining adversarial loss, symmetry loss and identity- preserving loss, TP-GAN generates a frontal view and simultaneously preserves global structures and local details.</td>
+<td>R. Huang, S. Zhang, T. Li, R. He, et al. Beyond face rotation: Global and local perception gan for photorealistic and identity preserving frontal view synthesis. arXiv preprint arXiv:1704.04086, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>154</td>
+<td>disentangled representation learning generative adversarial network (DR-GAN) , an encoder produces an identity representation, and a decoder synthesizes a face at the spec- ified pose using this representation and a pose code.</td>
+<td>L. Tran, X. Yin, and X. Liu. Disentangled representation learning gan for pose-invariant face recognition. In CVPR, volume 3, page 7, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>34</td>
+<td></td>
+<td>J. Deng, S. Cheng, N. Xue, Y. Zhou, and S. Zafeiriou. Uv-gan: Adversarial facial uv map completion for pose-invariant face recognition. arXiv preprint arXiv:1712.04695, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>197</td>
+<td>incorporated 3DMM into the GAN structure to provide shape and appearance priors to guide the generator to frontalization.</td>
+<td>X. Yin, X. Yu, K. Sohn, X. Liu, and M. Chandraker. Towards largepose face frontalization in the wild. arXiv preprint arXiv:1704.06244, 2017.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deep-feature-extraction"><a class="markdownIt-Anchor" href="#deep-feature-extraction"></a> Deep Feature Extraction</h3>
+<h4 id="network-architecture"><a class="markdownIt-Anchor" href="#network-architecture"></a> Network Architecture</h4>
+<p><img src="/img/6D9D77A2-127E-4626-8D95-ADF306933403.png" alt="Image Loading"></p>
+<h5 id="single-network"><a class="markdownIt-Anchor" href="#single-network"></a> Single Network</h5>
+<ul>
+<li>Typical Architectures<br>
+<img src="/img/1440447A-1B7D-4F8A-81AA-848F1CAB012B.png" alt="Image Loading"></li>
+<li>Novel architectures<br>
+Several，看下表。<br>
+And although the light-weight CNNs for mobile devices, such as SqueezeNet, MobileNet, ShuffleNet and Xception , are still not widely used in FR, they have potential and deserve more attention.<br>
+<img src="/img/343F5636-A550-4651-824A-59B4BF37A793.png" alt="Image Loading"></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>思路</th>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AlexNet</td>
+<td>131</td>
+<td></td>
+<td>S. Sankaranarayanan, A. Alavi, and R. Chellappa. Triplet similarity embedding for face verification. arXiv preprint arXiv:1602.03418, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>130</td>
+<td></td>
+<td>S. Sankaranarayanan, A. Alavi, C. D. Castillo, and R. Chellappa. Triplet probabilistic embedding for face verification and clustering. In BTAS, pages 1–8. IEEE, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>135</td>
+<td></td>
+<td>F. Schroff, D. Kalenichenko, and J. Philbin. Facenet: A unified embedding for face recognition and clustering. In CVPR, pages 815– 823, 2015.</td>
+</tr>
+<tr>
+<td>VGGNet</td>
+<td>115</td>
+<td></td>
+<td>O. M. Parkhi, A. Vedaldi, A. Zisserman, et al. Deep face recognition. In BMVC, volume 1, page 6, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>105</td>
+<td></td>
+<td>I. Masi, A. T. Tr?n, T. Hassner, J. T. Leksut, and G. Medioni. Do we really need to collect millions of faces for effective face recognition? In ECCV, pages 579–596. Springer, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>205</td>
+<td></td>
+<td>X. Zhang, Z. Fang, Y. Wen, Z. Li, and Y. Qiao. Range loss for deep face recognition with long-tail. arXiv preprint arXiv:1611.08976, 2016.</td>
+</tr>
+<tr>
+<td>GoogleNet</td>
+<td>190</td>
+<td></td>
+<td>J. Yang, P. Ren, D. Chen, F. Wen, H. Li, and G. Hua. Neural aggregation network for video face recognition. arXiv preprint arXiv:1603.05474, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>135</td>
+<td></td>
+<td>F. Schroff, D. Kalenichenko, and J. Philbin. Facenet: A unified embedding for face recognition and clustering. In CVPR, pages 815– 823, 2015.</td>
+</tr>
+<tr>
+<td>ResNet</td>
+<td>97</td>
+<td></td>
+<td>W. Liu, Y. Wen, Z. Yu, M. Li, B. Raj, and L. Song. Sphereface: Deep hypersphere embedding for face recognition. In CVPR, volume 1, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>205</td>
+<td></td>
+<td>X. Zhang, Z. Fang, Y. Wen, Z. Li, and Y. Qiao. Range loss for deep face recognition with long-tail. arXiv preprint arXiv:1611.08976, 2016.</td>
+</tr>
+<tr>
+<td>Novel Architecture</td>
+<td>175</td>
+<td></td>
+<td>X. Wu, R. He, and Z. Sun. A lightened cnn for deep face representation. In CVPR, volume 4, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>176</td>
+<td>A max-feature- map (MFM) activation function that introduces the concept of maxout in the fully connected layer to CNN. The MFM obtains a compact representation and reduces the computa- tional cost.</td>
+<td>X. Wu, R. He, Z. Sun, and T. Tan. A light cnn for deep face representation with noisy labels. arXiv preprint arXiv:1511.02683, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>148</td>
+<td>Sparsifying deep networks iteratively from the previously learned denser models based on a weight selection criterion.</td>
+<td>Y. Sun, X. Wang, and X. Tang. Sparsifying neural network connections for face recognition. In CVPR, pages 4856–4864, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>31</td>
+<td>bilinear CNN (B-CNN), The outputs at each location of two CNNs are combined (using outer product) and are then average pooled to obtain the bilinear feature representation.</td>
+<td>A. R. Chowdhury, T.-Y. Lin, S. Maji, and E. Learned-Miller. One-tomany face recognition with bilinear cnns. In WACV, pages 1–9. IEEE, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>182</td>
+<td>Conditional convolutional neural network (c-CNN) dynamically activated sets of kernels according to modalities of samples.</td>
+<td>C. Xiong, X. Zhao, D. Tang, K. Jayashree, S. Yan, and T.-K. Kim. Conditional convolutional neural network for modality-aware face recognition. In ICCV, pages 3667–3675. IEEE, 2015.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="multiple-networks"><a class="markdownIt-Anchor" href="#multiple-networks"></a> Multiple Networks</h5>
+<ul>
+<li>Multi-input Networks<br>
+对应 one-to-many augmentation (generate multiple images of different patches or poses)，multiple networks for different image inputs。</li>
+<li>Multi-task Learning Networks<br>
+Identity classification is the main task, and the side tasks are pose, illumination, and expression estimations, among others.<br>
+In these networks, the lower layers are shared among all the tasks, and the higher layers are disentangled into multiple networks to generate the task-specific outputs.<br>
+<img src="/img/7CE32C41-02D8-43A5-86EA-DA30674850F3.png" alt="Image Loading"></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>思路</th>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>multipose</td>
+<td>79</td>
+<td>multi-view deep network (MvDN) consists of view-specific subnetworks and common sub- networks; the former removes view-specific variations, and the latter obtains common representations.</td>
+<td>M. Kan, S. Shan, and X. Chen. Multi-view deep network for cross-view classification. In CVPR, pages 4847–4855, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>104</td>
+<td>Adjusted the pose to frontal (0◦), half-profile (40◦) and full-profile views (75◦) and then addressed pose variation by multiple pose networks.</td>
+<td>I. Masi, S. Rawls, G. Medioni, and P. Natarajan. Pose-aware face recognition in the wild. In CVPR, pages 4838–4846, 2016.</td>
+</tr>
+<tr>
+<td></td>
+<td>196</td>
+<td>Automatically assigning the dynamic loss weights for each side task.</td>
+<td>X. Yin and X. Liu. Multi-task convolutional neural network for poseinvariant face recognition. TIP, 2017.</td>
+</tr>
+<tr>
+<td></td>
+<td>165</td>
+<td>Coupled SAE for cross-view FR.</td>
+<td>W. Wang, Z. Cui, H. Chang, S. Shan, and X. Chen. Deeply coupled auto-encoder networks for cross-view classification. arXiv preprint arXiv:1402.2031, 2014.</td>
+</tr>
+<tr>
+<td>multipatch</td>
+<td>96</td>
+<td></td>
+<td>J. Liu, Y. Deng, T. Bai, Z. Wei, and C. Huang. Targeting ultimate accuracy: Face recognition via deep embedding. arXiv preprint arXiv:1506.07310, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>217</td>
+<td></td>
+<td>E. Zhou, Z. Cao, and Q. Yin. Naive-deep face recognition: Touching the limit of lfw benchmark or not? arXiv preprint arXiv:1501.04690, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>43</td>
+<td></td>
+<td>C. Ding and D. Tao. Robust face recognition via multimodal deep face representation. IEEE Transactions on Multimedia, 17(11):2049–2058, 2015.</td>
+</tr>
+<tr>
+<td></td>
+<td>146</td>
+<td></td>
+<td>Y. Sun, X. Wang, and X. Tang. Hybrid deep learning for face verification. In ICCV, pages 1489–1496. IEEE, 2013.</td>
+</tr>
+<tr>
+<td></td>
+<td>147</td>
+<td></td>
+<td>Y. Sun, X. Wang, and X. Tang. Deep learning face representation from predicting 10,000 classes. In CVPR, pages 1891–1898, 2014.</td>
+</tr>
+<tr>
+<td></td>
+<td>143</td>
+<td></td>
+<td>Y. Sun, Y. Chen, X. Wang, and X. Tang. Deep learning face representation by joint identification-verification. In NIPS, pages 1988– 1996, 2014.</td>
+</tr>
+<tr>
+<td></td>
+<td>173</td>
+<td></td>
+<td>W.-S. T. WST. Deeply learned face representations are sparse, selective, and robust. perception, 31:411–438, 2008.</td>
+</tr>
+<tr>
+<td>multitask</td>
+<td>122</td>
+<td>The task-specific subnetworks are branched out to learn face detection, face alignment, pose estimation, gender recognition, smile detection, age estimation and FR.</td>
+<td>R. Ranjan, S. Sankaranarayanan, C. D. Castillo, and R. Chellappa. An all-in-one convolutional neural network for face analysis. In FG 2017, pages 17–24. IEEE, 2017.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="loss-function"><a class="markdownIt-Anchor" href="#loss-function"></a> Loss Function</h4>
+<p><img src="/img/C67F0DD7-0004-4906-B1EC-EAEB94A1D00C.png" alt="Image Loading"></p>
+<h5 id="euclidean-distance-based-loss"><a class="markdownIt-Anchor" href="#euclidean-distance-based-loss"></a> Euclidean-distance-based loss</h5>
+<ul>
+<li>Contrastive Loss<br>
+训练时不太稳定，和 sample 选取有关。<br>
+Require face image pairs, pulls together positive pairs and pushes apart negative pairs.<br>
+时间线：[173], [143], [144], [148], [192]</li>
+<li>Triplet Loss<br>
+训练时不太稳定，和 sample 选取有关。<br>
+Require the face triplets, and then it minimizes the distance between an anchor and a positive sample of the same identity and maximizes the distance between the anchor and a negative sample of a different identity.  还有一些是先用 softmax 训练，然后再用 triplet loss fine-tune。<br>
+时间线：[135], [115], [130], [131], [96], [43]<br>
+(1):<img src="/img/797CB06C-B790-46A5-8F7F-781FBE3385AB.png" alt="Image Loading"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>x</mi><mi>i</mi><mi>a</mi></msubsup><mo separator="true">,</mo><msubsup><mi>x</mi><mi>i</mi><mi>p</mi></msubsup><mo separator="true">,</mo><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup></mrow><annotation encoding="application/x-tex">x^a_i, x^p_i, x^n_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.7823em;"></span><span class="strut bottom" style="height:1.059164em;vertical-align:-0.276864em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.258664em;margin-left:0em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">a</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.276864em;margin-left:0em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.480908em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">p</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.258664em;margin-left:0em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>是 anchor, positive, negative samples。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.0037em;">α</span></span></span></span>是 margin。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mo>⋅</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">f(\cdot)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord">⋅</span><span class="mclose">)</span></span></span></span>是 nonlinear transformation embedding an image into a feature space.<br>
+(2):<br>
+<img src="/img/C8DEB72E-D43D-4E5D-80C8-4CE0EF39A803.png" alt="Image Loading"><br>
+(3):<br>
+<img src="/img/37036815-86FC-4198-BB2A-5686CAF96A6E.png" alt="Image Loading"></li>
+<li>Center Loss<br>
+[170]; [205], [36], [179].<br>
+The center loss learned a center for each class and penalized the distances between the deep features and their corresponding class centers.<br>
+<img src="/img/289E934E-EBCB-4FD4-B669-7619F279E3AE.png" alt="Image Loading"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>是第 i 个 deep feature，属于第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">y_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> 个类别，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>c</mi><mrow><mi>y</mi><mi>i</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c_{yi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">c</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathit">i</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>是其 deep feature 的中心。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>143</td>
+<td>Increased the dimension of hidden representations and added supervision to early convolutional layers</td>
+<td>Y. Sun, Y. Chen, X. Wang, and X. Tang. Deep learning face representation by joint identification-verification. In NIPS, pages 1988– 1996, 2014.</td>
+</tr>
+<tr>
+<td>173</td>
+<td>Combined the face identification and verification supervisory signals to learn a discriminative representation, and joint Bayesian (JB) was applied to obtain a robust embedding space.</td>
+<td>W.-S. T. WST. Deeply learned face representations are sparse, selective, and robust. perception, 31:411–438, 2008.</td>
+</tr>
+<tr>
+<td>144</td>
+<td>Further introduced VGGNet and GoogleNet</td>
+<td>Y. Sun, D. Liang, X. Wang, and X. Tang. Deepid3: Face recognition with very deep neural networks. arXiv preprint arXiv:1502.00873, 2015.</td>
+</tr>
+<tr>
+<td>170</td>
+<td>The center loss learned a center for each class and penalized the distances between the deep features and their corresponding class centers.</td>
+<td>Y. Wen, K. Zhang, Z. Li, and Y. Qiao. A discriminative feature learning approach for deep face recognition. In ECCV, pages 499–515. Springer, 2016.</td>
+</tr>
+<tr>
+<td>179</td>
+<td>A center-invariant loss that penalizes the difference between each center of classes.</td>
+<td>Y. Wu, H. Liu, J. Li, and Y. Fu. Deep face recognition with center invariant loss. In Proceedings of the on Thematic Workshops of ACM Multimedia 2017, pages 408–414. ACM, 2017.</td>
+</tr>
+<tr>
+<td>205</td>
+<td>Used a range loss to minimize k greatest range’s harmonic mean values in one class and maximize the shortest inter-class distance within one batch .</td>
+<td>X. Zhang, Z. Fang, Y. Wen, Z. Li, and Y. Qiao. Range loss for deep face recognition with long-tail. arXiv preprint arXiv:1611.08976, 2016.</td>
+</tr>
+<tr>
+<td>135</td>
+<td>First introduced triplet loss to deep FR using hard triplet face samples. 公式(1)</td>
+<td>F. Schroff, D. Kalenichenko, and J. Philbin. Facenet: A unified embedding for face recognition and clustering. In CVPR, pages 815– 823, 2015.</td>
+</tr>
+<tr>
+<td>115</td>
+<td></td>
+<td>O. M. Parkhi, A. Vedaldi, A. Zisserman, et al. Deep face recognition. In BMVC, volume 1, page 6, 2015.</td>
+</tr>
+<tr>
+<td>131</td>
+<td>learned a linear projection W to construct triplet loss. 公式(3)</td>
+<td>S. Sankaranarayanan, A. Alavi, and R. Chellappa. Triplet similarity embedding for face verification. arXiv preprint arXiv:1602.03418, 2016.</td>
+</tr>
+<tr>
+<td>130</td>
+<td>learned a linear projection W to construct triplet loss. 公式(2)</td>
+<td>S. Sankaranarayanan, A. Alavi, C. D. Castillo, and R. Chellappa. Triplet probabilistic embedding for face verification and clustering. In BTAS, pages 1–8. IEEE, 2016.</td>
+</tr>
+<tr>
+<td>96</td>
+<td></td>
+<td>J. Liu, Y. Deng, T. Bai, Z. Wei, and C. Huang. Targeting ultimate accuracy: Face recognition via deep embedding. arXiv preprint arXiv:1506.07310, 2015.</td>
+</tr>
+<tr>
+<td>25</td>
+<td></td>
+<td>J.-C. Chen, V. M. Patel, and R. Chellappa. Unconstrained face verification using deep cnn features. In WACV, pages 1–9. IEEE, 2016.</td>
+</tr>
+<tr>
+<td>192</td>
+<td></td>
+<td>D. Yi, Z. Lei, S. Liao, and S. Z. Li. Learning face representation from scratch. arXiv preprint arXiv:1411.7923, 2014.</td>
+</tr>
+<tr>
+<td>43</td>
+<td></td>
+<td>C. Ding and D. Tao. Robust face recognition via multimodal deep face representation. IEEE Transactions on Multimedia, 17(11):2049–2058, 2015.</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Selected the farthest intra-class samples and the nearest inter- class samples to compute a margin loss.</td>
+<td>J. Deng, Y. Zhou, and S. Zafeiriou. Marginal loss for deep face recognition. In CVPR Workshops, volume 4, 2017.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="angularcosine-margin-based-loss"><a class="markdownIt-Anchor" href="#angularcosine-margin-based-loss"></a> angular/cosine-margin-based loss</h5>
+<p>Angular/cosine- margin-based loss makes learned features potentially separable with a larger angular/cosine distance.<br>
+<img src="/img/B3C83C1B-EC95-400C-B2D7-01547F5C6AE7.png" alt="Image Loading"><br>
+todo</p>
+<ul>
+<li>Large-margin Softmax (L-Softmax) Loss：<br>
+<img src="/img/DB7C458B-A582-442C-8374-D1F96BDEBD55.png" alt="Image Loading"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">m</span></span></span></span>  是正数表示 angular margin，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi></mrow><annotation encoding="application/x-tex">W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">W</span></span></span></span> 是 the weight of the last fully connected layer，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span></span></span></span> 是 deep feature，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">θ</span></span></span></span> 是 deep feature 之间的角度。<br>
+<img src="/img/E3506D62-30CD-445D-8375-676A1A21712D.png" alt="Image Loading"></li>
+<li>A-Softmax Loss<br>
+Based on L-Softmax，further normalized the weight W by its L2 norm such that the normalized vector will lie on a hypersphere, and then the discriminative face features can be learned on a hypersphere manifold with an angular margin.<br>
+<img src="/img/97D4B492-1470-4C72-89A7-3CF6CD22F324.png" alt="Image Loading"></li>
+<li>Additive angular/consine Margin <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mi>o</mi><mi>s</mi><mo>(</mo><mi>θ</mi><mo>+</mo><mi>m</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">cos(\theta + m)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">s</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mbin">+</span><span class="mord mathit">m</span><span class="mclose">)</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi><mi>o</mi><mi>s</mi><mi>θ</mi><mo>−</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">cos \theta - m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">s</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mbin">−</span><span class="mord mathit">m</span></span></span></span>。todo</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>98</td>
+<td></td>
+<td>W. Liu, Y. Wen, Z. Yu, and M. Yang. Large-margin softmax loss for convolutional neural networks. In ICML, pages 507–516, 2016.</td>
+</tr>
+<tr>
+<td>97</td>
+<td></td>
+<td>W. Liu, Y. Wen, Z. Yu, M. Li, B. Raj, and L. Song. Sphereface: Deep hypersphere embedding for face recognition. In CVPR, volume 1, 2017.</td>
+</tr>
+<tr>
+<td>160</td>
+<td></td>
+<td>F. Wang, W. Liu, H. Liu, and J. Cheng. Additive margin softmax for face verification. arXiv preprint arXiv:1801.05599, 2018.</td>
+</tr>
+<tr>
+<td>35</td>
+<td></td>
+<td>J. Deng, J. Guo, and S. Zafeiriou. Arcface: Additive angular margin loss for deep face recognition. arXiv preprint arXiv:1801.07698, 2018.</td>
+</tr>
+<tr>
+<td>162</td>
+<td></td>
+<td>H. Wang, Y. Wang, Z. Zhou, X. Ji, Z. Li, D. Gong, J. Zhou, and W. Liu. Cosface: Large margin cosine loss for deep face recognition. arXiv preprint arXiv:1801.09414, 2018.</td>
+</tr>
+<tr>
+<td>99</td>
+<td>a deep hy- perspherical convolution network (SphereNet) that adopts hy- perspherical convolution as its basic convolution operator and is supervised by angular-margin-based loss.</td>
+<td>W. Liu, Y.-M. Zhang, X. Li, Z. Yu, B. Dai, T. Zhao, and L. Song. Deep hyperspherical learning. In NIPS, pages 3953–3963, 2017.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="softmax-loss-and-its-variations"><a class="markdownIt-Anchor" href="#softmax-loss-and-its-variations"></a> softmax loss and its variations</h5>
+<ul>
+<li>weight normalization + feature normalization<br>
+<img src="/img/B234659E-D4AE-443C-8E89-59A0DD0A77F5.png" alt="Image Loading"><br>
+[97], [160], [35], [99],  normalize weights only and trained with angular/cosine margin to make the learned features be discriminative.<br>
+[120], [57], adopted feature normalization only to overcome the bias to the sample distribution of the softmax.<br>
+[161], [101], [58], normalize both features and weights.</li>
+<li>others<br>
+[20] proposed a noisy softmax to mitigate early saturation by injecting annealed noise in softmax.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>简介</th>
+<th>论文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>120</td>
+<td>enforced all the features to have the same L2-norm by feature normalization such that similar attention is given to good quality frontal faces and blurry faces with extreme pose.</td>
+<td>R. Ranjan, C. D. Castillo, and R. Chellappa. L2-constrained softmax loss for discriminative face verification. arXiv preprint arXiv:1703.09507, 2017.</td>
+</tr>
+<tr>
+<td>161</td>
+<td></td>
+<td>F. Wang, X. Xiang, J. Cheng, and A. L. Yuille. Normface: l 2 hypersphere embedding for face verification. arXiv preprint arXiv:1704.06369, 2017.</td>
+</tr>
+<tr>
+<td>57</td>
+<td>Normalize features with <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mu</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">μ</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">σ</span></span></span></span></td>
+<td>A. Hasnat, J. Bohne, J. Milgram, S. Gentric, and L. Chen. Deepvisage: ´ Making face recognition simple yet with powerful generalization skills. arXiv preprint arXiv:1703.08388, 2017.</td>
+</tr>
+<tr>
+<td>101</td>
+<td>After normalizing features and weights, optimized the cosine distance among data features.</td>
+<td>Y. Liu, H. Li, and X. Wang. Rethinking feature discrimination and polymerization for large-scale recognition. arXiv preprint arXiv:1710.00870, 2017.</td>
+</tr>
+<tr>
+<td>119</td>
+<td></td>
+<td>X. Qi and L. Zhang. Face recognition via centralized coordinate learning. arXiv preprint arXiv:1801.05678, 2018.</td>
+</tr>
+<tr>
+<td>20</td>
+<td>noisy softmax.</td>
+<td>B. Chen, W. Deng, and J. Du. Noisy softmax: improving the generalization ability of dcnn via postponing the early softmax saturation. arXiv preprint arXiv:1708.03769, 2017.</td>
+</tr>
+<tr>
+<td>58</td>
+<td>used the von Mises-Fisher (vMF) mixture model as the theoretical basis to develop a novel vMF mixture loss and its corresponding vMF deep features.</td>
+<td>M. Hasnat, J. Bohne, J. Milgram, S. Gentric, L. Chen, et al. von ´ mises-fisher mixture model-based deep learning: Application to face verification. arXiv preprint arXiv:1706.04264, 2017.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="similarity-comparison"><a class="markdownIt-Anchor" href="#similarity-comparison"></a> Similarity Comparison</h4>
+<p>image -&gt; deep feature representation<br>
+计算 feature 之间的 cosine distance 或 L2 distance，然后用 nearest neighbor 或 threshold comparison，用于 identification 或 verification task。<br>
+对 deep feature 还可以有一些预处理，比如 metric learning, sparse-representation-based classifier (SRC) 等。</p>
+<ul>
+<li>[22] JB model<br>
+<img src="/img/3C0EE0A5-4AEF-444C-81AB-4B6E390F2A99.png" alt="Image Loading"></li>
+<li>[158] first used product quantization (PQ) [76] to directly retrieve the top-k most similar faces and re-ranked these faces by combining similarities from deep features and the COTS matcher [51].</li>
+<li>In [191], Yang et al. extracted the local adaptive convolution features from the local regions of the face image and used the extended SRC for FR with a single sample per person.</li>
+<li>[53] combined deep features and the SVM classifier to recognize all the classes.</li>
+</ul>
+<h2 id="databases-of-face-recognition"><a class="markdownIt-Anchor" href="#databases-of-face-recognition"></a> Databases of Face Recognition</h2>
+<p>增加数据可以提高 FR 的表现。<br>
+<img src="/img/1804.06655.jpg" alt="Image Loading"></p>
+<h2 id="real-world-scenes"><a class="markdownIt-Anchor" href="#real-world-scenes"></a> Real-World Scenes</h2>
+<p><img src="/img/FD25275B-F7CE-4B54-9E76-01FCC748DB80.png" alt="Image Loading"></p>
+<h3 id="cross-factor-fr"><a class="markdownIt-Anchor" href="#cross-factor-fr"></a> Cross-factor FR</h3>
+<p>Problem: Variations caused by people themselves.<br>
+Method: image synthetic, domain adaptation, separating cross factors from identity.</p>
+<h4 id="cross-pose-face-recognition"><a class="markdownIt-Anchor" href="#cross-pose-face-recognition"></a> Cross-Pose Face Recognition</h4>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[16] first attempt to perform frontalization in the deep feature space but not in the image space. A deep residual equivariant mapping (DREAM) block dynamically adds residuals to an input representation to transform a profile face to a frontal image.</td>
+</tr>
+<tr>
+<td>[24] proposed combining feature ex- traction with multi-view subspace learning to simultaneously make features be more pose robust and discriminative.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cross-age-face-recognition"><a class="markdownIt-Anchor" href="#cross-age-face-recognition"></a> Cross-Age Face Recognition</h4>
+<p><img src="/img/DED4DE10-6E08-40EC-B28B-3594E8CF5DBB.png" alt="Image Loading"></p>
+<ul>
+<li>One direct approach is to synthesize the input image to the target age.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A generative probabilistic model was used by [46] to model the facial aging process at each short-term stage.</td>
+</tr>
+<tr>
+<td>Antipov et al. [6] proposed aging faces by GAN, but the synthetic faces cannot be directly used for face verification due to its imperfect preservation of identities.</td>
+</tr>
+<tr>
+<td>Then, [5] used a local manifold adaptation (LMA) approach to solve the problem of [6].</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>An alternative is to decompose aging/identity components separately and extract age-invariant representations.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[169] developed a latent identity analysis (LIA) layer to separate the two components.</td>
+</tr>
+<tr>
+<td>In [214], age-invariant features were obtained by subtracting age- specific factors from the representations with the help of the age estimation task.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>other methods</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[12], [47] fine-tuned the CNN to transfer knowledge.</td>
+</tr>
+<tr>
+<td>[167] proposed a siamese deep network of multi-task learning of FR and age estimation.</td>
+</tr>
+<tr>
+<td>[92] integrated feature extraction and metric learning via a deep CNN.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="makeup-face-recognition"><a class="markdownIt-Anchor" href="#makeup-face-recognition"></a> Makeup Face Recognition</h4>
+<p><img src="/img/7990848C-C06F-4692-986D-AAC7DB8AD499.png" alt="Image Loading"></p>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[91] generated nonmakeup images from makeup ones by a bi-level adversarial network (BLAN) and then used the synthesized nonmakeup images for verification.</td>
+</tr>
+<tr>
+<td>[145] pretrained a triplet network on the free videos and fine- tuned it on small makeup and nonmakeup datasets.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="heterogenous-fr"><a class="markdownIt-Anchor" href="#heterogenous-fr"></a> Heterogenous FR</h3>
+<p>Problem: Matching faces across different visual domains. Domain gap caused by sensory devices and cameras settings.<br>
+Method: Domain adaptation, image synthetic.</p>
+<h4 id="nir-vis-face-recognition"><a class="markdownIt-Anchor" href="#nir-vis-face-recognition"></a> NIR-VIS Face Recognition</h4>
+<p>Near-infrared spectrum NIS images, low-light scenarios, used in surveillance systems. 与其他 Visible light (VIS) spectrum images 不一样。</p>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[133] [100] transferred the VIS deep networks to the NIR domain by fine-tuning.</td>
+</tr>
+<tr>
+<td>[87] used a VIS CNN to recognize NIR faces by transforming NIR images to VIS faces through cross-spectral hallucination and restoring a low-rank structure for features through low-rank embedding.</td>
+</tr>
+<tr>
+<td>[125] trained two networks, a VISNet (for visible images) and a NIRNet (for near-infrared images), and coupled their output features by creating a siamese network.</td>
+</tr>
+<tr>
+<td>[62], [63] divided the high layer of the network into a NIR layer, a VIS layer and a NIR-VIS shared layer; then, a modality-invariant feature can be learned by the NIR-VIS shared layer.</td>
+</tr>
+<tr>
+<td>[142] embedded cross-spectral face hallucination and discriminative feature learning into an end- to-end adversarial network.</td>
+</tr>
+<tr>
+<td>In [177], the low-rank relevance and cross-modal ranking were used to alleviate the semantic gap.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="low-resolution-face-recognition"><a class="markdownIt-Anchor" href="#low-resolution-face-recognition"></a> Low-Resolution Face Recognition</h4>
+<p>[198] proposed a CNN with a two-branch architecture (a super-resolution network and a feature extraction network) to map the high- and low- resolution face images into a common space where the intra- person distance is smaller than the inter-person distance.</p>
+<h4 id="photo-sketch-face-recognition"><a class="markdownIt-Anchor" href="#photo-sketch-face-recognition"></a> Photo-Sketch Face Recognition</h4>
+<p>The photo-sketch FR may help law enforcement to quickly identify suspects.</p>
+<ul>
+<li>Method 1, utilize transfer learning to directly match photos to sketches, where the deep networks are first trained using a large face database of photos and are then fine-tuned using small sketch database [106], [48].</li>
+<li>Method 2, to use the image-to-image translation, where the photo can be transformed to a sketch or the sketch to a photo; then, FR can be performed in one domain.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[201] developed a fully con- volutional network with generative loss and a discriminative regularizer to transform photos to sketches.</td>
+</tr>
+<tr>
+<td>[199] utilized a branched fully convolutional neural network (BFCN) to generate a structure-preserved sketch and a texture-preserved sketch, and then they fused them together via a probabilistic method.</td>
+</tr>
+<tr>
+<td>GAN, [193], [83], [218] used two generators, GA and GB, to generate sketches from photos and photos from sketches, respectively.</td>
+</tr>
+<tr>
+<td>Based on [218], [163] proposed a multi-adversarial network to avoid artifacts by leveraging the implicit presence of feature maps of different resolutions in the generator subnetwork.</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/img/9955978E-C49D-40C6-9633-9FF7E4AC8075.png" alt="Image Loading"></p>
+<h3 id="multiple-or-single-media-fr"><a class="markdownIt-Anchor" href="#multiple-or-single-media-fr"></a> Multiple (or single) media FR</h3>
+<h4 id="low-shot-face-recognition"><a class="markdownIt-Anchor" href="#low-shot-face-recognition"></a> Low-Shot Face Recognition</h4>
+<p>Training sample 很少时。</p>
+<ul>
+<li>Enlarging the training data.</li>
+<li>Learning more powerful features.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Attempts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[66] generated images in various poses using a 3D face model and adopted deep domain adaptation to handle the other variations, such as blur, occlusion, and expression.</td>
+</tr>
+<tr>
+<td>[29] used data augmentation methods and a GAN for pose transition and attribute boosting to increase the size of the training dataset.</td>
+</tr>
+<tr>
+<td>[178] proposed a framework with hybrid classifiers using a CNN and a nearest neighbor (NN) model.</td>
+</tr>
+<tr>
+<td>[55] made the norms of the weight vectors of the one-shot classes and the normal classes aligned to address the data imbalance problem.</td>
+</tr>
+<tr>
+<td>[27] proposed an enforced softmax that contains optimal dropout, selective attenuation, L2 normalization and model-level optimization.</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/img/AD5DF91E-1A8C-4C61-9980-5F95D120974C.png" alt="Image Loading"></p>
+<h4 id="settemplate-based-face-recognition"><a class="markdownIt-Anchor" href="#settemplate-based-face-recognition"></a> Set/Template-Based Face Recognition</h4>
+<p>Set/template- based FR problems assume that both probe and gallery sets are represented using a set of media, e.g., images and videos, rather than just one. After learning a set of face representations from each medium individually, two strategies are generally adopted for face recognition between sets.</p>
+<ul>
+<li>One is to use these representations for similarity comparison between the media in two sets and pool the results into a single, final score, such as max score pooling [104], average score pooling [102] and its variations [210], [14].</li>
+<li>The other strategy is to aggregate face representations through average or max pooling and generate a single representation for each set and then perform a comparison between two sets, which we call feature pooling [104], [25], [130].</li>
+<li>Others<br>
+For example, [59] proposed a deep heterogeneous feature fusion network to exploit the features’ complementary information generated by different CNNs.</li>
+</ul>
+<h4 id="video-face-recognition"><a class="markdownIt-Anchor" href="#video-face-recognition"></a> Video Face Recognition</h4>
+<p>Two key issues：</p>
+<ul>
+<li>Integrate the information across different frames together to build a representation of the video face.<br>
+[190] proposed a neural aggregation network (NAN) in which the aggregation module, consisting of two attention blocks driven by a memory, produces a 128-dimensional vector representation.<br>
+Rao et al. [123] aggregated raw video frames directly by combining the idea of metric learning and adversarial learning.</li>
+<li>Handle video frames with severe blur, pose variations, and occlusions.<br>
+[124] discarded the bad frames by treating this operation as a Markov decision process and trained the attention model through a deep reinforcement learning framework.<br>
+[44] artificially blurred clear still images for training to learn blur-robust face representations.<br>
+[113] used a CNN to reconstruct a lower-quality video into a high-quality face.</li>
+</ul>
+<p><img src="/img/926335BC-E62A-40C5-A9E8-3FB4E37202B5.png" alt="Image Loading"></p>
+<h3 id="fr-in-industry"><a class="markdownIt-Anchor" href="#fr-in-industry"></a> FR in industry</h3>
+<p>除了accuracy 仍需考虑 anti-spoofing, high efficiency。</p>
+<h4 id="3d-face-recognition"><a class="markdownIt-Anchor" href="#3d-face-recognition"></a> 3D Face Recognition</h4>
+<p>没有 large annotated 3D data.</p>
+<ul>
+<li>Use the methods of “one-to-many augmentation” to synthesize 3D faces.</li>
+<li>还需探索。</li>
+</ul>
+<p>[81] fine-tuned a 2D CNN with a small amount of 3D scans for 3D FR.<br>
+[223] used a three- channel (corresponding to depth, azimuth and elevation angles of the normal vector) image as input and minimized the average prediction log-loss.<br>
+[200] selected 30 feature points from the Candide-3 face model to characterize faces and then conducted the unsupervised pretraining of face depth data and the supervised fine-tuning.</p>
+<h4 id="face-anti-spoofing"><a class="markdownIt-Anchor" href="#face-anti-spoofing"></a> Face Anti-spoofing</h4>
+<p>Various types of spoofing attacks, such as print attacks, replay attacks, and 3D mask attacks, are becoming a large threat.<br>
+[7] proposed a novel two-stream CNN in which the local features discriminate the spoof patches independent of the spatial face areas, and holistic depth maps ensure that the input live sample has a face-like depth.<br>
+[188] trained a CNN using both a single frame and multiple frames with five scales, and the live/spoof label is assigned as the output.<br>
+[185] proposed a long short- term memory (LSTM)-CNN architecture that learns temporal features to jointly predict for multiple frames of a video.<br>
+[88], [116] fine-tuned their networks from a pretrained model by training sets of real and fake images.</p>
+<h4 id="face-recognition-for-mobile-devices"><a class="markdownIt-Anchor" href="#face-recognition-for-mobile-devices"></a> Face Recognition for Mobile Devices</h4>
+<p>运算能力。<br>
+[73], [67], [30], [207] proposed lightweight deep networks, and these networks have potential to be introduced into FR.<br>
+[150] proposed a multibatch method that first generates signatures for a minibatch of k face images and then constructs an unbiased estimate of the full gradient by relying on all k^2 − k pairs from the minibatch.</p>
+<p>Ref:<br>
+[1] <a href="https://arxiv.org/pdf/1804.06655.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1804.06655.pdf</a></p>
+<p>Paper References:<br>
+<img src="/img/ADCE18B1-2C28-4006-98B8-F55D960EA2D0.png" alt="Image Loading"><br>
+<img src="/img/917666BC-280B-4D2A-AD13-4350AD9951FD.png" alt="Image Loading"><br>
+<img src="/img/659A8BCD-CA71-4530-A1A7-8D20B104BE15.png" alt="Image Loading"><br>
+<img src="/img/B2D80787-498F-46D6-974B-AB5ED48176FC.png" alt="Image Loading"><br>
+<img src="/img/DCF9C670-4625-43F9-B378-D94A07A42260.png" alt="Image Loading"></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#background-concepts-and-terminology"><span class="toc-number">1.</span> <span class="toc-text"> Background Concepts and Terminology</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#components-of-face-recognition"><span class="toc-number">2.</span> <span class="toc-text"> Components of Face Recognition</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-preprocessing"><span class="toc-number">2.1.</span> <span class="toc-text"> Data Preprocessing</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#one-to-many"><span class="toc-number">2.1.1.</span> <span class="toc-text"> One to Many</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#many-to-one-normalization"><span class="toc-number">2.1.2.</span> <span class="toc-text"> Many-to-One Normalization</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deep-feature-extraction"><span class="toc-number">2.2.</span> <span class="toc-text"> Deep Feature Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#network-architecture"><span class="toc-number">2.2.1.</span> <span class="toc-text"> Network Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#single-network"><span class="toc-number">2.2.1.1.</span> <span class="toc-text"> Single Network</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#multiple-networks"><span class="toc-number">2.2.1.2.</span> <span class="toc-text"> Multiple Networks</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#loss-function"><span class="toc-number">2.2.2.</span> <span class="toc-text"> Loss Function</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#euclidean-distance-based-loss"><span class="toc-number">2.2.2.1.</span> <span class="toc-text"> Euclidean-distance-based loss</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#angularcosine-margin-based-loss"><span class="toc-number">2.2.2.2.</span> <span class="toc-text"> angular/cosine-margin-based loss</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#softmax-loss-and-its-variations"><span class="toc-number">2.2.2.3.</span> <span class="toc-text"> softmax loss and its variations</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#similarity-comparison"><span class="toc-number">2.2.3.</span> <span class="toc-text"> Similarity Comparison</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#databases-of-face-recognition"><span class="toc-number">3.</span> <span class="toc-text"> Databases of Face Recognition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#real-world-scenes"><span class="toc-number">4.</span> <span class="toc-text"> Real-World Scenes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cross-factor-fr"><span class="toc-number">4.1.</span> <span class="toc-text"> Cross-factor FR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cross-pose-face-recognition"><span class="toc-number">4.1.1.</span> <span class="toc-text"> Cross-Pose Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cross-age-face-recognition"><span class="toc-number">4.1.2.</span> <span class="toc-text"> Cross-Age Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#makeup-face-recognition"><span class="toc-number">4.1.3.</span> <span class="toc-text"> Makeup Face Recognition</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heterogenous-fr"><span class="toc-number">4.2.</span> <span class="toc-text"> Heterogenous FR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#nir-vis-face-recognition"><span class="toc-number">4.2.1.</span> <span class="toc-text"> NIR-VIS Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#low-resolution-face-recognition"><span class="toc-number">4.2.2.</span> <span class="toc-text"> Low-Resolution Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#photo-sketch-face-recognition"><span class="toc-number">4.2.3.</span> <span class="toc-text"> Photo-Sketch Face Recognition</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#multiple-or-single-media-fr"><span class="toc-number">4.3.</span> <span class="toc-text"> Multiple (or single) media FR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#low-shot-face-recognition"><span class="toc-number">4.3.1.</span> <span class="toc-text"> Low-Shot Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#settemplate-based-face-recognition"><span class="toc-number">4.3.2.</span> <span class="toc-text"> Set/Template-Based Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#video-face-recognition"><span class="toc-number">4.3.3.</span> <span class="toc-text"> Video Face Recognition</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fr-in-industry"><span class="toc-number">4.4.</span> <span class="toc-text"> FR in industry</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3d-face-recognition"><span class="toc-number">4.4.1.</span> <span class="toc-text"> 3D Face Recognition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#face-anti-spoofing"><span class="toc-number">4.4.2.</span> <span class="toc-text"> Face Anti-spoofing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#face-recognition-for-mobile-devices"><span class="toc-number">4.4.3.</span> <span class="toc-text"> Face Recognition for Mobile Devices</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&text=论文 Deep Face Recognition - A Survey"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&is_video=false&description=论文 Deep Face Recognition - A Survey"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 Deep Face Recognition - A Survey&body=Check out this article: http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&title=论文 Deep Face Recognition - A Survey"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/07/07/essay-deep-face-recognition-survey/&name=论文 Deep Face Recognition - A Survey&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

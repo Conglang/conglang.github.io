@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="STL标准库之Function Object、Function Adapter、Lambda。它们分别的用法和示例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL Function Object and Using Lambda">
+<meta property="og:url" content="http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="STL标准库之Function Object、Function Adapter、Lambda。它们分别的用法和示例。">
+<meta property="og:image" content="http://conglang.github.io/img/predefined_function_objects.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/predefined_function_adapters.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:47:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STL Function Object and Using Lambda">
+<meta name="twitter:description" content="STL标准库之Function Object、Function Adapter、Lambda。它们分别的用法和示例。">
+<meta name="twitter:image" content="http://conglang.github.io/img/predefined_function_objects.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>STL Function Object and Using Lambda</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/09/stl-algorithm/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/08/stl-string/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&text=STL Function Object and Using Lambda"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&is_video=false&description=STL Function Object and Using Lambda"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Function Object and Using Lambda&body=Check out this article: http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&name=STL Function Object and Using Lambda&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数对象的概念"><span class="toc-number">1.</span> <span class="toc-text"> 函数对象的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-用函数对象作为排序标准"><span class="toc-number">1.1.</span> <span class="toc-text"> 例子: 用函数对象作为排序标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-有内部状态的函数对象"><span class="toc-number">1.2.</span> <span class="toc-text"> 例子: 有内部状态的函数对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-for_each返回自己的函数对象"><span class="toc-number">1.3.</span> <span class="toc-text"> 例子: for_each()返回自己的函数对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#谓词-vs-函数对象"><span class="toc-number">1.4.</span> <span class="toc-text"> 谓词 vs 函数对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预置的函数对象和binder"><span class="toc-number">2.</span> <span class="toc-text"> 预置的函数对象和Binder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预置的函数对象"><span class="toc-number">2.1.</span> <span class="toc-text"> 预置的函数对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数适配器和binder"><span class="toc-number">2.2.</span> <span class="toc-text"> 函数适配器和Binder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用lambda"><span class="toc-number">3.</span> <span class="toc-text"> 使用Lambda</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda语法"><span class="toc-number">3.1.</span> <span class="toc-text"> Lambda语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子lambda-vs-binder"><span class="toc-number">3.2.</span> <span class="toc-text"> 例子：Lambda vs. Binder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子lambda-vs-有状态的函数对象"><span class="toc-number">3.3.</span> <span class="toc-text"> 例子：Lambda vs. 有状态的函数对象</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STL Function Object and Using Lambda
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-08T12:09:36.000Z" itemprop="datePublished">2015-01-08</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Function-Object/">Function Object</a>, <a class="tag-link" href="/tags/Lambda/">Lambda</a>, <a class="tag-link" href="/tags/STL/">STL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="函数对象的概念"><a class="markdownIt-Anchor" href="#函数对象的概念"></a> 函数对象的概念</h2>
+<p>重载了运算符()。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> FunctionObjectType &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// statements</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相比于普通函数有三个优点：1. 可以存储状态。2. 每个函数对象都有自己的类型，可以传递到template里定义特定行为。3. 函数对象一般比函数指针快。</p>
+<h3 id="例子-用函数对象作为排序标准"><a class="markdownIt-Anchor" href="#例子-用函数对象作为排序标准"></a> 例子: 用函数对象作为排序标准</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">class</span> Person</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="built_in">string</span> <span class="title">firstname</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="built_in">string</span> <span class="title">lastname</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="comment">// other stuff</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// class for function predicate</span></span><br><span class="line"><span class="comment">// - operator() returns whether a person is less than another person</span></span><br><span class="line"><span class="keyword">class</span> PersonSortCriterion</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(<span class="keyword">const</span> Person&amp; p1, <span class="keyword">const</span> Person&amp; p2)</span> <span class="keyword">const</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="comment">// a person is less than another person</span></span><br><span class="line">		<span class="comment">// - if the last name is less</span></span><br><span class="line">		<span class="comment">// - if the last name is equal and the first name is less</span></span><br><span class="line">		<span class="keyword">return</span> p1.lastname() &lt; p2.lastname() || (p1.lastname() == p2.lastname() &amp;&amp; p1.firstname() &lt; p2.firstname());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// create a set with special sorting criterion</span></span><br><span class="line">	<span class="built_in">set</span>&lt;Person, PersonSortCriterion&gt; coll;</span><br><span class="line">	<span class="comment">// do sth with the elements</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> pos = coll.begin(); pos != coll.end(); ++pos)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// ...</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例子-有内部状态的函数对象"><a class="markdownIt-Anchor" href="#例子-有内部状态的函数对象"></a> 例子: 有内部状态的函数对象</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">class</span> IntSequence</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> value;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	IntSequence(<span class="keyword">int</span> initialValue): value(initialValue)&#123;&#125;	<span class="comment">// constructor</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">operator</span><span class="params">()</span> <span class="params">()</span> </span>&#123;<span class="keyword">return</span> ++value;&#125;	<span class="comment">// "function call"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; coll;</span><br><span class="line">	<span class="comment">// insert values from 1 to 9</span></span><br><span class="line">	generate_n(	back_inserter(coll),	<span class="comment">// start</span></span><br><span class="line">			<span class="number">9</span>,					<span class="comment">// number of elements</span></span><br><span class="line">			IntSequence(<span class="number">1</span>));	<span class="comment">// generates values, starting with 1</span></span><br><span class="line">	copy(coll.cbegin(), coll.cend(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// replace second to last element but one with values starting at 42</span></span><br><span class="line">	generate(	next(coll.begin()),	<span class="comment">// start</span></span><br><span class="line">			prev(coll.end()),	<span class="comment">// end</span></span><br><span class="line">			IntSequence(<span class="number">42</span>));	<span class="comment">// generates values, starting with 42</span></span><br><span class="line">	copy(coll.cbegin(), coll.cend(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果想传FunctionObject的引用，这样写：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; coll;</span><br><span class="line"><span class="function">IntSequence <span class="title">seq</span><span class="params">(<span class="number">1</span>)</span></span>;	<span class="comment">// integral sequence starting with 1</span></span><br><span class="line"><span class="comment">// insert values from 1 to 4</span></span><br><span class="line"><span class="comment">// - pass function object by reference</span></span><br><span class="line"><span class="comment">// so that it will continue with 5</span></span><br><span class="line">generate_n&lt;back_insert_iterator&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&gt;, <span class="keyword">int</span>, IntSequence&amp;&gt;(back_inserter(coll), <span class="number">4</span>, seq);</span><br></pre></td></tr></table></figure>
+<h3 id="例子-for_each返回自己的函数对象"><a class="markdownIt-Anchor" href="#例子-for_each返回自己的函数对象"></a> 例子: for_each()返回自己的函数对象</h3>
+<p>for_each可以返回自己的function object。就不用像上面那样写得那么费劲。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">// function object to process the mean value</span></span><br><span class="line"><span class="keyword">class</span> MeanValue</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">long</span> num;	<span class="comment">// number of elements</span></span><br><span class="line">	<span class="keyword">long</span> sum;	<span class="comment">// sum of all element values</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// constructor</span></span><br><span class="line">	MeanValue() : num(<span class="number">0</span>), sum(<span class="number">0</span>)&#123;&#125;</span><br><span class="line">	<span class="comment">// function call</span></span><br><span class="line">	<span class="comment">// - process one more element of the sequence</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(<span class="keyword">int</span> elem)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		++num;	<span class="comment">// increment count</span></span><br><span class="line">		sum += elem;	<span class="comment">// add value</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// return mean value</span></span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">value</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">double</span>&gt;(sum) / <span class="keyword">static_cast</span>&lt;<span class="keyword">double</span>&gt;(num);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> tmp[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; coll(tmp, tmp+<span class="number">8</span>);</span><br><span class="line">	<span class="comment">// process and print mean value</span></span><br><span class="line">	MeanValue mv = for_each(coll.begin(), coll.end(),	<span class="comment">// range</span></span><br><span class="line">							MeanValue());			<span class="comment">// operation</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"mean value: "</span> &lt;&lt; mv.value() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="谓词-vs-函数对象"><a class="markdownIt-Anchor" href="#谓词-vs-函数对象"></a> 谓词 vs 函数对象</h3>
+<p>Perdicate(谓词)是返回布尔(或可以隐式转换成布尔)值的函数对象。<br>
+注意这个标准不足以满足STL的标准：<br>
+标准并没有规定遍历时判断谓词会执行多少次。所以谓词的正确执行决不能依赖执行次数，在设计谓词的时候就应该注意这一点。所以谓词不能有状态，应将其()重载定义为const成员函数。</p>
+<h2 id="预置的函数对象和binder"><a class="markdownIt-Anchor" href="#预置的函数对象和binder"></a> 预置的函数对象和Binder</h2>
+<p>需要包含头文件<code>&lt;functional&gt;</code>。</p>
+<h3 id="预置的函数对象"><a class="markdownIt-Anchor" href="#预置的函数对象"></a> 预置的函数对象</h3>
+<p>其中bit_and, bit_or, bit_xor自从C++11才能用。<br>
+<img src="/img/predefined_function_objects.jpg" alt="Predefined Function Objects"><br>
+<strong>默认用less&lt;&gt;进行排序，所以默认顺序是升序(element &lt; nextElement)。</strong><br>
+unordered container默认等价标准是equal_to&lt;&gt;。</p>
+<h3 id="函数适配器和binder"><a class="markdownIt-Anchor" href="#函数适配器和binder"></a> 函数适配器和Binder</h3>
+<p>C<ins>98那些在C</ins>11后已废弃。就不总结了，只看C++11的。<br>
+<img src="/img/predefined_function_adapters.jpg" alt="C++11 Predefined Function Adapters"><br>
+<strong>bind()</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bind perdicate</span></span><br><span class="line"><span class="built_in">std</span>::transform(coll.begin(), coll.end(), coll.begin(), <span class="built_in">std</span>::bind(<span class="built_in">std</span>::plus&lt;<span class="keyword">int</span>&gt;(), <span class="built_in">std</span>::placeholders::_1, <span class="number">10</span>));	<span class="comment">// add 10 to each element</span></span><br><span class="line"><span class="keyword">auto</span> pos = <span class="built_in">std</span>::find_if(coll.begin(), coll.end(), <span class="built_in">std</span>::bind(<span class="built_in">std</span>::greater&lt;<span class="keyword">int</span>&gt;(),_1,<span class="number">42</span>));	<span class="comment">// find first element &gt; 42</span></span><br><span class="line">-----------</span><br><span class="line"><span class="comment">// bind global function</span></span><br><span class="line"><span class="keyword">auto</span> pos = search(s.begin(), s.end(), sub.begin(), sub.end(), bind(equal_to&lt;<span class="keyword">char</span>&gt;(), bind(my_global_func,_1), bind(my_global_func,_2)));	<span class="comment">// bind这部分等价于：my_global_func(param1) == my_global_func(param2)</span></span><br><span class="line">-----------</span><br><span class="line"><span class="comment">// bind member function</span></span><br><span class="line"><span class="keyword">class</span> MyClass</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">myfunc</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">myfunc2</span><span class="params">(<span class="built_in">string</span>&amp; haha)</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line">for_each(coll.begin(), coll.end(), bind(&amp;MyClass::myfunc, _1));</span><br><span class="line">for_each(coll.begin(), coll.end(), bind(&amp;MyClass::myfunc2, _1, <span class="string">"haha: "</span>));</span><br><span class="line">-----------</span><br><span class="line"><span class="comment">// bind data members</span></span><br><span class="line"><span class="built_in">map</span>&lt;<span class="built_in">string</span>, <span class="keyword">int</span>&gt;coll;</span><br><span class="line"><span class="keyword">int</span> sum = accumulate(coll.begin(), coll.end(), <span class="number">0</span>, bind(plus&lt;<span class="keyword">int</span>&gt;(), _1, bind(&amp;<span class="built_in">map</span>&lt;<span class="built_in">string</span>,<span class="keyword">int</span>&gt;::value_type::second, _2)));</span><br></pre></td></tr></table></figure>
+<p><strong>mem_fn()</strong><br>
+专用于绑定成员函数，可以不要写placeholder了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::for_each(coll.begin(), coll.end(), <span class="built_in">std</span>::mem_fn(&amp;MyClass::myfunc));</span><br><span class="line"><span class="built_in">std</span>::mem_fn(&amp;MyClass::myfunc)(n);	<span class="comment">// calls n.myfunc()</span></span><br><span class="line"><span class="built_in">std</span>::mem_fn(&amp;MyClass::myfunc2)(n, <span class="string">"Haha: "</span>);	<span class="comment">// calls n.myfunc2("Haha: ")</span></span><br></pre></td></tr></table></figure>
+<p><strong>not1()和not2()</strong><br>
+几乎废弃了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::sort(coll.begin(), coll.end(), <span class="built_in">std</span>::not2(<span class="built_in">std</span>::less&lt;<span class="keyword">int</span>&gt;()));</span><br></pre></td></tr></table></figure>
+<h2 id="使用lambda"><a class="markdownIt-Anchor" href="#使用lambda"></a> 使用Lambda</h2>
+<p>C++11开始有。</p>
+<h3 id="lambda语法"><a class="markdownIt-Anchor" href="#lambda语法"></a> Lambda语法</h3>
+<p>lambda不能是template。<br>
+<code>[...] (...) mutable throwSpec -&gt; retType {...}</code></p>
+<ul>
+<li>[=]表示外部作用域以值方式传入lambda。</li>
+<li>[&amp;]表示外部作用域以引用方式传入lambda。</li>
+</ul>
+<p>例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">auto l = [] (const std::string&amp; s) &#123;</span><br><span class="line">		std::cout &lt;&lt; s &lt;&lt; std::endl;</span><br><span class="line">	&#125;;</span><br><span class="line">------------</span><br><span class="line">l("hello lambda");</span><br><span class="line">[]()-&gt;double&#123; return 42;&#125;</span><br><span class="line">------------</span><br><span class="line">int x(0), y(42);</span><br><span class="line">auto qqq = [x, &amp;y] &#123;cout &lt;&lt; x; ++y;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例子lambda-vs-binder"><a class="markdownIt-Anchor" href="#例子lambda-vs-binder"></a> 例子：Lambda vs. Binder</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// lambda way</span></span><br><span class="line">	<span class="keyword">auto</span> plus10times2 = [] (<span class="keyword">int</span> i) &#123;</span><br><span class="line">						<span class="keyword">return</span> (i+<span class="number">10</span>)*<span class="number">2</span>;</span><br><span class="line">					&#125;;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"+10 *2:	"</span> &lt;&lt; plus10times2(<span class="number">7</span>) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// binder way</span></span><br><span class="line">	<span class="keyword">auto</span> plus10times2_binder = <span class="built_in">std</span>::bind(<span class="built_in">std</span>::multiplies&lt;<span class="keyword">int</span>&gt;(), <span class="built_in">std</span>::bind(<span class="built_in">std</span>::plus&lt;<span class="keyword">int</span>&gt;(), <span class="built_in">std</span>::placeholders::_1, <span class="number">10</span>), <span class="number">2</span>);</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"+10 *2:	"</span> &lt;&lt; plus10times2_binder(<span class="number">7</span>) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例子lambda-vs-有状态的函数对象"><a class="markdownIt-Anchor" href="#例子lambda-vs-有状态的函数对象"></a> 例子：Lambda vs. 有状态的函数对象</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> temp[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; coll(temp, temp+<span class="number">8</span>);</span><br><span class="line">	<span class="comment">// process and print mean value</span></span><br><span class="line">	<span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">// 和前文Example: The Return Value of for_each()比较。</span></span><br><span class="line">	<span class="comment">// MeanValue mv = for_each (coll.begin(), coll.end(), // range</span></span><br><span class="line">	<span class="comment">// 				MeanValue()); // operation</span></span><br><span class="line">	<span class="comment">// cout &lt;&lt; "mean value: " &lt;&lt; mv.value() &lt;&lt; endl;</span></span><br><span class="line">	for_each(coll.begin(), coll.end(),</span><br><span class="line">		[&amp;sum] (<span class="keyword">int</span> elem) &#123;</span><br><span class="line">			sum += elem;</span><br><span class="line">		&#125;);</span><br><span class="line">	<span class="keyword">double</span> mv = <span class="keyword">static_cast</span>&lt;<span class="keyword">double</span>&gt;(sum)/<span class="keyword">static_cast</span>&lt;<span class="keyword">double</span>&gt;(coll.size());</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"mean value: "</span> &lt;&lt; mv &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] The C++ Standard Library 2nd Edition</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数对象的概念"><span class="toc-number">1.</span> <span class="toc-text"> 函数对象的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-用函数对象作为排序标准"><span class="toc-number">1.1.</span> <span class="toc-text"> 例子: 用函数对象作为排序标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-有内部状态的函数对象"><span class="toc-number">1.2.</span> <span class="toc-text"> 例子: 有内部状态的函数对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-for_each返回自己的函数对象"><span class="toc-number">1.3.</span> <span class="toc-text"> 例子: for_each()返回自己的函数对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#谓词-vs-函数对象"><span class="toc-number">1.4.</span> <span class="toc-text"> 谓词 vs 函数对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预置的函数对象和binder"><span class="toc-number">2.</span> <span class="toc-text"> 预置的函数对象和Binder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#预置的函数对象"><span class="toc-number">2.1.</span> <span class="toc-text"> 预置的函数对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数适配器和binder"><span class="toc-number">2.2.</span> <span class="toc-text"> 函数适配器和Binder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用lambda"><span class="toc-number">3.</span> <span class="toc-text"> 使用Lambda</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda语法"><span class="toc-number">3.1.</span> <span class="toc-text"> Lambda语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子lambda-vs-binder"><span class="toc-number">3.2.</span> <span class="toc-text"> 例子：Lambda vs. Binder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子lambda-vs-有状态的函数对象"><span class="toc-number">3.3.</span> <span class="toc-text"> 例子：Lambda vs. 有状态的函数对象</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&text=STL Function Object and Using Lambda"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&is_video=false&description=STL Function Object and Using Lambda"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Function Object and Using Lambda&body=Check out this article: http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&title=STL Function Object and Using Lambda"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/08/stl-function-object-and-using-lambda/&name=STL Function Object and Using Lambda&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

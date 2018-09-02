@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="论文，Dynamic Routing Between Capsules, Sara Sabour, Nicholas Frosst, Geoffrey E Hinton, 2017">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文 Dynamic Routing Between Capsules">
+<meta property="og:url" content="http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="论文，Dynamic Routing Between Capsules, Sara Sabour, Nicholas Frosst, Geoffrey E Hinton, 2017">
+<meta property="og:image" content="http://conglang.github.io/img/8F8BBC37-3F05-4B16-9457-BB728E7A4F09.png">
+<meta property="og:image" content="http://conglang.github.io/img/DA90F10D-93A8-47F9-A6C2-4DDCDCBB9FC9.png">
+<meta property="og:image" content="http://conglang.github.io/img/81CC6C28-8895-4DB1-AB6E-9FDB155FC974.png">
+<meta property="og:image" content="http://conglang.github.io/img/37FC8E73-CDA8-4588-9D8A-6BD94A361AA7.png">
+<meta property="og:image" content="http://conglang.github.io/img/939F8F2F-8213-4EFF-BADB-BCBBF8E180EE.png">
+<meta property="og:image" content="http://conglang.github.io/img/7F078923-D56B-41D4-B223-8D7A8864F493.png">
+<meta property="og:image" content="http://conglang.github.io/img/5691B685-0ABE-4E66-92FE-5F85B4ABBB5B.png">
+<meta property="og:image" content="http://conglang.github.io/img/461491A4-6896-4F11-8C5C-88B60EEFCBDA.png">
+<meta property="og:image" content="http://conglang.github.io/img/8F13F5C6-B695-4155-A809-C6957AF95350.png">
+<meta property="og:image" content="http://conglang.github.io/img/6A8CBDC6-C02A-479A-91DF-0B144E66A3E0.png">
+<meta property="og:image" content="http://conglang.github.io/img/2D0F98E1-FD4F-47AC-B024-332EE4780353.png">
+<meta property="og:image" content="http://conglang.github.io/img/DCF9E35B-43B4-4E8E-8750-5E3C2107988F.png">
+<meta property="og:image" content="http://conglang.github.io/img/69F739F6-7193-47CC-ADF7-E090D4AAC163.png">
+<meta property="og:image" content="http://conglang.github.io/img/039A8F84-51A6-4379-B1BA-FC6821F692F6.png">
+<meta property="og:image" content="http://conglang.github.io/img/BDEC1717-F9B9-4D3D-829C-7FFEB39B941D.png">
+<meta property="og:image" content="http://conglang.github.io/img/A8162A2F-5589-4554-AC4C-D38A03FCC8CF.png">
+<meta property="og:image" content="http://conglang.github.io/img/ACC0130A-6E2D-46F2-B41C-5FBC4583358A.png">
+<meta property="og:image" content="http://conglang.github.io/img/21C7C4B5-2ACA-48DD-86B0-46EF59B18BDE.png">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文 Dynamic Routing Between Capsules">
+<meta name="twitter:description" content="论文，Dynamic Routing Between Capsules, Sara Sabour, Nicholas Frosst, Geoffrey E Hinton, 2017">
+<meta name="twitter:image" content="http://conglang.github.io/img/8F8BBC37-3F05-4B16-9457-BB728E7A4F09.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>论文 Dynamic Routing Between Capsules</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/12/20/essay-stargan/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/10/08/essay-photographic-image-synthesis/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&text=论文 Dynamic Routing Between Capsules"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&is_video=false&description=论文 Dynamic Routing Between Capsules"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 Dynamic Routing Between Capsules&body=Check out this article: http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&name=论文 Dynamic Routing Between Capsules&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#capsules-and-routing"><span class="toc-number">2.</span> <span class="toc-text"> Capsules and Routing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#loss-function"><span class="toc-number">3.</span> <span class="toc-text"> Loss function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#architecture"><span class="toc-number">4.</span> <span class="toc-text"> Architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#results"><span class="toc-number">5.</span> <span class="toc-text"> Results</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        论文 Dynamic Routing Between Capsules
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-12-09T01:25:07.000Z" itemprop="datePublished">2017-12-09</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Essay/">Essay</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h2>
+<p>The amazing success of convolutional neural networks was the start of the new push to create AI. Now Geoffrey Hinton, Sara Sabour and Nicholas Frosst, members of Google’s Brain Team Toronto, have published results that reveal what might be an even better architecture - a Capsule Net.<br>
+<img src="/img/8F8BBC37-3F05-4B16-9457-BB728E7A4F09.png" alt="Image Loading"><br>
+Translation: 平移。<br>
+Affine transformations: 仿射变换。是指在几何中，一个向量空间进行一次线性变换并接上一个平移，变换为另一个向量空间。Reflect, Scale, Rotate, Shear, Stretching.<br>
+CNN applies the same smallish group of neurons with the same structure across the entire image.<br>
+CNN is good at detecting features but less effective at exploring the spatial relationships among features (perspective, size, orientation).<br>
+The problem with CNN is that they throw away too much information. They recognize a face as a collection of two eyes, a mouth and a nose, but they don’t keep the relationships between the parts.<br>
+A capsule network is designed to build a parse tree of the scene that does keep the relationships between the different parts.</p>
+<h2 id="capsules-and-routing"><a class="markdownIt-Anchor" href="#capsules-and-routing"></a> Capsules and Routing</h2>
+<p><img src="/img/DA90F10D-93A8-47F9-A6C2-4DDCDCBB9FC9.png" alt="Image Loading"><br>
+<img src="/img/81CC6C28-8895-4DB1-AB6E-9FDB155FC974.png" alt="Image Loading"><br>
+A capsule is a group of neurons that not only capture the likelihood but also the parameters of the specific feature.<br>
+Every capsule can be represented with a vector.<br>
+The angle of the vector represent the property of the specific item.<br>
+The length of the vector represent the probability of finding some specific entity in the input or in the previous layers. Range [0, 1].<br>
+Normalizing.<br>
+<img src="/img/37FC8E73-CDA8-4588-9D8A-6BD94A361AA7.png" alt="Image Loading"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>V</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">V_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.22222em;">V</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.22222em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, capsule J. Capsule output.<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>S</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">S_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, capsule input. A weighted average of those <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>u</mi></mrow><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{u}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">u</span></span></span><span style="top:0em;margin-left:0.05556em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>.<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>u</mi></mrow><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{u}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">u</span></span></span><span style="top:0em;margin-left:0.05556em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, prediction vectors which are generated from the capsules of the layer below.</p>
+<p>S -&gt; V, normalizing. Squash.<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>u</mi></mrow><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{u}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">u</span></span></span><span style="top:0em;margin-left:0.05556em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> -&gt; S, Routing. Basically averaging then out using those coefficients <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>C</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>.<br>
+u -&gt; <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>u</mi></mrow><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{u}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">u</span></span></span><span style="top:0em;margin-left:0.05556em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body"><span>^</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, Scale rotate. <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>W</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">W_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> learnt by back prop.<br>
+<img src="/img/939F8F2F-8213-4EFF-BADB-BCBBF8E180EE.png" alt="Image Loading"><br>
+Name green layer L+1, purple layer L.<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">c</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, coupling coefficient, how much lower layer capsules affect higher layer capsules.<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">b_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, routing logists, is like the correlation between the capsules in the layer below and this one capsule in this layer. Routing-by-agreement. Dynamic.<br>
+<img src="/img/7F078923-D56B-41D4-B223-8D7A8864F493.png" alt="Image Loading"><br>
+If we take an input of [1, 2, 3, 4, 1, 2, 3], the softmax of that is [0.024, 0.064, 0.175, 0.475, 0.024, 0.064, 0.175]. The output has most of its weight where the ‘4’ was in the original input. This is what the function is normally used for: to highlight the largest values and suppress values which are significantly below the maximum value.<br>
+The softmax is used in order to help to strengthen just the path from one capsule in the layer below to its own part, so it decides where to route itself through the network.<br>
+<img src="/img/5691B685-0ABE-4E66-92FE-5F85B4ABBB5B.png" alt="Image Loading"><br>
+W trained by back propagation. C trained by dynamic routing.<br>
+<img src="/img/461491A4-6896-4F11-8C5C-88B60EEFCBDA.png" alt="Image Loading"></p>
+<h2 id="loss-function"><a class="markdownIt-Anchor" href="#loss-function"></a> Loss function</h2>
+<p><img src="/img/8F13F5C6-B695-4155-A809-C6957AF95350.png" alt="Image Loading"><br>
+<img src="/img/6A8CBDC6-C02A-479A-91DF-0B144E66A3E0.png" alt="Image Loading"><br>
+Margin loss in the output layer.<br>
+First row, the label of current sample is k. label正确时。<br>
+论文中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>m</mi><mo>+</mo></msup><mo>=</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>9</mn></mrow><annotation encoding="application/x-tex">m^+ = 0.9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.771331em;"></span><span class="strut bottom" style="height:0.771331em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">m</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord">+</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">9</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>m</mi><mo>−</mo></msup><mo>=</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">m^-=0.1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.771331em;"></span><span class="strut bottom" style="height:0.771331em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">m</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord">−</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">1</span></span></span></span>，并建议<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">\lambda=0.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">λ</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">5</span></span></span></span>。<br>
+当，label为class k时，如果capsule k输出向量长度短于0.9，loss就大于0。反之，如果label不是k的其他class，如果capsule k的长度长于0.1，loss就大于0。</p>
+<h2 id="architecture"><a class="markdownIt-Anchor" href="#architecture"></a> Architecture</h2>
+<p><img src="/img/2D0F98E1-FD4F-47AC-B024-332EE4780353.png" alt="Image Loading"><br>
+在MNIST dataset上实验。<br>
+首先采用两层Convolutional Layer对image内容进行特征提取，接着送进Primary Capsules，Primary Capsules再route给后一层的Digit Capsules，至此，这些Digit Capsules的输出已经可以由上面所述的Margin Loss进行训练，并根据capsule输出的向量长度进行预测了。<br>
+用capsule net还可以进行重建。Reconstruction regularizer。因为digit capsules的输出是向量，所以可以带有许多这个数字的特性(例如方向、角度、位置)，所以在训练时可以新增一个regularization项，将当前sample的label class对应的capsule取出，并送进连续三层的fully-connected layers重建出原本的image。<br>
+Loss function中的reconstruction是fully-connected layer输出与原image的L2 loss，为了避免过度影响到digit capsules本身的loss，乘了0.0005的系数。<br>
+<img src="/img/DCF9E35B-43B4-4E8E-8750-5E3C2107988F.png" alt="Image Loading"><br>
+Image is feed into the ReLU Conv1 which is a standard convolution layer. It applies 256 9x9 kernels to generate an output with 256 channels (feature maps). With stride 1 and no padding, the spatial dimension is reduced to 20x20. ( 28-9+1=20).<br>
+It is then feed into PrimaryCapsules which is a modified convolution layer supporting capsules. It generates a 8-D vector instead of a scalar. PrimaryCapsules used 8x32 kernels to generate 32 8-D capsules. (i.e. 8 output neurons are grouped together to form a capsule) PrimaryCapsules uses 9x9 kernels with stride 2 and no padding to reduce the spatial dimension from 20x20 to 6x6 ([(20 - 9) / 2] + 1 = 6). In PrimaryCapsules, we have 32x6x6 capsules.<br>
+It is then feed into DigiCaps which apply a transformation matrix <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>W</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">W_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">W</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> with shape 16x8 to convert the 8-D capsule to a 16-D capsule for each class j (from 1 to 10).<br>
+Because there are 10 classes, the shape of DigiCaps is 10x16 (10 16-D vector.)<br>
+<img src="/img/69F739F6-7193-47CC-ADF7-E090D4AAC163.png" alt="Image Loading"></p>
+<h2 id="results"><a class="markdownIt-Anchor" href="#results"></a> Results</h2>
+<p><img src="/img/039A8F84-51A6-4379-B1BA-FC6821F692F6.png" alt="Image Loading"><br>
+Routing是前面训练时的iteration r值。<br>
+baseline是3层CNN，分别255,255,125个channel，与两层fully-connected layer，分别328,192个node。<br>
+作者的结论是：</p>
+<ul>
+<li>使用CapsNet得到了相当低的test error，这过往需要较深的CNN model才能达到。</li>
+<li>这证明了routing与reconstruction regularizer的重要性。</li>
+</ul>
+<p><img src="/img/BDEC1717-F9B9-4D3D-829C-7FFEB39B941D.png" alt="Image Loading"><br>
+Label, prediction, reconstruction<br>
+最右边的两个sample是预测错误的例子。<br>
+此外，也可以把digit capsule的输出向量进行一些修改再reconstruction。<br>
+<img src="/img/A8162A2F-5589-4554-AC4C-D38A03FCC8CF.png" alt="Image Loading"><br>
+Dynamic Routing其实可以视为一种attention机制。上层的capsule只会接受有相关性的下层capsule输入，这可以帮助CapsNet处理严重重叠的数字。<br>
+<img src="/img/ACC0130A-6E2D-46F2-B41C-5FBC4583358A.png" alt="Image Loading"><br>
+L为label，R为Reconstruction Class。CapsNet在预测时会固定取长度最长的两个digit capsules，并使用其输出向量进行重建。</p>
+<p>在accuracy/error rate上，CapsNet并没有太大进展，但其输出向量有更好解释型，也能携带更多资讯，并透过reconstruction regularizer可以简单视觉化预测时的错误原因。Routing-by-agreement本身等于自带attention。<br>
+Reconstruction Regularizer会倾向考虑整张图像中的所有东西。</p>
+<p><img src="/img/21C7C4B5-2ACA-48DD-86B0-46EF59B18BDE.png" alt="Image Loading"></p>
+<p>Ref:<br>
+[1] https:/www.youtube.com/watch?v=EATWLTyLfmc<br>
+[2] <a href="http:/www.i-programmer.info/news/105-artificial-intelligence/11283-capsule-nets-the-new-ai.html" target="_blank" rel="external">Capsule Nets - The New AI</a><br>
+[3] <a href="https:/data-sci.info/2017/11/06/%E4%B8%80%E8%B5%B7%E8%AE%80-dynamic-routing-capsules/" target="_blank" rel="external">一起讀 Dynamic Routing Between Capsules | Learning by Hacking</a><br>
+[4] <a href="https:/jhui.github.io/2017/11/03/Dynamic-Routing-Between-Capsules/" target="_blank" rel="external">“Understanding Dynamic Routing between Capsules (Capsule Networks)”</a><br>
+[5] <a href="https:/github.com/naturomics/CapsNet-Tensorflow" target="_blank" rel="external">GitHub - naturomics/CapsNet-Tensorflow: A Tensorflow implementation of CapsNet(Capsules Net) in Hinton’s paper Dynamic Routing Between Capsules</a><br>
+[6] https:/github.com/jhui/machine_learning/tree/master/capsnet-keras<br>
+[7] <a href="https:/arxiv.org/abs/1710.09829" target="_blank" rel="external">1710.09829 Dynamic Routing Between Capsules</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#capsules-and-routing"><span class="toc-number">2.</span> <span class="toc-text"> Capsules and Routing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#loss-function"><span class="toc-number">3.</span> <span class="toc-text"> Loss function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#architecture"><span class="toc-number">4.</span> <span class="toc-text"> Architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#results"><span class="toc-number">5.</span> <span class="toc-text"> Results</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&text=论文 Dynamic Routing Between Capsules"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&is_video=false&description=论文 Dynamic Routing Between Capsules"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 Dynamic Routing Between Capsules&body=Check out this article: http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&title=论文 Dynamic Routing Between Capsules"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2017/12/09/essay-dynamic-routing-between-capsules/&name=论文 Dynamic Routing Between Capsules&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

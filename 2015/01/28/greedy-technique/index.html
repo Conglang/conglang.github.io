@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="算法之贪婪技术。在局部解的基础上扩展，每一步选择都是可行、局部最优和不可取消的。如Prim算法、Kruskal算法、Dijkstra算法、哈夫曼树，以及一些相关题目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Greedy Technique">
+<meta property="og:url" content="http://conglang.github.io/2015/01/28/greedy-technique/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="算法之贪婪技术。在局部解的基础上扩展，每一步选择都是可行、局部最优和不可取消的。如Prim算法、Kruskal算法、Dijkstra算法、哈夫曼树，以及一些相关题目。">
+<meta property="og:updated_time" content="2018-07-03T15:35:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Greedy Technique">
+<meta name="twitter:description" content="算法之贪婪技术。在局部解的基础上扩展，每一步选择都是可行、局部最优和不可取消的。如Prim算法、Kruskal算法、Dijkstra算法、哈夫曼树，以及一些相关题目。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Greedy Technique</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/31/iterative-improvement/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/27/dynamic-programming/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/28/greedy-technique/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/28/greedy-technique/&text=Greedy Technique"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/28/greedy-technique/&is_video=false&description=Greedy Technique"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Greedy Technique&body=Check out this article: http://conglang.github.io/2015/01/28/greedy-technique/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/28/greedy-technique/&name=Greedy Technique&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#贪婪技术"><span class="toc-number">1.</span> <span class="toc-text"> 贪婪技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#prim算法"><span class="toc-number">1.1.</span> <span class="toc-text"> Prim算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kruskal算法"><span class="toc-number">1.2.</span> <span class="toc-text"> Kruskal算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dijkstra算法"><span class="toc-number">1.3.</span> <span class="toc-text"> Dijkstra算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈夫曼树"><span class="toc-number">1.4.</span> <span class="toc-text"> 哈夫曼树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#leetcode相关题目"><span class="toc-number">1.5.</span> <span class="toc-text"> leetcode相关题目</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Greedy Technique
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-28T13:17:22.000Z" itemprop="datePublished">2015-01-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Algorithm/">Algorithm</a>, <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Greedy-Technique/">Greedy Technique</a>, <a class="tag-link" href="/tags/leetcode/">leetcode</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="贪婪技术"><a class="markdownIt-Anchor" href="#贪婪技术"></a> 贪婪技术</h2>
+<blockquote>
+<p><strong>贪婪技术</strong>建议通过一系列步骤来构造问题的解，每一步对目前构造的部分解做一个扩展，直到获得问题的完整解为止。这个技术的核心是，所做的每一步选择都必须满足<strong>可行</strong>、<strong>局部最优</strong>和<strong>不可取消</strong>原则。</p>
+</blockquote>
+<ul>
+<li>**可行的：**即它必须满足问题的约束。</li>
+<li>**局部最优：**它是当前步骤中所有可行选择中最佳的局部选择。</li>
+<li>**不可取消：**即选择一旦做出，在算法的后面步骤中就无法改变了。</li>
+</ul>
+<p>贪婪技术并不能保证一定得到最优解。但如果我们关心的是近似解，或者我们只能满足于近似解，贪婪算法仍然是有价值的。</p>
+<h3 id="prim算法"><a class="markdownIt-Anchor" href="#prim算法"></a> Prim算法</h3>
+<blockquote>
+<p><strong>Prim算法</strong>是一种为加权连通图构造最小生成树的贪婪算法。它的工作原理是向前面构造的一棵子树中添加离树中顶点最近的顶点。</p>
+</blockquote>
+<p>详细分析与实现<a href="/2015/01/11/graph/#%E6%99%AE%E9%87%8C%E5%A7%86%E7%AE%97%E6%B3%95(Prim)">见这里</a>。</p>
+<h3 id="kruskal算法"><a class="markdownIt-Anchor" href="#kruskal算法"></a> Kruskal算法</h3>
+<blockquote>
+<p><strong>Kruskal算法</strong>是另一种最小生成树问题的算法。它按照权重的升序把边包含进来，以构造一棵最小生成树，并使得这种包含不会产生一条回路。为了保证这种检查的效率，需要应用一种所谓的<strong>并查算法</strong>。</p>
+</blockquote>
+<p>详细分析与实现<a href="/2015/01/11/graph/#%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%E7%AE%97%E6%B3%95(Kruskal)">见这里</a>。</p>
+<h3 id="dijkstra算法"><a class="markdownIt-Anchor" href="#dijkstra算法"></a> Dijkstra算法</h3>
+<blockquote>
+<p><strong>Dijkstra算法</strong>解决了单起点最短路径问题，该问题要求出从给定的顶点(起点)出发通向加权图或者有向图的其他所有顶点的最短路径。它的工作过程和Prim算法是一样的，不同点在于它比较的是路径的长度而不是边的长度。对于不含负权重的图，Dijkstra算法总是能够产生一个正确的解。</p>
+</blockquote>
+<p>详细分析与实现<a href="/2015/01/11/graph/#%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E4%B9%8B%E5%BE%B7%E6%9D%B0%E6%96%AF%E7%89%B9%E6%8B%89%E7%AE%97%E6%B3%95(Dijkstra)">见这里</a>。</p>
+<h3 id="哈夫曼树"><a class="markdownIt-Anchor" href="#哈夫曼树"></a> 哈夫曼树</h3>
+<blockquote>
+<p><strong>哈夫曼树</strong>是一棵二叉树，它使得从根出发到包含一组预定义权重的叶子之间的加权路径长度达到最小。哈夫曼树的最重要的应用是哈夫曼编码。<br>
+<strong>哈夫曼编码</strong>是一种最优的自由前缀边长编码方案，它基于字符在给定文本中的出现频率，把比特串赋给字符。这是通过贪婪地构造一棵二叉树来完成的，二叉树的叶子代表字母表中的字符，而树中的边则标记为0或者1。</p>
+</blockquote>
+<p>详细分析与实现<a href="/2015/01/10/tree/#%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91(Huffman_Tree)">见这里</a>。</p>
+<h3 id="leetcode相关题目"><a class="markdownIt-Anchor" href="#leetcode相关题目"></a> leetcode相关题目</h3>
+<p><a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Jump_Game.cpp" target="_blank" rel="external">Jump Game</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Jump_Game_II.cpp" target="_blank" rel="external">Jump Game II</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Best_Time_to_Buy_and_Sell_Stock.cpp" target="_blank" rel="external">Best Time to Buy and Sell Stock</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Best_Time_to_Buy_and_Sell_Stock_II.cpp" target="_blank" rel="external">Best Time to Buy and Sell Stock II</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Longest_Substring_Without_Repeating_Characters.cpp" target="_blank" rel="external">Longest Substring Without Repeating Characters</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Container_With_Most_Water.cpp" target="_blank" rel="external">Container With Most Water</a></p>
+<p>[1] 算法设计与分析基础(第2版)<br>
+[2] leetcode</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#贪婪技术"><span class="toc-number">1.</span> <span class="toc-text"> 贪婪技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#prim算法"><span class="toc-number">1.1.</span> <span class="toc-text"> Prim算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kruskal算法"><span class="toc-number">1.2.</span> <span class="toc-text"> Kruskal算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dijkstra算法"><span class="toc-number">1.3.</span> <span class="toc-text"> Dijkstra算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈夫曼树"><span class="toc-number">1.4.</span> <span class="toc-text"> 哈夫曼树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#leetcode相关题目"><span class="toc-number">1.5.</span> <span class="toc-text"> leetcode相关题目</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/28/greedy-technique/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/28/greedy-technique/&text=Greedy Technique"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/28/greedy-technique/&is_video=false&description=Greedy Technique"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Greedy Technique&body=Check out this article: http://conglang.github.io/2015/01/28/greedy-technique/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/28/greedy-technique/&title=Greedy Technique"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/28/greedy-technique/&name=Greedy Technique&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

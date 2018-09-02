@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="充满实用示例，包括Making Recommendations, Discovering Groups, Searching and Ranking, Optimization, Document Filtering, Modeling with Decision Trees, Building Price Models, SVMs, Finding Independent Features, E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Programming Collective Intelligence 笔记">
+<meta property="og:url" content="http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="充满实用示例，包括Making Recommendations, Discovering Groups, Searching and Ranking, Optimization, Document Filtering, Modeling with Decision Trees, Building Price Models, SVMs, Finding Independent Features, E">
+<meta property="og:image" content="http://mines.humanoriented.com/classes/2010/fall/csci568/portfolio_exports/sphilip/images/tani.gif">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_hierarchical_clustering_in_action.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_k_means_clustering_with_two_clusters.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_clusters_of_things_that_people_want.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_sample_distance_matrix.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_starting_locations_of_the_2d_projection.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_distances_between_items.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_forces_acting_on_item_a.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_portion_of_2d_representation_of_blog_space.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_schema_for_the_search_engine.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_calculating_the_pagerank_of_a.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_calculating_the_pagerank_of_formular.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_design_of_a_click_tracking_neural_network.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_network_visualization_a_clean_network_layout.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_seeking_the_lowest_cost_on_a_hill.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_examples_of_mutating_a_solution.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_examples_of_crossover.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_example_decision_tree.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_user_behavior_and_final_purchase_decision_for_a_web_site.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_inverse_weight_function.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_subtraction_weight_function.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_gaussian_weight_function.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_a_cumulative_probability_graph.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_a_probability_density_graph.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_linear_classifier_using_averages.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_using_dot_products_to_determine_distance.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_finding_the_best_dividing_line.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_portion_of_a_features_matrix.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_portion_of_weights_matrix.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_multiplying_the_weights_matrix_by_the_feature_matrix.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_genetic_programming_overview.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_example_program_tree.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_mutation_by_changing_node_functions.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_mutation_by_replacing_subtrees.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_crossover_operation.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_grid_war_example.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_network_response_to_the_word_online.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_neural_network_response_to_online_pharmacy.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_pci_cross_validation_of_a_single_item.jpg">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Programming Collective Intelligence 笔记">
+<meta name="twitter:description" content="充满实用示例，包括Making Recommendations, Discovering Groups, Searching and Ranking, Optimization, Document Filtering, Modeling with Decision Trees, Building Price Models, SVMs, Finding Independent Features, E">
+<meta name="twitter:image" content="http://mines.humanoriented.com/classes/2010/fall/csci568/portfolio_exports/sphilip/images/tani.gif">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Programming Collective Intelligence 笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/04/28/git-notes/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&text=Programming Collective Intelligence 笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&is_video=false&description=Programming Collective Intelligence 笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Programming Collective Intelligence 笔记&body=Check out this article: http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&name=Programming Collective Intelligence 笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#preface"><span class="toc-number">1.</span> <span class="toc-text"> Preface</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#overview-of-the-chapters"><span class="toc-number">1.1.</span> <span class="toc-text"> Overview of the Chapters</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction-to-collective-intelligence"><span class="toc-number">2.</span> <span class="toc-text"> Introduction to Collective Intelligence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#making-recommendations"><span class="toc-number">3.</span> <span class="toc-text"> Making Recommendations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exercises"><span class="toc-number">3.1.</span> <span class="toc-text"> Exercises</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#discovering-groups"><span class="toc-number">4.</span> <span class="toc-text"> Discovering Groups</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#searching-and-ranking"><span class="toc-number">5.</span> <span class="toc-text"> Searching and Ranking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#optimization"><span class="toc-number">6.</span> <span class="toc-text"> Optimization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#document-filtering"><span class="toc-number">7.</span> <span class="toc-text"> Document Filtering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#modeling-with-decision-trees"><span class="toc-number">8.</span> <span class="toc-text"> Modeling with Decision Trees</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#building-price-models"><span class="toc-number">9.</span> <span class="toc-text"> Building Price Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#advanced-classification-kernel-methods-and-svms"><span class="toc-number">10.</span> <span class="toc-text"> Advanced Classification: Kernel Methods and SVMs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#finding-independent-features"><span class="toc-number">11.</span> <span class="toc-text"> Finding Independent Features</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#evolving-intelligence"><span class="toc-number">12.</span> <span class="toc-text"> Evolving Intelligence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#algorithm-summary"><span class="toc-number">13.</span> <span class="toc-text"> Algorithm Summary</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bayesian-classifier"><span class="toc-number">13.1.</span> <span class="toc-text"> Bayesian Classifier</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#training"><span class="toc-number">13.1.1.</span> <span class="toc-text"> Training</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#classifying"><span class="toc-number">13.1.2.</span> <span class="toc-text"> Classifying</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-code"><span class="toc-number">13.1.3.</span> <span class="toc-text"> Using Your Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses"><span class="toc-number">13.1.4.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#decision-tree-classifier"><span class="toc-number">13.2.</span> <span class="toc-text"> Decision Tree Classifier</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#training-2"><span class="toc-number">13.2.1.</span> <span class="toc-text"> Training</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-decision-tree-classifier"><span class="toc-number">13.2.2.</span> <span class="toc-text"> Using Your Decision Tree Classifier</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-2"><span class="toc-number">13.2.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#neural-networks"><span class="toc-number">13.3.</span> <span class="toc-text"> Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#training-a-neural-network"><span class="toc-number">13.3.1.</span> <span class="toc-text"> Training a Neural Network</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-neural-network-code"><span class="toc-number">13.3.2.</span> <span class="toc-text"> Using Your Neural Network Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-3"><span class="toc-number">13.3.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#support-vector-machines"><span class="toc-number">13.4.</span> <span class="toc-text"> Support-Vector Machines</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-kernel-trick"><span class="toc-number">13.4.1.</span> <span class="toc-text"> The Kernel Trick</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-libsvm"><span class="toc-number">13.4.2.</span> <span class="toc-text"> Using LIBSVM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-4"><span class="toc-number">13.4.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#k-nearest-neighbors"><span class="toc-number">13.5.</span> <span class="toc-text"> K-Nearest Neighbors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#scaling-and-superfluous-variables"><span class="toc-number">13.5.1.</span> <span class="toc-text"> Scaling and Superfluous Variables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-knn-code"><span class="toc-number">13.5.2.</span> <span class="toc-text"> Using Your kNN Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-5"><span class="toc-number">13.5.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clustering"><span class="toc-number">13.6.</span> <span class="toc-text"> Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hierarchical-clustering"><span class="toc-number">13.6.1.</span> <span class="toc-text"> Hierarchical Clustering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#k-means-clustering"><span class="toc-number">13.6.2.</span> <span class="toc-text"> K-Means Clustering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-clustering-code"><span class="toc-number">13.6.3.</span> <span class="toc-text"> Using Your Clustering Code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#multidimensional-scaling"><span class="toc-number">13.7.</span> <span class="toc-text"> Multidimensional Scaling</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-multidimensional-scaling-code"><span class="toc-number">13.7.1.</span> <span class="toc-text"> Using Your Multidimensional Scaling Code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#non-negative-matrix-factorization"><span class="toc-number">13.8.</span> <span class="toc-text"> Non-Negative Matrix Factorization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-nmf-code"><span class="toc-number">13.8.1.</span> <span class="toc-text"> Using Your NMF Code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optimization-2"><span class="toc-number">13.9.</span> <span class="toc-text"> Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-cost-function"><span class="toc-number">13.9.1.</span> <span class="toc-text"> The Cost Function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#simulated-annealing"><span class="toc-number">13.9.2.</span> <span class="toc-text"> Simulated Annealing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#genetic-algorithms"><span class="toc-number">13.9.3.</span> <span class="toc-text"> Genetic Algorithms</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-optimization-code"><span class="toc-number">13.9.4.</span> <span class="toc-text"> Using Your Optimization Code</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Programming Collective Intelligence 笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-04-17T07:59:44.000Z" itemprop="datePublished">2016-04-17</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Book/">Book</a>, <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>副标题Building Smart Web 2.0 Applications，作者Toby Segaran。<br>
+只大概记了一些要点，做课后的练习，具体内容看示例代码最有效。<br>
+Python一直没用熟，代码风格有待改善。</p>
+<h2 id="preface"><a class="markdownIt-Anchor" href="#preface"></a> Preface</h2>
+<p>This book covers ways to get hold of interesting datasets from many web sites you’ve probably heard of, ideas on how to collect data from users of your own applications ,and many different ways to analyze and understand the data once you’ve found it.<br>
+本书的代码用的是Python2。在Windows下如果同时安装了Python2和3，在终端里输入<code>py -2</code>就是Python2，<code>py -3</code>就是Python3。</p>
+<h3 id="overview-of-the-chapters"><a class="markdownIt-Anchor" href="#overview-of-the-chapters"></a> Overview of the Chapters</h3>
+<ul>
+<li><strong>Chapter 1, Introduction to Collective Intelligence</strong><br>
+Explains the concepts behind machine learning, how it is applied in many different fields, and how it can be used to draw new conclusions from data gathered from many different people.</li>
+<li><strong>Chapter 2, Making Recommendations</strong><br>
+Introduces the <em>collaborative filtering</em> techniques used by many online retailers to recommend products or media. The chapter includes a section on recommending links to people from a social bookmrking site, and building a move recommendation system from the MovieLens dataset.</li>
+<li><strong>Chapter 3, Discovering Groups</strong><br>
+Builds on some of the ideas in Chapter 2 and introduces two different methods of <em>clustering</em>, which automatically detect groups of similar items in a large dataset. This chapter demonstrates the use of clustering to find groups on a set of popular weblogs and on people’s desires from a social networking web site.</li>
+<li><strong>Chapter 4, Searching and Ranking</strong><br>
+Describes the various parts of a search engine including the crawler, indexer, and query engine. It covers the <em>PageRank</em> algorithm for scoring pages based on inbould links and shows you how to create a <em>neural network</em> that learns which keywords are associated with different results.</li>
+<li><strong>Chapter 5, Optimization</strong><br>
+Introduces algorithms for <em>optimization</em>, which are designed to search millions of possible solutions to a problem and choose the best one. The wide variety of uses for these algorithms is demonstrated with examples that find the best flights for a group of people traveling to the same location, find the best way of matching students to dorms, and lay out a network with the minimum number of crossed lines.</li>
+<li><strong>Chapter 6, Document Filtering</strong><br>
+Demonstrates <em>Bayesian filtering</em>, which is used in many free and commercial spam filters for automatically classifying documents based on the type of words and other features that appear in the document. This is applied to a set of RSS search results to demonstrate automatic classification of the entries.</li>
+<li><strong>Chapter 7, Modeling with Decision Trees</strong><br>
+Introduces <em>decision tree</em> as a method not only of making predictions, but also of modeling the way the decisions are made. The first decision tree is built with hypotheticl data from server logs and is used to predict whether or not a user is likely to become a premium subscriber. The other examples use data from real web sites to model real estate prices and “hotness”.</li>
+<li><strong>Chapter 8, Building Price Models</strong><br>
+Approaches the problem of predicting numerical values rather than classifications using <em>k-nearest neighbors</em> techniques, and applies the optimization algorithms from Chapter 5. These methods are used in conjunction with the eBay API to build a system for predicting eventual auction prices for items based on a set of properties.</li>
+<li><strong>Chapter 9, Advanced Classification: Kernel Methods and SVMs</strong><br>
+Shows how <em>support-vector machines</em> can be used to match people in online dating sites or when searching for professional contacts. Support-vector machines are a fairly advanced technique and this chapter compares them to other methods.</li>
+<li><strong>Chapter 10, Finding Independent Features</strong><br>
+Introduces a relatively new technique called <em>non-negative matrix factorization</em>, which is used to find the independent features in a dataset. In many datasets the items are constructed as a composite of different features that we don’t know in advance; the idea here is to detect these features. This technique is demonstrated on a set of news articles, where the stories themselves are used to detect themes, one or more of which may apply to a given story.</li>
+<li><strong>Chapter 11, Evolving Intelligence</strong><br>
+Introduces <em>genetic programming</em>, a very sophisticated set of techniques that goes beyond optimization and actually builds algorithms using evolutionary ideas to solve a particular problem. This is demonstrated by a simple game in which the computer is initially a poor player that improves its skill by improving its own code the more the game is played.</li>
+<li><strong>Chapter 12, Algorithm Summary</strong><br>
+Reviews all the machine-learning and statistical algorithms described in the book and compares them to a set of artificial problems. This will help you understand how they work and visualize the way that each of them divides data.</li>
+<li><strong>Appendix A, Third-Party Libraries</strong><br>
+Gives information on third-party libraries used in the book, such as where to find them and how to install them.</li>
+<li><strong>Appendix B, Mathematical Formulas</strong><br>
+Contains formulae, descriptions, and code for many of the mathematical concepts introduced throughout the book.</li>
+</ul>
+<h2 id="introduction-to-collective-intelligence"><a class="markdownIt-Anchor" href="#introduction-to-collective-intelligence"></a> Introduction to Collective Intelligence</h2>
+<p>Netflix, Google. The ability to collect information and the computational power to interpret it has enabled great collaboration opportunities and a better understanding of users and customers.</p>
+<p>Collective Intelligence: The combining of behavior, perferences, or ideas of a group of people to create novel insights. Building new conclusions from independent contributors.</p>
+<p>Machine Learing目前的缺陷是很多信息利用不上和overgeneralizing。</p>
+<p>使用ML的一些例子：Search Engine(Google), Recommendation System(Amazon, Netflix), Prediction Markets(Hollywood Stock Exchange), Dating Sites(eHarmony)。还可以应用在很多其他领域。比如：</p>
+<ul>
+<li>Product marketing<br>
+Understanding demographics and trends are make easier by the increased ability to collect data from consumers and use machine learning techniques such as clustering to better understand the natural divisions that exist in markets and to make better predictions about future trends.</li>
+</ul>
+<h2 id="making-recommendations"><a class="markdownIt-Anchor" href="#making-recommendations"></a> Making Recommendations</h2>
+<ul>
+<li>User-Based Filtering<br>
+Simpler to implement, more appropriate with smaller in-memory datasets that change very frequently.<br>
+<code>topMatches</code>是通过某种算法(如Euclidean Distance Score或Pearson Correlation Score或<a href="https://en.wikipedia.org/wiki/Metric_%28mathematics%29#Examples" target="_blank" rel="external">其他</a>)计算出每个user和其他user的相似性，然后按照相似程度排序得到最匹配的其他user。<br>
+<code>getRecommendations</code>是计算出每个其他user与自己的相似性之后，再将该user看过的其他电影的评分与相似性相乘，讲所有user的该值求和再除以总的相似性之和，得到每个电影的一个加权相似值，排序则得出最符合此user品味的推荐项。</li>
+<li>Item-Based Filtering<br>
+Faster, need to maintaining the item similarity table, performs better in sparse datasets.<br>
+<code>calculateSimilarItems</code>是讲之前的用户数据反过来，变为item主导的，然后用topMatches找到与自己最相似的其他item。<br>
+<code>getRecommendedItems</code>是针对该user的每个item，找到其用calculateSimilarItems计算出的n个相似item，然后类似前文求出每个item的的加权相似值，排序得出最符合此user品味的推荐项。</li>
+</ul>
+<h3 id="exercises"><a class="markdownIt-Anchor" href="#exercises"></a> Exercises</h3>
+<ul>
+<li><strong>Tanimoto score</strong>. Find out what a Tanimoto similarity score is. In what cases could this be used as the similarity metric instead of Euclidean distance or Pearson coefficient? Create a new similarity function using the Tanimoto score.<br>
+答： <a href="http://mines.humanoriented.com/classes/2010/fall/csci568/portfolio_exports/sphilip/tani.html" target="_blank" rel="external">参考</a><br>
+Used when each attribute is binary such that each bit represents the absence of presence of presence of a characteristic, thus, it is better to determine the similarity via the overlap, or intersection, of the sets.<br>
+The Tanimoto Coefficient uses the ratio of the intersecting set to the union set as the measure of similarity. Represented as a mathematical equation. In this equation, N represents the number of attributes in each object(a,b). C in this case is the intersection set.<br>
+<img src="http://mines.humanoriented.com/classes/2010/fall/csci568/portfolio_exports/sphilip/images/tani.gif" alt="Image Loading"></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sim_tanimoto</span><span class="params">(prefs, p1, p2)</span>:</span></span><br><span class="line">	<span class="comment"># Same Person return 1</span></span><br><span class="line">	<span class="keyword">if</span> p1 == p2:</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="comment"># Get mutually rated items</span></span><br><span class="line">	mutual_set = set()</span><br><span class="line">	<span class="keyword">for</span> item <span class="keyword">in</span> prefs[p1]:</span><br><span class="line">		<span class="keyword">if</span> item <span class="keyword">in</span> prefs[p2]: mutual_set.add(item)</span><br><span class="line">	<span class="comment"># Dividing value</span></span><br><span class="line">	divid_score = <span class="number">2.5</span></span><br><span class="line">	<span class="comment"># Get the list of movies that people1 &amp; people2 likes and dislikes</span></span><br><span class="line">	p1_like = &#123;&#125;</span><br><span class="line">	p2_like = &#123;&#125;</span><br><span class="line">	p1_dislike = &#123;&#125;</span><br><span class="line">	p2_dislike = &#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> item <span class="keyword">in</span> mutual_set:</span><br><span class="line">		<span class="keyword">if</span> prefs[p1][item] &gt;= divid_score:</span><br><span class="line">			p1_like[item] = <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			p1_dislike[item] = <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> prefs[p2][item] &gt;= divid_score:</span><br><span class="line">			p2_like[item] = <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			p2_dislike[item] = <span class="number">1</span></span><br><span class="line">	<span class="comment"># Calculate Tanimoto Coefficient</span></span><br><span class="line">	intersection_like = [common_item <span class="keyword">for</span> common_item <span class="keyword">in</span> p1_like <span class="keyword">if</span> common_item <span class="keyword">in</span> p2_like]</span><br><span class="line">	intersection_dislike = [common_item <span class="keyword">for</span> common_item <span class="keyword">in</span> p1_dislike <span class="keyword">if</span> common_item <span class="keyword">in</span> p2_dislike]</span><br><span class="line">	tanimoto_like = float(len(intersection_like)) / (len(p1_like) + len(p2_like) - len(intersection_like))</span><br><span class="line">	tanimoto_dislike = float(len(intersection_dislike)) / (len(p1_dislike) + len(p2_dislike) - len(intersection_dislike))</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"like:\t"</span> + str(tanimoto_like)</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"dislike:\t"</span> + str(tanimoto_dislike)</span><br><span class="line">	<span class="comment"># Normalize</span></span><br><span class="line">	<span class="keyword">return</span> (tanimoto_like + tanimoto_dislike) / <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Tag similarity</strong>. Using the <a href="http://del.icio.us" target="_blank" rel="external">del.icio.us</a> API, create a dataset of tags and items. Use this to calculate similarity between tags and see if you can find any that are almost identical. Find some items that could have been tagged “programming” but were not.<br>
+答：由于del.icio.us网站挂了，随便伪造了一点数据。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">tags = &#123;</span><br><span class="line">	<span class="string">'programming'</span> : [<span class="string">'url17'</span>, <span class="string">'url31'</span>, <span class="string">'url41'</span>,<span class="string">'url38'</span>,<span class="string">'url45'</span>,<span class="string">'url12'</span>,<span class="string">'url1'</span>,<span class="string">'url25'</span>,<span class="string">'url14'</span>,<span class="string">'url50'</span>, <span class="string">'url23'</span>],</span><br><span class="line">	<span class="string">'fake programming'</span> : [<span class="string">'url17'</span>, <span class="string">'url31'</span>, <span class="string">'url41'</span>,<span class="string">'url38'</span>,<span class="string">'url45'</span>,<span class="string">'url12'</span>,<span class="string">'url1'</span>,<span class="string">'url25'</span>,<span class="string">'url14'</span>,<span class="string">'url50'</span>, <span class="string">'url23'</span>],</span><br><span class="line">	<span class="string">'machine learning'</span> : [<span class="string">'url17'</span>, <span class="string">'url31'</span>, <span class="string">'url43'</span>,<span class="string">'url38'</span>,<span class="string">'url45'</span>,<span class="string">'url12'</span>,<span class="string">'url21'</span>,<span class="string">'url25'</span>,<span class="string">'url3'</span>,<span class="string">'url50'</span>],</span><br><span class="line">	<span class="string">'hello world'</span> : [<span class="string">'url47'</span>, <span class="string">'url28'</span>, <span class="string">'url38'</span>, <span class="string">'url21'</span>, <span class="string">'url14'</span>, <span class="string">'url20'</span>],</span><br><span class="line">	<span class="string">'coding'</span> : [<span class="string">'url46'</span>, <span class="string">'url14'</span>, <span class="string">'url38'</span>, <span class="string">'url39'</span>, <span class="string">'url7'</span>, <span class="string">'url10'</span>, <span class="string">'url24'</span>,<span class="string">'url45'</span>],</span><br><span class="line">	<span class="string">'art'</span> : [<span class="string">'url43'</span>, <span class="string">'url8'</span>, <span class="string">'url10'</span>, <span class="string">'url2'</span>],</span><br><span class="line">	<span class="string">'movie'</span> : [<span class="string">'url13'</span>, <span class="string">'url31'</span>, <span class="string">'url2'</span>, <span class="string">'url43'</span>, <span class="string">'url5'</span>, <span class="string">'url34'</span>, <span class="string">'url45'</span>, <span class="string">'url3'</span>, <span class="string">'url21'</span>]</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">PreprocessData</span><span class="params">(tags)</span>:</span></span><br><span class="line">	tag_data = &#123;&#125;</span><br><span class="line">	all_url = []</span><br><span class="line">	<span class="comment"># get all urls</span></span><br><span class="line">	<span class="keyword">for</span> url_list <span class="keyword">in</span> tags.values():</span><br><span class="line">		<span class="keyword">for</span> url <span class="keyword">in</span> url_list:</span><br><span class="line">			all_url.append(url)</span><br><span class="line">	<span class="comment"># construct tag data dictionary</span></span><br><span class="line">	<span class="keyword">for</span> tag <span class="keyword">in</span> tags.keys():</span><br><span class="line">		tag_data[tag] = &#123;&#125;</span><br><span class="line">		<span class="keyword">for</span> url <span class="keyword">in</span> all_url:</span><br><span class="line">			<span class="keyword">if</span> url <span class="keyword">in</span> tags[tag]:</span><br><span class="line">				tag_data[tag][url] = <span class="number">1.0</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				tag_data[tag][url] = <span class="number">0.0</span></span><br><span class="line">	<span class="keyword">return</span> tag_data</span><br><span class="line">				</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">CalculateTagSimilarity</span><span class="params">(tag1)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> recommendations.topMatches(PreprocessData(tags), tag1)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>User-based efficiency</strong>. The user-based filtering algorithm is inefficient because it compares a user to all other users every time a recommendation is needed. Write a function to precompute user similarities, and alter the recommendation code to use only the top five other users to get recommendations.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculateSimilarUsers</span><span class="params">(prefs,n=<span class="number">5</span>,similarity=recommendations.sim_pearson)</span>:</span></span><br><span class="line">	user_sim = &#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> user <span class="keyword">in</span> prefs:</span><br><span class="line">		scores = recommendations.topMatches(prefs, user, n, similarity)</span><br><span class="line">		user_sim[user] = scores</span><br><span class="line">	<span class="keyword">return</span> user_sim;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getRecommendationsUsingPrecalculatedUserSimilarity</span><span class="params">(prefs, person, similarity=recommendations.sim_pearson)</span>:</span></span><br><span class="line">	totals=&#123;&#125;</span><br><span class="line">	simSums=&#123;&#125;</span><br><span class="line">	<span class="comment"># Get similar people from precalculated data</span></span><br><span class="line">	similarPeople = calculateSimilarUsers(prefs, <span class="number">5</span>, similarity)[person]</span><br><span class="line">	<span class="keyword">for</span> people <span class="keyword">in</span> similarPeople:</span><br><span class="line">		sim = people[<span class="number">0</span>]</span><br><span class="line">		other = people[<span class="number">1</span>]</span><br><span class="line">		<span class="comment"># ignore scores of zero or lower</span></span><br><span class="line">		<span class="keyword">if</span> sim&lt;=<span class="number">0</span>: <span class="keyword">continue</span></span><br><span class="line">		<span class="keyword">for</span> item <span class="keyword">in</span> prefs[other]:</span><br><span class="line">		  <span class="comment"># only score movies I haven't seen yet</span></span><br><span class="line">		  <span class="keyword">if</span> item <span class="keyword">not</span> <span class="keyword">in</span> prefs[person] <span class="keyword">or</span> prefs[person][item]==<span class="number">0</span>:</span><br><span class="line">			<span class="comment"># Similarity * Score</span></span><br><span class="line">			totals.setdefault(item,<span class="number">0</span>)</span><br><span class="line">			totals[item]+=prefs[other][item]*sim</span><br><span class="line">			<span class="comment"># Sum of similarities</span></span><br><span class="line">			simSums.setdefault(item,<span class="number">0</span>)</span><br><span class="line">			simSums[item]+=sim</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># Create the normalized list</span></span><br><span class="line">	rankings=[(total/simSums[item],item) <span class="keyword">for</span> item,total <span class="keyword">in</span> totals.items()]</span><br><span class="line">	<span class="comment"># Return the sorted list</span></span><br><span class="line">	rankings.sort()</span><br><span class="line">	rankings.reverse()</span><br><span class="line">	<span class="keyword">return</span> rankings</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Item-based bookmark filtering</strong>. Download a set of data from <a href="http://del.icio.us" target="_blank" rel="external">del.icio.us</a> and add it to the database. Create an item-item table and use this to make item-based recommendations for various users. How do these compare to the user-based recommendations?</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getDeliciousRecommendationItem</span><span class="params">(tag)</span>:</span></span><br><span class="line">	tagData = PreprocessData(tags)</span><br><span class="line">	itemMatch = recommendations.calculateSimilarItems(tagData)</span><br><span class="line">	<span class="comment"># from getRecommendedItems</span></span><br><span class="line">	userRatings=tagData[tag]</span><br><span class="line">	scores=&#123;&#125;</span><br><span class="line">	totalSim=&#123;&#125;</span><br><span class="line">	<span class="comment"># Loop over items rated by this tag</span></span><br><span class="line">	<span class="keyword">for</span> (item,rating) <span class="keyword">in</span> userRatings.items( ):</span><br><span class="line">		<span class="comment"># Loop over items similar to this one</span></span><br><span class="line">		<span class="keyword">for</span> (similarity,item2) <span class="keyword">in</span> itemMatch[item]:</span><br><span class="line">			<span class="comment"># Ignore if this tag has already rated this item</span></span><br><span class="line">			<span class="keyword">if</span> userRatings[item2] != <span class="number">0.0</span>: <span class="keyword">continue</span></span><br><span class="line">			<span class="comment"># Weighted sum of rating times similarity</span></span><br><span class="line">			scores.setdefault(item2,<span class="number">0</span>)</span><br><span class="line">			scores[item2]+=similarity*rating</span><br><span class="line">			<span class="comment"># Sum of all the similarities</span></span><br><span class="line">			totalSim.setdefault(item2,<span class="number">0</span>)</span><br><span class="line">			totalSim[item2]+=similarity</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># Divide each total score by total weighting to get an average</span></span><br><span class="line">	rankings=[(score/totalSim[item],item) <span class="keyword">for</span> item,score <span class="keyword">in</span> scores.items( )]</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># Return the rankings from highest to lowest</span></span><br><span class="line">	rankings.sort( )</span><br><span class="line">	rankings.reverse( )</span><br><span class="line">	<span class="keyword">return</span> rankings</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Audioscrobbler</strong>. Take a look at <a href="http://www.audioscrobbler.net" target="_blank" rel="external">http://www.audioscrobbler.net</a>, a dataset containing music preferences for a large set of users. Use their web services API to get a set of data for making and building a music recommendation system.</li>
+</ul>
+<hr>
+<h2 id="discovering-groups"><a class="markdownIt-Anchor" href="#discovering-groups"></a> Discovering Groups</h2>
+<p>data clustering, a method for discovering and visualizing groups of things, people, or ideas that are all closely related.</p>
+<p>Clustering is used frequently in data-intensive applications. Retailers who track customer purchases can use this information to automatically detect groups of customers with similar buying patterns, in addition to regular demographic information. People of similar age and income may have vastly different styles of dress, but with the use of clustering, “fashion islands” can be discovered and used to develop a retail or marketing strategy.</p>
+<p><strong>Supervised versus Unsupervised Learning</strong></p>
+<ul>
+<li>Supervised Learning<br>
+use example inputs and outputs to learn how to make predictions<br>
+neural networks, decision trees, support-vector machine, Bayesian filtering, etc.</li>
+<li>Unsupervised Learning<br>
+not trained with examples of correct answers. Their purpose is to find structure within a set of data where no one piece of data is the answer.<br>
+clustering, non-negative matrix factorization, self-organizing maps, etc.</li>
+</ul>
+<p><strong>博客聚类示例的思路：</strong></p>
+<ol>
+<li>获得博客词频数据。数据是某Blog的某词次数的count。适合用Pearson correlation计算distance。</li>
+<li>Clustering.
+<ol>
+<li>Hierarchical Clustering.<br>
+算法是每一步计算当前group们之间的距离，找出最小距离的两个group，聚合成一个group。不断重复，直到最后只剩一个group。<br>
+每一个group的数据结构bicluster表示为，有left/right/vec/id/distance，要么是一个代表实际blog的叶节点，要么是有来源两个group的group。<br>
+效率很低，唯一的优化是备忘录，缓存下两group之间的距离数据避免每次都计算。<br>
+<img src="/img/note_pci_hierarchical_clustering_in_action.jpg" alt="Hierarchical clustering in action"></li>
+<li>K-Means Clustering.<br>
+算法是随机在空间中放k个中心点，然后把每个item指给离自己最近的中心点。中心点随后移到指向自己的所有item的中间位置。然后每个item重新指给离自己最近的中心点。重复直到item们的指向都稳定。<br>
+<img src="/img/note_pci_k_means_clustering_with_two_clusters.jpg" alt="K-means clustering with two clusters"></li>
+</ol>
+</li>
+</ol>
+<p><strong>兴趣聚类示例的思路：</strong></p>
+<ol>
+<li>获得兴趣网站zebo里的数据。用Beautiful Soup。数据是某User有此Item则为1，无则为0。适合用Tanimoto coefficient计算distance。</li>
+<li>Clustering。用和前文一样的方法，因为数据结构都一样。作者还建议考虑年龄因素，看看大家的欲望有何不同。</li>
+</ol>
+<p><strong>对显示方式的优化：</strong></p>
+<ol>
+<li>Dendrogram。<br>
+<img src="/img/note_pci_clusters_of_things_that_people_want.png" alt="Image Loading"></li>
+<li>为便于理解数据将其处理为二维。multidimensional scaling。(并不局限在二维，一维三维也都可以。)<br>
+原理是计算出两个item(如blog)之间的距离，讲所有这些item随机画在一个二维平面上，然后计算他们error的总和，并每次循环向正确的方向调整一点，直到error总和值不再变化为止。<br>
+<img src="/img/note_pci_sample_distance_matrix.jpg" alt="Sample distance matrix"><br>
+<img src="/img/note_pci_starting_locations_of_the_2d_projection.jpg" alt="Starting locations of the 2D projection"><br>
+<img src="/img/note_pci_distances_between_items.jpg" alt="Distances between items"><br>
+<img src="/img/note_pci_forces_acting_on_item_a.jpg" alt="Forces acting on item A"><br>
+<img src="/img/note_pci_portion_of_2d_representation_of_blog_space.jpg" alt="Portion of 2D representation of blog space"></li>
+</ol>
+<hr>
+<h2 id="searching-and-ranking"><a class="markdownIt-Anchor" href="#searching-and-ranking"></a> Searching and Ranking</h2>
+<p><strong>Search Engine:</strong></p>
+<ol>
+<li>
+<p>Crawling<br>
+收集网页数据。用urllib2(加载)和Beautiful Soup(解析)。</p>
+</li>
+<li>
+<p>Building the Index<br>
+将处理过的数据存进数据库。用SQLite，python的实现叫pysqlite。<br>
+数据库结构是：<br>
+<img src="/img/note_pci_schema_for_the_search_engine.jpg" alt="Schema for the search engine"><br>
+urllist：被索引到的URL。<br>
+wordlist：URL中文本中的所有词。<br>
+wordlocation：每个词在每个URL中出现的位置。<br>
+link：两个URL之间的指向关系。<br>
+linkwords：某个词是否出现在某个link的描述文本中。</p>
+</li>
+<li>
+<p>Querying<br>
+返回一个有序的URL列表，排序方法可以有：</p>
+<ul>
+<li>Content-based ranking
+<ul>
+<li>Word frequency. The number of times the words in the query appear in the document can help determine how relevant the document it.</li>
+<li>Document location. The main subject of a document will probably appear near the beginning of the document.</li>
+<li>Word distance. If there are multiple words in the query, they should appear close together in the document.</li>
+</ul>
+</li>
+<li>Inbound-link ranking
+<ul>
+<li>Simple Count<br>
+有多少页面外链到它，直接计数。</li>
+<li>The PageRank Algorithm<br>
+Google创始人发明的。每个页面都被赋予一个重要值。一个页面的重要值是由所有链接到它的其他页面的重要值决定的。<br>
+例子：Pages B, C, and D all link to A, and they already have their PageRanks calculated. B also links to three other pages and C links to four other pages. D only links to A. To get A’s PageRank, take the PageRank(PR) of each of the pages that links to A divided by the total number of links on that page, then multiply this by a damping factor of 0.85, and add a minimum value of 0.15. The calculation for PR(A) is:<br>
+<img src="/img/note_pci_calculating_the_pagerank_of_a.jpg" alt="Calculating the PageRank of A"><br>
+<img src="/img/note_pci_calculating_the_pagerank_of_formular.jpg" alt="Calculating the PageRank of A Formular"><br>
+注意到例子里BCD的PageRank是已经计算好的。事实上，在初始状态，每个page都被指定给一个初始值，然后多次迭代进行上述计算过程。对于一个小项目来说，迭代20次差不多就够了。</li>
+<li>Using the Link Text<br>
+Use the text of the links to a page to decide how relevant the page is.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Learning from Clicks<br>
+Build a neural network for ranking queries. The neural network will learn to associate searches with results based on what links people click on after they get a list of search results. The neural network will use this information to change the ordering of the results to better reflect what people have clicked on in the past.<br>
+Multilayer perceptron(MLP)</p>
+<ul>
+<li>神经网络的设计：<br>
+<img src="/img/note_pci_design_of_a_click_tracking_neural_network.jpg" alt="Design of a click-tracking neural network"></li>
+<li>数据库结构设计：<br>
+hiddennode：存储hidden layer。<br>
+wordhidden：存储从word layer到hidden layer的连接。<br>
+hiddenurl：存储从hidden layer到url layer的连接。</li>
+<li>Feeding Forward<br>
+每个node接收来自上一层node的输入时要经过一个sigmoid函数来产生自己的输出，一般都是S形，本例用的tangent函数。<br>
+从用户的输入word经过各层的一系列计算得到一个url列表，每个url都有不同的分值。</li>
+<li>Training with Backpropagation. TODO<br>
+对于url layer的每个节点：</li>
+</ul>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">error = targets[k] - self.ao[k]</span><br><span class="line">output_deltas[k] = dtanh(self.ao[k]) * error</span><br><span class="line"></span><br><span class="line">change = output_deltas[k] * self.ah[j]</span><br><span class="line">self.wo[j][k] = self.wo[j][k] + N * change</span><br></pre></td></tr></table></figure>
+<p>对于hidden layer的每个节点：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> range(len(self.urlids)):</span><br><span class="line">	error = error + output_deltas[k] * self.wo[j][k]</span><br><span class="line">hidden_deltas[j] = dtanh(self.ah[j]) * error</span><br><span class="line"></span><br><span class="line">change = hidden_deltas[j] * self.ai[i]</span><br><span class="line">self.wi[i][j] = self.wi[i][j] + N * change</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="optimization"><a class="markdownIt-Anchor" href="#optimization"></a> Optimization</h2>
+<p>stochastic optimization.<br>
+Optimization finds the best solution to a problem by trying many different solutions and scoring them to determine their quality.</p>
+<p><strong>也许可用Optimization解决的问题：</strong><br>
+The primary requirements for solving with optimization are that the problem has a defined cost function and that similar solutions tend to yield similar results.<br>
+最重要的是能确定solution representation和cost function。</p>
+<p><strong>Group Travel示例</strong><br>
+规划一组人的旅行计划，要考虑很多问题，比如每人的往返航班、要租多少辆车、到哪个机场，总花费、在机场等会合的时间等。<br>
+people是一个(name, origin)的list。<br>
+flights是dictionary，key是origin和destination，value是一个其余细节信息如depart/arrive/price的list。</p>
+<ul>
+<li>Solution Representation<br>
+为了让算法对多个问题通用，solution的表达方式应尽量一般化。比较常见的一种就是a list of numbers。<br>
+本例中，每个数字表示某人选择了某航班，第一人的来航班、第一人的回航班、第二人的来航班、第二人的回航班…。数字就是当天的第几个航班。<br>
+[1,4,3,2,7,3,6,3,2,4,5,3]</li>
+<li>Cost Function<br>
+要考虑到很多因素，机票钱、在飞机上待的时间、等待会合的时间、航班太早损失的睡眠时间、退车太晚多交的租车钱等等。选择越差，值越高。</li>
+</ul>
+<p><strong>Student Dorm示例</strong><br>
+一共五个宿舍，十个学生，每个学生可以填两个志愿。</p>
+<ul>
+<li>Solution Representation<br>
+算法设计时，为每个宿舍的每个位置指定一个slot，当该slot被占用时就从列表中移出，可以避免非法solution。<br>
+slots=[0,0,1,1,2,2,3,3,4,4,5,5]<br>
+solution中的数字表示取当前slots中的第几个。如[0,0,0,0,0,0,0,0,0,0]。注意第一个的取值范围在0<sub>9之间，第二个的取值范围就是0</sub>8之间。</li>
+<li>Cost Function<br>
+学生如果入住了第一志愿的宿舍就加0，第二志愿的就加1，不在志愿内的就加3。<br>
+设计Cost Function时的一个小技巧是尽量让理想最优解为0，这样数值出来后对其效果有一个直观认识。</li>
+</ul>
+<p><strong>Network Visualization示例</strong><br>
+画一些node的关系图时尽量不要让连线交叉。<br>
+<img src="/img/note_pci_network_visualization_a_clean_network_layout.jpg" alt="A clean network layout"></p>
+<ul>
+<li>Solution Representation<br>
+所有node的x,y坐标。sol=[120,200,250,125…]，Charlie的坐标就是(120,200)。</li>
+<li>Cost Function<br>
+the number of lines that cross each other.<br>
+计算每两条link是否相交，如果相交cost就加1，如果两点离得太近就加一个惩罚值。</li>
+</ul>
+<p><strong>一些算法:</strong></p>
+<ul>
+<li>Random Searching<br>
+随机生成一串solution，然后计算其cost，找最小的。<br>
+就是来搞笑的。</li>
+<li>Hill Climbing<br>
+从随机solution开始，然后看相邻的solution是变好还是变坏，朝更好的那个方向走。经过一定数量的迭代或solution稳定时停止。<br>
+缺点是local minimum。<br>
+<img src="/img/note_pci_seeking_the_lowest_cost_on_a_hill.jpg" alt="Seeking the lowest cost on a hill"></li>
+<li>Simulated Annealing<br>
+退火算法。从随机solution开始，用一个变量表示温度，最初很高，慢慢降低。在每次迭代的时候，随机选中并改变solution中的一个值。如果新cost更低，采用新solution继续迭代；如果新cost更高，根据<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>=</mo><msup><mi>e</mi><mrow><mo>(</mo><mo>−</mo><mi>h</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mo>−</mo><mi>l</mi><mi>o</mi><mi>w</mi><mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mo>)</mo><mi mathvariant="normal">/</mi><mi>t</mi><mi>e</mi><mi>m</mi><mi>p</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>t</mi><mi>u</mi><mi>r</mi><mi>e</mi></mrow></msup></mrow><annotation encoding="application/x-tex">p = e ^ {(-highcost-lowcost)/temperature}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8879999999999999em;"></span><span class="strut bottom" style="height:1.0824399999999998em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">p</span><span class="mrel">=</span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mopen">(</span><span class="mord">−</span><span class="mord mathit">h</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">h</span><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">s</span><span class="mord mathit">t</span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">s</span><span class="mord mathit">t</span><span class="mclose">)</span><span class="mord mathrm">/</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit">m</span><span class="mord mathit">p</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">a</span><span class="mord mathit">t</span><span class="mord mathit">u</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>的概率来选择采用此solution，所以温度越高，solution跳跃性越大。这其实是为了规避local minimum。经过一定数量的迭代或solution稳定时停止。</li>
+<li>Genetic Algorithms<br>
+遗传算法。初始创建一序列随机solution，称为population。每次迭代时，选择所有solution中cost最小的几个，称为elitism，加入到next generation里。这些cost最小的几个solution再经过mutation和crossover，生成足够数量的solution填充到next generation里，使其与之前population数目相同。经过一定数目的迭代后选出population中cost最小的一个。<br>
+<img src="/img/note_pci_examples_of_mutating_a_solution.jpg" alt="Examples of mutating a solution"><br>
+<img src="/img/note_pci_examples_of_crossover.jpg" alt="Examples of crossover"></li>
+</ul>
+<hr>
+<h2 id="document-filtering"><a class="markdownIt-Anchor" href="#document-filtering"></a> Document Filtering</h2>
+<p>Learn to recognize whether a document belongs in one category or another.</p>
+<p><strong>示例：</strong><br>
+Filtering Spam和Filtering Blog Feeds。</p>
+<p><strong>步骤：</strong><br>
+有一个Akismet的库可以用，不过是个黑盒，不方便自定义化。</p>
+<ul>
+<li>Feature<br>
+feature的选取很重要，既要经常出现又不能没有特点，还要考虑它将集合分解成目标子集的能力。经常需要反复微调。如果某item有某feature，该feature的值就为1。<br>
+Filtering Spam例子中只是简单生成了所有独特词的小写形式的dict。改进的方式比如，记录文中大写字母的比例，用词组而非单词，发邮件人的邮箱姓名信息，保持url和数字的完整性等。</li>
+<li>Training the Classifier<br>
+训练过程可能是不连续的，应该存入数据库，还是用pysqlite。<br>
+fc: 每个classification中每个feature的计数。<code>{'python':{'bad':0,'good':6}, 'the':{'bad':3,'good':3}}</code><br>
+cc: 记录每个classification的计数的dictionary。<br>
+getfeatures: 作为参数传进来。是一个dictionary。<br>
+train: 传入training set的document后，用getfeatures得到feature组，根据feature组和category，计算上面说的fc计数。此category出现了一次，cc也自增1。<br>
+Filtering Spam例子中这样调用<code>cl.train('the quick brown fox jumps', 'good')</code></li>
+<li>Calculating Probabilities<br>
+首先求得Pr(word|classification)，就是某feature在某category里出现的次数除以该category里所有item的数量。conditional probability常记做Pr(A|B)，念作the probability of A given B。<br>
+这种情况下最初train的几个sample对结果的影响太大，所以要引入一个合理的初始猜测值，比如0.5，并给猜测值一个weight。<code>(weight*assumeprob + count*fprob)/(count+weight)</code></li>
+<li>Classification Methods:
+<ul>
+<li>Naive Bayesian Classifier<br>
+被称为拿衣服是因为它假设要合并的这些概率之间是independent的。节省计算资源。<br>
+先计算整篇文档都属于某category的概率，即Pr(Document|Category)，如<code>Pr(Pyton&amp;Casino|Bad)=Pr(Python|Bad)*Pr(Casino|Bad)=0.8*0.2=0.16</code>。其实需要知道Pr(Category|Document)，根据<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>r</mi><mo>(</mo><mi>A</mi><mi mathvariant="normal">∣</mi><mi>B</mi><mo>)</mo><mo>=</mo><mi>P</mi><mi>r</mi><mo>(</mo><mi>B</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mo>)</mo><mo>×</mo><mi>P</mi><mi>r</mi><mo>(</mo><mi>A</mi><mo>)</mo><mi mathvariant="normal">/</mi><mi>P</mi><mi>r</mi><mo>(</mo><mi>B</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Pr(A|B)=Pr(B|A) \times Pr(A)/Pr(B)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit">A</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.05017em;">B</span><span class="mord mathrm">∣</span><span class="mord mathit">A</span><span class="mclose">)</span><span class="mbin">×</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit">A</span><span class="mclose">)</span><span class="mord mathrm">/</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.05017em;">B</span><span class="mclose">)</span></span></span></span>可计算。<br>
+然后决定应该在哪个category，比如筛选垃圾邮件时，宁可放过一千，不可错杀一个。此时可以设置一个threshold，比如第一名的Category其概率要大于第二名的概率乘以threshold时，才选择，不然就选择默认的category。</li>
+<li>The Fisher Method<br>
+结果更精确。<br>
+首先计算Pr(Category|feature)=(这个category中有这个feature的document的数量)/(所有有这个feature的document)。这个算法假设training set中每种category的样本数量都差不多。	具体计算是这样三步：<br>
+clf = Pr(feature|category) for this category<br>
+freqsum = Sum of Pr(feature|category) for all the categories<br>
+cprob = clf/(clf+nclf)<br>
+然后将所有feature的这个概率乘起来，然后用自然对数log一下，再乘以-2。将这个结果交给inverse chi-square function，得到一个0-1之间分布的概率。<br>
+最后决定在哪个category，比如概率大于0.2而小于0.6的标记为unknown。</li>
+<li>其他supervised learning methods也可以用。比如之前说的artificial neural network，可以让features做input，不同classifications做output；之后要讲的support vector machines也可以用。这些方法的优点是可以捕获更多细微关联，feature之间互相的影响关系interdependence可以捕获到。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="modeling-with-decision-trees"><a class="markdownIt-Anchor" href="#modeling-with-decision-trees"></a> Modeling with Decision Trees</h2>
+<p><strong>Decision Tree</strong><br>
+简单直观易解读。训练后看结果就像用树的方式表现的一系列if-then语句。对输入数据也不挑剔。<br>
+缺点是对于有很多可能结果的数据比较无力。对于数字只有大于或小于这样的判断，如果稍微复杂些，比如是两个变量的差值，树的分支就会变得非常多以至于没法用。<br>
+所以不适于有很多数字输入输出的、输入数字数据间关系比较复杂的情况，比如interpreting financial data或image analysis。适用于有很多分类数据和离散数字数据、理解选择过程很重要的情况。<br>
+<img src="/img/note_pci_example_decision_tree.jpg" alt="Example decision tree"></p>
+<p><strong>三个示例：</strong></p>
+<ul>
+<li>How to predict which of a site’s users are likely to pay for premium access.<br>
+清晰很重要，要知道让用户付款的具体原因，改变广告策略等。所以要用decision tree。<br>
+收集一些信息类似：<br>
+<img src="/img/note_pci_user_behavior_and_final_purchase_decision_for_a_web_site.jpg" alt="User behavior and final purchase decision for a web site">
+<ul>
+<li>表示一棵树的数据结构<br>
+decisionnode类包含：<br>
+col表示评价标准列表号；value表示该列的值要满足此value才是true；tb和fb是truebranch和falsebranch，下一个分支；results存储该分支中某结果出现的次数，非叶节点分支都是None。</li>
+<li>训练这棵树<br>
+算法名字叫CART(Classification and Regression Trees)，创建一个root node后，考虑每个标准，选择一个能最好区分数据的标准列，分成两个分支。</li>
+<li>选择能最好区分数据的数据列的方法<br>
+标准是measure how mixed a set is。我们的目标是分成两组之后，两组mixed程度之和小于原来一大组mixed的程度，差值就是information gain，选择效果最好的那列。
+<ul>
+<li>Gini Impurity<br>
+The expected error rate if one of the results from a set is randomly applied to one of the items in the set.<br>
+比如有4个分类分别有1/2/3/4个，那么计算出的error rate就应该是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn><mi mathvariant="normal">.</mi><mn>1</mn><mo>×</mo><mo>(</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>2</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>3</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>4</mn><mo>)</mo><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>2</mn><mo>×</mo><mo>(</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>1</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>3</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>4</mn><mo>)</mo><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>3</mn><mo>×</mo><mo>(</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>1</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>2</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>4</mn><mo>)</mo><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>4</mn><mo>×</mo><mo>(</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>1</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>2</mn><mo>+</mo><mn>0</mn><mi mathvariant="normal">.</mi><mn>3</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">0.1 \times (0.2+0.3+0.4) + 0.2 \times (0.1+0.3+0.4) + 0.3 \times (0.1+0.2+0.4) + 0.4 \times (0.1+0.2+0.3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">1</span><span class="mbin">×</span><span class="mopen">(</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">2</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">3</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">4</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mopen">(</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">3</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">4</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">3</span><span class="mbin">×</span><span class="mopen">(</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">2</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">4</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">4</span><span class="mbin">×</span><span class="mopen">(</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">2</span><span class="mbin">+</span><span class="mord mathrm">0</span><span class="mord mathrm">.</span><span class="mord mathrm">3</span><span class="mclose">)</span></span></span></span>。<br>
+这个值越高，采用此标准split就越差。</li>
+<li>Entropy<br>
+The amount of disorder in a set, how different the outcomes are from each other.<br>
+The entropy function calculates the frequency of each item (the number of times it appears divided by the total number of rows).<br>
+p(i) = frequency(outcome) = count(outcome) / count(total rows)<br>
+Entropy = sum of p(i) x log(p(i)) for all outcomes</li>
+</ul>
+</li>
+<li>递归地建造这棵树<br>
+每次遍历剩余评价标准，选择information gain最高的一列split，然后再对每个分支进行重复操作。直到split的information gain不再大于0为止。</li>
+<li>绘制树<br>
+用Python Imaging Library。</li>
+<li>对新数据应用决策树<br>
+递归。</li>
+<li>简化这棵决策树，避免过拟合<br>
+为避免split一次效果不好，后续继续split效果很好的情况。还是要执行前面的过程，然后再试图合并多余的节点，pruning。<br>
+算法是每次检查两个同parent的叶节点，看看合并他们的话增加的entropy是否小于一个预定的阈值。如果小于，就合并这两个叶子节点。</li>
+<li>当数据不完整时<br>
+比如缺少某个指标的值，只要在不知转到哪个branch的时候两个都转就是了。注意的是每个branch的weight不一样。这个weight就是该分支下item个数除以两个分支item的总数。</li>
+<li>当输出结果是数字时<br>
+比如之后的两个例子housing prices和hotness。如果还用之前的评判标准，不同的数字会变成不同的结果，那结果分支就海了去了。<br>
+所以不用entropy或Gini impurity，用variance来作为scoring function。就是方差。</li>
+</ul>
+</li>
+<li>housing prices和hotness<br>
+方法没有什么不同，只是数据收集和处理的方式不同，总之都要整理成一列列那个数据结构。</li>
+</ul>
+<hr>
+<h2 id="building-price-models"><a class="markdownIt-Anchor" href="#building-price-models"></a> Building Price Models</h2>
+<p>用kNN来对有many different attributes的numerical data做prediction，例如prices。<br>
+做numerical predictions比较重要的就是要确定哪些变量最重要并以哪种方式组合在一起。<br>
+kNN的缺点是运算量太大因为每两点之间的距离都要计算，决定weight和variable取舍也比较困难，虽然可以用optimization，但数据较多的情况下也要花费很多时间。<br>
+kNN的优点是新数据添加进来不太费劲，知道weight后也很容易理解每个variable所起的所用。</p>
+<p><strong>例子：预测红酒价钱</strong><br>
+数据是自造的{‘input’:(rating,age), ‘result’:price}。</p>
+<ul>
+<li>k-Nearest Neighbors<br>
+左邻右舍都是什么价钱，然后平均一下。<br>
+选择做参照的邻居数既不能太多(不精确)也不能太少(过拟合)。确定合适的邻居数目可以用之前学习的<a href="/2016/04/17/note-programming-collective-intelligence/">Optimization方法</a>。<br>
+kNN首先要知道如何定义两个item的相似度，也即它们之间的距离，可以用Euclidean distance(前文有介绍)。</li>
+<li>Weighted Neighbors<br>
+这些邻居与自己的距离不同，对自己的影响力也应不同，近的邻居对自己的影响力应该大一些。<br>
+距离与影响力之间的转化关系可以有这么几种：
+<ul>
+<li>Inverse Function<br>
+如weight = num / (dist + const)。<br>
+速度快，缺点是近的邻居的影响力很大，稍微远一点就迅速衰减，有可能会比较容易受噪音数据影响。<br>
+<img src="/img/note_pci_inverse_weight_function.jpg" alt="Inverse weight function"></li>
+<li>Subtraction Function<br>
+就是从distance里减去一个常量，负数全为0。<br>
+不会给近的邻居过大的权重，但常量的选择要注意，有时可能根本没有邻居算是近了。<br>
+<img src="/img/note_pci_subtraction_weight_function.jpg" alt="Subtraction weight function"></li>
+<li>Gaussian Function<br>
+也叫作bell curve。稍复杂一点，速度没那么快，不过效果好。<br>
+<code>math.e**(-dist**2/(2*sigma**2))</code><br>
+<img src="/img/note_pci_gaussian_weight_function.jpg" alt="Gaussian weight function"></li>
+</ul>
+</li>
+<li>验证算法好坏的方法：Cross-Validation<br>
+把数据分成training set和test set。看一下错误率，error = sum(real - guess)^2 / testset_length，用平方会让(一般表现很好偶尔表现极坏的算法)比(无论什么情况都不会太坏的算法)不受待见一点。</li>
+<li>Heterogeneous Variables<br>
+输入数据间尺度并不相似对结果也不是同等重要。自造数据改成{‘input’:(rating,age,aisle,bottlesize),‘result’:price}。
+<ul>
+<li>Optimizing the Scale<br>
+用之前学习的<a href="/2016/04/17/note-programming-collective-intelligence/">Optimization方法</a>，需要specify a domain that gives the number of variables, a range, and a cost function。此处crossvalidate可以评判一个算法好坏，稍作改写就可以作为cost function。<br>
+用退火算法。optimization.annealingoptimize(numpredict.weightdomain, costf, step=2)。<br>
+用遗传算法，慢但更准确。optimization.geneticoptimize(numpredict.weightdomain, costf, popsize=5, lrate=1, maxv=4, iters=20)。<br>
+一下就可以看出哪些变量更重要，有多重要。</li>
+</ul>
+</li>
+<li>Uneven Distributions<br>
+有时有某些数据很重要而我们并未收集。比如红酒例子，买家购买可能有两个渠道：从专卖店买的，和半价从折扣店买的，而我们并不知道。<br>
+Estimating the Probability Density，评估一下一个item落在某个区间的概率，比如红酒例子，输入99 percent和20 years，得到说50%可能性价格在40-80之间，50%可能性价格在80-100之间。<br>
+算法是计算在某个指定区间内所有邻居的weight之和，除以所有邻居的weight之和。<br>
+可以用matplotlib绘制不同区间的概率值。<br>
+如果画cumulative probability graph就比较容易。也可以看出60和110那里有较大跳跃。<br>
+<img src="/img/note_pci_a_cumulative_probability_graph.jpg" alt="A cumulative probability graph"><br>
+画probability density graph就麻烦一点，assume the probability at each point is a weighted average of the surrounding probabilities, much the same as the weighted kNN algorithm。用gaussian对旁边邻居值做平滑。<br>
+<img src="/img/note_pci_a_probability_density_graph.jpg" alt="A probability density graph"></li>
+</ul>
+<p>还有一个用eBay API的实际例子。</p>
+<hr>
+<h2 id="advanced-classification-kernel-methods-and-svms"><a class="markdownIt-Anchor" href="#advanced-classification-kernel-methods-and-svms"></a> Advanced Classification: Kernel Methods and SVMs</h2>
+<p>直接给算法丢一堆复杂的数据然后希望出一个好结果是不可能的，认真对数据做预处理，认真选择合适的算法是不可或缺的。</p>
+<p><strong>介绍Linear Classifiers和kernel methods</strong><br>
+以一个约会网站匹配的数据为例。有两个人的信息，预测他们是否匹配。</p>
+<ul>
+<li>输入数据的处理
+<ul>
+<li>原始输入数据<br>
+信息有Age,Smoker?,Want children?,List of interests,Location，然后匹配数据是两个人各自的信息和匹配结果，大概是这样：<code>39,yes,no,skiing:knitting:dancing,220 W 42nd St New York NY,43,no,yes,soccer:reading:scrabble,824 3rd Ave New York NY,0</code>。<br>
+可以看到数据非线性且相互关联，此时可以单独将每项抽出来用matplotlib看看分析图，便于更好地理解数据并处理。</li>
+<li>将分类信息转为数字信息<br>
+本章讲的算法都只能处理数字输入项，需要把所有输入信息都转化成数字项。
+<ul>
+<li>Yes/No Questions将yes转为1，no转为-1，缺失数据转为0。</li>
+<li>Lists of Interests，在本例中是两人匹配，所以可以将两人的共同兴趣数作为变量，缺点是会丢失一些兴趣组合相互关联的信息。另一种方式是将每个兴趣都单独给一个变量值，不过这些兴趣需要事先按照层级组织好，比如skiing和snowboarding都属于snow sports类。如果两人都对snow sports感兴趣，但子类型不一样，此时可以给两人共同兴趣数加个0.8，层级越接近根节点，加分越少。</li>
+<li>Determining Distance Using Yahoo!Maps。两人的位置信息通过雅虎的接口转化为经纬度，然后再转为距离。</li>
+</ul>
+</li>
+<li>Scaling the Data<br>
+将数据标准化一下，全部变成最小是0，最大是1。</li>
+</ul>
+</li>
+<li>最基本的Linear Classification<br>
+找到每个分类的平均中心点，然后计算新输入数据距离哪类的中心更近就属于哪类。图中是只考虑年龄一项时的情况。由于是Linear classifier，所以只是一条dividing line<br>
+<img src="/img/note_pci_linear_classifier_using_averages.jpg" alt="Linear classifier using averages"><br>
+此处计算距离使用vector和dot-products。利用向量点乘后正负值能看出方向的特性判断距离。图中M0和M1是两类的平均点，C是他们的中点，X1和X2是另两个待分类的点。于是计算M0M1与X1C之间的点乘为正，离M0近；M0M1与X2C之间点乘为负，离M1近。<br>
+<img src="/img/note_pci_using_dot_products_to_determine_distance.jpg" alt="Using dot-products to determine distance"><br>
+<code>advancedclassify.dpclassify(scalef(numericalset[11].data), avgs)</code></li>
+<li>Kernel Methods<br>
+所有使用点乘的算法都可以用到kernel trick技巧。The kernel trick involves replacing the dot-product function with a new function that returns what the dot-product would have been if the data had first been transformed to a higher dimensional space using some mapping function.也是输入两个向量，输出一个值。其中一个在实际使用中常见的transformation叫作radial-basis function，接收一个gamma的参数。还好原空间中点的平均值点做转换，和在转换空间中点的平均值一样。<br>
+<code>advancedclassify.nlclassify(scalef(newrow), scaledset, ssoffset)</code></li>
+</ul>
+<p><strong>Support-Vector Machines及现成的库LIBSVM</strong></p>
+<ul>
+<li>Support-Vector Machines<br>
+在寻找dividing line的时候寻找离两个分类尽量远的线，只受在margin范围内的点的影响，maximum-margin hyperplane。在线附近的那些点就是support vectors。<br>
+<img src="/img/note_pci_finding_the_best_dividing_line.jpg" alt="Finding the best dividing line">
+<ul>
+<li>Support-Vector Machines常被应用到的领域：<br>
+data-intensive scientific problems and other problems that deal with very complex sets of data。一些例子：
+<ul>
+<li>Classifying facial expressions</li>
+<li>Detecting intruders using military datasets</li>
+<li>Predicting the structure of proteins from their sequences</li>
+<li>Handwriting recognition</li>
+<li>Determining the potential for damage during earthquakes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用LIBSVM<br>
+用到的数学知识很多，所以本书直接用了一个开源库，<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/" target="_blank" rel="external">LIBSVM</a>。<br>
+是用C++写的，<a href="http://xn--wrappersvm-pf2pyp029w.py" target="_blank" rel="external">一个wrapper是svm.py</a>。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># training</span></span><br><span class="line"><span class="keyword">from</span> svm <span class="keyword">import</span> *</span><br><span class="line">answers,inputs = [r.match <span class="keyword">for</span> r <span class="keyword">in</span> scaledset], [r.data <span class="keyword">for</span> r <span class="keyword">in</span> scaledset]</span><br><span class="line">param = svm_parameter(kernel_type = RBF)</span><br><span class="line">prob = svm_problem(answers, inputs)</span><br><span class="line">m = svm_model(prob, param)</span><br><span class="line"><span class="comment"># using</span></span><br><span class="line">newrow = [<span class="number">28.0</span>,<span class="number">-1</span>,<span class="number">-1</span>,<span class="number">26.0</span>,<span class="number">-1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">0.8</span>]</span><br><span class="line">m.predict(scalef(newrow))</span><br><span class="line"><span class="comment"># evaluating</span></span><br><span class="line">guesses = cross_validation(prob, param, <span class="number">4</span>)</span><br><span class="line">sum([abs(answers[i]-guesses[i]) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(guesses))]) / len(scaledset)</span><br></pre></td></tr></table></figure>
+<p>还有一个用Facebook的API做实际开发的例子，主要是处理数据，然后用LIBSVM训练。</p>
+<hr>
+<h2 id="finding-independent-features"><a class="markdownIt-Anchor" href="#finding-independent-features"></a> Finding Independent Features</h2>
+<p>Unsupervised, extract the important underlying features from sets of data that are not labeled with specific outcomes.<br>
+Feature extraction tries to find new data rows that can be used in combination to reconstruct rows of the original dataset, each row is created from a combination of the features.<br>
+经典的用Feature extraction解决的问题有cocktail party problem(区分多人说话背景下每个人说话的声音)，在一堆文档中找到重复出现的遣词造句模式。</p>
+<p><strong>例子：找出多篇文章各自的不同主题</strong></p>
+<ul>
+<li>
+<p>准备数据<br>
+用Universal Feed Parser抓一些文章，分词，得到三个列表：<br>
+allwords记录所有文章中某个词出现的次数。allwords[word]=count。<br>
+articlewords记录每篇文章中某词出现的次数。articlewords[articleindex][word]=count<br>
+articletitles记录每篇文章的标题，是一个list。<br>
+去掉最常见的词和最不常见的词，只留下至少在3篇但不超过总数60%的文章中出现过的词，构造以word为列以article为行，值为该词在该文章中出现次数的矩阵。</p>
+</li>
+<li>
+<p>Non-Negative Matrix Factorization</p>
+<ul>
+<li>介绍<br>
+NMF, factorize the matrix，构造两个较小的矩阵，可以相乘重建原矩阵。之所以叫non-negative是因为两个较小矩阵中不能有负值。<br>
+这两个矩阵分别是：<br>
+The features matrix: 每行是一个feature，每列是一个word，值表示某个word对于某个feature来说有多重要。每个feature代表这些文章中的一个主题。<br>
+The weights matrix: 每行是一个article，每列是一个feature，值表示某个feature对某个文章的应用匹配度。<br>
+<img src="/img/note_pci_portion_of_a_features_matrix.jpg" alt="Portion of a features matrix"><br>
+<img src="/img/note_pci_portion_of_weights_matrix.jpg" alt="Portion of weights matrix"><br>
+之前的article/word矩阵就用这两个矩阵来重建。<br>
+<img src="/img/note_pci_multiplying_the_weights_matrix_by_the_feature_matrix.jpg" alt="Multiplying the weights matrix by the feature matrix"><br>
+矩阵乘法在python中可以使用NumPy库。matrix的乘法是矩阵乘法，array的乘法是行列完全相同的两矩阵对应值分别相乘。</li>
+<li>算法<br>
+类似之前Optimization那章讲的内容。<br>
+cost function是相乘后的两矩阵中的每一值减去原矩阵的值，差值的平方之和。<br>
+不断更新矩阵的算法，此处不再用annealing或swarm，一个新算法叫作multiplicative update rules，要使用4个中间矩阵。</li>
+</ul>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># w is weight matrix, h is feature matrix, v is original data matrix</span></span><br><span class="line"><span class="comment"># hn, hd, wn, wd</span></span><br><span class="line"><span class="comment"># update feature matrix</span></span><br><span class="line">hn = (transpose(w)*v)</span><br><span class="line">hd = (transpose(w)*w*h)</span><br><span class="line">h = matrix(array(h)*array(hn)/array(hd))</span><br><span class="line"><span class="comment"># update weights matrix</span></span><br><span class="line">wn = (v*transpose(h))</span><br><span class="line">wd = (w*h*transpose(h))</span><br><span class="line">w = matrix(array(w)*array(wn)/array(wd))</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>显示结果<br>
+可以输出每个feature最具影响力的5个word，每个article最具影响力的3个feature，或某个feature最影响哪些article。</p>
+</li>
+</ul>
+<p><strong>例子：Stock Market Data</strong><br>
+从Yahoo! Finance下载trading volume的数据。整理数据，构建矩阵。运行NMF算法。显示结果。人脑分析看看有什么关联性。</p>
+<hr>
+<h2 id="evolving-intelligence"><a class="markdownIt-Anchor" href="#evolving-intelligence"></a> Evolving Intelligence</h2>
+<p>Instead of choosing an algorithm to apply to a problem, you’ll make a program that attempts to automatically build the best program to solve a problem.<br>
+一个写算法的算法，genetic programming。</p>
+<p><strong>Genetic Programming</strong><br>
+<img src="/img/note_pci_genetic_programming_overview.jpg" alt="Genetic programming overview"><br>
+Genetic Programming和Genetic Algorithm的区别是，genetic programming不只是将一系列parameter引用到指定算法，从算法本身到其要用的参数都是它自己生成的。</p>
+<ul>
+<li>Programs As Trees<br>
+用树来表示一段程序，parse tree。<br>
+<img src="/img/note_pci_example_program_tree.jpg" alt="Example program tree"><br>
+此例等同于如下代码：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def func(x,y)</span><br><span class="line">	if x&gt;3:</span><br><span class="line">		return y+5</span><br><span class="line">	else:</span><br><span class="line">		return y-2</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在python中构造这样的树<br>
+需要这样几个类，凡是节点类都包含一个evaluate函数，输入值是用户参数，返回该节点计算出的值。详细要看代码。<br>
+fwrapper: 表示function的数据结构，为了让function node使用，成员包括函数名称、函数自身和参数数量(也就是子节点的数量)。<br>
+node: 表示function node。构造时接受一个fwrapper。evaluate函数得到其子节点的evaluate值，并对其应用自己的function。<br>
+paramnode: 只是返回传给程序的参数中的某一个。evaluate函数返回第idx个的参数值。<br>
+constnode: 返回一个常量的节点。evaluate函数就是返回一个常量。</li>
+</ul>
+<p><strong>例子：模拟数学方程</strong></p>
+<ul>
+<li>Creating the Initial Population<br>
+创建一些function，包到fwrapper里，记录到flist这个列表中，以后生成树的函数节点时会用这些做原材料。<br>
+makerandomtree，随机生成三种node，递归生成一棵树。</li>
+<li>Testing a Solution<br>
+如果我们知道实际要模拟的正确函数是什么，还是用Optimization中的方法，定义一个scorefunction，计算正确值与错误值之间差值的绝对值之和。</li>
+<li>Mutating Programs<br>
+不要mutate太多。从根节点开始，如果随机数小于某个阈值，就突变，不然就递归地问子节点们要不要突变。两种方式：
+<ul>
+<li>Mutation by changing node functions<br>
+修改函数节点，参数数量都有可能变化。<br>
+<img src="/img/note_pci_mutation_by_changing_node_functions.jpg" alt="Mutation by changing node functions"></li>
+<li>Mutation by replacing subtrees<br>
+替换整棵子树。更好实现。<br>
+<img src="/img/note_pci_mutation_by_replacing_subtrees.jpg" alt="Mutation by replacing subtrees"></li>
+</ul>
+</li>
+<li>Crossover<br>
+同时遍历两棵树，如果随机数小于某个阈值，就将第一棵树走到的这个分支换成第二棵树的。同时遍历这两棵树是为了crossover发生时两棵树的深度差不多。<br>
+<img src="/img/note_pci_crossover_operation.jpg" alt="Crossover operation"></li>
+<li>Building the Environment<br>
+不同方案彼此竞争的地方。<br>
+evolve，先初始创建一群population，对其rank进行排序，将最好的两个直接放到下一代，然后对其余优等生mutate又crossover补齐population数量，小概率创建一棵全新的树加进去。迭代。<br>
+<code>gp.evolve(2,500,gp.getrankfunction(gp.buildhiddenset()),mutationrate=0.2,breedingrate=0.1,pexp=0.7,pnew=0.1)</code><br>
+生成的结果function往往复杂冗余，也许手工精简下，某些情况下可以用pruning algorithm。<br>
+Genetic Programming中多样性是比较重要的，不然可能会local maxima。策略应该是survival of the fittest and luckiest。</li>
+</ul>
+<p><strong>例子：模拟棋牌游戏玩家</strong><br>
+游戏玩法是这样的，两个玩家，棋子可以往四个方向走，走到对方棋子所在的位置对方就输了，如果连续两次向同一个方向移动也是输。<br>
+<img src="/img/note_pci_grid_war_example.jpg" alt="Grid War example"></p>
+<ul>
+<li>Creating function<br>
+相当于前例的Testing a Solution，不同的是我们直接让两玩家比较决定优劣，而不是前例中每个树和正确值比较，然后按照分值排序。<br>
+模拟两个玩家对战的函数，输入值是两棵树[player1,player2]，返回值是赢的玩家的序号。</li>
+<li>A Round-Robin Tournament<br>
+相当于前例的Building the Environment<br>
+机器生成的玩家们先进行充分对战。population作为输入，分别两两对战，记录每个树输掉了多少局，排序，返回排序后的玩家列表。<br>
+<code>winner=gp.evolve(5,100,gp.tournament,maxgen=50)</code></li>
+<li>Playing Against Real People<br>
+和真人对战测试感受一下。<br>
+和前面筛选出的树对战，定义一个humanplayer类，里面也实现一个evaluate函数，告诉用户当前棋局，让用户选择一个方向，返回这个方向。</li>
+</ul>
+<p><strong>更多可改进之处</strong></p>
+<ul>
+<li>More Numerical Functions<br>
+现在的元function集合还比较小，可以更丰富复杂些，当然也要看需求是否需要。可以增加如：
+<ul>
+<li>Trigonometric functions like sine, cosine, and tangent.</li>
+<li>Other mathematical functions like power, square root, and absolute value.</li>
+<li>Statistical distributions, such as a Gaussian.</li>
+<li>Distance metrics, like Euclidean and Tanimoto distances.</li>
+<li>A three-parameter function that returns 1 if the first parameter is between the second and third.</li>
+<li>A three-parameter function that returns 1 if the difference between the first two parameters is less than the third.</li>
+</ul>
+</li>
+<li>Memory<br>
+当前实现是完全reactive的，不适于longer-term strategy。为了适用，需要存储可以用在以后回合的信息。可以创建一些新类型的node。比如：<br>
+store node有a single child和an index of a memory slot，它从child那里获取值然后存储在memory slot里，然后传递给它的父节点。<br>
+recall node没有children，只是返回某地址储存的值。<br>
+如果store node在树的顶端，树中的任何一部分的recall node都可以拿到结果值。<br>
+也可以设置多程序共享的shared memory。</li>
+<li>Different Datatypes<br>
+当前实现只接受integer参数，返回integer结果。还应处理其他类型数据，需要改动node上的那些函数。比如支持这些类型：
+<ul>
+<li>Strings. These would have operations like concatenate, split, indexing, and substrings.</li>
+<li>Lists. These would have operations similar to strings.</li>
+<li>Dictionaries. These would include operations like replacement and addition.</li>
+<li>Objects. Any custom object could be used as an input to a tree, with the functions on the nodes being method calls to the object.</li>
+<li>实现时则：<br>
+改写fwrapper类，让params不再只是接收参数数量，而是接受一个定义参数类型的list。<br>
+flist也不再只是特定的fwrapper的列表，而是指定了返回值类型的dictionary，如<code>flist={'str':[substringw,concatw], 'int':[indexw,addw,subw]}</code>。<br>
+然后在makerandomtree生成树的时候，遍历每个可以的参数类型，在flist里找对应的函数。crossover函数也是一样。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="algorithm-summary"><a class="markdownIt-Anchor" href="#algorithm-summary"></a> Algorithm Summary</h2>
+<h3 id="bayesian-classifier"><a class="markdownIt-Anchor" href="#bayesian-classifier"></a> Bayesian Classifier</h3>
+<p>前文Document Filtering，讲了如何创建一个document classification system，用来筛选垃圾邮件或是根据一些事先不知的关键词将不同文档分类。<br>
+Bayesian classifier只能应用于可以转化为feature list的数据，feature就是某item有或没有的某项特质。</p>
+<h4 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h4>
+<p>supervised method。需要training。输入数据是features的值列表和所属的分类，可以一条条输入，无需一次性都给classifier。classifier不断更新计算每个feature和每个category相关的概率。A trained classifier is nothing more than a list of features along with their associated probabilities.不需要记录训练时的原始输入数据。</p>
+<h4 id="classifying"><a class="markdownIt-Anchor" href="#classifying"></a> Classifying</h4>
+<p>需要将一个要鉴别的item中的每个feature的概率值组合起来，组合成这一整个item在每个category的概率。一种方法是：<br>
+<code>Pr(Category|Document) = Pr(Document|Category) * Pr(Category)</code><br>
+<code>Pr(Document|Category) = Pr(Word1|Category) * Pr(Word2|Category) * ...</code></p>
+<h4 id="using-your-code"><a class="markdownIt-Anchor" href="#using-your-code"></a> Using Your Code</h4>
+<p>对原始数据的处理需要一个feature-extraction函数，就是把原始数据处理成一系列features。只要接受一个object然后返回一个list的函数就可以。<br>
+<code>docclass.getwords('python is a dynamic language')	# {'python':1, 'dynamic':1, 'language':1}</code><br>
+接下来就可以使用之前说的算法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># training</span></span><br><span class="line">cl = docclass.naivebayes(docclass.getwords)</span><br><span class="line">cl.setdb(<span class="string">'test.db'</span>)</span><br><span class="line">cl.train(<span class="string">'pythons are constrictors'</span>,<span class="string">'snake'</span>)</span><br><span class="line">cl.train(<span class="string">'python has dynamic types'</span>,<span class="string">'language'</span>)</span><br><span class="line">cl.train(<span class="string">'python was developed as a scripting language'</span>,<span class="string">'language'</span>)</span><br><span class="line"><span class="comment"># classification</span></span><br><span class="line">cl.classify(<span class="string">'dynamic programming'</span>)	<span class="comment"># language</span></span><br><span class="line">cl.classify(<span class="string">'boa constrictors'</span>)	<span class="comment"># snake</span></span><br></pre></td></tr></table></figure>
+<h4 id="strengths-and-weaknesses"><a class="markdownIt-Anchor" href="#strengths-and-weaknesses"></a> Strengths and Weaknesses</h4>
+<ul>
+<li>Strength:<br>
+training和数据查询速度快，training和classifying的过程只是数学上对并不多的feature们的概率的数学计算。并且training还可以是渐进的。<br>
+对结果的解读比较直观，因为可以看到每个feature的概率，于是可以看出区分两个category最有效的feature是哪些。</li>
+<li>Weakness:<br>
+无法处理feature间的组合关系。</li>
+</ul>
+<h3 id="decision-tree-classifier"><a class="markdownIt-Anchor" href="#decision-tree-classifier"></a> Decision Tree Classifier</h3>
+<p>前文Modeling with Decision Trees讲了如何从server logs建立用户行为分析。</p>
+<h4 id="training-2"><a class="markdownIt-Anchor" href="#training-2"></a> Training</h4>
+<p>从root节点开始，每次选择一个属性，以其为标准把数据分割为两部分，递归直到没有information gain。选择最佳的分割方案需要用到entropy(the amount of disorder in a set)。<br>
+<code>p(i) = frequency(outcome) = count(outcome)/count(total rows)</code><br>
+<code>Entropy = sum of p(i) * log(p(i)) for all outcomes</code><br>
+然后计算information gain：<br>
+<code>weight1 = size of subset1 / size of original set</code><br>
+<code>weight2 = size of subset2 / size of original set</code><br>
+<code>gain = entropy(original) - weight1 * entropy(set1) - weight2 * entropy(set2)</code></p>
+<h4 id="using-your-decision-tree-classifier"><a class="markdownIt-Anchor" href="#using-your-decision-tree-classifier"></a> Using Your Decision Tree Classifier</h4>
+<p>原始输入数据如下，前面是一系列值，最后一列是属于哪个分类。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fruit = [</span><br><span class="line">	[4,'red','apple'],</span><br><span class="line">	[4,'green','apple],</span><br><span class="line">	[1,'red','cherry'],</span><br><span class="line">	[1,'green','grape'],</span><br><span class="line">	[5,'red','apple']</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>然后train并classify。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tree = treepredict.buildtree(fruit)</span><br><span class="line">treepredict.classify([<span class="number">2</span>,<span class="string">'red'</span>],tree)	<span class="comment">#&#123;'cherry':1&#125;</span></span><br><span class="line">treepredict.printtree(tree)</span><br></pre></td></tr></table></figure>
+<h4 id="strengths-and-weaknesses-2"><a class="markdownIt-Anchor" href="#strengths-and-weaknesses-2"></a> Strengths and Weaknesses</h4>
+<ul>
+<li>Strength:<br>
+结果极易解读，最重点的都在树顶端。可以将分类数据与数字数据混合使用。<br>
+比Bayesian classifier强的是可以处理有关联的变量。</li>
+<li>Weakness:<br>
+不擅长处理数字结果。不支持渐进训练。树可能变得很庞大。</li>
+</ul>
+<h3 id="neural-networks"><a class="markdownIt-Anchor" href="#neural-networks"></a> Neural Networks</h3>
+<p>前文Searching and Ranking讲了根据用户过去的点击对搜索结果进行排序。Neural network用于classification和numerical prediction问题。本书用的叫做multilayer perceptron network。包含数层neuron，neuron之间有synapse连接。<br>
+针对前文Bayesian Classifier中spam的例子，neural network可以解决online和pharmacy组合的问题。因为有多层neuron，所以可以模拟出相互之间的关联。<br>
+只输入Online的情况：<br>
+<img src="/img/note_pci_network_response_to_the_word_online.png" alt="Network response to the word &quot;online&quot;"><br>
+输入Online和Pharmacy情况：<br>
+<img src="/img/note_pci_neural_network_response_to_online_pharmacy.png" alt="Neural network response to &quot;online pharmacy&quot;"></p>
+<h4 id="training-a-neural-network"><a class="markdownIt-Anchor" href="#training-a-neural-network"></a> Training a Neural Network</h4>
+<p>backpropagation。初始随机值，输入一个例子，如果输出是错误的，就修改相关synapse的weights。公式见前文。</p>
+<h4 id="using-your-neural-network-code"><a class="markdownIt-Anchor" href="#using-your-neural-network-code"></a> Using Your Neural Network Code</h4>
+<p>并不是直接使用work，而是都有一个number ID。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> nn</span><br><span class="line">online,pharmacy=<span class="number">1</span>,<span class="number">2</span></span><br><span class="line">spam,notspam=<span class="number">1</span>,<span class="number">2</span></span><br><span class="line">possible=[spam,notspam]</span><br><span class="line">neuralnet=nn.searchnet(<span class="string">'nntest.db'</span>)</span><br><span class="line">neuralnet.maketables()</span><br><span class="line">neuralnet.trainquery([online],possible,notspam)</span><br><span class="line">neuralnet.trainquery([online,pharmacy],possible,spam)</span><br><span class="line">neuralnet.trainquery([pharmacy],possible,notspam)</span><br><span class="line">neuralnet.getresult([online,pharmacy],possible)	<span class="comment"># [0.7763,0.2890]</span></span><br><span class="line">neuralnet.getresult([online],possible)	<span class="comment"># [0.3219, 0.5329]</span></span><br><span class="line">neuralnet.trainquery([online],possible,notspam)</span><br><span class="line">neuralnet.getresult([online],possible)	<span class="comment"># [0.2206,0.6453]</span></span><br></pre></td></tr></table></figure>
+<h4 id="strengths-and-weaknesses-3"><a class="markdownIt-Anchor" href="#strengths-and-weaknesses-3"></a> Strengths and Weaknesses</h4>
+<p>可以处理复杂非线性数据，找到他们之间的关联。任何数字都能作为输入。也可以渐进training。只要记下synapse weights就可以了，不用记住以往示例。<br>
+黑箱策略，难以解读。选择training rate和network size的时候没有一定之准，只能不断试错调节。</p>
+<h3 id="support-vector-machines"><a class="markdownIt-Anchor" href="#support-vector-machines"></a> Support-Vector Machines</h3>
+<p>前文Advanced Classification: Kernel Methods and SVMs。SVMs接受数字输入然后试图输出它们属于哪个分类。<br>
+寻找两个分类间的dividing line。</p>
+<h4 id="the-kernel-trick"><a class="markdownIt-Anchor" href="#the-kernel-trick"></a> The Kernel Trick</h4>
+<p>取代dot product的操作，相当于在转换后的空间操作，应用于dividing line不再是线性时。<br>
+比如将<code>dotproduct(A,B)</code>换为<code>dotproduct(A,B)**2</code>。</p>
+<h4 id="using-libsvm"><a class="markdownIt-Anchor" href="#using-libsvm"></a> Using LIBSVM</h4>
+<p>You can use it to train on a dataset(to find the dividing line in a transformed space) and then to classify new observations.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"><span class="comment"># create 200 random points</span></span><br><span class="line">d1=[[randint(<span class="number">-20</span>,<span class="number">20</span>),randint(<span class="number">-20</span>,<span class="number">20</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>)]</span><br><span class="line"><span class="comment"># classify them as 1 if they are in the circle and 0 if not</span></span><br><span class="line">result=[(x**<span class="number">2</span>+y**<span class="number">2</span>)&lt;<span class="number">144</span> <span class="keyword">and</span> <span class="number">1</span> <span class="keyword">or</span> <span class="number">0</span> <span class="keyword">for</span> (x,y) <span class="keyword">in</span> d1]</span><br><span class="line"><span class="keyword">from</span> svm <span class="keyword">import</span> *</span><br><span class="line">prob=svm_problem(result,d1)</span><br><span class="line">param=svm_parameter(kernel_type=RBF)</span><br><span class="line">m=svm_model(prob,param)</span><br><span class="line">m.predict([<span class="number">2</span>,<span class="number">2</span>])	<span class="comment"># 1.0</span></span><br><span class="line">m.predict([<span class="number">14</span>,<span class="number">13</span>])	<span class="comment"># 0.0</span></span><br></pre></td></tr></table></figure>
+<p>验证某kernel function效果如何：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">guesses=cross_validation(prob,param,<span class="number">4</span>)</span><br><span class="line">sum([abs(guesses[i]-result[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(guesses))])	<span class="comment"># 28.0</span></span><br></pre></td></tr></table></figure>
+<h4 id="strengths-and-weaknesses-4"><a class="markdownIt-Anchor" href="#strengths-and-weaknesses-4"></a> Strengths and Weaknesses</h4>
+<p>如果参数调的好，效果也不是一般好。training之后classify时速度很快。通过把分类数据转为数字数据，可以同时处理两种数据。<br>
+缺陷是对于每个dataset，参数都不一样，需要慢慢选择调节。需要较大的数据库来进行cross-validation。黑盒数据，难以分析，并且是在高维空间里。</p>
+<h3 id="k-nearest-neighbors"><a class="markdownIt-Anchor" href="#k-nearest-neighbors"></a> K-Nearest Neighbors</h3>
+<p>前文Building Price Models和Discovering Groups。k个邻居的平均值。也可以根据邻居的远近设定weight。</p>
+<h4 id="scaling-and-superfluous-variables"><a class="markdownIt-Anchor" href="#scaling-and-superfluous-variables"></a> Scaling and Superfluous Variables</h4>
+<p>变量值应先统一在一个尺度里，通过cross-validation也可以去掉影响不大的变量项。Cross-validation removes items from the dataset and then tries to see how well it can guess them using the rest of the data.<br>
+<img src="/img/note_pci_cross_validation_of_a_single_item.jpg" alt="Cross-validation of a single item"></p>
+<h4 id="using-your-knn-code"><a class="markdownIt-Anchor" href="#using-your-knn-code"></a> Using Your kNN Code</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cameras = [</span><br><span class="line">	&#123;<span class="string">'input'</span>:(<span class="number">7.1</span>,<span class="number">3.8</span>),<span class="string">'result'</span>:<span class="number">399</span>&#125;,</span><br><span class="line">	&#123;<span class="string">'input'</span>:(<span class="number">5.0</span>,<span class="number">2.4</span>),<span class="string">'result'</span>:<span class="number">299</span>&#125;,</span><br><span class="line">	&#123;<span class="string">'input'</span>:(<span class="number">6.0</span>,<span class="number">4.0</span>),<span class="string">'result'</span>:<span class="number">349</span>&#125;,</span><br><span class="line">	&#123;<span class="string">'input'</span>:(<span class="number">6.0</span>,<span class="number">12.0</span>),<span class="string">'result'</span>:<span class="number">399</span>&#125;,</span><br><span class="line">	&#123;<span class="string">'input'</span>:(<span class="number">10.0</span>,<span class="number">3.0</span>),<span class="string">'result'</span>:<span class="number">449</span>&#125;</span><br><span class="line">]</span><br><span class="line"><span class="keyword">import</span> numpredict</span><br><span class="line">numpredict(cameras,(<span class="number">6.0</span>,<span class="number">6.0</span>),k=<span class="number">2</span>)	<span class="comment"># 374.0</span></span><br><span class="line">numpredict.weightedknn(cameras,(<span class="number">6.0</span>,<span class="number">6.0</span>),k=<span class="number">3</span>)	<span class="comment"># 351.5266689271958</span></span><br><span class="line"><span class="comment"># scaling data</span></span><br><span class="line">scc=numpredict.rescale(cameras,(<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line"><span class="comment"># figure out which scaling factor works best</span></span><br><span class="line">numpredict.crossvalidate(knn1,cameras,test=<span class="number">0.3</span>,trials=<span class="number">2</span>)	<span class="comment"># 3750.0</span></span><br><span class="line">numpredict.crossvalidate(knn1,scc,test=<span class="number">0.3</span>,trials=<span class="number">2</span>)	<span class="comment"># 2500.0</span></span><br></pre></td></tr></table></figure>
+<h4 id="strengths-and-weaknesses-5"><a class="markdownIt-Anchor" href="#strengths-and-weaknesses-5"></a> Strengths and Weaknesses</h4>
+<p>做数字预测却仍易于解读。scale的过程还能了解到哪些variable是有用的。是online technique，可以实时添加数据，并且不需要额外计算。<br>
+缺点是总是需要所有的training data来做预测，空间时间消耗都多。用cross validation做筛选的时候也需要进行相当的计算量，也很枯燥。</p>
+<h3 id="clustering"><a class="markdownIt-Anchor" href="#clustering"></a> Clustering</h3>
+<p>Hierarchical clustering和K-means clustering是unsupervised learning technique。前文Discovering Groups。</p>
+<h4 id="hierarchical-clustering"><a class="markdownIt-Anchor" href="#hierarchical-clustering"></a> Hierarchical Clustering</h4>
+<p>不断合并最近的两个group。可以用dendrogram绘制一个树形图。</p>
+<h4 id="k-means-clustering"><a class="markdownIt-Anchor" href="#k-means-clustering"></a> K-Means Clustering</h4>
+<p>用户自己确定要分成几组，每个item找离自己最近的中心点，中心点每次调整自己到关联item的正中心，多次迭代。</p>
+<h4 id="using-your-clustering-code"><a class="markdownIt-Anchor" href="#using-your-clustering-code"></a> Using Your Clustering Code</h4>
+<p>需要dataset和distance metric。The dataset consists of lists of numbers, with each number representing a variable. Distance metric比如Pearson correlation或Tanimoto score或Euclidean distance。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">data=[[<span class="number">1.0</span>,<span class="number">8.0</span>],[<span class="number">3.0</span>,<span class="number">8.0</span>],[<span class="number">2.0</span>,<span class="number">7.0</span>],[<span class="number">1.5</span>,<span class="number">1.0</span>],[<span class="number">4.0</span>,<span class="number">2.0</span>]]</span><br><span class="line">labels=[<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'D'</span>,<span class="string">'E'</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">euclidean</span><span class="params">(v1,v2)</span>:</span> <span class="keyword">return</span> sum([(v1[i]-v2[i])**<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(v1))])</span><br><span class="line"><span class="keyword">import</span> clusters</span><br><span class="line">hcl=clusters.hcluster(data,distance=euclidean)</span><br><span class="line">kcl=clusters.kcluster(data,distance=euclidean,k=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># print result of kcl</span></span><br><span class="line">kcl	<span class="comment"># [[0,1,2],[3,4]]</span></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> kcl: <span class="keyword">print</span> [labels[l] <span class="keyword">for</span> l <span class="keyword">in</span> c]	<span class="comment"># ['A','B','C']['D','E']</span></span><br><span class="line"><span class="comment"># draw dendrogram of hcl</span></span><br><span class="line">clusters.drawdendrogram(hcl,labels,jpeg=<span class="string">'hcl.jpg'</span>)</span><br></pre></td></tr></table></figure>
+<p>拿到一个新dataset可能没概念要分成几组，此时可以先用hierarchical clustering，然后再用k-means clustering。<br>
+或者可以用K-means clustering先分成几组，然后把每组的中心点根据hierarchical clustering组成树结构。</p>
+<h3 id="multidimensional-scaling"><a class="markdownIt-Anchor" href="#multidimensional-scaling"></a> Multidimensional Scaling</h3>
+<p>前文Discovering Groups讲到这种unsupervised的用于更好理解结果的方法。<br>
+原始的高维数据转成二维或三维的数据并绘制出来。<br>
+根据原始数据，用Euclidean distance计算出两个item之间的距离。随机给每个item一个二维坐标，计算它们之间的距离，与正确的距离比较，并按比例更正一点，迭代。</p>
+<h4 id="using-your-multidimensional-scaling-code"><a class="markdownIt-Anchor" href="#using-your-multidimensional-scaling-code"></a> Using Your Multidimensional Scaling Code</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># scale</span></span><br><span class="line">labels=[<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'D'</span>]</span><br><span class="line">scaleset = [</span><br><span class="line">[<span class="number">0.5</span>,<span class="number">0.0</span>,<span class="number">0.3</span>,<span class="number">0.1</span>],</span><br><span class="line">[<span class="number">0.4</span>,<span class="number">0.15</span>,<span class="number">0.2</span>,<span class="number">0.1</span>],</span><br><span class="line">[<span class="number">0.2</span>,<span class="number">0.4</span>,<span class="number">0.7</span>,<span class="number">0.8</span>],</span><br><span class="line">[<span class="number">1.0</span>,<span class="number">0.3</span>,<span class="number">0.6</span>,<span class="number">0.0</span>]</span><br><span class="line">]</span><br><span class="line">twod = clusters.scaledown(scaleset,distance=euclidean)</span><br><span class="line">[[<span class="number">0.45</span>,<span class="number">0.54</span>],</span><br><span class="line">[<span class="number">0.40</span>,<span class="number">0.54</span>],</span><br><span class="line">[<span class="number">-0.30</span>,<span class="number">1.02</span>],</span><br><span class="line">[<span class="number">0.92</span>,<span class="number">0.59</span>]</span><br><span class="line">]</span><br><span class="line"><span class="comment"># draw</span></span><br><span class="line">clusters.draw2d(twod,labels,jpeg=<span class="string">'abcd.jpg'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="non-negative-matrix-factorization"><a class="markdownIt-Anchor" href="#non-negative-matrix-factorization"></a> Non-Negative Matrix Factorization</h3>
+<p>前文Finding Independent Features，处理数字输入，unsupervised，可以找出每个item有哪些feature和它们的weight，这些feature又何种程度受哪些具体输入影响。<br>
+算法是将原矩阵(article/word)分割成两个矩阵(feature/word)(article/feature)。这两个矩阵初始从随机值开始，然后根据update rule更新(详细见前文)，不断迭代。</p>
+<h4 id="using-your-nmf-code"><a class="markdownIt-Anchor" href="#using-your-nmf-code"></a> Using Your NMF Code</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> nmf</span><br><span class="line">data = matrix([</span><br><span class="line">[<span class="number">29.</span>,<span class="number">29.</span>],</span><br><span class="line">[<span class="number">43.</span>,<span class="number">33.</span>],</span><br><span class="line">...</span><br><span class="line">])</span><br><span class="line">weights,features=nmf.factorize(data,pc=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="optimization-2"><a class="markdownIt-Anchor" href="#optimization-2"></a> Optimization</h3>
+<p>见前文Optimization。用某些算法生成一些solution，选择使cost function值最小的，不断迭代。</p>
+<h4 id="the-cost-function"><a class="markdownIt-Anchor" href="#the-cost-function"></a> The Cost Function</h4>
+<p>小心local minima。</p>
+<h4 id="simulated-annealing"><a class="markdownIt-Anchor" href="#simulated-annealing"></a> Simulated Annealing</h4>
+<p>从随机开始，然后平移一小段距离，如果cost function变低，就选新的这个solution，如果变高，按照一定几率temperature选择新solution。temperature逐渐降低，算法越来越保守。</p>
+<h4 id="genetic-algorithms"><a class="markdownIt-Anchor" href="#genetic-algorithms"></a> Genetic Algorithms</h4>
+<p>从随机population开始，然后精选后，mutation和crossover之后组成新population，不断迭代。</p>
+<h4 id="using-your-optimization-code"><a class="markdownIt-Anchor" href="#using-your-optimization-code"></a> Using Your Optimization Code</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">costf</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> (<span class="number">1.0</span>/(x[<span class="number">0</span>]+<span class="number">0.1</span>))/*math.sin(x[<span class="number">0</span>])</span><br><span class="line">domain=[(<span class="number">0</span>,<span class="number">20</span>)]</span><br><span class="line">optimization.annealingoptimize(domain,costf)</span><br></pre></td></tr></table></figure>
+<p>对于每个问题，应该运行几次optimization算法来调整参数。</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#preface"><span class="toc-number">1.</span> <span class="toc-text"> Preface</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#overview-of-the-chapters"><span class="toc-number">1.1.</span> <span class="toc-text"> Overview of the Chapters</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction-to-collective-intelligence"><span class="toc-number">2.</span> <span class="toc-text"> Introduction to Collective Intelligence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#making-recommendations"><span class="toc-number">3.</span> <span class="toc-text"> Making Recommendations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exercises"><span class="toc-number">3.1.</span> <span class="toc-text"> Exercises</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#discovering-groups"><span class="toc-number">4.</span> <span class="toc-text"> Discovering Groups</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#searching-and-ranking"><span class="toc-number">5.</span> <span class="toc-text"> Searching and Ranking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#optimization"><span class="toc-number">6.</span> <span class="toc-text"> Optimization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#document-filtering"><span class="toc-number">7.</span> <span class="toc-text"> Document Filtering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#modeling-with-decision-trees"><span class="toc-number">8.</span> <span class="toc-text"> Modeling with Decision Trees</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#building-price-models"><span class="toc-number">9.</span> <span class="toc-text"> Building Price Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#advanced-classification-kernel-methods-and-svms"><span class="toc-number">10.</span> <span class="toc-text"> Advanced Classification: Kernel Methods and SVMs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#finding-independent-features"><span class="toc-number">11.</span> <span class="toc-text"> Finding Independent Features</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#evolving-intelligence"><span class="toc-number">12.</span> <span class="toc-text"> Evolving Intelligence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#algorithm-summary"><span class="toc-number">13.</span> <span class="toc-text"> Algorithm Summary</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bayesian-classifier"><span class="toc-number">13.1.</span> <span class="toc-text"> Bayesian Classifier</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#training"><span class="toc-number">13.1.1.</span> <span class="toc-text"> Training</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#classifying"><span class="toc-number">13.1.2.</span> <span class="toc-text"> Classifying</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-code"><span class="toc-number">13.1.3.</span> <span class="toc-text"> Using Your Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses"><span class="toc-number">13.1.4.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#decision-tree-classifier"><span class="toc-number">13.2.</span> <span class="toc-text"> Decision Tree Classifier</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#training-2"><span class="toc-number">13.2.1.</span> <span class="toc-text"> Training</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-decision-tree-classifier"><span class="toc-number">13.2.2.</span> <span class="toc-text"> Using Your Decision Tree Classifier</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-2"><span class="toc-number">13.2.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#neural-networks"><span class="toc-number">13.3.</span> <span class="toc-text"> Neural Networks</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#training-a-neural-network"><span class="toc-number">13.3.1.</span> <span class="toc-text"> Training a Neural Network</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-neural-network-code"><span class="toc-number">13.3.2.</span> <span class="toc-text"> Using Your Neural Network Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-3"><span class="toc-number">13.3.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#support-vector-machines"><span class="toc-number">13.4.</span> <span class="toc-text"> Support-Vector Machines</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-kernel-trick"><span class="toc-number">13.4.1.</span> <span class="toc-text"> The Kernel Trick</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-libsvm"><span class="toc-number">13.4.2.</span> <span class="toc-text"> Using LIBSVM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-4"><span class="toc-number">13.4.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#k-nearest-neighbors"><span class="toc-number">13.5.</span> <span class="toc-text"> K-Nearest Neighbors</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#scaling-and-superfluous-variables"><span class="toc-number">13.5.1.</span> <span class="toc-text"> Scaling and Superfluous Variables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-knn-code"><span class="toc-number">13.5.2.</span> <span class="toc-text"> Using Your kNN Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strengths-and-weaknesses-5"><span class="toc-number">13.5.3.</span> <span class="toc-text"> Strengths and Weaknesses</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clustering"><span class="toc-number">13.6.</span> <span class="toc-text"> Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hierarchical-clustering"><span class="toc-number">13.6.1.</span> <span class="toc-text"> Hierarchical Clustering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#k-means-clustering"><span class="toc-number">13.6.2.</span> <span class="toc-text"> K-Means Clustering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-clustering-code"><span class="toc-number">13.6.3.</span> <span class="toc-text"> Using Your Clustering Code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#multidimensional-scaling"><span class="toc-number">13.7.</span> <span class="toc-text"> Multidimensional Scaling</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-multidimensional-scaling-code"><span class="toc-number">13.7.1.</span> <span class="toc-text"> Using Your Multidimensional Scaling Code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#non-negative-matrix-factorization"><span class="toc-number">13.8.</span> <span class="toc-text"> Non-Negative Matrix Factorization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-nmf-code"><span class="toc-number">13.8.1.</span> <span class="toc-text"> Using Your NMF Code</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optimization-2"><span class="toc-number">13.9.</span> <span class="toc-text"> Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#the-cost-function"><span class="toc-number">13.9.1.</span> <span class="toc-text"> The Cost Function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#simulated-annealing"><span class="toc-number">13.9.2.</span> <span class="toc-text"> Simulated Annealing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#genetic-algorithms"><span class="toc-number">13.9.3.</span> <span class="toc-text"> Genetic Algorithms</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#using-your-optimization-code"><span class="toc-number">13.9.4.</span> <span class="toc-text"> Using Your Optimization Code</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&text=Programming Collective Intelligence 笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&is_video=false&description=Programming Collective Intelligence 笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Programming Collective Intelligence 笔记&body=Check out this article: http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&title=Programming Collective Intelligence 笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/17/note-programming-collective-intelligence/&name=Programming Collective Intelligence 笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

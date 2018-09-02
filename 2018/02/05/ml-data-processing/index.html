@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="数据与数据处理、可视化。流程与代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data Preprocessing 数据处理">
+<meta property="og:url" content="http://conglang.github.io/2018/02/05/ml-data-processing/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="数据与数据处理、可视化。流程与代码。">
+<meta property="og:image" content="http://conglang.github.io/img/B13208F4-A177-421F-ADE1-0DE044FE9A36.png">
+<meta property="og:image" content="http://conglang.github.io/img/51ECFA79-4968-4B9F-8C7A-1B8E54941D4A.png">
+<meta property="og:image" content="http://conglang.github.io/img/93353FE4-3F98-4553-B342-9A20A42B7EAB.png">
+<meta property="og:image" content="http://conglang.github.io/img/ECE06A35-A7B2-42BA-BD63-B536FC6E5774.png">
+<meta property="og:image" content="http://conglang.github.io/img/62D6D832-2A36-4CB4-823A-85A4D369D401.png">
+<meta property="og:updated_time" content="2018-08-12T06:49:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Data Preprocessing 数据处理">
+<meta name="twitter:description" content="数据与数据处理、可视化。流程与代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/B13208F4-A177-421F-ADE1-0DE044FE9A36.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Data Preprocessing 数据处理</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/02/10/ml-linear-regression/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/02/03/ml-linear-model/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/02/05/ml-data-processing/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/02/05/ml-data-processing/&text=Data Preprocessing 数据处理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/02/05/ml-data-processing/&is_video=false&description=Data Preprocessing 数据处理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Data Preprocessing 数据处理&body=Check out this article: http://conglang.github.io/2018/02/05/ml-data-processing/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/02/05/ml-data-processing/&name=Data Preprocessing 数据处理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据种类"><span class="toc-number">1.</span> <span class="toc-text"> 数据种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据预处理流程"><span class="toc-number">2.</span> <span class="toc-text"> 数据预处理流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征值生成"><span class="toc-number">3.</span> <span class="toc-text"> 特征值生成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据探索"><span class="toc-number">4.</span> <span class="toc-text"> 数据探索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据清洗"><span class="toc-number">5.</span> <span class="toc-text"> 数据清洗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">6.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Data Preprocessing 数据处理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-02-05T14:00:00.000Z" itemprop="datePublished">2018-02-05</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="数据种类"><a class="markdownIt-Anchor" href="#数据种类"></a> 数据种类</h2>
+<p>在实际分析项目中，根据数据清理的不同阶段，有下面几类数据：</p>
+<ol>
+<li>原始数据。</li>
+<li>技术上正确的数据。</li>
+<li>可以用于模型的数据。</li>
+<li>整合后的数据。</li>
+<li>设置了固定格式的数据。</li>
+</ol>
+<blockquote>
+<p>建议：分别储存每一步得到的数据，以及各个处理过程使用的R代码，使得这个过程尽可能可重复。如果需要检查更改某个环节，也相对容易。</p>
+</blockquote>
+<h2 id="数据预处理流程"><a class="markdownIt-Anchor" href="#数据预处理流程"></a> 数据预处理流程</h2>
+<ol>
+<li>
+<p>检查数据：变量分布，是不是存在错误的观测。错误的值就设置为缺失值。</p>
+</li>
+<li>
+<p>缺失值填补：了解缺失原因，选择填补方式(中位数、众数、KNN临近值)。</p>
+</li>
+<li>
+<p>数据变换：首先中心化和标量化。取决于需要建立的模型，对不符合正态分布假设，变量尺度差异大，有离群值的数据进行变换。</p>
+<ul>
+<li>不符合正态分布假设 (偏态分布)：(左偏可记为左边数据偏少)<br>
+计算偏度<img src="/img/B13208F4-A177-421F-ADE1-0DE044FE9A36.png" alt="Image Loading"><br>
+变为正态：Box-Cox变换。<br>
+<img src="/img/51ECFA79-4968-4B9F-8C7A-1B8E54941D4A.png" alt="Image Loading"></li>
+<li>处理离群点：可以 可视化，或者用<br>
+<img src="/img/93353FE4-3F98-4553-B342-9A20A42B7EAB.png" alt="Image Loading"></li>
+</ul>
+</li>
+<li>
+<p>检查共线性：找到高度线性相关的变量，决定删除变量，还是使用PCA，CFA这类非监督方法得到不相关的变量线性组合。<br>
+<img src="/img/ECE06A35-A7B2-42BA-BD63-B536FC6E5774.png" alt="Image Loading"></p>
+</li>
+<li>
+<p>稀疏变量：查找并且删除稀疏变量。<br>
+<img src="/img/62D6D832-2A36-4CB4-823A-85A4D369D401.png" alt="Image Loading"></p>
+</li>
+<li>
+<p>编码名义变量：对于不能作用于分类变量的模型，将分类变量转化成0/1名义变量。</p>
+</li>
+</ol>
+<h2 id="特征值生成"><a class="markdownIt-Anchor" href="#特征值生成"></a> 特征值生成</h2>
+<p><a href="/2018/07/19/ml-feature-extraction/">Feature Extraction 特征值生成</a></p>
+<h2 id="数据探索"><a class="markdownIt-Anchor" href="#数据探索"></a> 数据探索</h2>
+<p><a href="/2018/07/19/ml-exploratory-data-analysis/">Exploratory Data Analysis 数据探索</a></p>
+<h2 id="数据清洗"><a class="markdownIt-Anchor" href="#数据清洗"></a> 数据清洗</h2>
+<p><a href="/2018/07/21/ml-data-cleaning/">Data Cleaning 数据清洗</a></p>
+<h2 id="ref"><a class="markdownIt-Anchor" href="#ref"></a> Ref</h2>
+<p>[1] <a href="http://hui1987.com/Presentations/COS_NA2016-6-2/Presentation_2016_6_2.html#20" target="_blank" rel="external">http://hui1987.com/Presentations/COS_NA2016-6-2/Presentation_2016_6_2.html#20</a><br>
+[2] <a href="https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%A6" target="_blank" rel="external">偏度 - 维基百科，自由的百科全书</a><br>
+[3] <a href="http://www.fabwrite.com/box-coxbian-huan-54491619" target="_blank" rel="external">Box-Cox变换 - 静夜录</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据种类"><span class="toc-number">1.</span> <span class="toc-text"> 数据种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据预处理流程"><span class="toc-number">2.</span> <span class="toc-text"> 数据预处理流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征值生成"><span class="toc-number">3.</span> <span class="toc-text"> 特征值生成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据探索"><span class="toc-number">4.</span> <span class="toc-text"> 数据探索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据清洗"><span class="toc-number">5.</span> <span class="toc-text"> 数据清洗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">6.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/02/05/ml-data-processing/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/02/05/ml-data-processing/&text=Data Preprocessing 数据处理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/02/05/ml-data-processing/&is_video=false&description=Data Preprocessing 数据处理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Data Preprocessing 数据处理&body=Check out this article: http://conglang.github.io/2018/02/05/ml-data-processing/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/02/05/ml-data-processing/&title=Data Preprocessing 数据处理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/02/05/ml-data-processing/&name=Data Preprocessing 数据处理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

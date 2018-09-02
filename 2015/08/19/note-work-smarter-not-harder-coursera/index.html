@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Coursera上Work Smarter, Not Harder课程的笔记。名字很长，内容很少，基本看看最后Summary一节就可以。是Career Success专项课程的第2门课。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Work Smarter, Not Harder 课程笔记">
+<meta property="og:url" content="http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="Coursera上Work Smarter, Not Harder课程的笔记。名字很长，内容很少，基本看看最后Summary一节就可以。是Career Success专项课程的第2门课。">
+<meta property="og:image" content="http://conglang.github.io/img/note_wsnh_daily_time_log_jugglers.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_wsnh_strategic_reserve_time_templates.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_wsnh_estimating_template.png">
+<meta property="og:updated_time" content="2018-07-03T15:44:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Work Smarter, Not Harder 课程笔记">
+<meta name="twitter:description" content="Coursera上Work Smarter, Not Harder课程的笔记。名字很长，内容很少，基本看看最后Summary一节就可以。是Career Success专项课程的第2门课。">
+<meta name="twitter:image" content="http://conglang.github.io/img/note_wsnh_daily_time_log_jugglers.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Work Smarter, Not Harder 课程笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/09/05/note-natural-language-processing/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/07/15/note-machine-learning-coursera/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&text=Work Smarter, Not Harder 课程笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&is_video=false&description=Work Smarter, Not Harder 课程笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Work Smarter, Not Harder 课程笔记&body=Check out this article: http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&name=Work Smarter, Not Harder 课程笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#smart-work-habits-just-dont-happen"><span class="toc-number">1.</span> <span class="toc-text"> Smart Work Habits Just Don’t Happen</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#productive-vs-unproductive-work"><span class="toc-number">1.1.</span> <span class="toc-text"> Productive vs. Unproductive Work</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#creating-a-work-plan"><span class="toc-number">1.2.</span> <span class="toc-text"> Creating a Work Plan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#additional"><span class="toc-number">1.3.</span> <span class="toc-text"> Additional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#time-is-the-most-limited-resource"><span class="toc-number">2.</span> <span class="toc-text"> Time is the Most Limited Resource</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-myth-of-work-life-balance"><span class="toc-number">2.1.</span> <span class="toc-text"> The Myth of Work-Life Balance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#where-does-the-time-go"><span class="toc-number">2.2.</span> <span class="toc-text"> Where Does the Time Go</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#additional-2"><span class="toc-number">2.3.</span> <span class="toc-text"> Additional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#little-tips-that-make-a-big-impact"><span class="toc-number">3.</span> <span class="toc-text"> Little Tips That Make a Big Impact</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#how-long-will-this-take"><span class="toc-number">3.1.</span> <span class="toc-text"> How Long Will This Take?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#managing-communications"><span class="toc-number">3.2.</span> <span class="toc-text"> Managing Communications</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lets-bring-it-all-together"><span class="toc-number">4.</span> <span class="toc-text"> Let’s Bring It All Together</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#some-thoughts-about-multitasking"><span class="toc-number">4.1.</span> <span class="toc-text"> Some Thoughts About Multitasking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#in-summary"><span class="toc-number">4.2.</span> <span class="toc-text"> In Summary</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Work Smarter, Not Harder 课程笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-08-19T14:35:14.000Z" itemprop="datePublished">2015-08-19</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Career/">Career</a>, <a class="tag-link" href="/tags/Course/">Course</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>中文名为更聪明而非更辛苦地工作：个人时间管理及工作效率。<br>
+大部分都是Cliche。内容也很少，完全可以压缩在一个20分钟的视频内，文本就更短了。</p>
+<h2 id="smart-work-habits-just-dont-happen"><a class="markdownIt-Anchor" href="#smart-work-habits-just-dont-happen"></a> Smart Work Habits Just Don’t Happen</h2>
+<h3 id="productive-vs-unproductive-work"><a class="markdownIt-Anchor" href="#productive-vs-unproductive-work"></a> Productive vs. Unproductive Work</h3>
+<p>注意区分productive和unproductive work。<br>
+if you worked and worked all day long, and you’re not 100% certain at where your time went, you might have been engaged in unproductive work. You were doing something. You weren’t lounging, but you weren’t completing the work that was really gonna further your goals right at that time. You weren’t completing the work that really needed to be completed right at that time. Sometimes this means you get distracted by something that is work related but not related to the task at hand. Maybe you start looking for some information that you do not need until later.</p>
+<h3 id="creating-a-work-plan"><a class="markdownIt-Anchor" href="#creating-a-work-plan"></a> Creating a Work Plan</h3>
+<p>一定要定<strong>计划</strong>，可以与时俱进修改，分清轻重缓急。其实就是很多年前那个important/urgent组合。</p>
+<p>Steps Help to Create a Plan:</p>
+<ul>
+<li>Review job responsibilities.</li>
+<li>Ask someone for help.</li>
+<li>Keep notes.</li>
+<li>Break tasks down into smaller steps.</li>
+</ul>
+<p>A Sample Work Plan Includes the Following Parts:</p>
+<ul>
+<li>Priority</li>
+<li>Description</li>
+<li>Due date</li>
+<li>Who the work is for</li>
+<li>Steps to take</li>
+<li>Estimate of time needed</li>
+<li>Start date</li>
+</ul>
+<p>How Long Will Tasks Take?</p>
+<ul>
+<li>Ask a supervisor or a coworker</li>
+<li>Keep detailed notes</li>
+<li>Break large tasks down into smaller steps</li>
+</ul>
+<h3 id="additional"><a class="markdownIt-Anchor" href="#additional"></a> Additional</h3>
+<p>也不要天天关注这些Time-Saving Tips，而是<strong>要关注自己到底要用时间来完成什么</strong>，专注于事情而非时间。</p>
+<blockquote>
+<p>You don’t build the lift you want by saving time. You build the life you want, and then time saves iteself.</p>
+</blockquote>
+<p>Rather than lookint to save bits of time here and there, start by <strong>asking yourself exactly what you’re saving that time for</strong>.</p>
+<h2 id="time-is-the-most-limited-resource"><a class="markdownIt-Anchor" href="#time-is-the-most-limited-resource"></a> Time is the Most Limited Resource</h2>
+<h3 id="the-myth-of-work-life-balance"><a class="markdownIt-Anchor" href="#the-myth-of-work-life-balance"></a> The Myth of Work-Life Balance</h3>
+<blockquote>
+<p>We often, maybe even mostly, let out schedule schedule itself; Ignoring the fact that time, not money, is our only true leadership asset.</p>
+</blockquote>
+<p>Tom Peters提出个人品牌概念的人。<br>
+Time Is a Limited Resource. 把时间用在对<strong>自己</strong>有用的事上。<br>
+Work Life Balance is a personal decision。和价值观有关系，而且不断变化，自己觉得舒服就好。Spend your time in a way that supports your goals and values.<br>
+You Teach People How to Treat You. 所以就应该真实作自己，要有界限，以免造成错误期望。</p>
+<h3 id="where-does-the-time-go"><a class="markdownIt-Anchor" href="#where-does-the-time-go"></a> Where Does the Time Go</h3>
+<p><strong>Time tracking</strong> allows oneself to reveal what is actually done throughout the day. 手写记下就可以，我用的ManicTime也不错。<br>
+Keep Yourself Honest. 关键就是<strong>Honesty</strong>和<strong>Decipline</strong>。<br>
+<img src="/img/note_wsnh_daily_time_log_jugglers.png" alt="Daily Time Log Jugglers"><br>
+Strategic Reserve Time = Basic job functions - How many hours to complete this work<br>
+Work Strategic Reserve Time = time available to work - all scheduled work<br>
+<strong>Personal Strategic Reserve Time</strong> = time available to do all tasks - all commitments</p>
+<p>Create Your Own <strong>Strategic Reserve Time Chart</strong>.<br>
+<img src="/img/note_wsnh_strategic_reserve_time_templates.png" alt="Strategic Reserve Time Templates"></p>
+<h3 id="additional-2"><a class="markdownIt-Anchor" href="#additional-2"></a> Additional</h3>
+<p>有几种不同的<a href="http://www.fastcompany.com/3021510/most-productive-people-the-art-of-doing-everything" target="_blank" rel="external">productive people类型</a>。可以<a href="http://www.fastcompany.com/3021596/work-smart/take-the-quiz-what-kind-of-productive-person-are-you" target="_blank" rel="external">测试</a>自己的类型。<br>
+The Night Owl, The Early Bird, The Multitasker, The Mono-tasker, The Procrastinator, The Connector, The Lone Wolf, The Firefighter</p>
+<p>我竟然是<strong>The Early Bird</strong>，感觉还有点意外。</p>
+<ul>
+<li>You get up early. Insanely early. You find your peace—and most productive hours—in the first slice of the day.</li>
+<li>ROLE MODEL:<br>
+The godfather of productivity, Benjamin Franklin. As he put it in Early Rising: A Natural, Social, and Religious Duty: “There is a feeling of life about the morning sunshine, provoking cheerfulness and vivacity, and he is a great loser who has not his eyes and his heart early open to welcome it.”</li>
+<li>TIP:<br>
+Spend these quiet hours on your most high-value tasks. Energy Project CEO Tony Schwartz wakes<br>
+up and immediately throws 90 minutes at the most crucial job for the day. Author and investor Whitney Johnson wakes up and writes before her inner critic can start criticizing it. How to be most effective on email: Don’t do it first thing, says Julie Morgenstern, author of the clearly stated Never Check E-mail in the Morning. “Early birds get a jump-start before the true pressures of the workday hit,” she says. “Use those hours for the deep-thinking work.”</li>
+<li>KILLER APP COMBO:<br>
+<a href="http://flexibits.com/fantastical" target="_blank" rel="external">Fantastical</a> lets you scroll through a full-day view of your events. Carrot offers prizes for completing tasks—and (hilariously) reprimands you if you fall behind.</li>
+</ul>
+<h2 id="little-tips-that-make-a-big-impact"><a class="markdownIt-Anchor" href="#little-tips-that-make-a-big-impact"></a> Little Tips That Make a Big Impact</h2>
+<h3 id="how-long-will-this-take"><a class="markdownIt-Anchor" href="#how-long-will-this-take"></a> How Long Will This Take?</h3>
+<p>Estimating的工具：</p>
+<ul>
+<li>Experience is the best tool</li>
+<li>Keep good notes。记下自己完成某任务所需大概时长。</li>
+<li>Use tables</li>
+<li>Use spreadsheets</li>
+</ul>
+<p>Variance = Initial estimate of time required to complete work - How long the work actually took<br>
+Analogous Estimating: 根据完成同类任务所需时长估计。<br>
+Parametric Estimating: 使用过去的数据，包括Variance，来估计。<br>
+<img src="/img/note_wsnh_estimating_template.png" alt="Estimating Template"></p>
+<h3 id="managing-communications"><a class="markdownIt-Anchor" href="#managing-communications"></a> Managing Communications</h3>
+<p>Schedule Specific Time for Communication.<br>
+Or, wait until there’s a need to spend time on communication. 有闲的固定时间再看email。</p>
+<p>Expand your inbox to use multiple folders: 邮件分类。</p>
+<ul>
+<li>Do it Right Away</li>
+<li>Action Folder。用时超过2分钟。</li>
+<li>Pending Folder (requires follow up)</li>
+<li>Information Folder</li>
+</ul>
+<p>Keep Similar Information Together: 同类东西都记到一起，以免需要查询多处。</p>
+<ul>
+<li>Calendars</li>
+<li>Contacts</li>
+<li>Personal items</li>
+<li>Work items</li>
+</ul>
+<p>Time of Day vs. Productivity: Schedule your most challenging work for when you are most productive. 好钢用在刀刃上。</p>
+<h2 id="lets-bring-it-all-together"><a class="markdownIt-Anchor" href="#lets-bring-it-all-together"></a> Let’s Bring It All Together</h2>
+<h3 id="some-thoughts-about-multitasking"><a class="markdownIt-Anchor" href="#some-thoughts-about-multitasking"></a> Some Thoughts About Multitasking</h3>
+<p>To do two things at once it to do neither. - Publilius Syrus<br>
+Switching Cost: 项目之间切换需要的时间。<br>
+**最好一段时间专注一件事。**如果不能不多线程，<strong>写笔记记下自己下一次从哪里开始</strong>，可以减少switching costs。</p>
+<h3 id="in-summary"><a class="markdownIt-Anchor" href="#in-summary"></a> In Summary</h3>
+<ul>
+<li>Work Plan</li>
+<li>Set Priorities</li>
+<li>Work-Life Balance</li>
+<li>Time Tracking</li>
+<li>Strategic Reserve Time</li>
+<li>Estimating</li>
+<li>Similar Tasks</li>
+<li>Time of Day</li>
+</ul>
+<p>Set a goal, make sure it’s measurable, give yourself support, keep track, have a reward for when you meet you goal, and don’t beat yourself up if you don’t. Just look at your results to see if there’s something you can do differently. And try again. With that thought in mind, go be fabulous.</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#smart-work-habits-just-dont-happen"><span class="toc-number">1.</span> <span class="toc-text"> Smart Work Habits Just Don’t Happen</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#productive-vs-unproductive-work"><span class="toc-number">1.1.</span> <span class="toc-text"> Productive vs. Unproductive Work</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#creating-a-work-plan"><span class="toc-number">1.2.</span> <span class="toc-text"> Creating a Work Plan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#additional"><span class="toc-number">1.3.</span> <span class="toc-text"> Additional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#time-is-the-most-limited-resource"><span class="toc-number">2.</span> <span class="toc-text"> Time is the Most Limited Resource</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-myth-of-work-life-balance"><span class="toc-number">2.1.</span> <span class="toc-text"> The Myth of Work-Life Balance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#where-does-the-time-go"><span class="toc-number">2.2.</span> <span class="toc-text"> Where Does the Time Go</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#additional-2"><span class="toc-number">2.3.</span> <span class="toc-text"> Additional</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#little-tips-that-make-a-big-impact"><span class="toc-number">3.</span> <span class="toc-text"> Little Tips That Make a Big Impact</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#how-long-will-this-take"><span class="toc-number">3.1.</span> <span class="toc-text"> How Long Will This Take?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#managing-communications"><span class="toc-number">3.2.</span> <span class="toc-text"> Managing Communications</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lets-bring-it-all-together"><span class="toc-number">4.</span> <span class="toc-text"> Let’s Bring It All Together</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#some-thoughts-about-multitasking"><span class="toc-number">4.1.</span> <span class="toc-text"> Some Thoughts About Multitasking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#in-summary"><span class="toc-number">4.2.</span> <span class="toc-text"> In Summary</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&text=Work Smarter, Not Harder 课程笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&is_video=false&description=Work Smarter, Not Harder 课程笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Work Smarter, Not Harder 课程笔记&body=Check out this article: http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&title=Work Smarter, Not Harder 课程笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/08/19/note-work-smarter-not-harder-coursera/&name=Work Smarter, Not Harder 课程笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

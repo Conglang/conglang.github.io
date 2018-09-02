@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="在Ubuntu下搭建Python编程环境，综合来说是`Python2/3+virtualenv+pip+packages+IPython`，也即配置多个不同的VirtualEnv，在其中为不同的Python版本用pip安装各自必要的扩展包，然后用IPython进行开发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Ubuntu下搭建Python编程环境">
+<meta property="og:url" content="http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="在Ubuntu下搭建Python编程环境，综合来说是`Python2/3+virtualenv+pip+packages+IPython`，也即配置多个不同的VirtualEnv，在其中为不同的Python版本用pip安装各自必要的扩展包，然后用IPython进行开发。">
+<meta property="og:updated_time" content="2018-07-03T14:28:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Ubuntu下搭建Python编程环境">
+<meta name="twitter:description" content="在Ubuntu下搭建Python编程环境，综合来说是`Python2/3+virtualenv+pip+packages+IPython`，也即配置多个不同的VirtualEnv，在其中为不同的Python版本用pip安装各自必要的扩展包，然后用IPython进行开发。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>在Ubuntu下搭建Python编程环境</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/09/08/python-google-analytics-api-v4/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/04/28/git-notes/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&text=在Ubuntu下搭建Python编程环境"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&is_video=false&description=在Ubuntu下搭建Python编程环境"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Ubuntu下搭建Python编程环境&body=Check out this article: http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&name=在Ubuntu下搭建Python编程环境&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本"><span class="toc-number">1.</span> <span class="toc-text"> 基本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#python2"><span class="toc-number">1.1.</span> <span class="toc-text"> python2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python3"><span class="toc-number">1.2.</span> <span class="toc-text"> python3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pip"><span class="toc-number">1.3.</span> <span class="toc-text"> pip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他一些全局安装了的包optional"><span class="toc-number">1.4.</span> <span class="toc-text"> 其他一些全局安装了的包(Optional)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟环境"><span class="toc-number">2.</span> <span class="toc-text"> 虚拟环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置virtualenv"><span class="toc-number">2.1.</span> <span class="toc-text"> 配置virtualenv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义的python2_env环境"><span class="toc-number">2.2.</span> <span class="toc-text"> 自定义的python2_env环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义的python3_env环境"><span class="toc-number">2.3.</span> <span class="toc-text"> 自定义的python3_env环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ipython用法"><span class="toc-number">3.</span> <span class="toc-text"> IPython用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动"><span class="toc-number">3.1.</span> <span class="toc-text"> 启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#accessing-help"><span class="toc-number">3.2.</span> <span class="toc-text"> Accessing help</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell-assignment"><span class="toc-number">3.3.</span> <span class="toc-text"> Shell Assignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#magics"><span class="toc-number">3.4.</span> <span class="toc-text"> Magics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#history"><span class="toc-number">3.5.</span> <span class="toc-text"> History</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启matplotlib"><span class="toc-number">3.6.</span> <span class="toc-text"> 开启matplotlib</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debug"><span class="toc-number">3.7.</span> <span class="toc-text"> debug</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        在Ubuntu下搭建Python编程环境
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-07-17T11:54:36.000Z" itemprop="datePublished">2016-07-17</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/IPython/">IPython</a>, <a class="tag-link" href="/tags/Python/">Python</a>, <a class="tag-link" href="/tags/Ubuntu/">Ubuntu</a>, <a class="tag-link" href="/tags/pip/">pip</a>, <a class="tag-link" href="/tags/virtualenv/">virtualenv</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>在Ubuntu下搭建Python编程环境，综合来说是<code>Python2/3+virtualenv+pip+packages+IPython</code>，也即配置多个不同的VirtualEnv，在其中为不同的Python版本用pip安装各自必要的扩展包，然后用IPython进行开发。<br>
+这篇博文主要是为了自己将来还原开发环境。</p>
+<h2 id="基本"><a class="markdownIt-Anchor" href="#基本"></a> 基本</h2>
+<p>可以用<code>python -V</code>查看当前python版本。最基本的<code>sudo apt-get install build-essential</code>。</p>
+<h3 id="python2"><a class="markdownIt-Anchor" href="#python2"></a> python2</h3>
+<p><code>sudo apt-get install python-dev</code></p>
+<h3 id="python3"><a class="markdownIt-Anchor" href="#python3"></a> python3</h3>
+<p><code>sudo apt-get install python3-dev</code></p>
+<h3 id="pip"><a class="markdownIt-Anchor" href="#pip"></a> <a href="https://pip.pypa.io/en/stable/" target="_blank" rel="external">pip</a></h3>
+<p><code>sudo apt-get install python-pip</code></p>
+<h3 id="其他一些全局安装了的包optional"><a class="markdownIt-Anchor" href="#其他一些全局安装了的包optional"></a> 其他一些全局安装了的包(Optional)</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential python-dev python-numpy python-setuptools python-scipy libatlas-dev</span><br><span class="line">sudo apt-get install libpng-dev libfreetype6-dev libjpeg8-dev python-matplotlib</span><br><span class="line">sudo apt-get install libxext-dev</span><br><span class="line">sudo apt-get install python-qt4 qt4-dev-tools</span><br><span class="line">sudo apt-get install cmake qt4-qmake qt-sdk</span><br><span class="line">sudo apt-get install libhdf5-serial-dev</span><br><span class="line">sudo apt-get install python-pygraphviz</span><br></pre></td></tr></table></figure>
+<h2 id="虚拟环境"><a class="markdownIt-Anchor" href="#虚拟环境"></a> 虚拟环境</h2>
+<h3 id="配置virtualenv"><a class="markdownIt-Anchor" href="#配置virtualenv"></a> 配置<a href="https://virtualenv.pypa.io/en/latest/" target="_blank" rel="external">virtualenv</a></h3>
+<ul>
+<li>安装virtualenv和virtualenvwrapper<br>
+<code>sudo pip install virtualenv virtualenvwrapper</code></li>
+<li>配置virtualenvwrapper<br>
+<code>vim ~/.bashrc</code></li>
+<li>在~/.bashrc中添加</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="_">-f</span> /usr/<span class="built_in">local</span>/bin/virtualenvwrapper.sh ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">export</span> WORKON_HOME=<span class="variable">$HOME</span>/.virtualenvs</span><br><span class="line">    <span class="built_in">source</span> /usr/<span class="built_in">local</span>/bin/virtualenvwrapper.sh</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行该脚本<br>
+<code>source ~/.bashrc</code></li>
+<li>之后可以创建虚拟环境<br>
+针对python2，<code>mkvirtualenv python2_env</code>。<br>
+针对python3，先查看python3安装位置<code>which python3</code>，再创建<code>mkvirtualenv -p /usr/bin/python3 python3_env</code></li>
+<li>进入某个虚拟环境时<br>
+<code>workon python2_env</code></li>
+<li>查看该虚拟环境中特有包的版本<br>
+<code>pip freeze</code></li>
+<li>退出该虚拟环境<br>
+<code>deactivate</code></li>
+<li>删除某虚拟环境<br>
+<code>rmvirtualenv python2_env</code></li>
+</ul>
+<h3 id="自定义的python2_env环境"><a class="markdownIt-Anchor" href="#自定义的python2_env环境"></a> 自定义的python2_env环境</h3>
+<p>自选，只是我自己会用到的包。进入虚拟环境python2_env后。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pip install numpy</span><br><span class="line">pip install scipy</span><br><span class="line">pip install scikit-learn</span><br><span class="line">pip install matplotlib</span><br><span class="line">pip install ipython</span><br><span class="line">pip install tornado</span><br><span class="line">pip install pyzmq</span><br><span class="line">pip install pandas</span><br><span class="line">pip install PySide</span><br><span class="line">pip install jupyter</span><br><span class="line">pip install tables</span><br><span class="line">pip install plotly</span><br><span class="line">pip install geopy</span><br></pre></td></tr></table></figure>
+<h3 id="自定义的python3_env环境"><a class="markdownIt-Anchor" href="#自定义的python3_env环境"></a> 自定义的python3_env环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pip3 install numpy</span><br><span class="line">pip3 install scipy</span><br><span class="line">pip3 install scikit-learn</span><br><span class="line">pip3 install matplotlib</span><br><span class="line">pip3 install ipython</span><br><span class="line">pip3 install tornado</span><br><span class="line">pip3 install pyzmq</span><br><span class="line">pip3 install pandas</span><br><span class="line">pip3 install PySide</span><br><span class="line">pip3 install jupyter</span><br><span class="line">pip3 install tables</span><br><span class="line">pip3 install plotly</span><br><span class="line">pip3 install geopy</span><br></pre></td></tr></table></figure>
+<h2 id="ipython用法"><a class="markdownIt-Anchor" href="#ipython用法"></a> IPython用法</h2>
+<h3 id="启动"><a class="markdownIt-Anchor" href="#启动"></a> 启动</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ipython</span><br><span class="line">jupyter qtconsole</span><br><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p><a href="http://jupyter.readthedocs.io/en/latest/content-quickstart.html" target="_blank" rel="external">关于notebook</a></p>
+<h3 id="accessing-help"><a class="markdownIt-Anchor" href="#accessing-help"></a> Accessing help</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">`?`		# 打开IPython帮助</span><br><span class="line">`object?`	# 显示关于这个object的信息</span><br><span class="line">`object??`	# 关于这个object的更多信息</span><br><span class="line">`*int*??`	# 搜索名字与int匹配的object的信息</span><br></pre></td></tr></table></figure>
+<h3 id="shell-assignment"><a class="markdownIt-Anchor" href="#shell-assignment"></a> Shell Assignment</h3>
+<p>前面加上<code>!</code>，如<code>!pwd</code>，可用<code>$variable</code>或<code>{variable}</code>读取当前环境的变量，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">file = <span class="string">'myfile.txt'</span></span><br><span class="line">!mv $file &#123;file.upper()&#125;</span><br></pre></td></tr></table></figure>
+<p><code>!</code>在<code>=</code>后时，命令的输出结果会被分割成一个list传给左边变量。如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">my_files =! ls ~/</span><br><span class="line">b = <span class="string">"backup file"</span></span><br><span class="line"><span class="keyword">for</span> i,file <span class="keyword">in</span> enumerate(my_file):</span><br><span class="line">	    raw = !echo $backup $file</span><br><span class="line">	    !cp $file &#123;file.split(<span class="string">'.'</span>)[<span class="number">0</span>]+<span class="string">'.bak'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>和系统相关的IPython的魔术命令:</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>!cmd</code></td>
+<td>在系统shell中执行cmd</td>
+</tr>
+<tr>
+<td><code>output=!cmd args</code></td>
+<td>执行cmd，并将stdout存放在output中</td>
+</tr>
+<tr>
+<td><code>%alias alias_name cmd</code></td>
+<td>为系统shell命令定义别名</td>
+</tr>
+<tr>
+<td><code>%bookmark</code></td>
+<td>使用IPython的目录书签系统</td>
+</tr>
+<tr>
+<td><code>%cd directory</code></td>
+<td>将系统工作目录更改为directory</td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td>返回系统的当前工作目录</td>
+</tr>
+<tr>
+<td><code>%pushd directory</code></td>
+<td>将当前目录入栈，并转向目标目录</td>
+</tr>
+<tr>
+<td><code>%popd</code></td>
+<td>弹出栈顶目录，并转向该目录</td>
+</tr>
+<tr>
+<td><code>%dirs</code></td>
+<td>返回一个含有当前目录栈的列表</td>
+</tr>
+<tr>
+<td><code>%dhist</code></td>
+<td>打印目录访问历史</td>
+</tr>
+<tr>
+<td><code>%env</code></td>
+<td>以dict形式返回系统环境变量</td>
+</tr>
+</tbody>
+</table>
+<h3 id="magics"><a class="markdownIt-Anchor" href="#magics"></a> Magics</h3>
+<p>以<code>%</code>开始的命令，常见的如：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%quickref</code></td>
+<td>显示IPython的快速参考</td>
+</tr>
+<tr>
+<td><code>%magic</code></td>
+<td>显示所有魔术命令的详细文档</td>
+</tr>
+<tr>
+<td><code>%debug</code></td>
+<td>从最新的异常跟踪的底部进入交互式调试器</td>
+</tr>
+<tr>
+<td><code>%hist</code></td>
+<td>打印命令的输入(可选输出)历史</td>
+</tr>
+<tr>
+<td><code>%pdb</code></td>
+<td>在异常发生后自动进入调试器</td>
+</tr>
+<tr>
+<td><code>%paste</code></td>
+<td>执行剪贴板中的Python代码</td>
+</tr>
+<tr>
+<td><code>%cpaste</code></td>
+<td>打开一个特殊提示符以便手工粘贴待执行的Python代码</td>
+</tr>
+<tr>
+<td><code>%reset</code></td>
+<td>删除interactive命名空间中的全部变量/名称</td>
+</tr>
+<tr>
+<td><code>%page OBJECT</code></td>
+<td>通过分页器打印输出OBJECT</td>
+</tr>
+<tr>
+<td><code>%run scipt.py</code></td>
+<td>在IPython中执行一个Python脚本文件</td>
+</tr>
+<tr>
+<td><code>%prun statement</code></td>
+<td>通过cProfile执行statement，并打印分析器的输出结果</td>
+</tr>
+<tr>
+<td><code>%time statement</code></td>
+<td>报告statement的执行时间</td>
+</tr>
+<tr>
+<td><code>%timeit statement</code></td>
+<td>多次执行statement以计算平均执行时间。对那些执行时间非常小的代码很有用</td>
+</tr>
+<tr>
+<td><code>%who``%who_ls``whos</code></td>
+<td>显示interactive命名空间中定义的变量，信息级别/冗余度可变</td>
+</tr>
+<tr>
+<td><code>%xdel variable</code></td>
+<td>删除variable，并尝试清楚其在IPython中的对象上的一切引用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="history"><a class="markdownIt-Anchor" href="#history"></a> History</h3>
+<p><code>_</code>和<code>__</code>记录了最近的两个输出结果。输入的文本保存在名为<code>_iX</code>的变量中，其中X是输入行的行号。<br>
+用<code>%logstart</code>可以开始记录整个控制台会话的日志，配套命令有<code>%logoff``logon``logstate</code>和<code>logstop</code>。</p>
+<h3 id="开启matplotlib"><a class="markdownIt-Anchor" href="#开启matplotlib"></a> 开启matplotlib</h3>
+<p>在Shell里，显示matplotlib的图要执行<code>ipython --pylab=qt</code>。<br>
+在QtConsole里，执行<code>matplotlib inline</code>。<br>
+<a href="http://nbviewer.jupyter.org/github/ipython/ipython/blob/1.x/examples/notebooks/Part%203%20-%20Plotting%20with%20Matplotlib.ipynb" target="_blank" rel="external">More</a></p>
+<h3 id="debug"><a class="markdownIt-Anchor" href="#debug"></a> debug</h3>
+<p>IPython调试器增强了pdb。<br>
+错误发生后执行<code>%debug</code>会跳转到引发异常的那个stack frame。<code>%pdb</code>可以让IPython在出现异常之后自动调用调试器。在运行时使用<code>%run -d scripy.py</code>可以直接但不执行代码。</p>
+<p>调试器命令：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h(elp)</td>
+<td>显示命令列表</td>
+</tr>
+<tr>
+<td>help command</td>
+<td>显示command的文档</td>
+</tr>
+<tr>
+<td>c(ontinue)</td>
+<td>恢复程序的执行</td>
+</tr>
+<tr>
+<td>q(uit)</td>
+<td>退出调试器，不再执行任何代码</td>
+</tr>
+<tr>
+<td>b(reak) number</td>
+<td>在当前文件的第number行设置一个断点</td>
+</tr>
+<tr>
+<td>b path/tofile.py:number</td>
+<td>在指定文件的第number行设置一个断点</td>
+</tr>
+<tr>
+<td>s(tep)</td>
+<td>单步进入函数调用</td>
+</tr>
+<tr>
+<td>n(ext)</td>
+<td>执行当前行，并前进到当前级别的下一行</td>
+</tr>
+<tr>
+<td>u§/d(own)</td>
+<td>在函数调用栈中向上或向下移动</td>
+</tr>
+<tr>
+<td>a(rgs)</td>
+<td>显示当前函数的参数</td>
+</tr>
+<tr>
+<td>debug statement</td>
+<td>在新的(递归)调试器中调用语句statement</td>
+</tr>
+<tr>
+<td>l(ist) statement</td>
+<td>显示当前行，以及当前栈级别上的上下文参考代码</td>
+</tr>
+<tr>
+<td>w(here)</td>
+<td>打印当前位置的完整栈跟踪(包括上下文参考代码)</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://docs.python.org/3/library/pdb.html#debugger-commands" target="_blank" rel="external">More</a></p>
+<p>Ref:<br>
+[1] <a href="https://nextdime.wordpress.com/2014/07/03/how-to-set-up-python-development-environment-ubuntu-14-04/" target="_blank" rel="external">https://nextdime.wordpress.com/2014/07/03/how-to-set-up-python-development-environment-ubuntu-14-04/</a><br>
+[2] <a href="http://stackoverflow.com/questions/9829175/pip-install-matplotlib-error-with-virtualenv" target="_blank" rel="external">http://stackoverflow.com/questions/9829175/pip-install-matplotlib-error-with-virtualenv</a><br>
+[3] Learning scikit-learn: Machine Learning in Python<br>
+[4] <a href="http://stackoverflow.com/questions/1961997/is-it-possible-to-add-pyqt4-pyside-packages-on-a-virtualenv-sandbox" target="_blank" rel="external">http://stackoverflow.com/questions/1961997/is-it-possible-to-add-pyqt4-pyside-packages-on-a-virtualenv-sandbox</a><br>
+[5] <a href="http://jupyter.readthedocs.io/en/latest/install.html" target="_blank" rel="external">http://jupyter.readthedocs.io/en/latest/install.html</a><br>
+[6] 利用Python进行数据分析</p>
+<p><a href="https://github.com/ipython/ipython/wiki/A-gallery-of-interesting-IPython-Notebooks" target="_blank" rel="external">更多书籍</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本"><span class="toc-number">1.</span> <span class="toc-text"> 基本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#python2"><span class="toc-number">1.1.</span> <span class="toc-text"> python2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python3"><span class="toc-number">1.2.</span> <span class="toc-text"> python3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pip"><span class="toc-number">1.3.</span> <span class="toc-text"> pip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他一些全局安装了的包optional"><span class="toc-number">1.4.</span> <span class="toc-text"> 其他一些全局安装了的包(Optional)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟环境"><span class="toc-number">2.</span> <span class="toc-text"> 虚拟环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置virtualenv"><span class="toc-number">2.1.</span> <span class="toc-text"> 配置virtualenv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义的python2_env环境"><span class="toc-number">2.2.</span> <span class="toc-text"> 自定义的python2_env环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义的python3_env环境"><span class="toc-number">2.3.</span> <span class="toc-text"> 自定义的python3_env环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ipython用法"><span class="toc-number">3.</span> <span class="toc-text"> IPython用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动"><span class="toc-number">3.1.</span> <span class="toc-text"> 启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#accessing-help"><span class="toc-number">3.2.</span> <span class="toc-text"> Accessing help</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shell-assignment"><span class="toc-number">3.3.</span> <span class="toc-text"> Shell Assignment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#magics"><span class="toc-number">3.4.</span> <span class="toc-text"> Magics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#history"><span class="toc-number">3.5.</span> <span class="toc-text"> History</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启matplotlib"><span class="toc-number">3.6.</span> <span class="toc-text"> 开启matplotlib</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debug"><span class="toc-number">3.7.</span> <span class="toc-text"> debug</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&text=在Ubuntu下搭建Python编程环境"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&is_video=false&description=在Ubuntu下搭建Python编程环境"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Ubuntu下搭建Python编程环境&body=Check out this article: http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&title=在Ubuntu下搭建Python编程环境"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/07/17/programming-in-ubuntu-python/&name=在Ubuntu下搭建Python编程环境&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

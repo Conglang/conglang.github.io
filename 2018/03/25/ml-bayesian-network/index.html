@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Bayesian Network / Belief Network 贝叶斯网。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bayesian Network / Belief Network 贝叶斯网">
+<meta property="og:url" content="http://conglang.github.io/2018/03/25/ml-bayesian-network/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="Bayesian Network / Belief Network 贝叶斯网。">
+<meta property="og:image" content="http://conglang.github.io/img/C790BD4F-53E9-473E-BA4D-58C812ED12ED.png">
+<meta property="og:image" content="http://conglang.github.io/img/F2ADADEF-9E48-4B23-A1DA-15A928268D7A.png">
+<meta property="og:image" content="http://conglang.github.io/img/26578DFA-B64C-4083-86C9-A905C316C56C.png">
+<meta property="og:image" content="http://conglang.github.io/img/BD9652F6-3046-48FD-B35E-D97140456229.png">
+<meta property="og:image" content="http://conglang.github.io/img/A2B33BE4-B9BD-4487-9D18-5785C06B3E4E.png">
+<meta property="og:image" content="http://conglang.github.io/img/0C5FA5CA-11CE-4C12-970D-6B638309D1DE.png">
+<meta property="og:image" content="http://conglang.github.io/img/D8897ADA-63FE-4680-A9B6-A9718F9063E0.png">
+<meta property="og:image" content="http://conglang.github.io/img/5FCE1B44-3992-4507-B044-5EA918F6D851.png">
+<meta property="og:image" content="http://conglang.github.io/img/3D6CCC44-2A5E-4B1D-9E31-FCFCEF0731B2.png">
+<meta property="og:image" content="http://conglang.github.io/img/CD219897-5129-4AD0-8C76-00EFAC6EC8B4.png">
+<meta property="og:image" content="http://conglang.github.io/img/02ACCBC5-71CF-4805-A58D-9EDE5992ABC0.png">
+<meta property="og:image" content="http://conglang.github.io/img/10A3F940-E79E-45D8-B962-C22E1EC83672.png">
+<meta property="og:updated_time" content="2018-08-12T06:48:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bayesian Network / Belief Network 贝叶斯网">
+<meta name="twitter:description" content="Bayesian Network / Belief Network 贝叶斯网。">
+<meta name="twitter:image" content="http://conglang.github.io/img/C790BD4F-53E9-473E-BA4D-58C812ED12ED.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Bayesian Network / Belief Network 贝叶斯网</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/03/30/ml-bayesian/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/03/20/ml-bayes-theory/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/03/25/ml-bayesian-network/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&text=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&is_video=false&description=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Bayesian Network / Belief Network 贝叶斯网&body=Check out this article: http://conglang.github.io/2018/03/25/ml-bayesian-network/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&name=Bayesian Network / Belief Network 贝叶斯网&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">1.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习"><span class="toc-number">2.</span> <span class="toc-text"> 学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推断"><span class="toc-number">3.</span> <span class="toc-text"> 推断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">4.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Bayesian Network / Belief Network 贝叶斯网
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-03-25T14:00:00.000Z" itemprop="datePublished">2018-03-25</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>借助有向无环图来刻画属性之间的依赖关系，用条件概率表描述属性的联合概率分布。<br>
+<img src="/img/C790BD4F-53E9-473E-BA4D-58C812ED12ED.png" alt="Image Loading"></p>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/F2ADADEF-9E48-4B23-A1DA-15A928268D7A.png" alt="Image Loading"><br>
+<img src="/img/26578DFA-B64C-4083-86C9-A905C316C56C.png" alt="Image Loading"><br>
+用道德图 moral graph 能看出变量间的独立关系，没有直接相连的边。<br>
+<img src="/img/BD9652F6-3046-48FD-B35E-D97140456229.png" alt="Image Loading"><br>
+生成道德图(无向图)的过程为：</p>
+<ul>
+<li>找出有向图中的所有 V 型结构，在 V 型结构的两个父节点之间加上一条无向边。</li>
+<li>将所有无向边改为有向边。</li>
+</ul>
+<h2 id="学习"><a class="markdownIt-Anchor" href="#学习"></a> 学习</h2>
+<p>在网络结构已知的情况下，贝叶斯网的学习就只是对训练样本计数，估计出每个节点的条件概率表即可。<br>
+因此，学习重点是根据训练数据集来找出结构最恰当的贝叶斯网。根据信息论准则，学习的目标是找到一个能以最短编码长度描述训练数据的模型。<br>
+<img src="/img/A2B33BE4-B9BD-4487-9D18-5785C06B3E4E.png" alt="Image Loading"><br>
+<img src="/img/0C5FA5CA-11CE-4C12-970D-6B638309D1DE.png" alt="Image Loading"></p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(\theta) = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span>，每个参数用1字节描述，Akaike Information Criterion。<br>
+<img src="/img/D8897ADA-63FE-4680-A9B6-A9718F9063E0.png" alt="Image Loading"></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mi>log</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">f(\theta) = \frac{1}{2} \log m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.845108em;"></span><span class="strut bottom" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.345em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">2</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord mathit">m</span></span></span></span>，每个参数用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mi>log</mi></mrow><annotation encoding="application/x-tex">\frac{1}{2} \log</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.845108em;"></span><span class="strut bottom" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.345em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">2</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.394em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span></span></span></span>描述，Bayesian Information Criterion。<br>
+<img src="/img/5FCE1B44-3992-4507-B044-5EA918F6D851.png" alt="Image Loading"></li>
+<li>若<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f(\theta) = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">0</span></span></span></span>，即不计算对网络进行编码的长度，则评分函数退化为负对数似然，学习任务退化为极大似然估计。</li>
+</ul>
+<p>从所有可能的网络结构空间搜索最优贝叶斯网结构是一个 NP 难问题。有两种常用的策略能在有限时间内求得近似解：</p>
+<ul>
+<li>贪心法。从某个网络开始增增减减，直到评分数值不再降低。</li>
+<li>给网络结构施加约束来削减搜索空间。例如必须是树。</li>
+</ul>
+<h2 id="推断"><a class="markdownIt-Anchor" href="#推断"></a> 推断</h2>
+<p>最理想是直接根据贝叶斯网定义的联合概率分布来精确计算后验概率，可惜这是 NP 难的。<br>
+所以现实中，要降低精度要求，在有限时间内求得近似解，贝叶斯网的近似推断常用吉布斯采样 Gibbs sampling。<br>
+<img src="/img/3D6CCC44-2A5E-4B1D-9E31-FCFCEF0731B2.png" alt="Image Loading"><br>
+<img src="/img/CD219897-5129-4AD0-8C76-00EFAC6EC8B4.png" alt="Image Loading"><br>
+实质上，吉布斯采样是在贝叶斯网所有变量的联合状态空间与证据<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>E</mi><mo>=</mo><mi>e</mi></mrow><annotation encoding="application/x-tex">E=e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mrel">=</span><span class="mord mathit">e</span></span></span></span>一直的子空间中进行随机漫步。每一步仅依赖于前一步的状态，这是一个马尔可夫链，会收敛于一个平稳分布。在 T 很大时，吉布斯采样相当于根据P(Q|E=e)采样，从而保证了7.33收敛于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>Q</mi><mo>=</mo><mi>q</mi><mi mathvariant="normal">∣</mi><mi>E</mi><mo>=</mo><mi>e</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P(Q=q|E=e)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit">Q</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.03588em;">q</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mrel">=</span><span class="mord mathit">e</span><span class="mclose">)</span></span></span></span>。<br>
+注意：1.马尔可夫链收敛很慢。2.如果出现极端概率0或1，不保证马尔可夫链存在平稳分布。<br>
+<img src="/img/02ACCBC5-71CF-4805-A58D-9EDE5992ABC0.png" alt="Image Loading"><br>
+<img src="/img/10A3F940-E79E-45D8-B962-C22E1EC83672.png" alt="Image Loading"></p>
+<h2 id="ref"><a class="markdownIt-Anchor" href="#ref"></a> Ref</h2>
+<p>[1] 机器学习 - 周志华<br>
+[2] <a href="http://www.stat.unm.edu/~ghuerta/stat574/notes-gibbs-metro.pdf" target="_blank" rel="external">http://www.stat.unm.edu/~ghuerta/stat574/notes-gibbs-metro.pdf</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">1.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习"><span class="toc-number">2.</span> <span class="toc-text"> 学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推断"><span class="toc-number">3.</span> <span class="toc-text"> 推断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">4.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/03/25/ml-bayesian-network/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&text=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&is_video=false&description=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Bayesian Network / Belief Network 贝叶斯网&body=Check out this article: http://conglang.github.io/2018/03/25/ml-bayesian-network/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&title=Bayesian Network / Belief Network 贝叶斯网"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/03/25/ml-bayesian-network/&name=Bayesian Network / Belief Network 贝叶斯网&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Tom M. Mitchell于2006年所写对Machine Learning的简而又简的介，以便初步了解the big picture。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Discipline of Machine Learning 笔记">
+<meta property="og:url" content="http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="Tom M. Mitchell于2006年所写对Machine Learning的简而又简的介，以便初步了解the big picture。">
+<meta property="og:updated_time" content="2018-07-03T15:54:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Discipline of Machine Learning 笔记">
+<meta name="twitter:description" content="Tom M. Mitchell于2006年所写对Machine Learning的简而又简的介，以便初步了解the big picture。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>The Discipline of Machine Learning 笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/02/05/note-natural-language-processing-with-python/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&text=The Discipline of Machine Learning 笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&is_video=false&description=The Discipline of Machine Learning 笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Discipline of Machine Learning 笔记&body=Check out this article: http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&name=The Discipline of Machine Learning 笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-questions"><span class="toc-number">1.</span> <span class="toc-text"> Defining Questions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state-of-machine-learning"><span class="toc-number">2.</span> <span class="toc-text"> State of Machine Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#application-successes"><span class="toc-number">2.1.</span> <span class="toc-text"> Application Successes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#place-of-machine-learning-within-computer-science"><span class="toc-number">2.2.</span> <span class="toc-text"> Place of Machine Learning within Computer Science</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#some-current-research-questions"><span class="toc-number">2.3.</span> <span class="toc-text"> Some Current Research Questions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#longer-term-research-questions"><span class="toc-number">2.3.1.</span> <span class="toc-text"> Longer Term Research Questions</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ethical-questions"><span class="toc-number">2.4.</span> <span class="toc-text"> Ethical Questions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#where-to-learn-more"><span class="toc-number">3.</span> <span class="toc-text"> Where to Learn More</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        The Discipline of Machine Learning 笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-04-03T12:30:13.000Z" itemprop="datePublished">2016-04-03</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Essay/">Essay</a>, <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Tom M. Mitchell于2006年所写对Machine Learning进行简单介绍的<a href="http://www.cs.cmu.edu/~tom/pubs/MachineLearning.pdf" target="_blank" rel="external">论文</a>。</p>
+<h2 id="defining-questions"><a class="markdownIt-Anchor" href="#defining-questions"></a> Defining Questions</h2>
+<p>Machine Learning的核心问题是：How can we build computer systems that automatically improve with experience, and what are the fundamental laws that govern all learning processes?</p>
+<p>这里的learn的定义是：with respect to a particular task T, performance metric P, and type of experience E, if the system reliably improves its performance P at Task T, following experience E.</p>
+<p>Machine Learning是Computer Science和Statistics的交集，还有一个较弱相关领域就是the study of human and animal learning in Psychology, Neuroscience and related fields，其他对Machine Learning感兴趣的领域如biology、ecomonics和control theory。</p>
+<h2 id="state-of-machine-learning"><a class="markdownIt-Anchor" href="#state-of-machine-learning"></a> State of Machine Learning</h2>
+<h3 id="application-successes"><a class="markdownIt-Anchor" href="#application-successes"></a> Application Successes</h3>
+<ul>
+<li>Speech recognition.</li>
+<li>Computer vision.</li>
+<li>Bio-surveillance. 比如detect and track disease outbreak。</li>
+<li>Robot control. 比如无人飞行器。</li>
+<li>Accelerating empirical sciences.</li>
+</ul>
+<h3 id="place-of-machine-learning-within-computer-science"><a class="markdownIt-Anchor" href="#place-of-machine-learning-within-computer-science"></a> Place of Machine Learning within Computer Science</h3>
+<p>在如下领域Machine Learning已经是best practice。即complex和self-customizing的软件。</p>
+<ul>
+<li>The application is too complex for people to manually design the algorithm. 比如sensor-base perception tasks (speech recognition, computer vision, etc.)</li>
+<li>The application requires that the software customize to its operational environment after it is fielded. 比如speech recognition应该用用户数据再训练一遍，推荐系统，自定义垃圾邮件。</li>
+</ul>
+<h3 id="some-current-research-questions"><a class="markdownIt-Anchor" href="#some-current-research-questions"></a> Some Current Research Questions</h3>
+<p>正在被研究(2006年)的前沿问题，例如：</p>
+<ul>
+<li>Can unlabeled data be helpful for supervised learning?</li>
+<li>How can we transfer what is learned for one task to improve learning in other related tasks?</li>
+<li>What is the relationship between different learning algorithms, and which should be used when?</li>
+<li>For learners that actively collect their own training data, what is the best strategy?</li>
+<li>To what degree can we have both data privacy and the benefits of data mining?</li>
+</ul>
+<h4 id="longer-term-research-questions"><a class="markdownIt-Anchor" href="#longer-term-research-questions"></a> Longer Term Research Questions</h4>
+<ul>
+<li>Can we build never-ending learners?<br>
+按照进阶顺序不断学习各种课程，课程之间可以融会贯通。 A key research issue here is self-supervised learning and constructing an appropriate graded curriculum.</li>
+<li>Can machine learning theories and algorithms help explain human learning?</li>
+<li>Can we design programming languages containing machine learning primitives?</li>
+<li>Will computer perception merge with machine learning?</li>
+</ul>
+<h3 id="ethical-questions"><a class="markdownIt-Anchor" href="#ethical-questions"></a> Ethical Questions</h3>
+<p>personal privacy.</p>
+<h2 id="where-to-learn-more"><a class="markdownIt-Anchor" href="#where-to-learn-more"></a> Where to Learn More</h2>
+<p>The top conferences and journals in the field:</p>
+<ul>
+<li>International Conference on Machine Learning (ICML).</li>
+<li>Conference on Neural Information Processing Systems (NIPS).</li>
+<li>Annual Conference on Learning Theory (COLT).</li>
+<li>Journal of Machine Learning Research (JMLR). This top journal is freely available online at <a href="http://www.jmlr.org" target="_blank" rel="external">www.jmlr.org</a>.</li>
+<li>Machine Learning. Published by Springer.</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-questions"><span class="toc-number">1.</span> <span class="toc-text"> Defining Questions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state-of-machine-learning"><span class="toc-number">2.</span> <span class="toc-text"> State of Machine Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#application-successes"><span class="toc-number">2.1.</span> <span class="toc-text"> Application Successes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#place-of-machine-learning-within-computer-science"><span class="toc-number">2.2.</span> <span class="toc-text"> Place of Machine Learning within Computer Science</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#some-current-research-questions"><span class="toc-number">2.3.</span> <span class="toc-text"> Some Current Research Questions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#longer-term-research-questions"><span class="toc-number">2.3.1.</span> <span class="toc-text"> Longer Term Research Questions</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ethical-questions"><span class="toc-number">2.4.</span> <span class="toc-text"> Ethical Questions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#where-to-learn-more"><span class="toc-number">3.</span> <span class="toc-text"> Where to Learn More</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&text=The Discipline of Machine Learning 笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&is_video=false&description=The Discipline of Machine Learning 笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Discipline of Machine Learning 笔记&body=Check out this article: http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&title=The Discipline of Machine Learning 笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/03/note-the-discipline-of-machine-learning/&name=The Discipline of Machine Learning 笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

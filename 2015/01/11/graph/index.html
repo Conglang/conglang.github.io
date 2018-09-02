@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="数据结构之图。介绍图的遍历两种常见算法，深度优先搜索和广度优先搜索。关于图连通性的最小生成树问题，普里姆算法和克鲁斯卡尔算法。关于最短路径的德杰斯特拉算法。相关题目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Graph">
+<meta property="og:url" content="http://conglang.github.io/2015/01/11/graph/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="数据结构之图。介绍图的遍历两种常见算法，深度优先搜索和广度优先搜索。关于图连通性的最小生成树问题，普里姆算法和克鲁斯卡尔算法。关于最短路径的德杰斯特拉算法。相关题目。">
+<meta property="og:image" content="http://conglang.github.io/img/a_labeled_graph.png">
+<meta property="og:image" content="http://conglang.github.io/img/390px-Depth-first-tree.png">
+<meta property="og:image" content="http://conglang.github.io/img/Animated_BFS.gif">
+<meta property="og:image" content="http://conglang.github.io/img/390px-Breadth-first-tree.png">
+<meta property="og:image" content="http://conglang.github.io/img/dfs_and_bfs_compare.png">
+<meta property="og:image" content="http://conglang.github.io/img/Prim's_algorithm.png">
+<meta property="og:image" content="http://conglang.github.io/img/MST_kruskal_en.gif">
+<meta property="og:image" content="http://conglang.github.io/img/kruskal_quick_find.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/kruskal_quick_union.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/dijkstra_algorithm.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:46:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Graph">
+<meta name="twitter:description" content="数据结构之图。介绍图的遍历两种常见算法，深度优先搜索和广度优先搜索。关于图连通性的最小生成树问题，普里姆算法和克鲁斯卡尔算法。关于最短路径的德杰斯特拉算法。相关题目。">
+<meta name="twitter:image" content="http://conglang.github.io/img/a_labeled_graph.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Graph</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/12/detail/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/10/tree/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/11/graph/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/11/graph/&text=Graph"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/11/graph/&is_video=false&description=Graph"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Graph&body=Check out this article: http://conglang.github.io/2015/01/11/graph/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/11/graph/&name=Graph&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#图简介"><span class="toc-number">1.</span> <span class="toc-text"> 图简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图的遍历"><span class="toc-number">2.</span> <span class="toc-text"> 图的遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#深度优先搜索depth-first-search"><span class="toc-number">2.1.</span> <span class="toc-text"> 深度优先搜索(Depth-First Search)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广度优先搜索breadth-first-search"><span class="toc-number">2.2.</span> <span class="toc-text"> 广度优先搜索(Breadth-First Search)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dfs与bfs比较"><span class="toc-number">2.3.</span> <span class="toc-text"> DFS与BFS比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最小生成树问题"><span class="toc-number">3.</span> <span class="toc-text"> 最小生成树问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普里姆算法prim"><span class="toc-number">3.1.</span> <span class="toc-text"> 普里姆算法(Prim)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#克鲁斯卡尔算法kruskal"><span class="toc-number">3.2.</span> <span class="toc-text"> 克鲁斯卡尔算法(Kruskal)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#不相交子集和并查算法"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 不相交子集和并查算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最短路径之德杰斯特拉算法dijkstra"><span class="toc-number">4.</span> <span class="toc-text"> 最短路径之德杰斯特拉算法(Dijkstra)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关问题"><span class="toc-number">4.1.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关题目"><span class="toc-number">5.</span> <span class="toc-text"> 相关题目</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Graph
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-11T15:53:15.000Z" itemprop="datePublished">2015-01-11</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Data-Structure/">Data Structure</a>, <a class="tag-link" href="/tags/Graph/">Graph</a>, <a class="tag-link" href="/tags/leetcode/">leetcode</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="图简介"><a class="markdownIt-Anchor" href="#图简介"></a> 图简介</h2>
+<p><strong>图</strong>由顶点和连接它们的边组成。如果边是有方向的，就是有向图；如果边没有方向，就是无向图。<br>
+<img src="/img/a_labeled_graph.png" alt="一个无向图"></p>
+<h2 id="图的遍历"><a class="markdownIt-Anchor" href="#图的遍历"></a> 图的遍历</h2>
+<h3 id="深度优先搜索depth-first-search"><a class="markdownIt-Anchor" href="#深度优先搜索depth-first-search"></a> 深度优先搜索(Depth-First Search)</h3>
+<p>图的<strong>深度优先搜索</strong>遍历类似于树的前序遍历。它的基本思想是：从图G的某个顶点v0出发，访问v0，然后选择一个与v0相邻且没被访问过的顶点v1访问，再从v1出发选择一个与v1相邻且未被访问的顶点v进行访问，依次继续。如果当前被访问过的顶点的所有邻接顶点都已被访问，则退回到已被访问的顶点序列中最后一个拥有未被访问的相邻顶点的顶点w，从w出发按同样的方法向前遍历，直到图中所有顶点都被访问。<br>
+与树先序遍历不同之处在于必须检查节点是否已经访问过。<br>
+<img src="/img/390px-Depth-first-tree.png" alt="Order in which the nodes are expanded"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> UndirectedGraphNode</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">int</span> label;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;UndirectedGraphNode*&gt; neighbors;</span><br><span class="line">	UndirectedGraphNode(<span class="keyword">int</span> x) : label(x)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">add_to_neighbor</span><span class="params">(UndirectedGraphNode* node)</span> </span>&#123;neighbors.push_back(node);&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS_search</span><span class="params">(UndirectedGraphNode* root, <span class="built_in">std</span>::<span class="built_in">unordered_set</span>&lt;UndirectedGraphNode*&gt;&amp; visited)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) &#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; root-&gt;label &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	visited.insert(root);</span><br><span class="line">	<span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;UndirectedGraphNode*&gt;::iterator it = root-&gt;neighbors.begin(); it != root-&gt;neighbors.end(); ++it)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!visited.count(*it))</span><br><span class="line">		&#123;</span><br><span class="line">			DFS_search(*it, visited);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n1</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n2</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n3</span><span class="params">(<span class="number">3</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n4</span><span class="params">(<span class="number">4</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n5</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n6</span><span class="params">(<span class="number">6</span>)</span></span>;</span><br><span class="line">	n1.add_to_neighbor(&amp;n2);</span><br><span class="line">	n1.add_to_neighbor(&amp;n5);</span><br><span class="line">	n2.add_to_neighbor(&amp;n1);</span><br><span class="line">	n2.add_to_neighbor(&amp;n5);</span><br><span class="line">	n2.add_to_neighbor(&amp;n3);</span><br><span class="line">	n3.add_to_neighbor(&amp;n2);</span><br><span class="line">	n3.add_to_neighbor(&amp;n4);</span><br><span class="line">	n4.add_to_neighbor(&amp;n3);</span><br><span class="line">	n4.add_to_neighbor(&amp;n5);</span><br><span class="line">	n4.add_to_neighbor(&amp;n6);</span><br><span class="line">	n5.add_to_neighbor(&amp;n1);</span><br><span class="line">	n5.add_to_neighbor(&amp;n2);</span><br><span class="line">	n5.add_to_neighbor(&amp;n4);</span><br><span class="line">	n6.add_to_neighbor(&amp;n4);</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">unordered_set</span>&lt;UndirectedGraphNode*&gt; visited;</span><br><span class="line">	DFS_search(&amp;n1, visited);</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="广度优先搜索breadth-first-search"><a class="markdownIt-Anchor" href="#广度优先搜索breadth-first-search"></a> 广度优先搜索(Breadth-First Search)</h3>
+<p>图的<strong>广度优先搜索</strong>是树的按层次遍历的推广。它的基本思想是：首先访问初始点vi，并将其标记为已访问过，接着访问vi的所有未被访问过的邻接点vi1, vi2, …, vit，并均标记为已访问过，然后再按照vi1, vi2, …, vit的顺序，访问每一个顶点的所有未被访问过的邻接点，并均标记为已访问过，以此类推，直到图中所有和初始点vi有路径相同的顶点都被访问过为止。<br>
+不是递归的。分层的。不会回退。需要辅助队列。<br>
+<img src="/img/Animated_BFS.gif" alt="广度优先搜索"><br>
+<img src="/img/390px-Breadth-first-tree.png" alt="Order in which the nodes are expanded"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> UndirectedGraphNode</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">int</span> label;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;UndirectedGraphNode*&gt; neighbors;</span><br><span class="line">	UndirectedGraphNode(<span class="keyword">int</span> x) : label(x)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">add_to_neighbor</span><span class="params">(UndirectedGraphNode* node)</span> </span>&#123;neighbors.push_back(node);&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS_search</span><span class="params">(UndirectedGraphNode* root, <span class="built_in">std</span>::<span class="built_in">unordered_set</span>&lt;UndirectedGraphNode*&gt;&amp; visited)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) &#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">queue</span>&lt;UndirectedGraphNode*&gt; nodes;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; root-&gt;label &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	visited.insert(root);</span><br><span class="line">	nodes.push(root);</span><br><span class="line">	<span class="keyword">while</span> (!nodes.empty())</span><br><span class="line">	&#123;</span><br><span class="line">		UndirectedGraphNode* node = nodes.front();</span><br><span class="line">		nodes.pop();</span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;UndirectedGraphNode*&gt;::iterator it = node-&gt;neighbors.begin(); it != node-&gt;neighbors.end(); ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (visited.count(*it)) <span class="keyword">continue</span>;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; (*it)-&gt;label &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">			visited.insert(*it);</span><br><span class="line">			nodes.push(*it);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n1</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n2</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n3</span><span class="params">(<span class="number">3</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n4</span><span class="params">(<span class="number">4</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n5</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">	<span class="function">UndirectedGraphNode <span class="title">n6</span><span class="params">(<span class="number">6</span>)</span></span>;</span><br><span class="line">	n1.add_to_neighbor(&amp;n2);</span><br><span class="line">	n1.add_to_neighbor(&amp;n5);</span><br><span class="line">	n2.add_to_neighbor(&amp;n1);</span><br><span class="line">	n2.add_to_neighbor(&amp;n5);</span><br><span class="line">	n2.add_to_neighbor(&amp;n3);</span><br><span class="line">	n3.add_to_neighbor(&amp;n2);</span><br><span class="line">	n3.add_to_neighbor(&amp;n4);</span><br><span class="line">	n4.add_to_neighbor(&amp;n3);</span><br><span class="line">	n4.add_to_neighbor(&amp;n5);</span><br><span class="line">	n4.add_to_neighbor(&amp;n6);</span><br><span class="line">	n5.add_to_neighbor(&amp;n1);</span><br><span class="line">	n5.add_to_neighbor(&amp;n2);</span><br><span class="line">	n5.add_to_neighbor(&amp;n4);</span><br><span class="line">	n6.add_to_neighbor(&amp;n4);</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">unordered_set</span>&lt;UndirectedGraphNode*&gt; visited;</span><br><span class="line">	BFS_search(&amp;n1, visited);</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="dfs与bfs比较"><a class="markdownIt-Anchor" href="#dfs与bfs比较"></a> DFS与BFS比较</h3>
+<blockquote>
+<p>空间复杂度均为O(n)，借用堆栈或队列。<br>
+BSF常用在比较大的树上。</p>
+</blockquote>
+<p><img src="/img/dfs_and_bfs_compare.png" alt="DFS和BFS的主要性质"></p>
+<h2 id="最小生成树问题"><a class="markdownIt-Anchor" href="#最小生成树问题"></a> 最小生成树问题</h2>
+<p>n个顶点的有权图可以生成很多不同的生成树，其中生成后树上各边权值之和最小的树就是最小生成树。<br>
+连通图的一棵<strong>生成树</strong>是包含图的所有顶点的连通无环子图(也就是一棵树)。加权连通图的一棵<strong>最小生成树</strong>是图的一棵权重最小的生成树，其中，树的<strong>权重</strong>定义为所有边的权重总和。<strong>最小生成树问题</strong>就是求一个给定的加权连通图的最小生成树问题。</p>
+<h3 id="普里姆算法prim"><a class="markdownIt-Anchor" href="#普里姆算法prim"></a> 普里姆算法(Prim)</h3>
+<p>V是所有的顶点，U是已经在最小生成树中的顶点，选择在U和V-U中各有一个顶点的代价最小的边加入最小生成树，同时将该边未收录的顶点加入U。如此重复，直到U=V为止。<br>
+<img src="/img/Prim's_algorithm.png" alt="Prim's Algorithm"><br>
+是一种贪婪算法。<br>
+一步一步归并点，找两个阵营之间最小的边，适合稠密图。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//=============================================================</span></span><br><span class="line"><span class="comment">// 有向图定义</span></span><br><span class="line"><span class="keyword">class</span> Vertex;</span><br><span class="line"><span class="keyword">class</span> Edge</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Edge(Vertex* i, Vertex* v, <span class="keyword">int</span> cost);</span><br><span class="line">	<span class="function">Vertex* <span class="title">get_income_vertex</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_income_vertex;&#125;</span><br><span class="line">	<span class="function">Vertex* <span class="title">get_next_vertex</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> m_next_vertex;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_cost</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_cost;&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	Vertex* m_income_vertex;</span><br><span class="line">	Vertex* m_next_vertex;</span><br><span class="line">	<span class="keyword">int</span> m_cost;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Vertex</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Vertex(<span class="keyword">char</span> data):m_data(data)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">add_edge</span><span class="params">(Edge* e)</span> </span>&#123;<span class="keyword">if</span> (!e) &#123;<span class="keyword">return</span>;&#125; m_edges.push_back(e);&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">erase_edge</span><span class="params">(Edge* e)</span></span>&#123;m_edges.remove(e);&#125;</span><br><span class="line">	<span class="function">Edge* <span class="title">get_smallest_edge_connect_to_other</span><span class="params">(<span class="built_in">vector</span>&lt;Vertex*&gt; collection)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		m_edges.sort([](Edge* a, Edge* b) &#123;<span class="keyword">return</span> a-&gt;get_cost() &lt; b-&gt;get_cost();&#125;);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">auto</span> it = m_edges.begin(); it != m_edges.end(); ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (find(collection.begin(), collection.end(), (*it)-&gt;get_next_vertex()) == collection.end())</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">return</span> *it;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">char</span> <span class="title">get_data</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_data;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_edge_num</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_edges.size();&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">clear_edge</span><span class="params">()</span> </span>&#123;m_edges.clear();&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="keyword">char</span> m_data;</span><br><span class="line">	<span class="built_in">list</span>&lt;Edge*&gt; m_edges;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line">Edge::Edge( Vertex* i, Vertex* v, <span class="keyword">int</span> cost ):m_income_vertex(i),m_next_vertex(v),m_cost(cost)</span><br><span class="line">&#123;</span><br><span class="line">	m_income_vertex-&gt;add_edge(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Graph</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">add_vertex</span><span class="params">(Vertex* v)</span> </span>&#123;m_vertexes.push_back(v);&#125;</span><br><span class="line">	<span class="function">Vertex* <span class="title">get_front_vertex</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> *m_vertexes.begin();&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">pop_front_vertex</span><span class="params">()</span> </span>&#123;m_vertexes.erase(m_vertexes.begin());&#125;</span><br><span class="line">	<span class="built_in">vector</span>&lt;Vertex*&gt; m_vertexes;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//=============================================================</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">prim</span><span class="params">(Graph&amp; graph, <span class="built_in">vector</span>&lt;Vertex*&gt;&amp; tree_vertexes, <span class="built_in">vector</span>&lt;Edge*&gt;&amp; tree_edge)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 构造最小生成树的Prim算法</span></span><br><span class="line">	<span class="comment">// 输入：加权连通图graph</span></span><br><span class="line">	<span class="comment">// 输出：tree组成graph的最小生成树</span></span><br><span class="line">	tree_vertexes.push_back(graph.get_front_vertex());</span><br><span class="line">	graph.pop_front_vertex();</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br><span class="line">	<span class="keyword">while</span> (tree_vertexes.size() != size)</span><br><span class="line">	&#123;</span><br><span class="line">		size = tree_vertexes.size();</span><br><span class="line">		<span class="function">Edge* <span class="title">pe</span><span class="params">(<span class="literal">NULL</span>)</span></span>;</span><br><span class="line">		<span class="function"><span class="keyword">int</span> <span class="title">cost</span><span class="params">(INT_MAX)</span></span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">auto</span> it = tree_vertexes.rbegin(); it != tree_vertexes.rend(); ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			Edge* t = (*it)-&gt;get_smallest_edge_connect_to_other(tree_vertexes);</span><br><span class="line">			<span class="keyword">if</span> (t &amp;&amp; t-&gt;get_cost() &lt; cost)</span><br><span class="line">			&#123;</span><br><span class="line">				pe = t;</span><br><span class="line">				cost = t-&gt;get_cost();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (pe)</span><br><span class="line">		&#123;</span><br><span class="line">			tree_edge.push_back(pe);</span><br><span class="line">			tree_vertexes.push_back(pe-&gt;get_next_vertex());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//=============================================================</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="function">Vertex <span class="title">v1</span><span class="params">(<span class="string">'a'</span>)</span></span>;</span><br><span class="line">	<span class="function">Vertex <span class="title">v2</span><span class="params">(<span class="string">'b'</span>)</span></span>;</span><br><span class="line">	<span class="function">Vertex <span class="title">v3</span><span class="params">(<span class="string">'c'</span>)</span></span>;</span><br><span class="line">	<span class="function">Vertex <span class="title">v4</span><span class="params">(<span class="string">'d'</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e1</span><span class="params">(&amp;v1, &amp;v2, <span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e2</span><span class="params">(&amp;v2, &amp;v1, <span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e3</span><span class="params">(&amp;v2, &amp;v4, <span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e4</span><span class="params">(&amp;v4, &amp;v2, <span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e5</span><span class="params">(&amp;v1, &amp;v4, <span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e6</span><span class="params">(&amp;v4, &amp;v1, <span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e7</span><span class="params">(&amp;v3, &amp;v4, <span class="number">3</span>)</span></span>;</span><br><span class="line">	<span class="function">Edge <span class="title">e8</span><span class="params">(&amp;v4, &amp;v3, <span class="number">3</span>)</span></span>;</span><br><span class="line">	Graph g;</span><br><span class="line">	g.add_vertex(&amp;v1);</span><br><span class="line">	g.add_vertex(&amp;v2);</span><br><span class="line">	g.add_vertex(&amp;v3);</span><br><span class="line">	g.add_vertex(&amp;v4);</span><br><span class="line">	<span class="built_in">vector</span>&lt;Vertex*&gt; tree_vertexes;</span><br><span class="line">	<span class="built_in">vector</span>&lt;Edge*&gt; tree_edges;</span><br><span class="line">	prim(g, tree_vertexes, tree_edges);</span><br><span class="line">	for_each(tree_edges.begin(), tree_edges.end(), [](Edge* e)&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; e-&gt;get_income_vertex()-&gt;get_data() &lt;&lt; <span class="string">" -&gt; "</span> &lt;&lt; e-&gt;get_next_vertex()-&gt;get_data() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;);</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="克鲁斯卡尔算法kruskal"><a class="markdownIt-Anchor" href="#克鲁斯卡尔算法kruskal"></a> 克鲁斯卡尔算法(Kruskal)</h3>
+<p>V是所有的顶点，让最小生成树的初始状态为包括所有顶点却没有边，每一个顶点是一个连通分量。选择代价最小的边，如果边的两边属于同一个连通分量就放弃，否则加入。边连接的两边变成一个连通分量。如此重复，直到图中所有的顶点都在同一连通分量上。<br>
+<img src="/img/MST_kruskal_en.gif" alt="Kruskal's Algorithm"><br>
+是一种贪婪算法。<br>
+一步一步添加边，找最小的边作为桥梁连通另一个阵营，适合稀疏图。</p>
+<h4 id="不相交子集和并查算法"><a class="markdownIt-Anchor" href="#不相交子集和并查算法"></a> 不相交子集和并查算法</h4>
+<p>Kruskal算法中用来判断两个顶点是否属于同一连通分量的算法称为<strong>union-find(并查)算法</strong>。<br>
+需要得到的是这样一种抽象数据类型，它是由某个有限集的一系列不相交子集以及下面这些操作构成的：</p>
+<ul>
+<li>makeset(x) 生成一个单元素集合{x}。假设这个操作对集合S的每一个元素只能应用一次。</li>
+<li>find(x) 返回一个包含x的子集。</li>
+<li>union(x,y) 构造分别包含x和y的不相交子集<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>S</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">S_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">x</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>S</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">S_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>的并集，并把它添加到子集的集合中，以代替被删除后的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>S</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">S_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">x</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>S</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">S_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>。</li>
+</ul>
+<p>举例：S={1,2,3,4,5,6}。6次makeset(i)后得到：{1},{2},{3},{4},{5},{6}。执行union(1,4)和union(5,2)后得到：{1,4},{5,2},{3},{6}。再执行union(4,5)和union(3,6)后得到{1,4,5,2},{3,6}。</p>
+<p>实现这种数据结构有两种主要的做法。第一种称为<strong>快速查找</strong>，其查找操作的时间效率是最优的；第二种称为<strong>快速求并</strong>，其求并集操作是最优的。</p>
+<ul>
+<li>快速查找使用一个数组，并以集合S中的元素来索引数组；数组中的值指出了包含这些元素的子集代表。每一个子集都是链表实现的，表头包含了指向表头和表尾元素的指针以及表中的元素个数。<br>
+于是，makeset(x)的实现是把代表数组中相应元素的值赋为x，并把相应的链表初始化为值为x的单节点链表，O(1)。find(x)是从代表数组中取出x的代表，O(1)。union(x,y)的一种直接的做法就是简单地把y的列表添加到x列表后面，对于y列表中的所有元素更新它们的代表信息，然后再删除y的列表，O(n^2)。<br>
+<img src="/img/kruskal_quick_find.jpg" alt="在执行了union(1,4),union(5,2),union(4,5)和union(3,6)以后，快速查找法得出的子集{1,4,5,2}和{3,6}的链表表示。大小为0的链表是被删除的子集"></li>
+<li>快速求并用一棵有根树来表示每一个子集。树中的节点包含子集中的元素(每个节点一个元素)，而根中的元素就被当做该子集的代表；树中的边从子女指向它们的父母。(此外，还要维护一个从集合元素到树中节点的映射，比如说用一个指针数组来实现。未在下图中显示。)<br>
+于是，makeset(x)需要创建一棵单节点的树，O(1)，初始化n棵单节点的树是O(n)。union(x,y)是把y树的根附加到x树的根上(并把指向y树的根的指针置为空，来把y树删除)，O(1)。find(x)需要沿着一条指针链，从包含x的节点开始找到树的根(根中元素作为子集代表就是该函数的返回值)，O(n)。<br>
+<img src="/img/kruskal_quick_union.jpg" alt="(a)快速求并中用来表示子集{1,4,5,2}和{3,6}的森林；(b)union(5,6)的结果"></li>
+</ul>
+<h2 id="最短路径之德杰斯特拉算法dijkstra"><a class="markdownIt-Anchor" href="#最短路径之德杰斯特拉算法dijkstra"></a> 最短路径之德杰斯特拉算法(Dijkstra)</h2>
+<p>德杰斯特拉算法是典型的最短路径路由算法，用于计算一个节点到其他所有节点的最短路径。主要特点是以起始点为中心向外层层扩展，直到扩展到终点为止。<br>
+Dijkstra算法只能应用于不含负权重的图。<br>
+Dijkstra算法能得到最短路径的最优解，但由于它遍历计算的节点很多，所以效率低。<br>
+其<strong>基本思想</strong>是，设置顶点集合S并不断地作贪心选择来扩充这个集合。一个顶点属于集合S当且仅当从源到该顶点的最短路径长度已知。<br>
+初始时，S中只有起点。设u是S之外的一个顶点。把从起点到u且中间只经过S中顶点的路称为从起点到u的特殊路径，并记录当前每个顶点所对应的最短特殊路径长度。Dijkstra算法每次从V-S中取出具有最短特殊路长度的顶点u，将其添加到S中，并根据新的S集合，对其他顶点的最短路径长度进行更新。当S=V时，就得到了从起点到所有其他顶点之间的最短路径长度。<br>
+<img src="/img/dijkstra_algorithm.jpg" alt="Dijkstra's Algorithm"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="相关问题"><a class="markdownIt-Anchor" href="#相关问题"></a> 相关问题</h3>
+<ol>
+<li>设计一个求有向无环图中最长路径长度的高效算法。(比如用于确定一个项目总完成时间的下界。)</li>
+</ol>
+<h2 id="相关题目"><a class="markdownIt-Anchor" href="#相关题目"></a> 相关题目</h2>
+<p><a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Clone_Graph.cpp" target="_blank" rel="external">Clone Graph</a></p>
+<p>[1] 数据结构(C语言版)<br>
+[2] Cracking the Coding Interview<br>
+[3] leetcode<br>
+[4] <a href="http://en.wikipedia.org/wiki/Prim%27s_algorithm" target="_blank" rel="external">http://en.wikipedia.org/wiki/Prim's_algorithm</a><br>
+[5] <a href="http://en.wikipedia.org/wiki/Kruskal%27s_algorithm" target="_blank" rel="external">http://en.wikipedia.org/wiki/Kruskal's_algorithm</a><br>
+[6] <a href="http://blog.csdn.net/zrjdds/article/details/6728332" target="_blank" rel="external">http://blog.csdn.net/zrjdds/article/details/6728332</a><br>
+[7] 算法设计与分析基础(第2版)</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#图简介"><span class="toc-number">1.</span> <span class="toc-text"> 图简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图的遍历"><span class="toc-number">2.</span> <span class="toc-text"> 图的遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#深度优先搜索depth-first-search"><span class="toc-number">2.1.</span> <span class="toc-text"> 深度优先搜索(Depth-First Search)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广度优先搜索breadth-first-search"><span class="toc-number">2.2.</span> <span class="toc-text"> 广度优先搜索(Breadth-First Search)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dfs与bfs比较"><span class="toc-number">2.3.</span> <span class="toc-text"> DFS与BFS比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最小生成树问题"><span class="toc-number">3.</span> <span class="toc-text"> 最小生成树问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普里姆算法prim"><span class="toc-number">3.1.</span> <span class="toc-text"> 普里姆算法(Prim)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#克鲁斯卡尔算法kruskal"><span class="toc-number">3.2.</span> <span class="toc-text"> 克鲁斯卡尔算法(Kruskal)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#不相交子集和并查算法"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 不相交子集和并查算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最短路径之德杰斯特拉算法dijkstra"><span class="toc-number">4.</span> <span class="toc-text"> 最短路径之德杰斯特拉算法(Dijkstra)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关问题"><span class="toc-number">4.1.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关题目"><span class="toc-number">5.</span> <span class="toc-text"> 相关题目</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/11/graph/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/11/graph/&text=Graph"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/11/graph/&is_video=false&description=Graph"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Graph&body=Check out this article: http://conglang.github.io/2015/01/11/graph/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/11/graph/&title=Graph"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/11/graph/&name=Graph&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="数据结构之树。树的几种常见概念如二叉树、二叉查找树、平衡二叉树、满二叉树、完全二叉树，以及它们的常用操作。几种特殊的树如字典树、哈夫曼树、堆。树相关的题目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tree">
+<meta property="og:url" content="http://conglang.github.io/2015/01/10/tree/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="数据结构之树。树的几种常见概念如二叉树、二叉查找树、平衡二叉树、满二叉树、完全二叉树，以及它们的常用操作。几种特殊的树如字典树、哈夫曼树、堆。树相关的题目。">
+<meta property="og:image" content="http://conglang.github.io/img/a_binary_search_tree.png">
+<meta property="og:image" content="http://conglang.github.io/img/640px-Binary_search_tree_delete.png">
+<meta property="og:image" content="http://conglang.github.io/img/balanced_tree.png">
+<meta property="og:image" content="http://conglang.github.io/img/BinaryTreeRotations.png">
+<meta property="og:image" content="http://conglang.github.io/img/AVL_Tree_Rebalancing.png">
+<meta property="og:image" content="http://conglang.github.io/img/construct_an_AVL_tree.png">
+<meta property="og:image" content="http://conglang.github.io/img/500px-Red-black_tree_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_insert_case_3.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_insert_case_4.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_insert_case_5.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_delete_case_2_as_svg.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_delete_case_3_as_svg.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_delete_case_4_as_svg.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_delete_case_5_as_svg.png">
+<meta property="og:image" content="http://conglang.github.io/img/Red-black_tree_delete_case_6_as_svg.png">
+<meta property="og:image" content="http://conglang.github.io/img/full_complete_binary_tree.png">
+<meta property="og:image" content="http://conglang.github.io/img/Trie_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/trie1.gif">
+<meta property="og:image" content="http://conglang.github.io/img/double.gif">
+<meta property="og:image" content="http://conglang.github.io/img/tripple.gif">
+<meta property="og:image" content="http://conglang.github.io/img/625px-Huffman_tree_2.png">
+<meta property="og:image" content="http://conglang.github.io/img/392px-HuffmanCodeAlg.png">
+<meta property="og:image" content="http://conglang.github.io/img/huffman_decision_tree.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/Heap-as-an-Array.png">
+<meta property="og:updated_time" content="2018-07-03T15:42:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tree">
+<meta name="twitter:description" content="数据结构之树。树的几种常见概念如二叉树、二叉查找树、平衡二叉树、满二叉树、完全二叉树，以及它们的常用操作。几种特殊的树如字典树、哈夫曼树、堆。树相关的题目。">
+<meta name="twitter:image" content="http://conglang.github.io/img/a_binary_search_tree.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Tree</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/11/graph/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/09/stl-algorithm/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/10/tree/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/10/tree/&text=Tree"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/10/tree/&is_video=false&description=Tree"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tree&body=Check out this article: http://conglang.github.io/2015/01/10/tree/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/10/tree/&name=Tree&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#树简介"><span class="toc-number">1.</span> <span class="toc-text"> 树简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意区分的一些概念"><span class="toc-number">2.</span> <span class="toc-text"> 注意区分的一些概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树binary-tree"><span class="toc-number">2.1.</span> <span class="toc-text"> 二叉树(Binary Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的前序遍历pre-order"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 二叉树的前序遍历(pre-order)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的中序遍历in-order"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 二叉树的中序遍历(in-order)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的后序遍历post-order"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 二叉树的后序遍历(post-order)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉查找树binary-search-tree"><span class="toc-number">2.2.</span> <span class="toc-text"> 二叉查找树(Binary Search Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断是否是二叉查找树"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 判断是否是二叉查找树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在二叉查找树中查找一个元素"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 在二叉查找树中查找一个元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#向二叉查找树中插入一个元素"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 向二叉查找树中插入一个元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从二叉查找树中删除一个元素"><span class="toc-number">2.2.4.</span> <span class="toc-text"> 从二叉查找树中删除一个元素</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡二叉树balanced-binary-tree"><span class="toc-number">2.3.</span> <span class="toc-text"> 平衡二叉树(Balanced Binary Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#avl-tree"><span class="toc-number">2.3.1.</span> <span class="toc-text"> AVL tree</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#red-black-tree"><span class="toc-number">2.3.2.</span> <span class="toc-text"> Red-Black tree</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#插入"><span class="toc-number">2.3.2.1.</span> <span class="toc-text"> 插入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#删除"><span class="toc-number">2.3.2.2.</span> <span class="toc-text"> 删除</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#avl-tree和red-black-tree比较"><span class="toc-number">2.3.3.</span> <span class="toc-text"> AVL tree和Red-Black tree比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#满二叉树full-binary-tree"><span class="toc-number">2.4.</span> <span class="toc-text"> 满二叉树(Full Binary Tree)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完全二叉树complete-binary-tree"><span class="toc-number">2.5.</span> <span class="toc-text"> 完全二叉树(Complete Binary Tree)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些特殊树"><span class="toc-number">3.</span> <span class="toc-text"> 一些特殊树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字典树trie"><span class="toc-number">3.1.</span> <span class="toc-text"> 字典树(Trie)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#二数组字典树"><span class="toc-number">3.1.1.</span> <span class="toc-text"> 二数组字典树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三数组字典树"><span class="toc-number">3.1.2.</span> <span class="toc-text"> 三数组字典树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈夫曼树huffman-tree"><span class="toc-number">3.2.</span> <span class="toc-text"> 哈夫曼树(Huffman Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关问题"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆"><span class="toc-number">3.3.</span> <span class="toc-text"> 堆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关leetcode"><span class="toc-number">4.</span> <span class="toc-text"> 相关leetcode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树的遍历"><span class="toc-number">4.1.</span> <span class="toc-text"> 二叉树的遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树的构建"><span class="toc-number">4.2.</span> <span class="toc-text"> 二叉树的构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉查找树"><span class="toc-number">4.3.</span> <span class="toc-text"> 二叉查找树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树的递归"><span class="toc-number">4.4.</span> <span class="toc-text"> 二叉树的递归</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Tree
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-10T14:36:02.000Z" itemprop="datePublished">2015-01-10</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Data-Structure/">Data Structure</a>, <a class="tag-link" href="/tags/Tree/">Tree</a>, <a class="tag-link" href="/tags/leetcode/">leetcode</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="树简介"><a class="markdownIt-Anchor" href="#树简介"></a> 树简介</h2>
+<p>一棵树的逻辑很简单：除了根节点之外每个节点只有一个父节点，根节点没有父节点；除了叶节点之外所有节点都有一个或多个子节点，叶节点没有子节点。父节点和子节点之间用指针链接。</p>
+<h2 id="注意区分的一些概念"><a class="markdownIt-Anchor" href="#注意区分的一些概念"></a> 注意区分的一些概念</h2>
+<h3 id="二叉树binary-tree"><a class="markdownIt-Anchor" href="#二叉树binary-tree"></a> 二叉树(Binary Tree)</h3>
+<p><strong>二叉树</strong>的特点是每个节点至多只有两棵子树，并且子树有左右之分，次序不能任意颠倒。</p>
+<blockquote>
+<p>在二叉树的第i层上至多有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2^{i-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.824664em;"></span><span class="strut bottom" style="height:0.824664em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">i</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>个节点(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>⩾</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i\geqslant1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.79619em;vertical-align:-0.13667em;"></span><span class="base textstyle uncramped"><span class="mord mathit">i</span><span class="mrel amsrm">⩾</span><span class="mord mathrm">1</span></span></span></span>)。<br>
+深度为k的二叉树至多有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>k</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^k-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.849108em;"></span><span class="strut bottom" style="height:0.932438em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span>个节点(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>⩾</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">k\geqslant1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.83111em;vertical-align:-0.13667em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mrel amsrm">⩾</span><span class="mord mathrm">1</span></span></span></span>)。<br>
+对任何一棵二叉树T，如果其终端节点数为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>n</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">n_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，度为2的节点数为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">n_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，则<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>n</mi><mn>0</mn></msub><mo>=</mo><msub><mi>n</mi><mn>2</mn></msub><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n_0= n_2+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.79444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span>。</p>
+</blockquote>
+<h4 id="二叉树的前序遍历pre-order"><a class="markdownIt-Anchor" href="#二叉树的前序遍历pre-order"></a> 二叉树的前序遍历(pre-order)</h4>
+<p>先访问根节点，再访问左子节点，最后访问右子节点。<br>
+递归方法最直接简单，也可以用迭代的方法。<br>
+代码示例可见相关题目<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Preorder_Traversal.cpp" target="_blank" rel="external">Binary Tree Preorder Traversal</a>。</p>
+<h4 id="二叉树的中序遍历in-order"><a class="markdownIt-Anchor" href="#二叉树的中序遍历in-order"></a> 二叉树的中序遍历(in-order)</h4>
+<p>先访问左子节点，再访问根节点，最后访问右子节点。<br>
+递归方法最直接简单，也可以用迭代的方法。<br>
+代码示例可见相关题目<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Inorder_Traversal.cpp" target="_blank" rel="external">Binary Tree Inorder Traversal</a>。</p>
+<h4 id="二叉树的后序遍历post-order"><a class="markdownIt-Anchor" href="#二叉树的后序遍历post-order"></a> 二叉树的后序遍历(post-order)</h4>
+<p>先访问左子节点，再访问右子节点，最后访问根节点。<br>
+递归方法最直接简单，也可以用迭代的方法。<br>
+代码示例可见相关题目<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Postorder_Traversal.cpp" target="_blank" rel="external">Binary Tree Postorder Traversal</a>。</p>
+<h3 id="二叉查找树binary-search-tree"><a class="markdownIt-Anchor" href="#二叉查找树binary-search-tree"></a> 二叉查找树(Binary Search Tree)</h3>
+<p><img src="/img/a_binary_search_tree.png" alt="Binary Search Tree"><br>
+<strong>二叉查找树</strong>中，左子树的节点总是小于或等于根节点，右子树的节点总是大于或等于根节点。</p>
+<blockquote>
+<p>可以在平均O(logn)的时间内根据数值在二叉查找树中找到一个节点。最坏情况时O(n)。</p>
+</blockquote>
+<h4 id="判断是否是二叉查找树"><a class="markdownIt-Anchor" href="#判断是否是二叉查找树"></a> 判断是否是二叉查找树</h4>
+<p>左子树是二叉查找树，右子树也是二叉查找树，左节点&lt;自己&lt;右节点。<br>
+最直观就是用递归，代码看相关题目<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Validate_Binary_Search_Tree.cpp" target="_blank" rel="external">Validate Binary Search Tree</a>。</p>
+<h4 id="在二叉查找树中查找一个元素"><a class="markdownIt-Anchor" href="#在二叉查找树中查找一个元素"></a> 在二叉查找树中查找一个元素</h4>
+<p>递归与迭代两种方法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NULL 0</span></span><br><span class="line"><span class="keyword">struct</span> TreeNode &#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	TreeNode *left;</span><br><span class="line">	TreeNode *right;</span><br><span class="line">	TreeNode(<span class="keyword">int</span> x) : val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">TreeNode* <span class="title">find_in_BST_recursive</span><span class="params">(TreeNode* root, <span class="keyword">int</span> key)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root || root-&gt;val == key) &#123;<span class="keyword">return</span> root;&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (key &lt; root-&gt;val) &#123;<span class="keyword">return</span> find_in_BST_recursive(root-&gt;left, key);&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;<span class="keyword">return</span> find_in_BST_recursive(root-&gt;right, key);	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">TreeNode* <span class="title">find_in_BST_iterative</span><span class="params">(TreeNode* root, <span class="keyword">int</span> key)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode* node = root;</span><br><span class="line">	<span class="keyword">while</span> (node)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (node-&gt;val == key) &#123;<span class="keyword">return</span> node;&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (node-&gt;val &gt; key) &#123;node = node-&gt;left;&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;node = node-&gt;right;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode* root1 = <span class="literal">NULL</span>;</span><br><span class="line">	TreeNode* result1 = find_in_BST_recursive(root1, <span class="number">5</span>);</span><br><span class="line">	TreeNode* result2 = find_in_BST_iterative(root1, <span class="number">5</span>);</span><br><span class="line">	<span class="function">TreeNode <span class="title">root2</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line">	result1 = find_in_BST_recursive(&amp;root2, <span class="number">5</span>);</span><br><span class="line">	result2 = find_in_BST_iterative(&amp;root2, <span class="number">5</span>);</span><br><span class="line">	<span class="function">TreeNode <span class="title">root3</span><span class="params">(<span class="number">3</span>)</span></span>;</span><br><span class="line">	<span class="function">TreeNode <span class="title">lnode</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">	root3.left = &amp;lnode;</span><br><span class="line">	root3.right = &amp;root2;</span><br><span class="line">	result1 = find_in_BST_recursive(&amp;root3, <span class="number">5</span>);</span><br><span class="line">	result2 = find_in_BST_iterative(&amp;root3, <span class="number">5</span>);</span><br><span class="line">	result1 = find_in_BST_recursive(&amp;root3, <span class="number">2</span>);</span><br><span class="line">	result2 = find_in_BST_iterative(&amp;root3, <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="向二叉查找树中插入一个元素"><a class="markdownIt-Anchor" href="#向二叉查找树中插入一个元素"></a> 向二叉查找树中插入一个元素</h4>
+<p>递归方式，依旧是查找的过程，走到它应该的位置却是NULL的时候就插入。<br>
+注意生成的二叉查找树的结构和插入顺序相关。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert_in_BST_recursive</span><span class="params">(TreeNode*&amp; root, <span class="keyword">int</span> data)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) &#123;root = <span class="keyword">new</span> TreeNode(data);&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (data &lt; root-&gt;val) &#123;insert_in_BST_recursive(root-&gt;left, data);&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;insert_in_BST_recursive(root-&gt;right, data);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="从二叉查找树中删除一个元素"><a class="markdownIt-Anchor" href="#从二叉查找树中删除一个元素"></a> 从二叉查找树中删除一个元素</h4>
+<p>如果删除的节点是：</p>
+<ul>
+<li>叶子节点：直接删除。</li>
+<li>有一个孩子的节点：删除它，替换为它的孩子。</li>
+<li>有两个孩子的节点：让该节点中序遍历时的下一节点(或上一节点)来顶上。如此递归下去直到遇到前两种情况。<br>
+第三种情况如图：<br>
+<img src="/img/640px-Binary_search_tree_delete.png" alt="删除有两个孩子的节点7"></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TreeNode没有指向父节点的指针，所以需要一个表来管理，代码不太好看。</span></span><br><span class="line"><span class="comment">// 死心眼，可以只交换值啊，干嘛非要动节点。</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">struct</span> TreeNode &#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	TreeNode *left;</span><br><span class="line">	TreeNode *right;</span><br><span class="line">	TreeNode(<span class="keyword">int</span> x) : val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">TreeNode* <span class="title">find_min_in_tree</span><span class="params">(TreeNode* root, <span class="built_in">std</span>::<span class="built_in">unordered_map</span>&lt;TreeNode*, TreeNode*&gt;&amp; parent_map)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	TreeNode* node = root;</span><br><span class="line">	<span class="keyword">while</span> (node-&gt;left)</span><br><span class="line">	&#123;</span><br><span class="line">		parent_map.insert(<span class="built_in">std</span>::make_pair(node-&gt;left, node));</span><br><span class="line">		node = node-&gt;left;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">TreeNode* <span class="title">replace_in_parent</span><span class="params">(TreeNode* node, TreeNode* newnode, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">unordered_map</span>&lt;TreeNode*, TreeNode*&gt;&amp; parent_map)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode* parent = parent_map.at(node);</span><br><span class="line">	<span class="keyword">if</span> (!parent) <span class="keyword">return</span> newnode;</span><br><span class="line">	<span class="keyword">if</span> (parent-&gt;left == node)&#123;parent-&gt;left = newnode;&#125;</span><br><span class="line">	<span class="keyword">else</span>&#123;parent-&gt;right = newnode;&#125;</span><br><span class="line">	<span class="keyword">return</span> newnode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">TreeNode* <span class="title">remove_in_BST</span><span class="params">(TreeNode*&amp; root, <span class="keyword">int</span> key, <span class="built_in">std</span>::<span class="built_in">unordered_map</span>&lt;TreeNode*, TreeNode*&gt;&amp; parent_map)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!root) &#123;<span class="keyword">return</span> root;&#125;</span><br><span class="line">	<span class="keyword">if</span> (root-&gt;left) &#123;parent_map.insert(<span class="built_in">std</span>::make_pair(root-&gt;left, root));&#125;</span><br><span class="line">	<span class="keyword">if</span> (root-&gt;right) &#123;parent_map.insert(<span class="built_in">std</span>::make_pair(root-&gt;right, root));&#125;</span><br><span class="line">	<span class="keyword">if</span> (key &lt; root-&gt;val) &#123;root-&gt;left = remove_in_BST(root-&gt;left, key, parent_map);&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (key &gt; root-&gt;val) &#123;root-&gt;right = remove_in_BST(root-&gt;right, key, parent_map);&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (root-&gt;left &amp;&amp; root-&gt;right)</span><br><span class="line">		&#123;</span><br><span class="line">			TreeNode* successor = find_min_in_tree(root-&gt;right, parent_map);</span><br><span class="line">			root-&gt;val = successor-&gt;val;</span><br><span class="line">			remove_in_BST(successor, successor-&gt;val, parent_map);</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;left)</span><br><span class="line">		&#123;</span><br><span class="line">			root = replace_in_parent(root, root-&gt;left, parent_map);</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;right)</span><br><span class="line">		&#123;</span><br><span class="line">			root = replace_in_parent(root, root-&gt;right, parent_map);</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			root = replace_in_parent(root, <span class="literal">NULL</span>, parent_map);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="平衡二叉树balanced-binary-tree"><a class="markdownIt-Anchor" href="#平衡二叉树balanced-binary-tree"></a> 平衡二叉树(Balanced Binary Tree)</h3>
+<p>如果树不平衡，在描述时间复杂度的时候，平均和最坏情况都要说明。<br>
+<img src="/img/balanced_tree.png" alt="Balanced Tree"><br>
+<strong>平衡树</strong>是空树或具有以下性质的二叉树：它的左子树和右子树的深度之差的绝对值不超过1，且它的左子树和右子树都是一颗平衡二叉树。</p>
+<blockquote>
+<p>二叉平衡树的诞生是为了更高效的查询。一般的二叉查找树的查询复杂度是跟目标节点到树根的距离(即深度)有关，因此当节点的深度普遍较大时，查询的均摊复杂度会上升，平衡二叉树就应运而生了。<br>
+实现一棵平衡树有很多种方法，如2-3 tree, AA tree, AVL tree, Red-Black tree, Scapegoat tree, Splay tree, Treap。<br>
+以AVL tree和Red-Black tree为例。</p>
+</blockquote>
+<h4 id="avl-tree"><a class="markdownIt-Anchor" href="#avl-tree"></a> AVL tree</h4>
+<blockquote>
+<p>基本操作 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>≈</mo></mrow><annotation encoding="application/x-tex">\approx</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.48312em;"></span><span class="strut bottom" style="height:0.48312em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mrel">≈</span></span></span></span> 普通二叉树该操作 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>+</mo></mrow><annotation encoding="application/x-tex">+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.58333em;"></span><span class="strut bottom" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord">+</span></span></span></span> 0或几次tree rotation。<br>
+平衡因子Balance Factor为：该节点的左子树的深度减去它右子树的深度。平衡二叉树的所有节点的平衡因子只可能为-1, 0或1。</p>
+</blockquote>
+<p><strong>Tree Rotation</strong>用来让树重新获得平衡。<br>
+<img src="/img/BinaryTreeRotations.png" alt="Tree Rotations"><br>
+四种情况</p>
+<ul>
+<li>Left Left Case: 插入点为左子树的左孩子，向右旋转。</li>
+<li>Right Right Case: 插入点为右子树的右孩子，向左旋转。</li>
+<li>Left Right Case: 插入点为左子树的右孩子，要进行两次旋转，先左旋转，再右旋转。第一次最小不平衡子树的根节点不动，调整插入节点所在的子树，第二次再调整最小不平衡树。</li>
+<li>Right Left Case: 插入点为右子树的左孩子，要进行两次旋转，先右旋转，再左旋转。与Left Right Case类似。</li>
+</ul>
+<p><img src="/img/AVL_Tree_Rebalancing.png" alt="How AVL Tree Reblance.数字编号圆圈表示正在平衡的节点。字母编号三角表示已平衡的子树。节点旁的蓝色数字表示可能的平衡因子"></p>
+<p>请记住，<strong>如果有若干个节点的平衡因子为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span></span></span></span>，先找出最靠近新插入的叶子的不平衡节点，然后再旋转以该节点为根的树。</strong><br>
+<img src="/img/construct_an_AVL_tree.png" alt="通过连续的插入，为列表5,6,8,3,2,4,7构造一棵AVL树。旋转缩写旁边的括号中的数字，指出了被重新组织的树的根"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造一棵AVL树</span></span><br></pre></td></tr></table></figure>
+<p>AVL树的缺点是频繁的旋转、需要维护树的节点的平衡以及总体上的复杂性，尤其是删除操作。</p>
+<h4 id="red-black-tree"><a class="markdownIt-Anchor" href="#red-black-tree"></a> Red-Black tree</h4>
+<blockquote>
+<p>STL库中的set/multiset/map/multimap等是基于红黑树实现的。<br>
+红黑树并不严格平衡，但足够保证查找时O(logn)时间复杂度。<br>
+红黑树的叶节点不包含数据。<br>
+从根到叶子的最长的可能路径不超过最短的可能路径的两倍长。（最短的可能路径都是黑色节点，最长的可能路径有交替的红色和黑色节点）于是树大致是平衡的。</p>
+</blockquote>
+<p><img src="/img/500px-Red-black_tree_example.png" alt="An Example of a Red-Black Tree"><br>
+性质：</p>
+<blockquote>
+<p>1.节点是红色或黑色。<br>
+2.根节点是黑色的。<br>
+3.叶节点都是黑色的(叶节点是NIL节点)。<br>
+4.每一个红色的节点必须有两个黑色的子节点。(从每个叶子到根的所有路径上不能有两个连续的红色节点。)<br>
+5.从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。</p>
+</blockquote>
+<p>注意：</p>
+<blockquote>
+<p>性质1和3总是保持着。<br>
+性质4只在增加红色节点、重绘黑色节点为红色，或做旋转时受到威胁。<br>
+性质5只在增加黑色节点、重绘红色节点为黑色，或做旋转时受到威胁。</p>
+</blockquote>
+<h5 id="插入"><a class="markdownIt-Anchor" href="#插入"></a> 插入</h5>
+<p>首先以二叉查找树的方法增加节点并标记为红色。之后注意要保持红黑树的特性：</p>
+<ul>
+<li>情形1：新节点N位于树的根上，没有父节点。此时把它重绘为黑色满足性质2。因为它在每个路径上对黑节点数目+1，性质5符合。</li>
+<li>情形2：新节点的父节点P是黑色，所以性质4没有失效。此时，树仍是有效的。</li>
+<li>注意：在下列情形下我们假定新节点的父节点为红色，所以它有祖父节点；因为如果父节点是根节点，那父节点就应当是黑色。所以新节点总有一个叔父节点，尽管在情形4和5下它可能是叶子节点。</li>
+<li>情形3：如果父节点P和叔父节点U也是红色，那么可以把它们两个重绘为黑色并重绘爷爷节点G为红色。爷爷节点G的父节点也可能是红色的，不符合性质4，所以此时需要从头开始整个过程，把G当成新加入的节点进行各种情形的检查。<br>
+<img src="/img/Red-black_tree_insert_case_3.png" alt="情形3，假定N是P左子节点，如果是右子节点也可以"></li>
+<li>注意：在余下的情形下，我们假定父节点P是其父亲G的左子节点。如果它是右子节点，情形4和情形5中的左和右应当对调。</li>
+<li>情形4：父节点P是红色而叔父节点U是黑色或缺少，并且新节点N是其父节点P的右子节点而父节点P又是其父节点的左子节点。在这种情形下，我们进行一次左旋转调换新节点和其父节点的角色; 接着，我们按情形5处理以前的父节点P以解决仍然失效的性质4。<br>
+<img src="/img/Red-black_tree_insert_case_4.png" alt="情形4"></li>
+<li>情形5：父节点P是红色而叔父节点U是黑色或缺少，新节点N是其父节点的左子节点，而父节点P又是其父节点G的左子节点。在这种情形下，我们进行针对祖父节点G的一次右旋转; 在旋转产生的树中，以前的父节点P现在是新节点N和以前的祖父节点G的父节点。我们知道以前的祖父节点G是黑色，否则父节点P就不可能是红色(如果P和G都是红色就违反了性质4，所以G必须是黑色)。我们切换以前的父节点P和祖父节点G的颜色，结果的树满足性质4。<br>
+<img src="/img/Red-black_tree_insert_case_5.png" alt="情形5"></li>
+</ul>
+<h5 id="删除"><a class="markdownIt-Anchor" href="#删除"></a> 删除</h5>
+<p>如果需要删除的节点有两个儿子，那么问题可以被转化成删除另一个只有一个儿子的节点的问题（为了表述方便，这里所指的儿子，为非叶子节点的儿子）。对于二叉查找树，在删除带有两个非叶子儿子的节点的时候，我们找到要么在它的左子树中的最大元素、要么在它的右子树中的最小元素，并把它的值转移到要删除的节点中(如在这里所展示的那样)。我们接着删除我们从中复制出值的那个节点，它必定有少于两个非叶子的儿子。因为只是复制了一个值，不违反任何性质，这就把问题简化为如何删除最多有一个儿子的节点的问题。它不关心这个节点是最初要删除的节点还是我们从中复制出值的那个节点。</p>
+<p>于是可以只讨论删除只有一个儿子的节点的问题。<br>
+如果我们删除一个红色节点，它的父亲和儿子一定是黑色的。所以我们可以简单的用它的黑色儿子替换它，并不会破坏性质3和性质4。通过被删除节点的所有路径只是少了一个红色节点，这样可以继续保证性质5。<br>
+如果我们删除一个黑色节点，且它的儿子是红色的。只需删除它，用它的红色儿子顶替上来并重绘为黑色。</p>
+<p>当要删除的节点和它的儿子都是黑色时，首先把要删除的节点替换为它的儿子。出于方便，称呼这个儿子为N(在新的位置上)，称呼它的兄弟(它父亲的另一个儿子)为S。在下面的示意图中，我们还是使用P称呼N的父亲，SL称呼S的左儿子，SR称呼S的右儿子。<br>
+如果N和它初始的父亲是黑色，则删除它的父亲导致通过N的路径都比不通过它的路径少了一个黑色节点。因为这违反了性质5，树需要被重新平衡。</p>
+<p>比较复杂，有多种情形：</p>
+<ul>
+<li>情形1：N是新的根。此时所有性质都保持着，完成。</li>
+<li>注意：在情形2、5和6下，我们假定N是它父亲的左儿子。如果它是右儿子，则在这些情形下的左和右应当对调。</li>
+<li>情形2：S是红色。在这种情形下我们在N的父亲上做左旋转，把红色兄弟转换成N的祖父，我们接着对调N的父亲和祖父的颜色。完成这两个操作后，尽管所有路径上黑色节点的数目没有改变，但现在N有了一个黑色的兄弟和一个红色的父亲（它的新兄弟是黑色因为它是红色S的一个儿子），所以我们可以接下去按情形4、情形5或情形6来处理。<br>
+<img src="/img/Red-black_tree_delete_case_2_as_svg.png" alt="情形2"></li>
+<li>情形3: N的父亲、S和S的儿子都是黑色的。在这种情形下，我们简单的重绘S为红色。结果是通过S的所有路径，它们就是以前不通过N的那些路径，都少了一个黑色节点。因为删除N的初始的父亲使通过N的所有路径少了一个黑色节点，这使事情都平衡了起来。但是，通过P的所有路径现在比不通过P的路径少了一个黑色节点，所以仍然违反性质5。要修正这个问题，我们要从头开始，在P上做重新平衡处理。<br>
+<img src="/img/Red-black_tree_delete_case_3_as_svg.png" alt="情形3"></li>
+<li>情形4: S和S的儿子都是黑色，但是N的父亲是红色。在这种情形下，我们简单的交换N的兄弟和父亲的颜色。这不影响不通过N的路径的黑色节点的数目，但是它在通过N的路径上对黑色节点数目增加了一，添补了在这些路径上删除的黑色节点。<br>
+<img src="/img/Red-black_tree_delete_case_4_as_svg.png" alt="情形4"></li>
+<li>情形5: S是黑色，S的左儿子是红色，S的右儿子是黑色，而N是它父亲的左儿子。在这种情形下我们在S上做右旋转，这样S的左儿子成为S的父亲和N的新兄弟。我们接着交换S和它的新父亲的颜色。所有路径仍有同样数目的黑色节点，但是现在N有了一个右儿子是红色的黑色兄弟，所以我们进入了情形6。N和它的父亲都不受这个变换的影响。<br>
+<img src="/img/Red-black_tree_delete_case_5_as_svg.png" alt="情形5"></li>
+<li>情形6：S是黑色，S的右儿子是红色，而N是它父亲的左儿子。在这种情形下我们在N的父亲上做左旋转，这样S成为N的父亲（P）和S的右儿子的父亲。我们接着交换N的父亲和S的颜色，并使S的右儿子为黑色。子树在它的根上的仍是同样的颜色，所以性质3没有被违反。但是，N现在增加了一个黑色祖先: 要么N的父亲变成黑色，要么它是黑色而S被增加为一个黑色祖父。所以，通过N的路径都增加了一个黑色节点。在示意图中的白色节点可以是红色或黑色，但是在变换前后都必须指定相同的颜色。<br>
+<img src="/img/Red-black_tree_delete_case_6_as_svg.png" alt="情形6"></li>
+</ul>
+<h4 id="avl-tree和red-black-tree比较"><a class="markdownIt-Anchor" href="#avl-tree和red-black-tree比较"></a> AVL tree和Red-Black tree比较</h4>
+<ul>
+<li>两者支持的操作相同，且基本操作的时间复杂度都是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(logn)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>。</li>
+<li>对于查找操作比较多的应用，AVL tree比red-black tree快一点，因为它更严格平衡。而插入和删除操作，AVL tree就相应会慢一点。</li>
+</ul>
+<h3 id="满二叉树full-binary-tree"><a class="markdownIt-Anchor" href="#满二叉树full-binary-tree"></a> 满二叉树(Full Binary Tree)</h3>
+<p>一棵深度为k且具有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>k</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^k-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.849108em;"></span><span class="strut bottom" style="height:0.932438em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.03148em;">k</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span>个节点的二叉树称为<strong>满二叉树</strong>。</p>
+<blockquote>
+<p>每一层上的节点数都是最大节点树。</p>
+</blockquote>
+<h3 id="完全二叉树complete-binary-tree"><a class="markdownIt-Anchor" href="#完全二叉树complete-binary-tree"></a> 完全二叉树(Complete Binary Tree)</h3>
+<p>深度为k的，有n个节点的二叉树，当且仅当其每个节点都与深度为k的满二叉树中从上而下从左至右的编号从1至n的节点一一对应时，称为<strong>完全二叉树</strong>。<br>
+完全二叉树除最后一层之外全是满的，最后一层所有的结点都在最左侧。</p>
+<blockquote>
+<p>具有n个节点的完全二叉树的深度为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">log_2n+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">n</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span>。<br>
+如果对一棵有n个节点的完全二叉树的节点按层序编号（从第1层到第<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">log_2n+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">n</span><span class="mbin">+</span><span class="mord mathrm">1</span></span></span></span>层，每层从左到右），则对任一节点i(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>⩽</mo><mi>i</mi><mo>⩽</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1 \leqslant i \leqslant n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.79619em;vertical-align:-0.13667em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mrel amsrm">⩽</span><span class="mord mathit">i</span><span class="mrel amsrm">⩽</span><span class="mord mathit">n</span></span></span></span>)，有：</p>
+<blockquote>
+<p>(1) 如果i=1，则节点i是二叉树的根，无双亲；如果i&gt;1，则其双亲PARENT(i)是节点i/2。<br>
+(2) 如果2i&gt;n，则节点i无左孩子(节点i为叶子节点)；否则其左孩子LCHILD(i)是节点2i。<br>
+(3) 如果2i+1&gt;n，则节点i无右孩子；否则其右孩子RCHILD(i)是节点2i+1。</p>
+</blockquote>
+</blockquote>
+<p><img src="/img/full_complete_binary_tree.png" alt="满二叉树与完全二叉树"></p>
+<h2 id="一些特殊树"><a class="markdownIt-Anchor" href="#一些特殊树"></a> 一些特殊树</h2>
+<h3 id="字典树trie"><a class="markdownIt-Anchor" href="#字典树trie"></a> 字典树(Trie)</h3>
+<p><strong>字典树</strong>又称前缀树，是一种有序树，用于保存关联数组，其中的键通常是字符串。<br>
+<img src="/img/Trie_example.png" alt="一个保存了8个键的trie结构，&quot;A&quot;,&quot;to&quot;,&quot;tea&quot;,&quot;ted&quot;,&quot;ten&quot;,&quot;i&quot;,&quot;in&quot;,&quot;inn&quot;。键标注在节点中，值标注在节点之下。每一个完整的英文单词对应一个特定的整数。键不需要被显式地保存在节点中。图中标注出完整的单词，只是为了演示trie的原理。"></p>
+<blockquote>
+<p>与二叉查找树不同，键不是直接保存在节点中，而是由节点在树中的位置决定。<br>
+一个节点的所有子孙都有相同的前缀，也就是这个节点对应的字符串，也就是这个节点对应的字符串，根节点对应空字符串。<br>
+一般情况下，不是所有的节点都有对应的值，只有叶子节点和部分内部节点所对应的键才有相关的值。<br>
+trie树常用于搜索提示。如，当输入一个网址时，自动搜索可能的选择。当没有完全匹配的搜索结果，返回前缀最相似的可能。</p>
+</blockquote>
+<p><img src="/img/trie1.gif" alt="另一个Trie的例子"></p>
+<blockquote>
+<p>trie也可以视为一个确定优先状态机(deterministic finite automation)。每个节点视为一个状态，每一个边视为一个转换。<br>
+DFA常常用转换表(trainsition table)实现。横行是状态，竖列是转换标记。每个空间存储的是经过这个转换，下一步要到达的状态。<br>
+这种方式在空间存储上是不划算的，trie树中的节点只有几个分支，表中的大部分空间都会是空的。<br>
+trie的实现进行了改良。有两种方式Double-Array Trie、Tripple-Array Trie。</p>
+</blockquote>
+<h4 id="二数组字典树"><a class="markdownIt-Anchor" href="#二数组字典树"></a> 二数组字典树</h4>
+<p><img src="/img/double.gif" alt="Double-Array Trie Data Structure"><br>
+数据结构包含2个数组：base/check。</p>
+<ul>
+<li>base存储的是trie的节点。</li>
+<li>check数组表示某个节点的前驱节点。</li>
+</ul>
+<blockquote>
+<p>定义：对于一个把c作为输入，从s到t的转换，二数组字典树中的实现是：<br>
+<code>check[base[s]+c] = s</code><br>
+<code>base[s] + c = t</code></p>
+</blockquote>
+<h4 id="三数组字典树"><a class="markdownIt-Anchor" href="#三数组字典树"></a> 三数组字典树</h4>
+<p><img src="/img/tripple.gif" alt="Tripple-Array Trie Data Structure"><br>
+数据结构包含3个数组：base/next/check。</p>
+<ul>
+<li>base存储的是trie的节点。</li>
+<li>next存储的是base中的节点经过转换后的节点。</li>
+<li>check用于检查，表示某个节点的前驱节点。</li>
+</ul>
+<blockquote>
+<p>定义：对于一个把c作为输入，从s到t的转换，三数组字典树中的实现是：<br>
+<code>check[base[s]+c] = s</code><br>
+<code>next[base[s]+c] = t</code></p>
+</blockquote>
+<h3 id="哈夫曼树huffman-tree"><a class="markdownIt-Anchor" href="#哈夫曼树huffman-tree"></a> 哈夫曼树(Huffman Tree)</h3>
+<p><strong>哈夫曼树</strong>又称最优树，基本思想是使权大的节点靠近根，从而使编码总长度最小。<br>
+<img src="/img/625px-Huffman_tree_2.png" alt="按照&quot;this is an example of a huffman tree&quot;中的字母频率构造的哈夫曼树"><br>
+对应表格：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字符</th>
+<th style="text-align:center">空格</th>
+<th style="text-align:center">a</th>
+<th style="text-align:center">e</th>
+<th style="text-align:center">f</th>
+<th style="text-align:center">h</th>
+<th style="text-align:center">i</th>
+<th style="text-align:center">m</th>
+<th style="text-align:center">n</th>
+<th style="text-align:center">s</th>
+<th style="text-align:center">t</th>
+<th style="text-align:center">l</th>
+<th style="text-align:center">o</th>
+<th style="text-align:center">p</th>
+<th style="text-align:center">r</th>
+<th style="text-align:center">u</th>
+<th style="text-align:center">x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">频率</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">编码</td>
+<td style="text-align:center">111</td>
+<td style="text-align:center">010</td>
+<td style="text-align:center">000</td>
+<td style="text-align:center">1101</td>
+<td style="text-align:center">1010</td>
+<td style="text-align:center">1000</td>
+<td style="text-align:center">0111</td>
+<td style="text-align:center">0010</td>
+<td style="text-align:center">1011</td>
+<td style="text-align:center">0110</td>
+<td style="text-align:center">11001</td>
+<td style="text-align:center">00110</td>
+<td style="text-align:center">10011</td>
+<td style="text-align:center">11000</td>
+<td style="text-align:center">00111</td>
+<td style="text-align:center">10010</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第一步</strong>：初始化n个单节点的树，并为它们标上字母表中的字符。把每个字符的概率记在树的根中，用来指出树的<strong>权重</strong>(更一般地说，树的权重等于树中所有叶子的概率之和)。<br>
+<strong>第二步</strong>：重复下面的步骤，直到只剩一棵单独的树。找到两棵权重最小的树(次序无关紧要)。把它们作为新树中的左右子树，并把其权重之和作为新的权重记录在新树的根中。</p>
+<blockquote>
+<p>操作要点是对权值的合并、删除与替换，总是合并当前值最小的两个。</p>
+</blockquote>
+<p><img src="/img/392px-HuffmanCodeAlg.png" alt="哈夫曼编码演算步骤"></p>
+<p>哈夫曼算法也可用于数字都在叶节点上的最优决策树构造。比如下图，因为n为1234的概率不同，生成的最优决策树也不同。左图中，n为1234的概率p均为0.25。右图中，p1=0.1,p2=0.2,p3=0.3,p4=0.4。<br>
+<img src="/img/huffman_decision_tree.jpg" alt="猜测1~4之间整数，在不同概率下的两棵最优决策树"></p>
+<h4 id="相关问题"><a class="markdownIt-Anchor" href="#相关问题"></a> 相关问题</h4>
+<ol>
+<li>
+<p>请解释如何在不实际构造一棵哈夫曼树的情况下，生成一套哈夫曼编码。</p>
+</li>
+<li>
+<p><strong>猜底牌</strong>。设计一种策略，使在下面的游戏中，期望提问的次数达到最小。有一副纸牌，是由1张A，2张2，3张3，一直到9张9组成的，一共包含45张牌。有人从这副洗过的牌中抽出一张牌，问一连串可以回答是或否的问题来确定这张牌的点数。</p>
+</li>
+</ol>
+<h3 id="堆"><a class="markdownIt-Anchor" href="#堆"></a> 堆</h3>
+<p><strong>堆</strong>总是一棵完全二叉树。其中(最大堆)任意节点都大于它的后裔，最大元在堆的根上。<br>
+<img src="/img/Heap-as-an-Array.png" alt="最大堆的数组表示"><br>
+关于<a href="/2015/01/22/transform-and-conquer/#%E5%A0%86%E5%92%8C%E5%A0%86%E6%8E%92%E5%BA%8F">堆的详细讲解看这里</a>。</p>
+<h2 id="相关leetcode"><a class="markdownIt-Anchor" href="#相关leetcode"></a> 相关leetcode</h2>
+<p>树常常用递归解决，很常见。如果用迭代方法遍历，常常需要<strong>指针</strong>和栈的帮助。树有时上层遍历下层编辑。</p>
+<h3 id="二叉树的遍历"><a class="markdownIt-Anchor" href="#二叉树的遍历"></a> 二叉树的遍历</h3>
+<p><a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Preorder_Traversal.cpp" target="_blank" rel="external">Binary Tree Preorder Traversal</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Inorder_Traversal.cpp" target="_blank" rel="external">Binary Tree Inorder Traversal</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Postorder_Traversal.cpp" target="_blank" rel="external">Binary Tree Postorder Traversal</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Level_Order_Traversal.cpp" target="_blank" rel="external">Binary Tree Level Order Traversal</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Level_Order_Traversal_II.cpp" target="_blank" rel="external">Binary Tree Level Order Traversal II</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Zigzag_Level_Order_Traversal.cpp" target="_blank" rel="external">Binary Tree Zigzag Level Order Traversal</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Recover_Binary_Search_Tree.cpp" target="_blank" rel="external">Recover Binary Search Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Same_Tree.cpp" target="_blank" rel="external">Same Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Symmetric_Tree.cpp" target="_blank" rel="external">Symmetric Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Balanced_Binary_Tree.cpp" target="_blank" rel="external">Balanced Binary Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Flatten_Binary_Tree_to_Linked_List.cpp" target="_blank" rel="external">Flatten Binary Tree to Linked List</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Populating_Next_Right_Pointers_in_Each_Node.cpp" target="_blank" rel="external">Populating Next Right Pointers in Each Node</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Populating_Next_Right_Pointers_in_Each_Node_II.cpp" target="_blank" rel="external">Populating Next Right Pointers in Each Node II</a></p>
+<h3 id="二叉树的构建"><a class="markdownIt-Anchor" href="#二叉树的构建"></a> 二叉树的构建</h3>
+<p><a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Construct_Binary_Tree_from_Preorder_and_Inorder_Traversal.cpp" target="_blank" rel="external">Construct Binary Tree from Preorder and Inorder Traversal</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Construct_Binary_Tree_from_Inorder_and_Postorder_Traversal.cpp" target="_blank" rel="external">Construct Binary Tree from Inorder and Postorder Traversal</a></p>
+<h3 id="二叉查找树"><a class="markdownIt-Anchor" href="#二叉查找树"></a> 二叉查找树</h3>
+<p><a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Unique_Binary_Search_Trees.cpp" target="_blank" rel="external">Unique Binary Search Trees</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Unique_Binary_Search_Trees_II.cpp" target="_blank" rel="external">Unique Binary Search Trees II</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Validate_Binary_Search_Tree.cpp" target="_blank" rel="external">Validate Binary Search Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Convert_Sorted_Array_to_Binary_Search_Tree.cpp" target="_blank" rel="external">Convert Sorted Array to Binary Search Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Convert_Sorted_List_to_Binary_Search_Tree.cpp" target="_blank" rel="external">Convert Sorted List to Binary Search Tree</a></p>
+<h3 id="二叉树的递归"><a class="markdownIt-Anchor" href="#二叉树的递归"></a> 二叉树的递归</h3>
+<p><a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Minimum_Depth_of_Binary_Tree.cpp" target="_blank" rel="external">Minimum Depth of Binary Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Maximum_Depth_of_Binary_Tree.cpp" target="_blank" rel="external">Maximum Depth of Binary Tree</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Path_Sum.cpp" target="_blank" rel="external">Path Sum</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Path_Sum_II.cpp" target="_blank" rel="external">Path Sum II</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Binary_Tree_Maximum_Path_Sum.cpp" target="_blank" rel="external">Binary Tree Maximum Path Sum</a><br>
+<a href="https://github.com/Conglang/MyLeetCode/blob/master/src/Sum_Root_to_Leaf_Numbers.cpp" target="_blank" rel="external">Sum Root to Leaf Numbers</a></p>
+<p>[1] Cracking the Coding Interview<br>
+[2] 剑指Offer<br>
+[3] 数据结构(C语言版)<br>
+[4] leetcode<br>
+[5] <a href="http://en.wikipedia.org/wiki/Binary_search_tree" target="_blank" rel="external">http://en.wikipedia.org/wiki/Binary_search_tree</a><br>
+[6] <a href="http://en.wikipedia.org/wiki/Self-balancing_binary_search_tree" target="_blank" rel="external">http://en.wikipedia.org/wiki/Self-balancing_binary_search_tree</a><br>
+[7] <a href="http://en.wikipedia.org/wiki/AVL_tree" target="_blank" rel="external">http://en.wikipedia.org/wiki/AVL_tree</a><br>
+[8] <a href="http://en.wikipedia.org/wiki/Red%E2%80%93black_tree" target="_blank" rel="external">http://en.wikipedia.org/wiki/Red–black_tree</a><br>
+[9] <a href="http://linux.thai.net/~thep/datrie/datrie.html" target="_blank" rel="external">http://linux.thai.net/~thep/datrie/datrie.html</a><br>
+[10] <a href="http://en.wikipedia.org/wiki/Huffman_coding" target="_blank" rel="external">http://en.wikipedia.org/wiki/Huffman_coding</a><br>
+[11] <a href="http://www.stoimen.com/blog/2012/08/07/computer-algorithms-heap-and-heapsort-data-structure/" target="_blank" rel="external">http://www.stoimen.com/blog/2012/08/07/computer-algorithms-heap-and-heapsort-data-structure/</a><br>
+[12] 算法设计与分析基础(第2版)</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#树简介"><span class="toc-number">1.</span> <span class="toc-text"> 树简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意区分的一些概念"><span class="toc-number">2.</span> <span class="toc-text"> 注意区分的一些概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树binary-tree"><span class="toc-number">2.1.</span> <span class="toc-text"> 二叉树(Binary Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的前序遍历pre-order"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 二叉树的前序遍历(pre-order)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的中序遍历in-order"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 二叉树的中序遍历(in-order)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的后序遍历post-order"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 二叉树的后序遍历(post-order)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉查找树binary-search-tree"><span class="toc-number">2.2.</span> <span class="toc-text"> 二叉查找树(Binary Search Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#判断是否是二叉查找树"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 判断是否是二叉查找树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在二叉查找树中查找一个元素"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 在二叉查找树中查找一个元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#向二叉查找树中插入一个元素"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 向二叉查找树中插入一个元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#从二叉查找树中删除一个元素"><span class="toc-number">2.2.4.</span> <span class="toc-text"> 从二叉查找树中删除一个元素</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡二叉树balanced-binary-tree"><span class="toc-number">2.3.</span> <span class="toc-text"> 平衡二叉树(Balanced Binary Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#avl-tree"><span class="toc-number">2.3.1.</span> <span class="toc-text"> AVL tree</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#red-black-tree"><span class="toc-number">2.3.2.</span> <span class="toc-text"> Red-Black tree</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#插入"><span class="toc-number">2.3.2.1.</span> <span class="toc-text"> 插入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#删除"><span class="toc-number">2.3.2.2.</span> <span class="toc-text"> 删除</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#avl-tree和red-black-tree比较"><span class="toc-number">2.3.3.</span> <span class="toc-text"> AVL tree和Red-Black tree比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#满二叉树full-binary-tree"><span class="toc-number">2.4.</span> <span class="toc-text"> 满二叉树(Full Binary Tree)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完全二叉树complete-binary-tree"><span class="toc-number">2.5.</span> <span class="toc-text"> 完全二叉树(Complete Binary Tree)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些特殊树"><span class="toc-number">3.</span> <span class="toc-text"> 一些特殊树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字典树trie"><span class="toc-number">3.1.</span> <span class="toc-text"> 字典树(Trie)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#二数组字典树"><span class="toc-number">3.1.1.</span> <span class="toc-text"> 二数组字典树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三数组字典树"><span class="toc-number">3.1.2.</span> <span class="toc-text"> 三数组字典树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#哈夫曼树huffman-tree"><span class="toc-number">3.2.</span> <span class="toc-text"> 哈夫曼树(Huffman Tree)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关问题"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆"><span class="toc-number">3.3.</span> <span class="toc-text"> 堆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关leetcode"><span class="toc-number">4.</span> <span class="toc-text"> 相关leetcode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树的遍历"><span class="toc-number">4.1.</span> <span class="toc-text"> 二叉树的遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树的构建"><span class="toc-number">4.2.</span> <span class="toc-text"> 二叉树的构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉查找树"><span class="toc-number">4.3.</span> <span class="toc-text"> 二叉查找树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树的递归"><span class="toc-number">4.4.</span> <span class="toc-text"> 二叉树的递归</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/10/tree/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/10/tree/&text=Tree"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/10/tree/&is_video=false&description=Tree"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tree&body=Check out this article: http://conglang.github.io/2015/01/10/tree/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/10/tree/&title=Tree"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/10/tree/&name=Tree&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

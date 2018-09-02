@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="论文，FaceNet - A Unified Embedding for Face Recognition and Clustering">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文 FaceNet - A Unified Embedding for Face Recognition and Clustering">
+<meta property="og:url" content="http://conglang.github.io/2018/07/31/essay-facenet/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="论文，FaceNet - A Unified Embedding for Face Recognition and Clustering">
+<meta property="og:image" content="http://conglang.github.io/img/triplet_loss.png">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_triplet_loss.png">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_triplet_loss_formula.png">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_triplet_loss_function.png">
+<meta property="og:image" content="http://conglang.github.io/img/triplets.png">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_model_structure.png">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_model1.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_model2.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_network_architectures.png">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_network_roc.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_flop_accuracy_tradeoff.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/face_image_quality.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_embedding_dimensionality.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/facenet_training_data_size.jpg">
+<meta property="og:updated_time" content="2018-07-31T16:10:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文 FaceNet - A Unified Embedding for Face Recognition and Clustering">
+<meta name="twitter:description" content="论文，FaceNet - A Unified Embedding for Face Recognition and Clustering">
+<meta name="twitter:image" content="http://conglang.github.io/img/triplet_loss.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>论文 FaceNet - A Unified Embedding for Face Recognition and Clustering</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/01/essay-deepid/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/07/30/face-recognition/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/07/31/essay-facenet/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/07/31/essay-facenet/&text=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/07/31/essay-facenet/&is_video=false&description=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering&body=Check out this article: http://conglang.github.io/2018/07/31/essay-facenet/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/07/31/essay-facenet/&name=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#triplet-loss"><span class="toc-number">2.</span> <span class="toc-text"> Triplet Loss</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#triplet-selection-and-training-procedure"><span class="toc-number">3.</span> <span class="toc-text"> Triplet Selection and Training Procedure</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#online-generation"><span class="toc-number">3.1.</span> <span class="toc-text"> Online Generation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model-architecture"><span class="toc-number">4.</span> <span class="toc-text"> Model Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zeilerfergus-based-model"><span class="toc-number">4.1.</span> <span class="toc-text"> Zeiler&Fergus based Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#googlenet-style-inception-model"><span class="toc-number">4.2.</span> <span class="toc-text"> GoogLeNet style Inception Model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#experiments"><span class="toc-number">5.</span> <span class="toc-text"> Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#flops-vs-accuracy-trade-off"><span class="toc-number">5.1.</span> <span class="toc-text"> FLOPS vs. Accuracy Trade-off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sensitivity-to-image-quality"><span class="toc-number">5.2.</span> <span class="toc-text"> Sensitivity to Image Quality</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#embedding-dimensionality"><span class="toc-number">5.3.</span> <span class="toc-text"> Embedding Dimensionality</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#amouint-of-training-data"><span class="toc-number">5.4.</span> <span class="toc-text"> Amouint of Training Data</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#summary"><span class="toc-number">6.</span> <span class="toc-text"> Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#code"><span class="toc-number">7.</span> <span class="toc-text"> Code</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        论文 FaceNet - A Unified Embedding for Face Recognition and Clustering
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-07-31T12:49:21.000Z" itemprop="datePublished">2018-07-31</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Deep-Learning/">Deep Learning</a>, <a class="tag-link" href="/tags/Essay/">Essay</a>, <a class="tag-link" href="/tags/Face-Recognition/">Face Recognition</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h2>
+<p>核心思想</p>
+<blockquote>
+<p>Face Image -&gt; 128-D Embedding (End to End)<br>
+Euclidean distance between Embeddings = Measure of face similarity<br>
+Triplet Loss = minimize sum(||A - P|| - ||A - N|| + α)，P和N如何选择很重要</p>
+</blockquote>
+<p>with Embedding, face recognition, verification, clustering 变成了常规任务，Embedding 之间距离的较量。<br>
+图片是 tight crops of the face area，无 2D or 3D alignment。</p>
+<h2 id="triplet-loss"><a class="markdownIt-Anchor" href="#triplet-loss"></a> Triplet Loss</h2>
+<p>为什么不用 softmax？</p>
+<ul>
+<li>Usually in supervised learning we have a fixed number of classes and train the network using the softmax cross entropy loss. However in some cases we need to be able to have a variable number of classes. In face recognition for instance, we need to be able to compare two unknown faces and say whether they are from the same person or not.</li>
+</ul>
+<p>Triplet loss tries to enforce a margin between each pair of faces from one person to all other faces. 和 SVM 的 margin 有点像。</p>
+<p>triplets of embeddings:</p>
+<ul>
+<li>an anchor</li>
+<li>a positive of the same class as the anchor</li>
+<li>a negative of a different class</li>
+</ul>
+<p><img src="/img/triplet_loss.png" alt="Triplet Loss"><br>
+<img src="/img/facenet_triplet_loss.png" alt="Triplet Loss"><br>
+公式<br>
+<img src="/img/facenet_triplet_loss_formula.png" alt="Triplet Loss"><br>
+即 For some distance on the embedding space <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">d</span></span></span></span>, the loss of a triplet <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo separator="true">,</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">(a,p,n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mpunct">,</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> is:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mo>=</mo><mi>max</mi><mo>(</mo><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo>)</mo><mo>−</mo><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>n</mi><mo>)</mo><mo>+</mo><mi>m</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi><mo separator="true">,</mo><mn>0</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">L = \max(d(a,p) - d(a,n) + margin, 0)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">L</span><span class="mrel">=</span><span class="mop">max</span><span class="mopen">(</span><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mclose">)</span><span class="mbin">−</span><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathit">m</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">i</span><span class="mord mathit">n</span><span class="mpunct">,</span><span class="mord mathrm">0</span><span class="mclose">)</span></span></span></span></span></p>
+<p><img src="/img/facenet_triplet_loss_function.png" alt="Triplet Loss Function"></p>
+<p>Triplet 应当选 hard triplets，违反公式1的例子，这样才对模型的训练有帮助，fast convergence。</p>
+<h2 id="triplet-selection-and-training-procedure"><a class="markdownIt-Anchor" href="#triplet-selection-and-training-procedure"></a> Triplet Selection and Training Procedure</h2>
+<p>Three categories of triplets:</p>
+<ul>
+<li>Easy Triplets<br>
+triplets which have a loss of 0, because <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo>)</mo><mo>+</mo><mi>m</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi><mo>&lt;</mo><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">d(a,p) + margin \lt d(a,n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathit">m</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">i</span><span class="mord mathit">n</span><span class="mrel">&lt;</span><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span></li>
+<li>Hard Triplets<br>
+triplets where the negative is closer to the anchor than the positive, i.e. <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>n</mi><mo>)</mo><mo>&lt;</mo><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">d(a,n) \lt d(a,p)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">&lt;</span><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mclose">)</span></span></span></span></li>
+<li>Semi-hard Triplet<br>
+triplets where the negative is not closer to the anchor than the positive, but which still have positive loss: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo>)</mo><mo>&lt;</mo><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>n</mi><mo>)</mo><mo>&lt;</mo><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo>)</mo><mo>+</mo><mi>m</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">d(a,p) \lt d(a,n) \lt d(a,p) + margin</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mclose">)</span><span class="mrel">&lt;</span><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">&lt;</span><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord mathit">m</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">i</span><span class="mord mathit">n</span></span></span></span></li>
+</ul>
+<p><img src="/img/triplets.png" alt="Categories of Negatives"></p>
+<p>在选择 triplet 时，我们想要 Hard Positive $$argmax_{x_i^p} \parallel f(x_i^a) - f(x_i^p) \parallel_2^2$$ 和 Hard Negative $$argmin_{x_i^n} \parallel f(x_i^a) - f(x_i^n) \parallel_2^2$$。<br>
+但是在整个训练集上计算不现实，而且 outlier 和 mislabelled 会严重影响选择。</p>
+<p>The paper pick a random semi-hard negative for every pair of anchor and positive, and train on these triplets.</p>
+<p>有两条出路：</p>
+<ul>
+<li>Offline Triplet Mining<br>
+Generate triplets offline every n steps, using the most recent network checkpoint and computing the argmin and argmax on a subset of the data.<br>
+Not efficient enough.</li>
+<li>Online Triplet Mining<br>
+Generate triplets online. This can be done by selecting the hard positive/negative exemplars from within a mini-batch.</li>
+</ul>
+<h3 id="online-generation"><a class="markdownIt-Anchor" href="#online-generation"></a> Online Generation</h3>
+<p>In online mining, we have computed a batch of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05017em;">B</span></span></span></span> embeddings from a batch of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05017em;">B</span></span></span></span> inputs.<br>
+valid triplet: (i,j,k) 中 i,j 属于同一人，k 则不。</p>
+<p>Suppose that you have a batch of faces as input of size <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>B</mi><mo>=</mo><mi>P</mi><mi>K</mi></mrow><annotation encoding="application/x-tex">B = PK</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05017em;">B</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.07153em;">K</span></span></span></span>, composed of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span> different persons with <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.07153em;">K</span></span></span></span> images each. A typical value is <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">K=4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mrel">=</span><span class="mord mathrm">4</span></span></span></span>. 有两种策略：</p>
+<ul>
+<li>Batch All<br>
+select all the valid triplets, and average the loss on the hard and semi-hard triplets.
+<ul>
+<li>a crucial point here is to not take into account the easy triplets (those with loss<br>
+0), as averaging on them would make the overall loss very small.</li>
+<li>this produces a total of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>K</mi><mo>(</mo><mi>K</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>(</mo><mi>P</mi><mi>K</mi><mo>−</mo><mi>K</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">PK(K-1)(PK-K)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mbin">−</span><span class="mord mathrm">1</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mclose">)</span></span></span></span> triplets (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>K</mi></mrow><annotation encoding="application/x-tex">PK</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.07153em;">K</span></span></span></span> anchors, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">K-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span> possible positives per anchor, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>K</mi><mo>−</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">PK-K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mbin">−</span><span class="mord mathit" style="margin-right:0.07153em;">K</span></span></span></span> possible negatives).</li>
+</ul>
+</li>
+<li>Batch Hard (better)<br>
+for each anchor, select the hardest positive (biggest distance <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo>(</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">d(a,p)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">p</span><span class="mclose">)</span></span></span></span> and the hardest negative among the batch.
+<ul>
+<li>this produces <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>K</mi></mrow><annotation encoding="application/x-tex">PK</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mord mathit" style="margin-right:0.07153em;">K</span></span></span></span> triplets.</li>
+<li>the selected tripltes are the hardest among the batch.</li>
+</ul>
+</li>
+</ul>
+<h2 id="model-architecture"><a class="markdownIt-Anchor" href="#model-architecture"></a> Model Architecture</h2>
+<p><img src="/img/facenet_model_structure.png" alt="Model Structure"><br>
+Train the CNN using Stochastic Gradient Descent (SGD) with standard backprop and AdaGrad.</p>
+<p>两种，Zeiler&amp;Fergus based Model，GoogLeNet style Inception Model。</p>
+<p>Their practical differences lie in the difference of parameters and FLOPS. 选择使用哪个模型要看应用场景。</p>
+<ul>
+<li>Model running in a datacenter can have many parameters and require a large number of FLOPS.</li>
+<li>Model running on a mobile phone needs to have few parameters, so that it can fit into memory.</li>
+</ul>
+<h3 id="zeilerfergus-based-model"><a class="markdownIt-Anchor" href="#zeilerfergus-based-model"></a> Zeiler&amp;Fergus based Model</h3>
+<p>Per image</p>
+<ul>
+<li>140 million parameters</li>
+<li>1.6 billion FLOPS</li>
+</ul>
+<p><img src="/img/facenet_model1.jpg" alt="Zeiler&amp;Fergus based Model"></p>
+<h3 id="googlenet-style-inception-model"><a class="markdownIt-Anchor" href="#googlenet-style-inception-model"></a> GoogLeNet style Inception Model</h3>
+<p>Per image</p>
+<ul>
+<li>6.6M -7.5M parameters</li>
+<li>500M - 1.6B FLOPS</li>
+</ul>
+<p><img src="/img/facenet_model2.jpg" alt="GoogLeNet style Inception Model"></p>
+<h2 id="experiments"><a class="markdownIt-Anchor" href="#experiments"></a> Experiments</h2>
+<h3 id="flops-vs-accuracy-trade-off"><a class="markdownIt-Anchor" href="#flops-vs-accuracy-trade-off"></a> FLOPS vs. Accuracy Trade-off</h3>
+<p>注：model parameters 与 Accuray 没看出明显相关性。<br>
+<img src="/img/facenet_network_architectures.png" alt="Network Architectures"><br>
+<img src="/img/facenet_network_roc.jpg" alt="Network Architectures"><br>
+<img src="/img/facenet_flop_accuracy_tradeoff.jpg" alt="FLOPS vs. Accuracy trade-off"></p>
+<h3 id="sensitivity-to-image-quality"><a class="markdownIt-Anchor" href="#sensitivity-to-image-quality"></a> Sensitivity to Image Quality</h3>
+<p><img src="/img/face_image_quality.jpg" alt="Image Quality"></p>
+<h3 id="embedding-dimensionality"><a class="markdownIt-Anchor" href="#embedding-dimensionality"></a> Embedding Dimensionality</h3>
+<p><img src="/img/facenet_embedding_dimensionality.jpg" alt="Embedding Dimensionality"></p>
+<h3 id="amouint-of-training-data"><a class="markdownIt-Anchor" href="#amouint-of-training-data"></a> Amouint of Training Data</h3>
+<p><img src="/img/facenet_training_data_size.jpg" alt="Training Data Size"></p>
+<h2 id="summary"><a class="markdownIt-Anchor" href="#summary"></a> Summary</h2>
+<p>优点：</p>
+<ul>
+<li>直接学习 an embedding into<br>
+an Euclidean space for face verification.</li>
+<li>不需要太多 alignment，只需要 tight crop arouind the face area。</li>
+</ul>
+<p>未来：</p>
+<ul>
+<li>Better understanding of the error cases;</li>
+<li>Further improving the model;</li>
+<li>Reducing model size and reducing CPU + requirements;</li>
+<li>Reduce the currently extremely long training time.</li>
+</ul>
+<h2 id="code"><a class="markdownIt-Anchor" href="#code"></a> Code</h2>
+<p>比葫芦画瓢实现了一下。<br>
+<a href="https://github.com/Conglang/DeepOps/tree/master/facenet_face_recognition" target="_blank" rel="external">FaceNet Face Recognition</a></p>
+<p>Ref:<br>
+[1] <a href="https://arxiv.org/abs/1503.03832" target="_blank" rel="external">https://arxiv.org/abs/1503.03832</a><br>
+[2] <a href="https://omoindrot.github.io/triplet-loss" target="_blank" rel="external">https://omoindrot.github.io/triplet-loss</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#triplet-loss"><span class="toc-number">2.</span> <span class="toc-text"> Triplet Loss</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#triplet-selection-and-training-procedure"><span class="toc-number">3.</span> <span class="toc-text"> Triplet Selection and Training Procedure</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#online-generation"><span class="toc-number">3.1.</span> <span class="toc-text"> Online Generation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model-architecture"><span class="toc-number">4.</span> <span class="toc-text"> Model Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zeilerfergus-based-model"><span class="toc-number">4.1.</span> <span class="toc-text"> Zeiler&Fergus based Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#googlenet-style-inception-model"><span class="toc-number">4.2.</span> <span class="toc-text"> GoogLeNet style Inception Model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#experiments"><span class="toc-number">5.</span> <span class="toc-text"> Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#flops-vs-accuracy-trade-off"><span class="toc-number">5.1.</span> <span class="toc-text"> FLOPS vs. Accuracy Trade-off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sensitivity-to-image-quality"><span class="toc-number">5.2.</span> <span class="toc-text"> Sensitivity to Image Quality</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#embedding-dimensionality"><span class="toc-number">5.3.</span> <span class="toc-text"> Embedding Dimensionality</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#amouint-of-training-data"><span class="toc-number">5.4.</span> <span class="toc-text"> Amouint of Training Data</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#summary"><span class="toc-number">6.</span> <span class="toc-text"> Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#code"><span class="toc-number">7.</span> <span class="toc-text"> Code</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/07/31/essay-facenet/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/07/31/essay-facenet/&text=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/07/31/essay-facenet/&is_video=false&description=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering&body=Check out this article: http://conglang.github.io/2018/07/31/essay-facenet/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/07/31/essay-facenet/&title=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/07/31/essay-facenet/&name=论文 FaceNet - A Unified Embedding for Face Recognition and Clustering&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

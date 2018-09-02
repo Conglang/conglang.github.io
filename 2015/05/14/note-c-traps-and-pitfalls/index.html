@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="学习《C陷阱与缺陷》的笔记。介绍了C语言使用中的词法陷阱、语法陷阱、语义陷阱、连接、库函数、预处理器，以及printf函数族、cstdarg实现可变参数等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《C陷阱与缺陷》笔记">
+<meta property="og:url" content="http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="学习《C陷阱与缺陷》的笔记。介绍了C语言使用中的词法陷阱、语法陷阱、语义陷阱、连接、库函数、预处理器，以及printf函数族、cstdarg实现可变参数等内容。">
+<meta property="og:image" content="http://conglang.github.io/img/c_operator_priority.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/copy_pointer.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:46:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《C陷阱与缺陷》笔记">
+<meta name="twitter:description" content="学习《C陷阱与缺陷》的笔记。介绍了C语言使用中的词法陷阱、语法陷阱、语义陷阱、连接、库函数、预处理器，以及printf函数族、cstdarg实现可变参数等内容。">
+<meta name="twitter:image" content="http://conglang.github.io/img/c_operator_priority.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>《C陷阱与缺陷》笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/05/19/business-english-materials/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/04/28/programmer-competency-matrix/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&text=《C陷阱与缺陷》笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&is_video=false&description=《C陷阱与缺陷》笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=《C陷阱与缺陷》笔记&body=Check out this article: http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&name=《C陷阱与缺陷》笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#词法陷阱"><span class="toc-number">1.</span> <span class="toc-text"> 词法陷阱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目"><span class="toc-number">1.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#语法陷阱"><span class="toc-number">2.</span> <span class="toc-text"> 语法陷阱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#语义陷阱"><span class="toc-number">3.</span> <span class="toc-text"> 语义陷阱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目-2"><span class="toc-number">3.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接"><span class="toc-number">4.</span> <span class="toc-text"> 连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目-3"><span class="toc-number">4.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#库函数"><span class="toc-number">5.</span> <span class="toc-text"> 库函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目-4"><span class="toc-number">5.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预处理器"><span class="toc-number">6.</span> <span class="toc-text"> 预处理器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2个常用的却很普遍地被误解的库函数"><span class="toc-number">7.</span> <span class="toc-text"> 2个常用的却很普遍地被误解的库函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#printf函数族"><span class="toc-number">7.1.</span> <span class="toc-text"> printf函数族</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#format"><span class="toc-number">7.1.1.</span> <span class="toc-text"> format</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#返回值"><span class="toc-number">7.1.2.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-number">7.1.3.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cstdargstdargh实现可变参数"><span class="toc-number">7.2.</span> <span class="toc-text"> cstdarg(stdarg.h)实现可变参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">7.2.1.</span> <span class="toc-text"> 例子</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作者的建议"><span class="toc-number">8.</span> <span class="toc-text"> 作者的建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另外"><span class="toc-number">9.</span> <span class="toc-text"> 另外</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        《C陷阱与缺陷》笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-05-14T12:08:08.000Z" itemprop="datePublished">2015-05-14</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Book/">Book</a>, <a class="tag-link" href="/tags/C/">C</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>同事言讲，自从他学习了《C陷阱与缺陷》和《C专家编程》后，写比较底层一点的程序就很少出错了。我听后甚是羡慕，慕名学习。</p>
+<p>这本书主要讲解C语言使用中可能遇到的坑，包括很多语法细节，不过有些内容已经过时。</p>
+<h2 id="词法陷阱"><a class="markdownIt-Anchor" href="#词法陷阱"></a> 词法陷阱</h2>
+<blockquote>
+<p>程序会被词法分析器分解成各个符号。探讨符号和组成符号的字符间的关系，以及有关符号含义的一些常见误解。</p>
+</blockquote>
+<ul>
+<li><code>=</code>不同于<code>==</code>。分别是赋值运算符和比较运算符。</li>
+<li><code>&amp;</code>和<code>|</code>不同于<code>&amp;&amp;</code>和<code>||</code>。分别是按位运算符和逻辑运算符。</li>
+<li>词法分析中的贪心法则。C语言中某些符号如<code>/</code>、<code>*</code>、<code>=</code>只有一个字符长，称为单字符符号。其他符号如<code>/*</code>和<code>==</code>和标识符包括多个字符，称为多字符符号。当C编译器读入一个字符<code>/</code>后又跟了一个字符<code>*</code>，编译器就需要作出判断：是将其作为两个分别的符号对待，还是合起来作为一个符号对待。C语言的解决方案是：贪心规则，即每一个符号应该包含尽可能多的字符。<br>
+注意除了字符串与字符常量，符号的中间不能嵌有空白（空格符、制表符和换行符）。<br>
+例如：<code>y = x/*p</code>是错误的，应写为<code>y = x / *p</code>或者<code>y = x/(*p)</code>。</li>
+<li>整型常量。如果一个整型常量的第一个字符是数字0，那么该常量会被视为八进制数。</li>
+<li>字符与字符串。C语言中的单引号与双引号含义迥异。<br>
+用单引号引起的一个字符实际上代表一个整数，整数值对应于该字符在编译器采用的字符集中的序列值，如<code>'a'</code>的含义与<code>0141</code>(八进制)或者<code>97</code>(十进制)严格一致。<br>
+用双引号引起的字符串，代表的是一个指向无名数组起始字符的指针，该数组被双引号之间的字符以及一个额外的二进制值为零的字符<code>'\0'</code>初始化。<br>
+例如：<code>printf(&quot;Hello world\n&quot;);</code>与<code>char hello[] = {'H','e','l','l','o',' ','w','o','r','l','d','\n',0}; printf(hello);</code>是等效的。</li>
+</ul>
+<h3 id="题目"><a class="markdownIt-Anchor" href="#题目"></a> 题目</h3>
+<ul>
+<li><strong>问</strong>：写一个测试程序。要求：无论是对允许嵌套注释的编译器，还是对不允许嵌套注释的编译器，该程序都能正常通过编译，但是这两种情况下程序执行的结果却不相同。<br>
+<strong>答</strong>：<code>/*/*/0*/**/1</code>。如果允许嵌套注释，上式解释为：<code>/* /* /0 */ * */ 1</code>，结果为1；如果不允许嵌套注释，上式解释为<code>/* / */ 0 * /**/ 1</code>，结果为0*1，即0。</li>
+<li><strong>问</strong>：<code>a+++++b</code>的含义是什么？<br>
+<strong>答</strong>：上式唯一有意义的解析方式是：<code>a ++ + ++b</code>。但是根据贪婪规则，上式会被分解为：<code>a ++ ++ + b</code>，等价于<code>((a++)++) + b</code>，，由于a++结果不能作为左值，语法上不正确。</li>
+</ul>
+<h2 id="语法陷阱"><a class="markdownIt-Anchor" href="#语法陷阱"></a> 语法陷阱</h2>
+<blockquote>
+<p>一些用法和意义与我们想当然的认识不一致的语法结构。</p>
+</blockquote>
+<ul>
+<li>理解函数声明。任何C变量的声明都由两部分组成：类型以及一组类似表达式的声明符declarator。<br>
+例如：<br>
+<code>float *g(), (*h)();</code>表示<code>*g()</code>与<code>(*h)()</code>是浮点表达式。因为<code>()</code>结合优先级高于<code>*</code>，<code>*g()</code>也就是<code>*(g())</code>，g是一个函数，该函数的返回值类型为指向浮点数的指针。同理得出h是一个函数指针，h所指向函数的返回值为浮点类型。<br>
+<code>float (*h)();</code>表示h是一个指向返回值为浮点类型的函数的指针，因此<code>(float (*)())</code>表示一个“指向返回值为浮点类型的函数的指针”的类型转换符。<br>
+调用首地址为0位置的子例程：<code>(*(void(*)())0)();</code>。一般用<code>typedef</code>来优化可读性，例如<code>typedef void (*funcptr)(); (*(funcptr)0)();</code>。<br>
+<code>void (*signal(int, void(*)(int)))(int);</code>可以表示为<code>typedef void (*HANDLER)(int); HANDLER signal(int, HANDLER);</code>。</li>
+<li>运算符的优先级问题。分组记忆。<br>
+优先级最高的并不是真正意义上的运算符，包括<strong>数组下标、函数调用操作符各结构成员选择操作符</strong>，都是<strong>从左到右</strong>结合。<br>
+之后是<strong>单目运算符</strong>，是<strong>从右到左</strong>结合。因此<code>*p++</code>被编译器解释成<code>*(p++)</code>即取指针p所指向的对象，然后将p递增1，而不是<code>(*p)++</code>即取指针p所指向的对象，然后将该对象递增1。<br>
+其次是<strong>双目运算符</strong>。双目运算符中，<strong>算术运算符</strong>的优先级最高，<strong>移位运算符</strong>次之，<strong>关系运算符</strong>再次之，接着是<strong>逻辑运算符</strong>、<strong>赋值运算符</strong>、<strong>三目运算符</strong>。记住两点：1.任何一个逻辑运算符的优先级低于任何一个关系运算符。2.移位运算符的优先级比算术运算符要低，但是比关系运算符要高。<br>
+最后是<strong>逗号运算符</strong>。<br>
+<img src="/img/c_operator_priority.jpg" alt="C语言运算符优先级表"></li>
+<li>注意作为语句结束标志的分号。不要不小心写在if或while语句等之后需要紧跟另一条语句的语句后。return语句后遗漏分号也麻烦。当一个声明的结尾紧跟一个函数定义时，如果声明结尾的分号被忽略，编译器可能会将声明的类型视作函数的返回值类型。</li>
+<li>switch语句。不要忘写break。故意不写break的地方最好写上注释说明。</li>
+<li>函数调用。要有参数列表()。</li>
+<li>悬挂else引发的问题。if的内容要放在{}里。</li>
+</ul>
+<h2 id="语义陷阱"><a class="markdownIt-Anchor" href="#语义陷阱"></a> 语义陷阱</h2>
+<blockquote>
+<p>可能的语义误解。程序员本意是希望表示某物，而实际表示的是另外一种事物。</p>
+</blockquote>
+<ul>
+<li>指针与数组。C语言中的数组值得注意的地方有以下两点。<br>
+1.C语言中只有一维数组，而且数组的大小必须在编译期就作为一个常数确定下来。C语言中数组的元素可以是任何类型的对象，也可以是其他数组。这样就可以仿真出一个多维数组。<br>
+2.对于一个数组，只能做两件事：确定该数组的大小，以及获得指向该数组下标为0的元素的指针。其他有关数组的操作，实际上都是通过指针进行的。<br>
+<strong>例如</strong>：<code>int calendar[12][31];</code>声明了calendar是一个数组，该数组拥有12个数组类型的元素，其中每个元素都是一个拥有31个整形元素的数组。<br>
+<code>sizeof(calendar)</code>的值是372(31x12)与sizeof(int)的乘积。<br>
+如果calendar不是用于sizeof的操作数，而是用于其他的场合，那么calendar总是被转换成一个指向calendar数组的起始元素的指针。<br>
+<code>calendar[4]</code>表示calendar数组的第5个元素，是calendar数组中12个有着31个整型元素的数组之一。<code>sizeof(calendar[4])</code>的结果是31与sizeof(int)的乘积。<code>int *p = calendar[4];</code>使指针p指向了数组calendar[4]中下标为0的元素。<br>
+<code>int i = calendar[4][7];</code>等价于<code>i = *(*(calendar+4)+7);</code>。<br>
+<code>p = calendar;</code>是非法的。应该写为<code>int (*monthp)[31]; monthp = calendar;</code>，monthp会指向数组calendar的第1个元素，也就是数组calendar的12个有着31个元素的数组类型元素之一。</li>
+<li>非数组的指针。字符串常量代表了一块包含字符串中所有字符以及一个空字符<code>'\0'</code>的内存区域的地址。<br>
+例子：将字符串s和t连接成单个字符串r。可以这么写。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">char *r, *malloc( );</span><br><span class="line">r = malloc(strlen(s) + strlen(t) + 1);</span><br><span class="line">if (!r) &#123;</span><br><span class="line">	complain();</span><br><span class="line">	exit(1);</span><br><span class="line">&#125;</span><br><span class="line">strcpy(r, s);</span><br><span class="line">strcat(r, t);</span><br><span class="line">// after some time</span><br><span class="line">free(r);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>作为参数的数组声明。数组名作为参数没有意义，它会立刻被转换为指向该数组第一个元素的指针。<br>
+但不是所有情况下都有这种自动的转换。<code>extern char *hello;</code>和<code>extern char hello[];</code>有天壤之别。TODO4.5。<br>
+<code>main(int argc, char* argv[]){}</code>和<code>main(int argc, char** argv){}</code>。这两种写法完全等价，前一种写法更强调argv是一个指向某数组的起始元素的指针，该数组的元素为字符指针类型。</li>
+<li>避免以整体代表部分或以部分代表整体。<br>
+例如在<code>char *p, *q; p = &quot;xyz&quot;; q=p;</code>中，p的值是一个指向由’x’,‘y’,‘z’和’\0’4个字符组成的数组的起始元素的指针。p和q是指向内存中同一地址的两个指针。复制指针并不同时复制指针所指向的数据。<br>
+<img src="/img/copy_pointer.jpg" alt="指针复制示意图"></li>
+<li>空指针并非空字符串。当将0赋值给一个指针变量时，绝对不能企图使用该指针所指向的内存中存储的内容。<br>
+例如：<code>if (p == (char *)0) ...</code>写法是合法的。但是如果写成这样，<code>if (strcmp(p, (char*)0) == 0) ...</code>就是非法的。因为库函数strcmp的实现中包括查看它的指针参数所指向内存中的内容的操作。</li>
+<li>边界计算与不对称边界。C语言中一个拥有n个元素的数组的下标范围是从0到n-1为止。<br>
+程序设计错误中最难以察觉的一类是差一错误(off-by-one error)。要避免这个错误有两个原则。1.首先考虑最简单情况下的特例，然后将得到的结果外推。2.仔细计算边界，绝不掉以轻心。<br>
+所以表示范围的时候常常用半开区间[start,end)，可以省去很多麻烦。<br>
+对于数组结尾之后的下一个元素，取它的地址是合法的，但是取值是非法的。<br>
+例子：程序按一定顺序生成一些整数，并将这些整数按列输出。程序的输出可能包括若干页的整数，每页包括NCOLS列，每列又包括NROWS个元素，每个元素就是一个待输出的整数。程序生成的整数是按列连续分布的，而不是按行分布的。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">其他程序把生成数值传递给print，当缓冲区满时打印。</span><br><span class="line">最后一个数值生成出来后，调用flush刷新，无论缓冲区是否已满。</span><br><span class="line">printnum在本页的当前位置打印一个数值。</span><br><span class="line">printnl打印一个换行符，另起新的一行。</span><br><span class="line">printpage打印一个分页符，另起新的一页。</span><br><span class="line">*/</span><br><span class="line">// 缓冲区不必包括最后一列。</span><br><span class="line">// 到达最后一列时，其每一个元素，也就是相应行的最后一个元素，</span><br><span class="line">// 只要得到数值，就可以立即打印出来。</span><br><span class="line">#define BUFSIZE (NROWS*(NCOLS-1))	</span><br><span class="line">static int buffer[BUFSIZE];</span><br><span class="line">static int *bufptr = buffer;</span><br><span class="line">// 如果缓冲区未满，就把生成的数值放到缓冲区中；</span><br><span class="line">// 当缓冲区已满时，此时读入的数值就是一页中最后一列的某个元素，这时就打印出该元素所对应的行。</span><br><span class="line">// 当一页中所有的行都已输出，就清空缓冲区。</span><br><span class="line">void print(int n)</span><br><span class="line">&#123;</span><br><span class="line">	if (bufstr == &amp;buffer[BUFSIZE]) &#123;</span><br><span class="line">		static int row = 0;</span><br><span class="line">		int *p;</span><br><span class="line">		for (p = buffer+row; p &lt; bufptr; p += NROWS) &#123;printnum(*p);&#125;</span><br><span class="line">		printnum(n);	// 打印当前行的最后一个元素</span><br><span class="line">		printnl();		// 另起新的一行</span><br><span class="line">		if (++row == NROWS) &#123;</span><br><span class="line">			printpage();</span><br><span class="line">			row = 0;	// 重置当前行序号</span><br><span class="line">			bufptr = buffer;	// 重置指针bufptr</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;else</span><br><span class="line">	&#123;*bufptr++ = n;&#125;</span><br><span class="line">&#125;</span><br><span class="line">void flush()</span><br><span class="line">&#123;</span><br><span class="line">	int row;</span><br><span class="line">	int k = bufptr - buffer;	// 计算缓冲区中剩余项的数目</span><br><span class="line">	if (k &gt; NROWS) k = NROWS;</span><br><span class="line">	if (k &gt; 0) &#123;</span><br><span class="line">		for (row = 0; row &lt; k; row++) &#123;</span><br><span class="line">			int *p;</span><br><span class="line">			for (p = buffer + row; p &lt; bufptr; p += NROWS)</span><br><span class="line">			&#123;printnum(*p);&#125;</span><br><span class="line">			printnl();</span><br><span class="line">		&#125;</span><br><span class="line">		printpage();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>求值顺序。C语言中只有四个运算符(<code>&amp;&amp;</code>、<code>||</code>、<code>?:</code>、<code>,</code>)存在规定的求值顺序。运算符<code>&amp;&amp;</code>和运算符<code>||</code>首先对左侧操作数求值，只在需要时才对右侧操作数求值。运算符<code>?:</code>先对条件求值，然后再根据条件选择分支求值。逗号运算符首先对左侧操作数求值，然后该值被丢弃，再对右侧操作数求值。<br>
+例如：<code>if (y != 0 &amp;&amp; x/y &gt; tolerance)</code>保证仅当y非0时才对x/y求值。<br>
+而<code>y[i] = x[i++];</code>的写法是错误的，因为不能保证y[i]的地址在i的自增操作执行之前被求值。</li>
+<li>运算符<code>&amp;&amp;</code>、<code>||</code>和<code>!</code>与运算符<code>&amp;</code>、<code>|</code>和<code>~</code>是截然不同的。例如<code>10&amp;12 = 8</code>即二进制<code>1010&amp;1100 = 1000</code>，<code>10|12 = 14</code>，<code>~10=-11</code>。而<code>10&amp;&amp;12 = 1</code>，<code>10||12 = 1</code>，<code>!10 = 0</code>。与运算符&amp;&amp;不同，运算符&amp;两侧的操作数都必须被求值。</li>
+<li>整数溢出。C语言中存在两类整数算术运算，有符号运算与无符号运算。在无符号算术运算中，没有溢出一说，所有的无符号运算都是以2的n次方为模。如果算术运算符的两个操作数分别是有符号和无符号整数，有符号整数会被转换为无符号整数，溢出也不会发生。但当两个操作数都是有符号整数时，就有可能发生结果未定义的溢出。<br>
+例如，假定a和b是两个非负整型变量，检查a+b是否会溢出。使用<code>if((unsigned)a + (unsigned)b &gt; INT_MAX){}</code>或<code>if(a &gt; INT_MAX - b){}</code>。</li>
+<li>为函数main提供返回值。返回值为0表示程序执行成功，返回值非0则表示程序执行失败。</li>
+</ul>
+<h3 id="题目-2"><a class="markdownIt-Anchor" href="#题目-2"></a> 题目</h3>
+<ul>
+<li><strong>问</strong>：编写一个函数，对一个已排序的整数表执行二分查找。函数的输入包括一个指向表头的指针，表中的元素个数，以及待查找的数值。函数的输出是一个指向满足查找要求的元素的指针，当未查找到满足要求的数值时，输出一个NULL指针。<br>
+<strong>答</strong>：注意其中做的优化。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int *bsearch(int *t, int n, int x)</span><br><span class="line">&#123;</span><br><span class="line">	int *lo = t, *hi = t + n;</span><br><span class="line">	while (lo &lt; hi)</span><br><span class="line">	&#123;</span><br><span class="line">		int *mid = lo + ((hi - lo) &gt;&gt; 1);</span><br><span class="line">		if (x &lt; *mid) hi = mid;</span><br><span class="line">		else if (x &gt; *mid) lo = mid + 1;</span><br><span class="line">		else return mid;</span><br><span class="line">	&#125;</span><br><span class="line">	return NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="连接"><a class="markdownIt-Anchor" href="#连接"></a> 连接</h2>
+<blockquote>
+<p>C程序通常是由若干个部分组成，它们分别进行编译，最后再整合起来。这个过程称为“连接”，是程序和其支持环境之间关系的一部分。</p>
+</blockquote>
+<ul>
+<li>什么是连接器。典型的连接器把由汇编器生成的若干个目标模块，整合成一个被称为载入模块或可执行文件的实体，该实体能够被操作系统直接执行。连接器的输入是一组目标模块和库文件。连接器的输出是一个载入模块。连接器读入目标模块和库文件，同时生成载入模块。对每个目标模块中的每个外部对象，连接器都要检查载入模块，看是否已有同名的外部对象。如果没有，连接器就将该外部对象添加到载入模块中；如果有，连接器就要开始处理命名冲突。在连接器生成载入模块的过程中，还需要记录外部对象的引用。当连接器读入一个目标模块时，它需要解析出这个目标模块中定义的所有外部对象的引用，并作出标记说明这些外部对象不再是未定义的。</li>
+<li>声明与定义。声明语句<code>int a;</code>如果位置出现在所有函数体之外，那么它被称为外部对象a的定义。说明a是一个外部整型变量，同时为a分配了存储空间。未指定初始值的外部变量被初始化为0。而<code>extern int a;</code>也说明a是一个外部整型变量，但也说明a的存储空间是在程序的其他地方分配的，是对a的引用而不是定义。每个外部对象都必须在程序某个地方进行定义，并且只能定义一次。</li>
+<li>命名冲突与static修饰符。static修饰符可以减少命名冲突。如<code>static int a;</code>含义与<code>int a;</code>相同，但a的作用域限制在一个源文件内，对于其他源文件，a是不可见的。static不仅适用于变量，也适用于函数。</li>
+<li>形参、实参与返回值。要明确类型，尤其是遇到在不同情形下可以接收不同类型的参数的函数。</li>
+<li>检查外部类型。要保证一个特定名称的所有外部定义在每个目标模块中都有严格相同的类型。</li>
+<li>头文件。每个外部对象只在一个地方声明，就是一个头文件中，所有需要用到该外部对象的模块都包含这个头文件。</li>
+</ul>
+<h3 id="题目-3"><a class="markdownIt-Anchor" href="#题目-3"></a> 题目</h3>
+<ul>
+<li><strong>问</strong>：假定一个程序在一个源文件中包含了声明：<code>long foo;</code>而在另一个源文件中包含了：<code>extern short foo;</code>。又进一步假定，如果给long类型的foo赋一个较小的值，例如37，那么short类型的foo就同时获得了一个值37。我们能够对运行该程序的硬件作出什么样的推断？如果short类型的foo得到的值不是37而是0，我们又能够作出什么样的推断？<br>
+<strong>答</strong>：如果把值37赋给long型的foo，相当于同时把值37也赋给了short型的foo，那么这意味着short型的foo，与long型的foo中包含了值37的有效位的部分，两者在内存中占用的是同一区域。这有可能是因为long型和short型被实现为同一类型，但很少有C语言实现会这样做。更有可能的是，long型的foo的低位部分与short型的foo共享了相同的内存空间，一般情况下，这个部分所处的内存地址较低；因此我们的一个可能推论就是，运行该程序的硬件是一个低位优先(little-endian)的机器。同样道理，如果在long型的foo中存储了值37，而short型的foo的值却是0，我们所用的硬件可能是一个高位优先(big-endian)的机器。<br>
+<strong>注</strong>：<br>
+<strong>Endian</strong>的意思是“数据在内存中的字节排列顺序”，表示一个字在内存中或传送过程中的字节顺序。在微处理器中，像long/DWORD(32bits) 0x12345678这样的数据总是按照高位优先(BIG ENDIAN)方式存放的。但在内存中，数据存放顺序则因微处理器厂商的不同而不同。一种顺序称为big-endian，即把最高位字节放在最前面；另一种顺序就称为little-endian，即把最低位字节放在最前面。<br>
+<strong>BIG ENDIAN</strong>：最低地址存放高位字节，可称为高位优先。内存从最低地址开始，按顺序存放。BIG ENDIAN存放方式正是我们的书写方式，高数位数字先写（比如，总是按照千百十个位来书写数字）。而且所有的处理器都是按照这个顺序存放数据的。<br>
+<strong>LITTLE ENDIAN</strong>：最低地址存放低位字节，可称为低位优先。内存从最低地址开始，顺序存放。LITTLE ENDIAN处理器是通过硬件将内存中的LITTLE ENDIAN排列顺序转换到寄存器的BIG ENDIAN排列顺序的，没有数据加载/存储的开销，不用担心。</li>
+</ul>
+<h2 id="库函数"><a class="markdownIt-Anchor" href="#库函数"></a> 库函数</h2>
+<blockquote>
+<p>可能的库函数误用。</p>
+</blockquote>
+<ul>
+<li>返回整数的getchar函数，再赋值给char类型的话会被截断，可能出错。</li>
+<li>更新顺序文件。为了保持与过去不能同时进行读写操作的程序的向下兼容性，一个输入操作不能随后直接紧跟一个输出操作，反之亦然。如果要同时进行输入和输出操作，必须在其中插入fseek函数的调用。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FILE *fp;</span><br><span class="line">struct record rec;</span><br><span class="line">...</span><br><span class="line">while (fread((char*)&amp;rec, sizeof(rec), 1, fp) == 1)</span><br><span class="line">&#123;</span><br><span class="line">	// 对rec执行某些操作</span><br><span class="line">	if (/*rec必须被重新写入*/)</span><br><span class="line">	&#123;</span><br><span class="line">		fseek(fp, -(long)sizeof(rec), 1);</span><br><span class="line">		fwrite((char*)&amp;rec, sizeof(rec), 1, fp);</span><br><span class="line">		fseek(fp, 0L, 1);	// 改变了文件的状态，使文件又可以正常读取。</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>缓冲输出与内存分配。程序输出有两种方式：一种是即时处理方式，另一种是先暂存起来，然后再大块写入的方式，前者往往造成较高的系统负担。C语言使用库函数<code>setbuf(stdout, buf);</code>控制实际写之前产生的输出数据量。为防止函数结束时缓冲数组刷新前就已经被释放，应该将缓冲数组设置为静态数组，或把声明移到函数之外，或动态分配缓冲区。</li>
+<li>使用errno检测错误，错误则值为0，正确则不确定。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 调用库函数</span><br><span class="line">if (返回的错误值)</span><br><span class="line">&#123;</span><br><span class="line">	检查errno</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>库函数signal。包含头文件<code>#include &lt;signal.h&gt;</code>。调用<code>signal(signal type, handler function);</code>。由于signal是异步，不要在其回调函数中进行诸如内存分配这种危险的操作，这个函数越简单越好。</li>
+</ul>
+<h3 id="题目-4"><a class="markdownIt-Anchor" href="#题目-4"></a> 题目</h3>
+<ul>
+<li><strong>问</strong>：当一个程序异常终止时，程序输出的最后几行常常会丢失，原因是什么？可以采取怎样的措施来解决这个问题？<br>
+<strong>答</strong>：一个异常终止的程序可能没有机会来清空其输出缓冲区。因此，该程序生成的输出可能位于内存的某个位置，但却永远不会被写出了。在某些系统上，这些无法被写出的输出数据可能长达好几页。容易误导程序员，以为错误发生在实际位置之前。解决方案就是在调试时强制不允许对输出进行缓冲。可以把<code>setbuf(stdout, (char*)0);</code>这个语句写在任何输出被写入到stdout(包括任何对printf的调用)之前。最恰当的就是作为main函数的第一个语句。</li>
+</ul>
+<h2 id="预处理器"><a class="markdownIt-Anchor" href="#预处理器"></a> 预处理器</h2>
+<blockquote>
+<p>由于C预处理器的介入，实际运行的程序并不是最初编写的程序，它对程序代码作了必要的转换处理。</p>
+</blockquote>
+<ul>
+<li>不能忽视宏定义中的空格。<code>#define f(x) ((x)-1)</code>。</li>
+<li>宏并不是函数。宏定义中应把每个参数都用括号括起来。另外还要确保宏中的参数没有副作用，如i++之类。要不然干脆用函数而不是宏。宏的另一个危险是，宏展开可能产生非常庞大的表达式，占用的空间远远超过了编程者所期望的空间。</li>
+<li>宏并不是语句。展开时容易在ifelse语句中有{}或;应不应该有的错误。例如，正确的assert宏定义，并不是类似一个语句，而是类似一个表达式，利用了||运算符对两侧的操作数依次顺序求值的性质。<br>
+<code>#define assert(e) ((void)((e)||_assert_error(__FILE__,__LINE__)))</code></li>
+<li>宏并不是类型定义。最好还是用类型定义<code>typedef struct foo FOOTYPE;</code>。宏这样的粗暴展开容易在同时定义多个变量时缺失字符。</li>
+</ul>
+<h2 id="2个常用的却很普遍地被误解的库函数"><a class="markdownIt-Anchor" href="#2个常用的却很普遍地被误解的库函数"></a> 2个常用的却很普遍地被误解的库函数</h2>
+<h3 id="printf函数族"><a class="markdownIt-Anchor" href="#printf函数族"></a> printf函数族</h3>
+<p>printf、fprintf、sprintf。</p>
+<p><code>int printf(const char* format, ...);</code>printf将格式化字符串输出到标准输出stdout。<br>
+<code>int fprintf(FILE* stream, const char* format, ...);</code>fprintf将格式化字符串输出到任意文件。<br>
+<code>int sprintf(char* str, const char* format, ...);</code>sprintf将格式化字符串输出到字符数组。</p>
+<h4 id="format"><a class="markdownIt-Anchor" href="#format"></a> format</h4>
+<p>format参数是这种格式<code>%[flags][width][.precision][length]specifier</code>。<br>
+<strong>specifier</strong></p>
+<table>
+<thead>
+<tr>
+<th>specifier</th>
+<th>Output</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d or i</td>
+<td>Signed decimal integer</td>
+<td>392</td>
+</tr>
+<tr>
+<td>u</td>
+<td>Unsigned decimal integer</td>
+<td>7235</td>
+</tr>
+<tr>
+<td>o</td>
+<td>Unsigned octal</td>
+<td>610</td>
+</tr>
+<tr>
+<td>x</td>
+<td>Unsigned hexadecimal integer</td>
+<td>7fa</td>
+</tr>
+<tr>
+<td>X</td>
+<td>Unsigned hexadecimal integer (uppercase)</td>
+<td>7FA</td>
+</tr>
+<tr>
+<td>f</td>
+<td>Decimal floating point, lowercase</td>
+<td>392.65</td>
+</tr>
+<tr>
+<td>F</td>
+<td>Decimal floating point, uppercase</td>
+<td>392.65</td>
+</tr>
+<tr>
+<td>e</td>
+<td>Scientific notation (mantissa/exponent), lowercase</td>
+<td>3.9265e+2</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Scientific notation (mantissa/exponent), uppercase</td>
+<td>3.9265E+2</td>
+</tr>
+<tr>
+<td>g</td>
+<td>Use the shortest representation: %e or %f</td>
+<td>392.65</td>
+</tr>
+<tr>
+<td>G</td>
+<td>Use the shortest representation: %E or %F</td>
+<td>392.65</td>
+</tr>
+<tr>
+<td>a</td>
+<td>Hexadecimal floating point, lowercase</td>
+<td>-0xc.90fep-2</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Hexadecimal floating point, uppercase</td>
+<td>-0XC.90FEP-2</td>
+</tr>
+<tr>
+<td>c</td>
+<td>Character</td>
+<td>a</td>
+</tr>
+<tr>
+<td>s</td>
+<td>String of characters</td>
+<td>sample</td>
+</tr>
+<tr>
+<td>p</td>
+<td>Pointer address</td>
+<td>b8000000</td>
+</tr>
+<tr>
+<td>n</td>
+<td>Nothing printed.The corresponding argument must be a pointer to a signed int. <br>The number of characters written so far is stored in the pointed location.</td>
+<td></td>
+</tr>
+<tr>
+<td>%</td>
+<td>A % followed by another % character will write a single % to the stream.</td>
+<td>%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>flags</strong></p>
+<table>
+<thead>
+<tr>
+<th>flags</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-</td>
+<td>Left-justify within the given field width; <br>Right justification is the default (see width sub-specifier).</td>
+</tr>
+<tr>
+<td>+</td>
+<td>Forces to preceed the result with a plus or minus sign (+ or -) even for positive numbers. <br>By default, only negative numbers are preceded with a - sign.</td>
+</tr>
+<tr>
+<td>(space)</td>
+<td>If no sign is going to be written, a blank space is inserted before the value.</td>
+</tr>
+<tr>
+<td>#</td>
+<td>Used with o, x or X specifiers the value is preceeded with 0, 0x or 0X respectively for values different than zero.<br>Used with a, A, e, E, f, F, g or G it forces the written output to contain a decimal point even if no more digits follow. <br>By default, if no digits follow, no decimal point is written.</td>
+</tr>
+<tr>
+<td>0</td>
+<td>Left-pads the number with zeroes (0) instead of spaces when padding is specified (see width sub-specifier).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>width</strong></p>
+<table>
+<thead>
+<tr>
+<th>width</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(number)</td>
+<td>Minimum number of characters to be printed. If the value to be printed is shorter than this number, the result is padded with blank spaces. The value is not truncated even if the result is larger.</td>
+</tr>
+<tr>
+<td>*</td>
+<td>The width is not specified in the format string, but as an additional integer value argument preceding the argument that has to be formatted.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>.precision</strong></p>
+<table>
+<thead>
+<tr>
+<th>.precision</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.number</td>
+<td>For integer specifiers (d, i, o, u, x, X): precision specifies the minimum number of digits to be written. If the value to be written is shorter than this number, the result is padded with leading zeros. The value is not truncated even if the result is longer. A precision of 0 means that no character is written for the value 0.<br>For a, A, e, E, f and F specifiers: this is the number of digits to be printed after the decimal point (by default, this is 6).<br>For g and G specifiers: This is the maximum number of significant digits to be printed.<br>For s: this is the maximum number of characters to be printed. By default all characters are printed until the ending null character is encountered.<br>If the period is specified without an explicit value for precision, 0 is assumed.</td>
+</tr>
+<tr>
+<td>.*</td>
+<td>The precision is not specified in the format string, but as an additional integer value argument preceding the argument that has to be formatted.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="返回值"><a class="markdownIt-Anchor" href="#返回值"></a> 返回值</h4>
+<p>如果成功，返回格式化字符串的长度。如果失败，返回一个负值，并设置错误码ferror。如果是一个宽字节编码错误，错误码errno是EILSEQ。</p>
+<h4 id="示例"><a class="markdownIt-Anchor" href="#示例"></a> 示例</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">/* printf example */</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">   printf (&quot;Characters: %c %c \n&quot;, &apos;a&apos;, 65);</span><br><span class="line">   printf (&quot;Decimals: %d %ld\n&quot;, 1977, 650000L);</span><br><span class="line">   printf (&quot;Preceding with blanks: %10d \n&quot;, 1977);</span><br><span class="line">   printf (&quot;Preceding with zeros: %010d \n&quot;, 1977);</span><br><span class="line">   printf (&quot;Some different radices: %d %x %o %#x %#o \n&quot;, 100, 100, 100, 100, 100);</span><br><span class="line">   printf (&quot;floats: %4.2f %+.0e %E \n&quot;, 3.1416, 3.1416, 3.1416);</span><br><span class="line">   printf (&quot;Width trick: %*d \n&quot;, 5, 10);</span><br><span class="line">   printf (&quot;%s \n&quot;, &quot;A string&quot;);</span><br><span class="line">   return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">输出：</span><br><span class="line">Characters: a A</span><br><span class="line">Decimals: 1977 650000</span><br><span class="line">Preceding with blanks:       1977</span><br><span class="line">Preceding with zeros: 0000001977</span><br><span class="line">Some different radices: 100 64 144 0x64 0144</span><br><span class="line">floats: 3.14 +3e+000 3.141600E+000</span><br><span class="line">Width trick:    10</span><br><span class="line">A string</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/* fprintf example */</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">   FILE * pFile;</span><br><span class="line">   int n;</span><br><span class="line">   char name [100];</span><br><span class="line">   pFile = fopen (&quot;myfile.txt&quot;,&quot;w&quot;);</span><br><span class="line">   for (n=0 ; n&lt;3 ; n++)</span><br><span class="line">   &#123;</span><br><span class="line">     puts (&quot;please, enter a name: &quot;);</span><br><span class="line">     gets (name);</span><br><span class="line">     fprintf (pFile, &quot;Name %d [%-10.10s]\n&quot;,n+1,name);</span><br><span class="line">   &#125;</span><br><span class="line">   fclose (pFile);</span><br><span class="line">   return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">如果输入：John, Jean-Francois, Yoko</span><br><span class="line">在myfile.txt中：</span><br><span class="line">Name 1 [John      ] </span><br><span class="line">Name 2 [Jean-Franc] </span><br><span class="line">Name 3 [Yoko      ]</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/* sprintf example */</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">  char buffer [50];</span><br><span class="line">  int n, a=5, b=3;</span><br><span class="line">  n=sprintf (buffer, &quot;%d plus %d is %d&quot;, a, b, a+b);</span><br><span class="line">  printf (&quot;[%s] is a string %d chars long\n&quot;,buffer,n);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">输出</span><br><span class="line">[5 plus 3 is 8] is a string 13 chars long</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<h3 id="cstdargstdargh实现可变参数"><a class="markdownIt-Anchor" href="#cstdargstdargh实现可变参数"></a> cstdarg(stdarg.h)实现可变参数</h3>
+<p>va_list、va_start、va_arg、va_end、va_copy<br>
+<code>void va_start (va_list ap, paramN);</code><br>
+<code>type va_arg (va_list ap, type)</code><br>
+<code>void va_end (va_list ap);</code><br>
+<code>void va_copy (va_list dest, va_list src);</code></p>
+<ol>
+<li>使用<code>va_start</code>初始化定义为<code>va_list</code>的变量列表。</li>
+<li>随后<code>va_arg</code>按照传递进函数的顺序生成额外的参数。</li>
+<li>在函数返回前执行<code>va_end</code>。</li>
+</ol>
+<h4 id="例子"><a class="markdownIt-Anchor" href="#例子"></a> 例子</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/* va_start example */</span><br><span class="line">#include &lt;stdio.h&gt;      /* printf */</span><br><span class="line">#include &lt;stdarg.h&gt;     /* va_list, va_start, va_arg, va_end */</span><br><span class="line">void PrintFloats (int n, ...)</span><br><span class="line">&#123;</span><br><span class="line">  int i;</span><br><span class="line">  double val;</span><br><span class="line">  printf (&quot;Printing floats:&quot;);</span><br><span class="line">  va_list vl;</span><br><span class="line">  va_start(vl,n);</span><br><span class="line">  for (i=0;i&lt;n;i++)</span><br><span class="line">  &#123;</span><br><span class="line">    val=va_arg(vl,double);</span><br><span class="line">    printf (&quot; [%.2f]&quot;,val);</span><br><span class="line">  &#125;</span><br><span class="line">  va_end(vl);</span><br><span class="line">  printf (&quot;\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">  PrintFloats (3,3.14159,2.71828,1.41421);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">输出：</span><br><span class="line">Printing floats: [3.14] [2.72] [1.41]</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">/* va_arg example */</span><br><span class="line">#include &lt;stdio.h&gt;      /* printf */</span><br><span class="line">#include &lt;stdarg.h&gt;     /* va_list, va_start, va_arg, va_end */</span><br><span class="line">int FindMax (int n, ...)</span><br><span class="line">&#123;</span><br><span class="line">  int i,val,largest;</span><br><span class="line">  va_list vl;</span><br><span class="line">  va_start(vl,n);</span><br><span class="line">  largest=va_arg(vl,int);</span><br><span class="line">  for (i=1;i&lt;n;i++)</span><br><span class="line">  &#123;</span><br><span class="line">    val=va_arg(vl,int);</span><br><span class="line">    largest=(largest&gt;val)?largest:val;</span><br><span class="line">  &#125;</span><br><span class="line">  va_end(vl);</span><br><span class="line">  return largest;</span><br><span class="line">&#125;</span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">  int m;</span><br><span class="line">  m= FindMax (7,702,422,631,834,892,104,772);</span><br><span class="line">  printf (&quot;The largest value is: %d\n&quot;,m);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">输出：</span><br><span class="line">The largest value is: 892</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">/* va_end example */</span><br><span class="line">#include &lt;stdio.h&gt;      /* puts */</span><br><span class="line">#include &lt;stdarg.h&gt;     /* va_list, va_start, va_arg, va_end */</span><br><span class="line">void PrintLines (char* first, ...)</span><br><span class="line">&#123;</span><br><span class="line">  char* str;</span><br><span class="line">  va_list vl;</span><br><span class="line">  str=first;</span><br><span class="line">  va_start(vl,first);</span><br><span class="line">  do &#123;</span><br><span class="line">    puts(str);</span><br><span class="line">    str=va_arg(vl,char*);</span><br><span class="line">  &#125; while (str!=NULL);</span><br><span class="line">  va_end(vl);</span><br><span class="line">&#125;</span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">  PrintLines (&quot;First&quot;,&quot;Second&quot;,&quot;Third&quot;,&quot;Fourth&quot;,NULL);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">输出：</span><br><span class="line">First</span><br><span class="line">Second</span><br><span class="line">Third</span><br><span class="line">Fourth</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">/* va_copy example */</span><br><span class="line">#include &lt;stdio.h&gt;      /* printf, vprintf*/</span><br><span class="line">#include &lt;stdlib.h&gt;     /* malloc */</span><br><span class="line">#include &lt;string.h&gt;     /* strlen, strcat */</span><br><span class="line">#include &lt;stdarg.h&gt;     /* va_list, va_start, va_copy, va_arg, va_end */</span><br><span class="line">/* print ints until a zero is found: */</span><br><span class="line">void PrintInts (int first,...)</span><br><span class="line">&#123;</span><br><span class="line">  char * buffer;</span><br><span class="line">  const char * format = &quot;[%d] &quot;;</span><br><span class="line">  int count = 0;</span><br><span class="line">  int val = first;</span><br><span class="line">  va_list vl,vl_count;</span><br><span class="line">  va_start(vl,first);</span><br><span class="line">  /* count number of arguments: */</span><br><span class="line">  va_copy(vl_count,vl);</span><br><span class="line">  while (val != 0) &#123;</span><br><span class="line">    val=va_arg(vl_count,int);</span><br><span class="line">    ++count;</span><br><span class="line">  &#125;</span><br><span class="line">  va_end(vl_count);</span><br><span class="line">  /* allocate storage for format string: */</span><br><span class="line">  buffer = (char*) malloc (strlen(format)*count+1);</span><br><span class="line">  buffer[0]=&apos;\0&apos;;</span><br><span class="line">  /* generate format string: */</span><br><span class="line">  for (;count&gt;0;--count) &#123;</span><br><span class="line">    strcat (buffer,format);</span><br><span class="line">  &#125;</span><br><span class="line">  /* print integers: */</span><br><span class="line">  printf (format,first);</span><br><span class="line">  vprintf (buffer,vl);</span><br><span class="line">  va_end(vl);</span><br><span class="line">&#125;</span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">  PrintInts (10,20,30,40,50,0);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">输出：</span><br><span class="line">[10] [20] [30] [40] [50] [0]</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<h2 id="作者的建议"><a class="markdownIt-Anchor" href="#作者的建议"></a> 作者的建议</h2>
+<p>作者归纳道，要避免那些最令人生厌的那种看起来能工作却深藏bug的程序，最好的办法就是事前周密思考。</p>
+<ul>
+<li>小心极具伪装性和欺骗性的bug。比如==和=的问题。</li>
+<li>直截了当地表明意图，用括号等方式消除可能的误解。</li>
+<li>考察最简单的特例。比如输入数据为空或只有一个元素。</li>
+<li>使用不对称边界。注意C中数组下标取值从0开始。</li>
+<li>避免使用生僻的语言特性，以规避编译器差异造成的迷惑。</li>
+<li>防御性编程。</li>
+</ul>
+<h2 id="另外"><a class="markdownIt-Anchor" href="#另外"></a> 另外</h2>
+<ul>
+<li><strong>问</strong>：在烹饪时你是否失手用菜刀切伤过自己的手？怎样改进菜刀使得使用更安全？你是否愿意使用这样一把经过改良的菜刀？<br>
+<strong>答</strong>：我们很容易想到办法让一个工具更安全，代价是原来简单的工具现在要变得复杂一些。食品加工机一般有连锁装置，保护使用者不让手指受伤。但是菜刀却不同，给这样一个简单、灵活的工具附加保护手指避免受伤的装置，只能让它失去简单灵活的特点。实际上，这样做最后得到的也许更像一台食品加工机，而不是一把菜刀。使其难于做傻事常常也会使其难于做聪明事，正所谓弄巧成拙。</li>
+</ul>
+<p>[1] C陷阱与缺陷<br>
+[2] <a href="http://www.cplusplus.com/reference/cstdio/printf/" target="_blank" rel="external">http://www.cplusplus.com/reference/cstdio/printf/</a><br>
+[3] <a href="http://www.cplusplus.com/reference/cstdio/fprintf/" target="_blank" rel="external">http://www.cplusplus.com/reference/cstdio/fprintf/</a><br>
+[4] <a href="http://www.cplusplus.com/reference/cstdio/sprintf/" target="_blank" rel="external">http://www.cplusplus.com/reference/cstdio/sprintf/</a><br>
+[5] <a href="http://www.cplusplus.com/reference/cstdarg/" target="_blank" rel="external">http://www.cplusplus.com/reference/cstdarg/</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#词法陷阱"><span class="toc-number">1.</span> <span class="toc-text"> 词法陷阱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目"><span class="toc-number">1.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#语法陷阱"><span class="toc-number">2.</span> <span class="toc-text"> 语法陷阱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#语义陷阱"><span class="toc-number">3.</span> <span class="toc-text"> 语义陷阱</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目-2"><span class="toc-number">3.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连接"><span class="toc-number">4.</span> <span class="toc-text"> 连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目-3"><span class="toc-number">4.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#库函数"><span class="toc-number">5.</span> <span class="toc-text"> 库函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题目-4"><span class="toc-number">5.1.</span> <span class="toc-text"> 题目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预处理器"><span class="toc-number">6.</span> <span class="toc-text"> 预处理器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2个常用的却很普遍地被误解的库函数"><span class="toc-number">7.</span> <span class="toc-text"> 2个常用的却很普遍地被误解的库函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#printf函数族"><span class="toc-number">7.1.</span> <span class="toc-text"> printf函数族</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#format"><span class="toc-number">7.1.1.</span> <span class="toc-text"> format</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#返回值"><span class="toc-number">7.1.2.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-number">7.1.3.</span> <span class="toc-text"> 示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cstdargstdargh实现可变参数"><span class="toc-number">7.2.</span> <span class="toc-text"> cstdarg(stdarg.h)实现可变参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">7.2.1.</span> <span class="toc-text"> 例子</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作者的建议"><span class="toc-number">8.</span> <span class="toc-text"> 作者的建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另外"><span class="toc-number">9.</span> <span class="toc-text"> 另外</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&text=《C陷阱与缺陷》笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&is_video=false&description=《C陷阱与缺陷》笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=《C陷阱与缺陷》笔记&body=Check out this article: http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&title=《C陷阱与缺陷》笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/05/14/note-c-traps-and-pitfalls/&name=《C陷阱与缺陷》笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

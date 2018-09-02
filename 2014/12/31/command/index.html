@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="设计模式之命令。将“请求”封装成对象，以便使用不同的请求、队列或者日志来参数化其他对象。命令模式也支持可撤销的操作。可将“动作的请求者”从“动作的执行者”对象中解耦。适用性、结构与示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Command">
+<meta property="og:url" content="http://conglang.github.io/2014/12/31/command/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="设计模式之命令。将“请求”封装成对象，以便使用不同的请求、队列或者日志来参数化其他对象。命令模式也支持可撤销的操作。可将“动作的请求者”从“动作的执行者”对象中解耦。适用性、结构与示例代码。">
+<meta property="og:image" content="http://conglang.github.io/img/command_brief.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/command_scenario.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/command_class.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/command_class2.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/command_sequence.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:44:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Command">
+<meta name="twitter:description" content="设计模式之命令。将“请求”封装成对象，以便使用不同的请求、队列或者日志来参数化其他对象。命令模式也支持可撤销的操作。可将“动作的请求者”从“动作的执行者”对象中解耦。适用性、结构与示例代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/command_brief.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Command</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2014/12/31/stl-set-and-multiset/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2014/12/31/chain-of-responsibility/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/31/command/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/31/command/&text=Command"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/31/command/&is_video=false&description=Command"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Command&body=Check out this article: http://conglang.github.io/2014/12/31/command/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/31/command/&name=Command&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命令"><span class="toc-number">1.</span> <span class="toc-text"> 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">5.</span> <span class="toc-text"> 实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">6.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Command
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2014-12-31T14:06:11.000Z" itemprop="datePublished">2014-12-31</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Design-Pattern/">Design Pattern</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="命令"><a class="markdownIt-Anchor" href="#命令"></a> 命令</h2>
+<blockquote>
+<p>将“请求”封装成对象，以便使用不同的请求、队列或者日志来参数化其他对象。命令模式也支持可撤销的操作。<br>
+可将“动作的请求者”从“动作的执行者”对象中解耦。</p>
+</blockquote>
+<h2 id="适用性"><a class="markdownIt-Anchor" href="#适用性"></a> 适用性</h2>
+<ul>
+<li>抽象出待执行的动作以参数化某对象。Command是回调机制的一个面向对象的替代品。</li>
+<li>在不同的时刻指定、排列和执行请求。Command对象有与初始请求无关的生存期。</li>
+<li>支持取消操作。Command有一个Execute接口和一个Unexecute接口。Command被存储在一个历史列表中。</li>
+<li>支持修改日志，这样当系统崩溃时，这些修改可以重做一遍。在Command接口中添加装载和存储操作，可以用来保持变动的一个一致的修改日志。从崩溃中恢复的过程包括从磁盘中重新读入记录下来的命令并用Execute操作重新执行它们。</li>
+</ul>
+<h2 id="典型情境"><a class="markdownIt-Anchor" href="#典型情境"></a> 典型情境</h2>
+<p>一个遥控器同时控制电视、电灯等等。<br>
+<img src="/img/command_brief.jpg" alt="Command Brief"><br>
+<img src="/img/command_scenario.jpg" alt="Command Scenario"></p>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/command_class.jpg" alt="Command Class 1"><br>
+<img src="/img/command_class2.jpg" alt="Command Class 2"></p>
+<blockquote>
+<p><strong>Command</strong> - 声明执行操作的接口。<br>
+<strong>ConcreteCommand</strong> - 将一个接收者对象绑定与一个动作。调用接收者相应的操作，以实现Execute。<br>
+<strong>Client</strong> - 创建一个具体命令对象并设定它的接收者。<br>
+<strong>Invoker</strong> - 要求该命令执行这个请求。<br>
+<strong>Receiver</strong> - 知道如何实施与执行一个请求相关的操作。任何类都可能作为一个接收者。</p>
+<blockquote>
+<p>协作：<br>
+Client创建一个ConcreteCommand对象并指定它的Receiver对象。<br>
+某Invoker对象存储该ConcreteCommand对象。<br>
+该Invoker通过调用Command对象的Execute操作来提交一个请求。若该命令是可撤销的，ConcreteCommand就在执行Execute操作之前存储当前状态以用于取消该命令。<br>
+ConcreteCommand对象对调用它的Receiver的一些操作以执行该请求。</p>
+</blockquote>
+</blockquote>
+<p><img src="/img/command_sequence.jpg" alt="Command Sequence"></p>
+<h2 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Receiver</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">action</span><span class="params">(<span class="keyword">bool</span> state)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (state)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"Go!Go!Go!"</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"Back!Back!Back!"</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Command</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ConcreteCommand : <span class="keyword">public</span> Command</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ConcreteCommand(Receiver* recv) : Command(), m_receiver(recv), m_state(<span class="literal">true</span>)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		m_state = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">if</span> (!m_receiver) <span class="keyword">return</span>;</span><br><span class="line">		m_receiver-&gt;action(m_state);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		m_state = <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">if</span> (!m_receiver) <span class="keyword">return</span>;</span><br><span class="line">		m_receiver-&gt;action(m_state);</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	Receiver* m_receiver;</span><br><span class="line">	<span class="keyword">bool</span> m_state;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> MultiCommand : <span class="keyword">public</span> Command</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Command* com)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		m_cmds.push_back(com);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Command* com)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		m_cmds.remove(com);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"Multi: "</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Command*&gt;::iterator it = m_cmds.begin(); it != m_cmds.end(); ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (*it)</span><br><span class="line">			&#123;</span><br><span class="line">				(*it)-&gt;execute();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">undo</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"Multi: "</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Command*&gt;::reverse_iterator it = m_cmds.rbegin(); it != m_cmds.rend(); ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (*it)</span><br><span class="line">			&#123;</span><br><span class="line">				(*it)-&gt;undo();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Command*&gt; m_cmds;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Invoker</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">execute_command</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"[Execute]"</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		Command* com = m_executecmds.front();</span><br><span class="line">		m_executecmds.pop_front();</span><br><span class="line">		<span class="keyword">if</span> (!com) <span class="keyword">return</span>;</span><br><span class="line">		com-&gt;execute();</span><br><span class="line">		m_undocmds.push_back(com);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">undo_command</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"[Undo]"</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		Command* com = m_undocmds.back();</span><br><span class="line">		m_undocmds.pop_back();</span><br><span class="line">		<span class="keyword">if</span> (!com) <span class="keyword">return</span>;</span><br><span class="line">		com-&gt;undo();</span><br><span class="line">		m_executecmds.push_back(com);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">store_command</span><span class="params">(Command* command)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		m_executecmds.push_back(command);</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Command*&gt; m_executecmds;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Command*&gt; m_undocmds;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Client</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">set_all</span><span class="params">(Invoker* ivk)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!ivk) <span class="keyword">return</span>;</span><br><span class="line">		Receiver* r1 = <span class="keyword">new</span> Receiver();</span><br><span class="line">		ConcreteCommand* c1 = <span class="keyword">new</span> ConcreteCommand(r1);</span><br><span class="line">		ivk-&gt;store_command(c1);</span><br><span class="line"></span><br><span class="line">		ConcreteCommand* c2 = <span class="keyword">new</span> ConcreteCommand(r1);</span><br><span class="line">		ConcreteCommand* c3 = <span class="keyword">new</span> ConcreteCommand(r1);</span><br><span class="line">		ConcreteCommand* c4 = <span class="keyword">new</span> ConcreteCommand(r1);</span><br><span class="line">		MultiCommand* cm = <span class="keyword">new</span> MultiCommand();</span><br><span class="line">		cm-&gt;add(c2);</span><br><span class="line">		cm-&gt;add(c3);</span><br><span class="line">		cm-&gt;add(c4);</span><br><span class="line">		ivk-&gt;store_command(cm);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Invoker ivk;</span><br><span class="line">	Client clt;</span><br><span class="line">	clt.set_all(&amp;ivk);</span><br><span class="line">	ivk.execute_command();</span><br><span class="line">	ivk.execute_command();</span><br><span class="line">	ivk.undo_command();</span><br><span class="line">	ivk.undo_command();</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="相关模式"><a class="markdownIt-Anchor" href="#相关模式"></a> 相关模式</h2>
+<ul>
+<li>Composite模式可被用来实现宏命令。</li>
+<li>Memento模式可用来保存某个状态，命令用这一状态来取消它的效果。在被放入历史列表前必须被拷贝的命令起到一种原型的作用。</li>
+</ul>
+<p>[1] 设计模式：可复用面向对象软件的基础<br>
+[2] Head First 设计模式</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命令"><span class="toc-number">1.</span> <span class="toc-text"> 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">5.</span> <span class="toc-text"> 实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">6.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/31/command/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/31/command/&text=Command"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/31/command/&is_video=false&description=Command"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Command&body=Check out this article: http://conglang.github.io/2014/12/31/command/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/31/command/&title=Command"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/31/command/&name=Command&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

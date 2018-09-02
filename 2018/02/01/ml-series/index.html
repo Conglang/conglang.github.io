@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="机器学习相关算法总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning Series 机器学习">
+<meta property="og:url" content="http://conglang.github.io/2018/02/01/ml-series/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="机器学习相关算法总结。">
+<meta property="og:image" content="http://conglang.github.io/img/16F89E17-412C-43F8-86AA-F530AA9464F3.png">
+<meta property="og:image" content="http://conglang.github.io/img/DAD99776-3AC9-4FC2-9744-ED4D746ACF07.png">
+<meta property="og:image" content="http://conglang.github.io/img/ml_workflow.png">
+<meta property="og:image" content="http://conglang.github.io/img/3B940D3F-5685-42BD-91D7-929A59926CF2.png">
+<meta property="og:image" content="http://conglang.github.io/img/ml_stages_in_the_knowledge_discovery_process.png">
+<meta property="og:image" content="http://conglang.github.io/img/ml_problem_desc.png">
+<meta property="og:updated_time" content="2018-08-12T06:47:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Machine Learning Series 机器学习">
+<meta name="twitter:description" content="机器学习相关算法总结。">
+<meta name="twitter:image" content="http://conglang.github.io/img/16F89E17-412C-43F8-86AA-F530AA9464F3.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Machine Learning Series 机器学习</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/02/03/ml-linear-model/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/12/20/essay-stargan/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/02/01/ml-series/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/02/01/ml-series/&text=Machine Learning Series 机器学习"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/02/01/ml-series/&is_video=false&description=Machine Learning Series 机器学习"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Machine Learning Series 机器学习&body=Check out this article: http://conglang.github.io/2018/02/01/ml-series/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/02/01/ml-series/&name=Machine Learning Series 机器学习&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#技能表"><span class="toc-number">1.</span> <span class="toc-text"> 技能表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#workflow"><span class="toc-number">2.</span> <span class="toc-text"> Workflow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题种类"><span class="toc-number">3.</span> <span class="toc-text"> 问题种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#章节"><span class="toc-number">4.</span> <span class="toc-text"> 章节</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Machine Learning Series 机器学习
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-02-01T14:00:00.000Z" itemprop="datePublished">2018-02-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>通过整理博客，希望形成系统的知识体系。</p>
+</blockquote>
+<h2 id="技能表"><a class="markdownIt-Anchor" href="#技能表"></a> 技能表</h2>
+<p><img src="/img/16F89E17-412C-43F8-86AA-F530AA9464F3.png" alt="Image Loading"></p>
+<h2 id="workflow"><a class="markdownIt-Anchor" href="#workflow"></a> Workflow</h2>
+<p>数据分析流程：分析成功的关键在于将数据分析嵌入实际问题的语境中，最终分析师能够将数据中提取的信息通过交流传达给客户，指导推动用户付出行动创造价值。<br>
+<img src="/img/DAD99776-3AC9-4FC2-9744-ED4D746ACF07.png" alt="Image Loading"><br>
+<img src="/img/ml_workflow.png" alt="Image Loading"><br>
+<img src="/img/3B940D3F-5685-42BD-91D7-929A59926CF2.png" alt="Image Loading"><br>
+<img src="/img/ml_stages_in_the_knowledge_discovery_process.png" alt="Image Loading"></p>
+<h2 id="问题种类"><a class="markdownIt-Anchor" href="#问题种类"></a> 问题种类</h2>
+<p>问题种类：比较、描述、聚类、判别、回归<br>
+<img src="/img/ml_problem_desc.png" alt="Image Loading"></p>
+<p>需要考虑的问题有：<br>
+Problem formalization, Choice of target metric, Deployment issues, Inference speed, Data collecting, Model complexity, Target metric value。</p>
+<h2 id="章节"><a class="markdownIt-Anchor" href="#章节"></a> 章节</h2>
+<ul>
+<li>理论
+<ul>
+<li><a href="/2018/06/02/linear-algebra-intuition/">矩阵</a></li>
+<li><a href="/2018/06/04/ml-convex-optimization-overview-cs229/">凸优化</a>
+<ul>
+<li>梯度下降法</li>
+<li>牛顿法和拟牛顿法</li>
+</ul>
+<ul>
+<li><a href="/2018/03/15/ml-lagrange/">拉格朗日算子</a></li>
+</ul>
+</li>
+<li><a href="/2018/08/04/probability-statistics-intuition/">概率与统计</a>
+<ul>
+<li><a href="/2018/03/20/ml-bayes-theory/">贝叶斯决策论</a></li>
+<li><a href="/2018/03/10/ml-maximum-likelihood/">极大似然估计</a></li>
+</ul>
+</li>
+<li><a href="/2018/08/05/calculus-intuition/">微积分</a></li>
+<li><a href="/2018/08/05/numerical-computation">数值计算</a></li>
+</ul>
+</li>
+<li><a href="/2018/02/05/ml-data-processing/">Data Preprocessing 数据处理</a>
+<ul>
+<li><a href="/2018/07/19/ml-feature-extraction/">Feature Extraction 特征值生成</a></li>
+<li><a href="/2018/07/19/ml-exploratory-data-analysis/">Exploratory Data Analysis 数据探索</a></li>
+<li><a href="/2018/07/21/ml-data-cleaning/">Data Cleaning 数据清洗</a></li>
+</ul>
+</li>
+<li><a href="/2018/07/19/ml-model-evaluating/">模型评估与选择 Model Evaluating</a></li>
+<li>Modelling 建模
+<ul>
+<li><a href="/2018/02/03/ml-linear-model/">Linear Model 线性模型</a>
+<ul>
+<li><a href="/2018/02/10/ml-linear-regression/">Linear Regression 线性回归</a></li>
+<li><a href="/2018/02/15/ml-logistic-regression/">Logistic Regression 对数几率回归</a></li>
+<li><a href="/2018/02/20/ml-generalized-linear-model/">Generalized Linear Model 广义线性模型</a></li>
+<li><a href="/2018/02/25/ml-linear-discriminant-analysis/">Linear Discriminant Analysis 线性判别分析</a></li>
+</ul>
+</li>
+<li><a href="/2018/03/01/ml-decision-tree/">Decision Tree 决策树</a></li>
+</ul>
+<ul>
+<li><a href="/2018/07/10/ml-neural-networks/">Neural Networks 神经网络</a></li>
+</ul>
+<ul>
+<li><a href="/2018/03/05/ml-support-vector-machine/">Support Vector Machines 支持向量机</a></li>
+<li><a href="/2018/03/30/ml-bayesian/">Bayesian 贝叶斯分类器</a>
+<ul>
+<li>Naive Bayes Classifier 朴素贝叶斯分类器</li>
+<li>Semi-Naive Bayes Classifiers 半朴素贝叶斯分类器</li>
+<li><a href="/2018/03/25/ml-bayesian-network/">Bayesian Network / Belief Network 贝叶斯网</a></li>
+<li><a href="/2018/04/05/ml-expectation-maximization/">EM 算法</a></li>
+</ul>
+</li>
+<li><a href="/2018/05/01/ml-ensemble-learning/">Ensemble Learning 集成学习</a>
+<ul>
+<li><a href="/2018/05/10/ml-boosting/">Boosting</a>
+<ul>
+<li>AdaBoost</li>
+<li>Boosting Tree
+<ul>
+<li><a href="/2018/05/13/ml-gbdt/">GBDT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="/2018/05/05/ml-bagging-random-forest/">Bagging</a>
+<ul>
+<li><a href="/2018/05/05/ml-bagging-random-forest/">Random Forest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="/2018/04/25/ml-cluster">Cluster 聚类</a>
+<ul>
+<li>prototype-based clustering 原型聚类
+<ul>
+<li><a href="/2018/04/30/ml-k-means/">k-means k 均值算法</a></li>
+<li>Learning Vector Quantization 学习向量量化</li>
+<li>Mixture-of-Gaussian 高斯混合聚类</li>
+</ul>
+</li>
+<li>density-based clustering 密度聚类
+<ul>
+<li>DBSCAN</li>
+</ul>
+</li>
+<li>hierarchical clustering 层次聚类
+<ul>
+<li>AGNES</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="/2018/04/15/ml-dimension-reduction/">降维与度量学习</a>
+<ul>
+<li><a href="/2018/04/10/ml-k-nearest-neighbour/">k Nearest Neighbour k 近邻学习</a></li>
+<li>低维嵌入
+<ul>
+<li>MDS</li>
+<li>线性变换</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="/2018/05/15/ml-principle-component-analysis/">Principle Component Analysis 主成分分析</a></li>
+<li>核化线性降维
+<ul>
+<li>Kernelized PCA 核主成分分析</li>
+</ul>
+</li>
+<li>流形学习
+<ul>
+<li>Isometric Mapping 等度量映射</li>
+<li>Locally Linear Embedding 局部线性嵌入</li>
+</ul>
+</li>
+<li>Metric Learning 度量学习</li>
+</ul>
+</li>
+<li><a href="/2018/04/20/ml-feature-selection/">特征选择与稀疏学习</a>
+<ul>
+<li>filter 过滤式选择
+<ul>
+<li>Relief (Relevant Features)</li>
+</ul>
+</li>
+<li>wrapper 包裹式选择
+<ul>
+<li>Las Vegas Wrapper</li>
+</ul>
+</li>
+<li>embedding 嵌入式选择与 L1 正则化</li>
+<li>稀疏表示与 dictionary learning 字典学习</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>计算学习理论
+<ul>
+<li>基础知识</li>
+<li>PAC 学习</li>
+<li>有限假设空间</li>
+<li>VC 维</li>
+<li>Rademacher 复杂度</li>
+<li>稳定性</li>
+</ul>
+</li>
+<li>半监督学习
+<ul>
+<li>未标记样本</li>
+<li>生成式方法</li>
+<li>半监督 SVM</li>
+<li>图半监督学习</li>
+<li>基于分歧的方法</li>
+<li>半监督聚类</li>
+</ul>
+</li>
+<li>概率图模型
+<ul>
+<li>隐马尔科夫模型</li>
+<li>马尔可夫随机场</li>
+<li>条件随机场</li>
+<li>学习与推断</li>
+<li>近似推断</li>
+<li>话题模型</li>
+</ul>
+</li>
+<li>规则学习
+<ul>
+<li>基本概念</li>
+<li>序贯覆盖</li>
+<li>剪枝优化</li>
+<li>一阶规则学习</li>
+<li>归纳逻辑程序设计</li>
+</ul>
+</li>
+<li>强化学习
+<ul>
+<li>任务与奖励</li>
+<li>K-摇臂赌博机</li>
+<li>有模型学习</li>
+<li>免模型学习</li>
+<li>值函数近似</li>
+<li>模仿学习</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Ref:<br>
+[1] 机器学习 - 周志华<br>
+[2] 统计学习方法<br>
+[3] 套路！机器学习 北美数据科学家的私房课<br>
+[4] Coursera - Data Science Essentials<br>
+[5] Coursera - How to Win a Data Science Competition</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#技能表"><span class="toc-number">1.</span> <span class="toc-text"> 技能表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#workflow"><span class="toc-number">2.</span> <span class="toc-text"> Workflow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题种类"><span class="toc-number">3.</span> <span class="toc-text"> 问题种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#章节"><span class="toc-number">4.</span> <span class="toc-text"> 章节</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/02/01/ml-series/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/02/01/ml-series/&text=Machine Learning Series 机器学习"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/02/01/ml-series/&is_video=false&description=Machine Learning Series 机器学习"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Machine Learning Series 机器学习&body=Check out this article: http://conglang.github.io/2018/02/01/ml-series/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/02/01/ml-series/&title=Machine Learning Series 机器学习"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/02/01/ml-series/&name=Machine Learning Series 机器学习&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

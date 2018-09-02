@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="本论文发表于1994年，介绍了软件架构设计中常见的几种风格(Pipes and Filters, Data Abstraction and Object-Oriented Organization, Event-based Implicit Invocation, Layered Systems, Repositories/Blackboard, Table Driven Interpreters">
+<meta property="og:type" content="article">
+<meta property="og:title" content="An Introduction to Software Architecture 笔记">
+<meta property="og:url" content="http://conglang.github.io/2015/05/25/note-intro-to-software-arch/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="本论文发表于1994年，介绍了软件架构设计中常见的几种风格(Pipes and Filters, Data Abstraction and Object-Oriented Organization, Event-based Implicit Invocation, Layered Systems, Repositories/Blackboard, Table Driven Interpreters">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_pipes_and_filters.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_data_abstraction_and_object_oriented_organization.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_layered_systems.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_blackboard.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_interpreter.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case1_kwic_shared_data_solution.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case1_kwic_abstract_data_type_solution.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case1_kwic_implicit_invocation_solution.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case1_kwic_pipe_and_filter_solution.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case1_kwic_comparison.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case2_oscilloscopes_object_oriented.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case2_oscilloscopes_layered.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case2_oscilloscopes_pipe_and_filter.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case2_oscilloscopes_modified_pipe_and_filter.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case3_traditional_compiler_model.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case3_traditional_compiler_model_with_shared_symbol_table.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case3_modern_canonical_compiler.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case3_canonical_compiler_revisited.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case4_provox_hierarchical_top_level.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case4_provox_object_oriented_elaboration.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case5_basic_rule_based_system.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case5_simplified_sophisticated_rule_based_system.png">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case6_hearsay_ii.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case6_blackboard_view_of_hearsay_ii.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/intro_arch_case6_interpreter_view_of_hearsay_ii.jpg">
+<meta property="og:updated_time" content="2018-07-03T02:01:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="An Introduction to Software Architecture 笔记">
+<meta name="twitter:description" content="本论文发表于1994年，介绍了软件架构设计中常见的几种风格(Pipes and Filters, Data Abstraction and Object-Oriented Organization, Event-based Implicit Invocation, Layered Systems, Repositories/Blackboard, Table Driven Interpreters">
+<meta name="twitter:image" content="http://conglang.github.io/img/intro_arch_pipes_and_filters.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>An Introduction to Software Architecture 笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/05/31/note-cpp-primer5-1/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/05/19/business-english-materials/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&text=An Introduction to Software Architecture 笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&is_video=false&description=An Introduction to Software Architecture 笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=An Introduction to Software Architecture 笔记&body=Check out this article: http://conglang.github.io/2015/05/25/note-intro-to-software-arch/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&name=An Introduction to Software Architecture 笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#common-architectural-styles"><span class="toc-number">1.</span> <span class="toc-text"> Common Architectural Styles</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pipes-and-filters"><span class="toc-number">1.1.</span> <span class="toc-text"> Pipes and Filters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-abstraction-and-object-oriented-organization"><span class="toc-number">1.2.</span> <span class="toc-text"> Data Abstraction and Object-Oriented Organization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#event-based-implicit-invocation"><span class="toc-number">1.3.</span> <span class="toc-text"> Event-based, Implicit Invocation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layered-systems"><span class="toc-number">1.4.</span> <span class="toc-text"> Layered Systems</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repositories"><span class="toc-number">1.5.</span> <span class="toc-text"> Repositories</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#blackboard"><span class="toc-number">1.5.1.</span> <span class="toc-text"> Blackboard</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#table-driven-interpreters"><span class="toc-number">1.6.</span> <span class="toc-text"> Table Driven Interpreters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#other-familiar-architectures"><span class="toc-number">1.7.</span> <span class="toc-text"> Other Familiar Architectures</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#distributed-processes"><span class="toc-number">1.7.1.</span> <span class="toc-text"> Distributed processes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#main-programsubroutine-organizations"><span class="toc-number">1.7.2.</span> <span class="toc-text"> Main program/subroutine organizations</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#domain-specific-software-architectures"><span class="toc-number">1.7.3.</span> <span class="toc-text"> Domain-specific software architectures</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#state-transition-systems"><span class="toc-number">1.7.4.</span> <span class="toc-text"> State transition systems</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#process-control-systems"><span class="toc-number">1.7.5.</span> <span class="toc-text"> Process control systems</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heterogeneous-architectures"><span class="toc-number">1.8.</span> <span class="toc-text"> Heterogeneous Architectures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#case-studies"><span class="toc-number">2.</span> <span class="toc-text"> Case Studies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#case-1-key-word-in-context"><span class="toc-number">2.1.</span> <span class="toc-text"> Case 1: Key Word in Context</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用案例kwic-system"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 使用案例：KWIC system</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-1-main-programsubroutine-with-shared-data"><span class="toc-number">2.1.2.</span> <span class="toc-text"> Solution 1: Main Program/Subroutine with Shared Data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-2-abstract-data-types"><span class="toc-number">2.1.3.</span> <span class="toc-text"> Solution 2: Abstract Data Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-3-implicit-invocation"><span class="toc-number">2.1.4.</span> <span class="toc-text"> Solution 3: Implicit Invocation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-4-pipes-and-filters"><span class="toc-number">2.1.5.</span> <span class="toc-text"> Solution 4: Pipes and Filters</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#comparisons"><span class="toc-number">2.1.6.</span> <span class="toc-text"> Comparisons</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-2-instrumentation-software"><span class="toc-number">2.2.</span> <span class="toc-text"> Case 2: Instrumentation Software</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#an-object-oriented-model"><span class="toc-number">2.2.1.</span> <span class="toc-text"> An object-oriented model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#an-layered-model"><span class="toc-number">2.2.2.</span> <span class="toc-text"> An layered model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-pipe-and-filter-model"><span class="toc-number">2.2.3.</span> <span class="toc-text"> A Pipe and Filter Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-modified-pipe-and-filter-model"><span class="toc-number">2.2.4.</span> <span class="toc-text"> A Modified Pipe and Filter Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#further-specialization"><span class="toc-number">2.2.5.</span> <span class="toc-text"> Further Specialization</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-3-a-fresh-view-of-compilers"><span class="toc-number">2.3.</span> <span class="toc-text"> Case 3: A Fresh View of Compilers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-4-a-layered-design-with-different-styles-for-the-layers"><span class="toc-number">2.4.</span> <span class="toc-text"> Case 4: A Layered Design with Different Styles for the Layers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-5-an-interpreter-using-different-idioms-for-the-componnets"><span class="toc-number">2.5.</span> <span class="toc-text"> Case 5: An Interpreter Using Different Idioms for the Componnets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-6-a-blackboard-globally-recast-as-interpreter"><span class="toc-number">2.6.</span> <span class="toc-text"> Case 6: A Blackboard Globally Recast as Interpreter</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        An Introduction to Software Architecture 笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-05-25T12:28:52.000Z" itemprop="datePublished">2015-05-25</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Architecture/">Architecture</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>&quot;<a href="http://www.cs.cmu.edu/afs/cs/project/able/www/paper_abstracts/intro_softarch.html" target="_blank" rel="external">An Introduction to Software Architecture</a>&quot;是David Garlan和Mary Shaw于1994年发表的一篇论文。<br>
+论文介绍了软件架构设计中的常见风格与组合方式，并举出6个实例来具体分析。</p>
+<h2 id="common-architectural-styles"><a class="markdownIt-Anchor" href="#common-architectural-styles"></a> Common Architectural Styles</h2>
+<p>常见风格及其利弊。<br>
+本论文将系统视为许多模块(Component)、他们之间的交互关系(Connector)，以及一些前提约束(Constraint)。<br>
+可以使用这些问题来分析一个风格：</p>
+<ol>
+<li>结构(Component、Connector、Constraint)？</li>
+<li>背后的计算模型？</li>
+<li>重要的不变量？</li>
+<li>常见应用？</li>
+<li>优缺点？</li>
+<li>常见变种？</li>
+</ol>
+<h3 id="pipes-and-filters"><a class="markdownIt-Anchor" href="#pipes-and-filters"></a> Pipes and Filters</h3>
+<p><img src="/img/intro_arch_pipes_and_filters.jpg" alt="Pipes and Filters"><br>
+结构：</p>
+<blockquote>
+<p>本风格中每个component都有一系列输入和输出。一个component接受一系列输入数据，处理后产生一系列输出数据，按照一定的顺序传给下一个component。于是component称为filter，connector称为pipe。</p>
+</blockquote>
+<p>重要不变量：</p>
+<blockquote>
+<p>filter们必须是单独的实体，不能和其他filter共享状态。filter可以限制上游或下游filter应具备哪些属性，但不能明确限制filter的身份。系统最终输出的正确性不能依赖于filter的顺序，虽然其也要经过一定的规划。</p>
+</blockquote>
+<p>常见变种：</p>
+<blockquote>
+<p>Pipeline：限制拓扑结构为线性序列。<br>
+Bounded pipe：限制pipe上可以存留的数据量。<br>
+Typed pipe：限制两个filter间传递的数据必须是某种数据结构。<br>
+还有一种退化的pipeline，每次只接收一个单个的输入实体，只是一个流水线处理程序。</p>
+</blockquote>
+<p>常见应用：</p>
+<blockquote>
+<p>Unix shell。传统编译器。</p>
+</blockquote>
+<p>优点：</p>
+<blockquote>
+<p>全局的系统输入输出行为可被视为独立filter行为的组合。<br>
+允许复用。可以拼接任意两个filter，只要他们的输入输出数据能够匹配。<br>
+系统容易维护与扩展。新filter很容易添加，老filter也很容易被改进版本替代。<br>
+支持一些系统分析，比如流量分析、死锁分析。<br>
+显然利于实现并行处理。每一个filter可以实现为一个单独的task，然后与其他filter并行处理。</p>
+</blockquote>
+<p>缺点：</p>
+<blockquote>
+<p>需要为每一个filter考虑完整的输入数据到输出数据的转化过程，不适用于交互程序。<br>
+可能需要维护两个单独却相关的数据流，比较麻烦。<br>
+传输数据可能需要一个共同的底层结构，于是每个filter处理时需要额外解析和反解析其数据。会影响性能并增加复杂度。</p>
+</blockquote>
+<h3 id="data-abstraction-and-object-oriented-organization"><a class="markdownIt-Anchor" href="#data-abstraction-and-object-oriented-organization"></a> Data Abstraction and Object-Oriented Organization</h3>
+<p><img src="/img/intro_arch_data_abstraction_and_object_oriented_organization.jpg" alt="Data Abstraction and Object-Oriented Organization"><br>
+结构：</p>
+<blockquote>
+<p>数据属性及其操作被封装在抽象数据类型里。component是对象即类的实例，对象与对象之间通过函数和过程调用交互。<br>
+每一个对象要保持自己的意义与实现完整性。<br>
+每一个对象的内部实现对其他对象来说是不可见的。</p>
+</blockquote>
+<p>常见变种：</p>
+<blockquote>
+<p>对象是可并行的task。或对象有多个接口。</p>
+</blockquote>
+<p>优点：</p>
+<blockquote>
+<p>对象可以对客户隐藏自己的内部实现。修改内部实现不会影响客户。<br>
+可以将问题分解成多个交互的角色。</p>
+</blockquote>
+<p>缺点：</p>
+<blockquote>
+<p>为了让两个对象交互，他们必须知道对方的身份。于是修改一个对象的话，所有调用其函数的对象都要做相应修改。如果B和C都对同一个对象A做修改，可能会有一些预料遇到的副作用。</p>
+</blockquote>
+<h3 id="event-based-implicit-invocation"><a class="markdownIt-Anchor" href="#event-based-implicit-invocation"></a> Event-based, Implicit Invocation</h3>
+<p>结构：</p>
+<blockquote>
+<p>不再使用显式调用，而是发送或广播一个event。其他component可以注册一个函数为event的接收函数。当event被发送时，相关component的对应函数即被调用。</p>
+</blockquote>
+<p>常见应用：</p>
+<blockquote>
+<p>编辑器和变量监视器接收调试器的breakpoint事件。调试器在断点出发送一个事件，这些工具接收并显示对应信息。<br>
+在数据库中保证一致性约束。<br>
+在用户界面中将数据显示与数据管理分开。<br>
+在syntax-directed editor中支持渐进语法检查。</p>
+</blockquote>
+<p>重要不变量：</p>
+<blockquote>
+<p>发送事件的component不知道哪些component会被这个时间影响。所以这些component的处理顺序也是不可控的。</p>
+</blockquote>
+<p>优点：</p>
+<blockquote>
+<p>易复用。一个component只要注册一下就可加入系统。<br>
+更换component不会影响其他component的接口。</p>
+</blockquote>
+<p>缺点：</p>
+<blockquote>
+<p>component放弃了对系统执行的控制。当一个component发送一个事件时，它不知道其他component会怎么反应。也不知道会以什么样的顺序反应。也不知道它们什么时候反应结束。<br>
+数据交换也可能成为问题。有时候数据可以保存在发送的事件里，有时候component们需要共享一个数据仓库来交换数据。这种时候资源管理可能比较成问题。<br>
+结果的正确性也难以保证，因为一个事件发送后执行的结果和当时程序环境上下文相关。</p>
+</blockquote>
+<h3 id="layered-systems"><a class="markdownIt-Anchor" href="#layered-systems"></a> Layered Systems</h3>
+<p><img src="/img/intro_arch_layered_systems.jpg" alt="Layered Systems"><br>
+结构：</p>
+<blockquote>
+<p>这种结构有层级之分。每一层为上层提供服务，又是下层的客户。有些这类系统中，内部层级只有相邻外层层级才知道，除了某些刻意设计过的外部接口。他们之间的connector是定义层级之间如何交互的协议。</p>
+</blockquote>
+<p>常见应用：</p>
+<blockquote>
+<p>layered communication protocols。还有数据库和操作系统。</p>
+</blockquote>
+<p>优点：</p>
+<blockquote>
+<p>支持逐层抽象。可以把一个复杂的问题分解为连续的几步。<br>
+支持扩展。每一层的更改只影响相邻两层而已。<br>
+支持复用。不同实现的同一层换起来很方便，只要有相同的接口。</p>
+</blockquote>
+<p>缺点：</p>
+<blockquote>
+<p>系统很难表示为逐层的，即便逻辑上可以视为逐层，基于性能的考虑，最高层与最底层之间也许也需要密切的交互。<br>
+将各层抽象得很恰当不容易。有些功能可能跨越几层。</p>
+</blockquote>
+<h3 id="repositories"><a class="markdownIt-Anchor" href="#repositories"></a> Repositories</h3>
+<p>结构：</p>
+<blockquote>
+<p>有两种很不一样的component：一个中央数据结构表示当前状态，一些独立的component基于这个中央存储运行。<br>
+独立component和中央存储之间的交互方式有很多可能：<br>
+如果一组输入数据的类型决定了哪些操作会被调用，这是传统数据库。<br>
+如果中央存储的当前状态决定哪些操作被调用，这是blackboard。</p>
+</blockquote>
+<h4 id="blackboard"><a class="markdownIt-Anchor" href="#blackboard"></a> Blackboard</h4>
+<p><img src="/img/intro_arch_blackboard.jpg" alt="The Blackboard"></p>
+<p>结构：</p>
+<blockquote>
+<p>分成三部分：<br>
+<strong>The knowledge sources</strong>: 独立、分散的，与应用相关的知识包。对知识包的交互只能通过blackboard。<br>
+<strong>The blackboard data structure</strong>: 目前问题解决状态的数据，按照应用分成层级结构。知识源对blackboard做出修改，直到问题的答案被渐进地解决出来。<br>
+<strong>Control</strong>: 完全由blackboard的状态驱动。blackboard中的变化让一些知识源可以运行时，他们会寻机响应。<br>
+图中没有明确展示Control部分。blackboard中的状态变化会触发知识源的调用。实际的控制可以写在知识源、blackboard、单独模块，或者所有这些之中。</p>
+</blockquote>
+<p>常见应用：</p>
+<blockquote>
+<p>用在需要复杂的信号处理和解释的应用中，比如语音与模式识别。<br>
+关系不密切的agent需要共享数据时。</p>
+</blockquote>
+<h3 id="table-driven-interpreters"><a class="markdownIt-Anchor" href="#table-driven-interpreters"></a> Table Driven Interpreters</h3>
+<p><img src="/img/intro_arch_interpreter.jpg" alt="Interpreter"></p>
+<p>结构：</p>
+<blockquote>
+<p>Interpreter里包含pseudo-program和interpretation engine。伪代码程序里包含程序自己还有解释器所对其执行状态的模拟。解释器引擎包含解释器的定义和其执行状态。<br>
+所以一个interpreter一般包括4个component: an interpretation engine to do the work, a memory that contains the pseudo-code to be interpreted, a representation of the control state of the interpretation engine, and a representation of the current state of the program being simulated.</p>
+</blockquote>
+<p>常见应用：</p>
+<blockquote>
+<p>虚拟机，用来兼容硬件引擎和代码所期待的引擎。</p>
+</blockquote>
+<h3 id="other-familiar-architectures"><a class="markdownIt-Anchor" href="#other-familiar-architectures"></a> Other Familiar Architectures</h3>
+<h4 id="distributed-processes"><a class="markdownIt-Anchor" href="#distributed-processes"></a> Distributed processes</h4>
+<p>以拓扑结构知名，如ring and star organizations。<br>
+以进程间通信协议知名，如heartbeat algorithms。<br>
+一个常见的结构是client-server结构。一个server为其他process(client)提供服务。server事先不知道client都是谁，client知道server是谁并且远程发送请求。</p>
+<h4 id="main-programsubroutine-organizations"><a class="markdownIt-Anchor" href="#main-programsubroutine-organizations"></a> Main program/subroutine organizations</h4>
+<p>结构与采用语言相关。一般是模块化，或者就是一个main控制几个subroutine。</p>
+<h4 id="domain-specific-software-architectures"><a class="markdownIt-Anchor" href="#domain-specific-software-architectures"></a> Domain-specific software architectures</h4>
+<p>有利于自动或半自动生成架构。</p>
+<h4 id="state-transition-systems"><a class="markdownIt-Anchor" href="#state-transition-systems"></a> State transition systems</h4>
+<p>很多交互系统采用这种结构，state和transition。</p>
+<h4 id="process-control-systems"><a class="markdownIt-Anchor" href="#process-control-systems"></a> Process control systems</h4>
+<p>要和物理世界交互的程序通常采用。基本上是一个反馈循环，从sensor来的输入处理过之后产生输出，对环境产生一些影响。</p>
+<h3 id="heterogeneous-architectures"><a class="markdownIt-Anchor" href="#heterogeneous-architectures"></a> Heterogeneous Architectures</h3>
+<p>组合多种风格的混合结构。组合风格的方式有种：</p>
+<ol>
+<li>通过层级。一个风格里的某个component内部有另一种不同风格的结构，比如Unix pipeline里单独component可以是任何风格。甚至connector也可以用层级方式处理，比如一个pipe connector内部可以用FIFO的queue实现。</li>
+<li>允许一个component使用混合风格的connector。比如，一个component可能通过接口获取一个repository的数据，但是和其他component的交互用pipe完成，接收控制消息又用另外一些接口。再比如active database，该repository通过消息等隐式调用激活外部component，外部component是与数据库中的某部分注册关联好的。(Blackboards are often constructed this way; knowledge sources are associated with specific kinds of data, and are activated whenever that kind of data is modified.)</li>
+<li>绞尽脑汁精心实现组合。</li>
+</ol>
+<h2 id="case-studies"><a class="markdownIt-Anchor" href="#case-studies"></a> Case Studies</h2>
+<p>第一个：展示对同一个问题采用不同的风格各有什么利弊。<br>
+第二个：总结设计domain-specific风格的经验。<br>
+第三个：用新眼光看编译器架构。<br>
+剩下三个：展示混合结构。</p>
+<h3 id="case-1-key-word-in-context"><a class="markdownIt-Anchor" href="#case-1-key-word-in-context"></a> Case 1: Key Word in Context</h3>
+<h4 id="使用案例kwic-system"><a class="markdownIt-Anchor" href="#使用案例kwic-system"></a> 使用案例：KWIC system</h4>
+<blockquote>
+<p>“The KWIC [Key Word in Context] index system accepts an ordered set of lines, each line is an ordered set of words, and each word is an ordered set of characters. Any line may be ‘circularly shifted’ by repeatedly removing the first word and appending it at the end of the line. The KWIC index system outputs a listing of all circular shifts of all lines in alphabetical order.”</p>
+</blockquote>
+<p>常被用来展示对问题的分解方式不同会导致它们适应软件设计变化的能力不同。</p>
+<p>一个软件的设计可以有这些可变部分：</p>
+<ul>
+<li>Changes in processing algorithm: 比如，行旋转可以发生在从输入设备读入每行时，所有行都读完时，字母排序需要新的旋转行时。</li>
+<li>Changes in data representation: 比如，行可以有很多种保存方式。旋转也可以存结果或是(序列、平移)对。</li>
+<li>Enhancement to system function: 比如，旋转行来移除以a/an/and等词开始的行。添加交互功能，让用户来删除行。</li>
+<li>Performance: 时间和空间复杂度更改。</li>
+<li>Reuse: 每个component的可复用性如何。</li>
+</ul>
+<h4 id="solution-1-main-programsubroutine-with-shared-data"><a class="markdownIt-Anchor" href="#solution-1-main-programsubroutine-with-shared-data"></a> Solution 1: Main Program/Subroutine with Shared Data</h4>
+<p><img src="/img/intro_arch_case1_kwic_shared_data_solution.png" alt="KWIC - Shared Data Solution"><br>
+这种分解方式基于4个基本功能：input, shift, alphabetize, output。<br>
+由一个main函数按顺序循环执行这几个子功能。数据通过shared storage在component之间传输。component和shared storage之间通信基于不受限制的读写协议，因为程序执行时保证依次读写数据。<br>
+优点：用这种结构，数据被有效利用，因为所有操作都共享同一份存储数据。而且这种结构设计很符合直觉，不同的操作被分为不同的模块。<br>
+缺点：难以应付软件设计变化。尤其是数据存储格式的更改会影响所有模块。修改主函数功能和扩展系统都不容易。分散的模块设计也不利于复用。</p>
+<h4 id="solution-2-abstract-data-types"><a class="markdownIt-Anchor" href="#solution-2-abstract-data-types"></a> Solution 2: Abstract Data Types</h4>
+<p><img src="/img/intro_arch_case1_kwic_abstract_data_type_solution.png" alt="KWIC - Abstract Data Type Solution"><br>
+这个方案将系统分解为5部分。不过这里面的数据已经不是被计算component所直接共享的了，而是只能通过模块的接口来访问。逻辑的处理方式还是一样。<br>
+优点：和第1个方案相比，比较容易应对软件设计变化。算法和数据结构都可以在单一模块中修改，不会影响其他模块。可复用性也得到提高，因为模块项目之间交互时很少猜测，都用明确的接口。<br>
+缺点：仍然不利于扩展。如果要向系统添加新功能，要么修改现有模块使其变复杂，要么添加新的模块造成性能损失。</p>
+<h4 id="solution-3-implicit-invocation"><a class="markdownIt-Anchor" href="#solution-3-implicit-invocation"></a> Solution 3: Implicit Invocation</h4>
+<p><img src="/img/intro_arch_case1_kwic_implicit_invocation_solution.jpg" alt="KWIC - Implicit Invocation Solution"><br>
+这个方案使用和方案1一样的共享数据，但是有两个重要不同：数据的接口更加抽象。计算是当数据修改时被隐形调用的，比如，向line storage添加新line会向shift模块发送事件，shift模块会生成circular shift，其又隐式调用alphabetizer去为line排序。<br>
+优点：利于扩展。新模块添加时只要注册为监听数据修改事件即可。由于数据读写是抽象的，数据结构的内部变化不会影响外界读写。可复用性提高，因为能被隐式调用的模块只依赖于一些外部触发事件。<br>
+缺点：难以控制被隐式调用的模块的执行顺序。由于调用是数据驱动的，实现时可能会用更多空间。</p>
+<h4 id="solution-4-pipes-and-filters"><a class="markdownIt-Anchor" href="#solution-4-pipes-and-filters"></a> Solution 4: Pipes and Filters</h4>
+<p><img src="/img/intro_arch_case1_kwic_pipe_and_filter_solution.jpg" alt="KWIC - Pipe and Filter Solution"><br>
+这个方案使用pipeline，有4个filter：input, shift, alphabetize, output。每个filter处理完数据后发给下一个filter。control是分布在每一个filter上的。数据在filter之间只通过pipe共享。<br>
+优点：保持了直觉上的数据流动。支持复用和修改，每个filter都是独立的。新功能很容易添加。<br>
+缺点：不可能支持互动。空间利用率不高，因为每个filter都需要拷贝其所有数据到下一filter。</p>
+<h4 id="comparisons"><a class="markdownIt-Anchor" href="#comparisons"></a> Comparisons</h4>
+<p><img src="/img/intro_arch_case1_kwic_comparison.jpg" alt="KWIC - Comparison of Solutions"></p>
+<h3 id="case-2-instrumentation-software"><a class="markdownIt-Anchor" href="#case-2-instrumentation-software"></a> Case 2: Instrumentation Software</h3>
+<p>目标是为示波器设计一个可重用性强且性能好的系统。</p>
+<h4 id="an-object-oriented-model"><a class="markdownIt-Anchor" href="#an-object-oriented-model"></a> An object-oriented model</h4>
+<p><img src="/img/intro_arch_case2_oscilloscopes_object_oriented.jpg" alt="Oscilloscopes - An Object-oriented Model"><br>
+界定示波器中的数据类型：waveforms, signals, measurements, trigger modes, etc.<br>
+功能如何划分不明确。比如，测量应该和所测量的数据关联，还是单独表示？用户界面应该和哪个对象交互？</p>
+<h4 id="an-layered-model"><a class="markdownIt-Anchor" href="#an-layered-model"></a> An layered model</h4>
+<p><img src="/img/intro_arch_case2_oscilloscopes_layered.jpg" alt="Oscilloscopes - A Layered Model"><br>
+Hardware层过滤发给示波器的信号。Digitization层将信号数字化并存储，以及对waveform进行操作，包括测量、增益、傅里叶变换等。Visualization层将数字化的waveform和测量显示出来。User interface层用于用户交互并确定显示哪些内容。<br>
+层次的划分很符合直觉，可惜不适用于此应用领域。因为每层之间的硬性划分不符合众多功能之间所需的密切交互。</p>
+<h4 id="a-pipe-and-filter-model"><a class="markdownIt-Anchor" href="#a-pipe-and-filter-model"></a> A Pipe and Filter Model</h4>
+<p><img src="/img/intro_arch_case2_oscilloscopes_pipe_and_filter.jpg" alt="Oscilloscopes - A Pipe and Filter Model"><br>
+Signal转换器处理外部信号。Acquisition转换器从这些信号生成数字waveform。Display转换器把这些waveform转换为显示数据。<br>
+该结构并没像layered结构一样将功能硬性划分为独立区间，signal数据也可以直接传入display转换器。且该模型的设计比较符合工程师的数据流分析。<br>
+缺点是用户如何交互并不清晰。</p>
+<h4 id="a-modified-pipe-and-filter-model"><a class="markdownIt-Anchor" href="#a-modified-pipe-and-filter-model"></a> A Modified Pipe and Filter Model</h4>
+<p><img src="/img/intro_arch_case2_oscilloscopes_modified_pipe_and_filter.jpg" alt="Oscilloscopes - A Modified Pipe and Filter Model"><br>
+为每个filter添加一个control接口，从而可以从外部控制filter，解决用户输入问题。</p>
+<h4 id="further-specialization"><a class="markdownIt-Anchor" href="#further-specialization"></a> Further Specialization</h4>
+<p>前一个设计仍然有些问题，其中一个就是Pipe and Filter风格的性能比较差；另一个就是每个filter运行的速度很不一样，因为一个处理数据慢大家就都等它不太好。<br>
+解决这些问题需要更加“特化”。定义很多种不同类型的pipe，其中一些允许数据传递时不用复制，另外一些允许数据处理中不接受其他数据。</p>
+<h3 id="case-3-a-fresh-view-of-compilers"><a class="markdownIt-Anchor" href="#case-3-a-fresh-view-of-compilers"></a> Case 3: A Fresh View of Compilers</h3>
+<p>技术的进步也会影响系统的设计，从编译器就可以看出这点。<br>
+在19世纪70年代，编译被看做一个序列化的进程，其结构如下图。文本从左端开始依次转化 - lexical token stream, parse tree, intermediate code - 直到变成机器码出现在右端。<br>
+<img src="/img/intro_arch_case3_traditional_compiler_model.png" alt="Traditional Compiler Model"><br>
+事实上很多编译器还会有一个变量表独立存在。<br>
+<img src="/img/intro_arch_case3_traditional_compiler_model_with_shared_symbol_table.png" alt="Traditional Compiler Model with Shared Symbol Table"><br>
+19世纪80年代中期，出现了中间表示，它在编译初期生成，在接下来的步骤中持续修改。<br>
+<img src="/img/intro_arch_case3_modern_canonical_compiler.png" alt="Modern Canonical Compiler"><br>
+如果将关注的重点从顺序执行的过程转移到共享数据的表示，这个架构可以重绘为下图。很多工具是针对这个中间数据开发的，比如syntax-directed editor和很多分析工具。<br>
+<img src="/img/intro_arch_case3_canonical_compiler_revisited.png" alt="Canonical Compiler, Revisited"><br>
+这个结构和blackboard有一些相像之处，比如计算所需的数据存在中央存储，并且只通过共享数据与其他运算模块交互。也有不同之处，blackboard中操作执行的顺序是数据修改发生的顺序所决定的，而编译器执行的顺序是事先确定的。</p>
+<h3 id="case-4-a-layered-design-with-different-styles-for-the-layers"><a class="markdownIt-Anchor" href="#case-4-a-layered-design-with-different-styles-for-the-layers"></a> Case 4: A Layered Design with Different Styles for the Layers</h3>
+<p>对化工生产过程进行分布式过程控制的系统，PROVOX。<br>
+从简单的压力流量循环控制到复杂的交叠循环策略控制都有。系统通过一个5层的层级架构实现了过程控制与设备管理的整合。<br>
+下图体现了这个架构，右侧是软件视角，左侧是硬件视角。<br>
+<img src="/img/intro_arch_case4_provox_hierarchical_top_level.jpg" alt="PROVOX - Hierarchical Top Level"></p>
+<ul>
+<li>Level 1: Process measurement and control: direct adjustment of final control elements.</li>
+<li>Level 2: Process supervision: operations console for monitoring and controlling Level 1.</li>
+<li>Level 3: Process management: computer-based plant automation, including management reports, optimization strategies, and guidance to operations console.</li>
+<li>Level 4 and 5: PLant and corporate management: higher-level functions such as cost accounting, inventory control, and order processing/scheduling.</li>
+</ul>
+<p>其中，Level 1-3是object-oriented，Level 4-5是传统的data-processing repository。<br>
+对于Level 2所需的控制与监控功能，PROVOX使用了一系列的point，类似一个object。下图是point的规范形式。<br>
+<img src="/img/intro_arch_case4_provox_object_oriented_elaboration.jpg" alt="PROVOX - Object-oriented Elaboration"></p>
+<h3 id="case-5-an-interpreter-using-different-idioms-for-the-componnets"><a class="markdownIt-Anchor" href="#case-5-an-interpreter-using-different-idioms-for-the-componnets"></a> Case 5: An Interpreter Using Different Idioms for the Componnets</h3>
+<p>专家系统常用一系列situation-action规则的方式构建。Hayes-Roth就是一个这样的基于规则的系统。</p>
+<p>最基础的rule-based系统，类似一个table-driven interpreter。<br>
+<img src="/img/intro_arch_case5_basic_rule_based_system.jpg" alt="Basic Rule-Based System"></p>
+<ul>
+<li>The pseudo-code to be executed, in this case the knowledge base.</li>
+<li>The interpretation engine, in this case the rule interpreter, the heart of the inference engine.</li>
+<li>The control state of the interpretation engine, in this case the rule and data element selector.</li>
+<li>The current state of the program running on the virtual machine, in this case the working memory.</li>
+</ul>
+<p>Rule-based系统常用pattern matching和context(currently relevant rules)。把这些也添加进去，再标记出模块。<br>
+<img src="/img/intro_arch_case5_simplified_sophisticated_rule_based_system.png" alt="Simplified Sophisticated Rule-Based System"><br>
+除了两条黑线(Interpreter控制激活)，其余部分结构和简单模型一样。</p>
+<ul>
+<li>Knowledge base仍然是一个相对简单的存储结构，有一些区分活跃和非活跃内容的子结构。</li>
+<li>Rule interpreter内部使用table-driven interpreter扩展了一下，而control procedure起的是pseudo-code作用，execution stack起的是current program state的作用。</li>
+<li>Rule and data element selection主要使用pipeline实现的，逐步通过激活的规则和事实得出下一步激活的规则。在这个pipeline中，第3个filter(nominator)也是一个固定的原规则数据库。</li>
+<li>Working memory没有进一步扩展。</li>
+</ul>
+<h3 id="case-6-a-blackboard-globally-recast-as-interpreter"><a class="markdownIt-Anchor" href="#case-6-a-blackboard-globally-recast-as-interpreter"></a> Case 6: A Blackboard Globally Recast as Interpreter</h3>
+<p>最基础的blackboard结构，标明了其最主要的3个部分：knowledge sources, the blackboard data structure, control。这就是前面那张图。</p>
+<p>HEARSAY-II语音识别系统是一个大型blackboard结构的系统，它的结构如下图。<br>
+<img src="/img/intro_arch_case6_hearsay_ii.jpg" alt="Hearsay-II"><br>
+Blackboard被分成6到8层层级，每一层都对下层数据进行进一步抽象，其元素是对输入语言解析方式的假说。<br>
+Knowledge source的设计也要适应这些任务，比如segmenting the raw signal, identifying phonemes, generating word candidates, hypothesizing syntactic segments, proposing semantic interpretations。每一个knowledge source都包括一个用于确定其何时可用的condition部分，和一个处理对应旧blackboard元素并生成新的的action部分。<br>
+Control被实现为blackboard monitor和scheduler。scheduler监视blackboard，并且为请求knowledge source的各个blackboard元素计算优先级。</p>
+<p>这个模型在设计时是blackboard模型，实现时用到了interpreter模型。并不是说其中一个component用到了interpreter，而是可以从两种角度来看。<br>
+<img src="/img/intro_arch_case6_blackboard_view_of_hearsay_ii.jpg" alt="Blackboard View of Hearsay-II"><br>
+<img src="/img/intro_arch_case6_interpreter_view_of_hearsay_ii.jpg" alt="Interpreter View of Hearsay-II"></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#common-architectural-styles"><span class="toc-number">1.</span> <span class="toc-text"> Common Architectural Styles</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pipes-and-filters"><span class="toc-number">1.1.</span> <span class="toc-text"> Pipes and Filters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-abstraction-and-object-oriented-organization"><span class="toc-number">1.2.</span> <span class="toc-text"> Data Abstraction and Object-Oriented Organization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#event-based-implicit-invocation"><span class="toc-number">1.3.</span> <span class="toc-text"> Event-based, Implicit Invocation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layered-systems"><span class="toc-number">1.4.</span> <span class="toc-text"> Layered Systems</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repositories"><span class="toc-number">1.5.</span> <span class="toc-text"> Repositories</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#blackboard"><span class="toc-number">1.5.1.</span> <span class="toc-text"> Blackboard</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#table-driven-interpreters"><span class="toc-number">1.6.</span> <span class="toc-text"> Table Driven Interpreters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#other-familiar-architectures"><span class="toc-number">1.7.</span> <span class="toc-text"> Other Familiar Architectures</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#distributed-processes"><span class="toc-number">1.7.1.</span> <span class="toc-text"> Distributed processes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#main-programsubroutine-organizations"><span class="toc-number">1.7.2.</span> <span class="toc-text"> Main program/subroutine organizations</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#domain-specific-software-architectures"><span class="toc-number">1.7.3.</span> <span class="toc-text"> Domain-specific software architectures</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#state-transition-systems"><span class="toc-number">1.7.4.</span> <span class="toc-text"> State transition systems</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#process-control-systems"><span class="toc-number">1.7.5.</span> <span class="toc-text"> Process control systems</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heterogeneous-architectures"><span class="toc-number">1.8.</span> <span class="toc-text"> Heterogeneous Architectures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#case-studies"><span class="toc-number">2.</span> <span class="toc-text"> Case Studies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#case-1-key-word-in-context"><span class="toc-number">2.1.</span> <span class="toc-text"> Case 1: Key Word in Context</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用案例kwic-system"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 使用案例：KWIC system</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-1-main-programsubroutine-with-shared-data"><span class="toc-number">2.1.2.</span> <span class="toc-text"> Solution 1: Main Program/Subroutine with Shared Data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-2-abstract-data-types"><span class="toc-number">2.1.3.</span> <span class="toc-text"> Solution 2: Abstract Data Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-3-implicit-invocation"><span class="toc-number">2.1.4.</span> <span class="toc-text"> Solution 3: Implicit Invocation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#solution-4-pipes-and-filters"><span class="toc-number">2.1.5.</span> <span class="toc-text"> Solution 4: Pipes and Filters</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#comparisons"><span class="toc-number">2.1.6.</span> <span class="toc-text"> Comparisons</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-2-instrumentation-software"><span class="toc-number">2.2.</span> <span class="toc-text"> Case 2: Instrumentation Software</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#an-object-oriented-model"><span class="toc-number">2.2.1.</span> <span class="toc-text"> An object-oriented model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#an-layered-model"><span class="toc-number">2.2.2.</span> <span class="toc-text"> An layered model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-pipe-and-filter-model"><span class="toc-number">2.2.3.</span> <span class="toc-text"> A Pipe and Filter Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-modified-pipe-and-filter-model"><span class="toc-number">2.2.4.</span> <span class="toc-text"> A Modified Pipe and Filter Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#further-specialization"><span class="toc-number">2.2.5.</span> <span class="toc-text"> Further Specialization</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-3-a-fresh-view-of-compilers"><span class="toc-number">2.3.</span> <span class="toc-text"> Case 3: A Fresh View of Compilers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-4-a-layered-design-with-different-styles-for-the-layers"><span class="toc-number">2.4.</span> <span class="toc-text"> Case 4: A Layered Design with Different Styles for the Layers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-5-an-interpreter-using-different-idioms-for-the-componnets"><span class="toc-number">2.5.</span> <span class="toc-text"> Case 5: An Interpreter Using Different Idioms for the Componnets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-6-a-blackboard-globally-recast-as-interpreter"><span class="toc-number">2.6.</span> <span class="toc-text"> Case 6: A Blackboard Globally Recast as Interpreter</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&text=An Introduction to Software Architecture 笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&is_video=false&description=An Introduction to Software Architecture 笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=An Introduction to Software Architecture 笔记&body=Check out this article: http://conglang.github.io/2015/05/25/note-intro-to-software-arch/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&title=An Introduction to Software Architecture 笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/05/25/note-intro-to-software-arch/&name=An Introduction to Software Architecture 笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

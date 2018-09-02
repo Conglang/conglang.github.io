@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="设计模式之蝇量。运用共享技术有效地支持大量细粒度的对象。让某个类的一个实例用来提供许多“虚拟实例”。适用性、结构与示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flyweight">
+<meta property="og:url" content="http://conglang.github.io/2014/12/30/flyweight/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="设计模式之蝇量。运用共享技术有效地支持大量细粒度的对象。让某个类的一个实例用来提供许多“虚拟实例”。适用性、结构与示例代码。">
+<meta property="og:image" content="http://conglang.github.io/img/flyweight_scenario1.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/flyweight_scenario2.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/flyweight_scenario3.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/flyweight_class.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/flyweight_object.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:43:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flyweight">
+<meta name="twitter:description" content="设计模式之蝇量。运用共享技术有效地支持大量细粒度的对象。让某个类的一个实例用来提供许多“虚拟实例”。适用性、结构与示例代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/flyweight_scenario1.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Flyweight</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2014/12/30/proxy/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2014/12/30/facade/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/30/flyweight/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/30/flyweight/&text=Flyweight"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/30/flyweight/&is_video=false&description=Flyweight"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Flyweight&body=Check out this article: http://conglang.github.io/2014/12/30/flyweight/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/30/flyweight/&name=Flyweight&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#蝇量"><span class="toc-number">1.</span> <span class="toc-text"> 蝇量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">5.</span> <span class="toc-text"> 实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-number">6.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途和缺点"><span class="toc-number">7.</span> <span class="toc-text"> 用途和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">8.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Flyweight
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2014-12-30T13:04:29.000Z" itemprop="datePublished">2014-12-30</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Design-Pattern/">Design Pattern</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="蝇量"><a class="markdownIt-Anchor" href="#蝇量"></a> 蝇量</h2>
+<blockquote>
+<p>运用共享技术有效地支持大量细粒度的对象。让某个类的一个实例用来提供许多“虚拟实例”。</p>
+</blockquote>
+<h2 id="适用性"><a class="markdownIt-Anchor" href="#适用性"></a> 适用性</h2>
+<ul>
+<li>一个应用程序使用了大量的对象。</li>
+<li>完全由于使用大量的对象，造成很大的存储开销。</li>
+<li>对象的大多数状态都可变为外部状态。</li>
+<li>如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。</li>
+<li>应用程序不依赖于对象标识。由于Flyweight对象可以被共享，对于概念上明显有别的对象，标识测试将返回真值。</li>
+</ul>
+<h2 id="典型情境"><a class="markdownIt-Anchor" href="#典型情境"></a> 典型情境</h2>
+<blockquote>
+<p>一个文档中有很多字符，每个字符都是一个类。使用flyweight后，物理上每个字符共享一个flyweight对象，而这个对象出现在文档结构中的不同地方。一个特定字符对象的每次出现都指向同一个实例，这个实例位于flyweight对象的共享池中。</p>
+</blockquote>
+<p><img src="/img/flyweight_scenario1.jpg" alt="Flyweight Scenario"><br>
+<img src="/img/flyweight_scenario2.jpg" alt="Flyweight Scenario Solution"></p>
+<blockquote>
+<p>一个场景里有很多树。使用flyweight后，应该只用一个树实例和一个客户对象来维护“所有”树的状态。</p>
+</blockquote>
+<p><img src="/img/flyweight_scenario3.jpg" alt="Flyweight Scenario 2"></p>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/flyweight_class.jpg" alt="Flyweight Class"><br>
+<img src="/img/flyweight_object.jpg" alt="Flyweight Object"></p>
+<blockquote>
+<p><strong>Flyweight</strong> - 描述一个接口，通过这个接口flyweight可以接受并作用于外部状态。<br>
+<strong>Concrete Flyweight</strong> - 实现Flyweight接口，并为内部状态（如果有的话）增加存储空间。ConcreteFlyweight对象必须是可共享的。它所存储的状态必须是内部的；即，它必须独立于ConcreteFlyweight对象的场景。<br>
+<strong>UnsharedConcreteFlyweight</strong> - 并非所有的Flyweight子类都需要被共享。Flyweight接口使共享成为可能，但它并不强制共享。在Flyweight对象结构的某些层次，UnsharedConcreteFlyweight对象通常将ConcreteFlyweight对象作为子节点。<br>
+<strong>FlyweightFactory</strong> - 创建并管理flyweight对象。确保合理地共享flyweight。当用户请求一个flyweight时，FlyweightFactory对象提供一个已创建的实例或者创建一个（如果不存在的话）。<br>
+<strong>Client</strong> - 维持一个对flyweight的引用。计算或存储一个（多个）flyweight的外部状态。</p>
+<blockquote>
+<p>协作：<br>
+flyweight执行时所需的状态必定是内部的或外部的。内部状态存储于ConcreteFlyweight对象之中；而外部对象则由Client对象存储或计算。当用户调用flyweight对象的操作时，将该状态传递给它。<br>
+用户不应直接对ConcreteFlyweight类进行实例化，而只能从FlyweightFactory对象得到ConcreteFlyweight对象，这可以保证对它们适当地进行共享。</p>
+</blockquote>
+</blockquote>
+<h2 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">const int MAX_NUM = 255;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">class ExtrinsicState</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	void set_num(int n) &#123;m_num = n;&#125;</span><br><span class="line">	int get_num() const &#123;return m_num;&#125;</span><br><span class="line">private:</span><br><span class="line">	int m_num;</span><br><span class="line">&#125;;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">class Flyweight</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	virtual void operation(ExtrinsicState&amp; context)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">class ConcreteFlyweight : public Flyweight</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	ConcreteFlyweight(char c) : Flyweight(), m_inner(c)</span><br><span class="line">	&#123;</span><br><span class="line">		std::cout &lt;&lt; "Shared Created once."&lt;&lt;std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void operation(ExtrinsicState&amp; context)</span><br><span class="line">	&#123;</span><br><span class="line">		std::string temp(context.get_num(), m_inner);</span><br><span class="line">		std::cout&lt;&lt;temp&lt;&lt;std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">private:</span><br><span class="line">	char m_inner;</span><br><span class="line">&#125;;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">class UnsharedConcreteFlyweight : public Flyweight</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	UnsharedConcreteFlyweight() : Flyweight()</span><br><span class="line">	&#123;</span><br><span class="line">		std::cout &lt;&lt; "Unshared Created once."&lt;&lt;std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void operation(ExtrinsicState&amp; context)</span><br><span class="line">	&#123;</span><br><span class="line">		std::cout&lt;&lt;"I don't like share."&lt;&lt;std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">class FlyweightFactory</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	FlyweightFactory()</span><br><span class="line">	&#123;</span><br><span class="line">		for (int i = 0; i &lt; MAX_NUM; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			m_flyweights[i] = NULL;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	virtual Flyweight* create_concrete_flyweight(char c)</span><br><span class="line">	&#123;</span><br><span class="line">		if (!m_flyweights[c]) &#123;m_flyweights[c] = new ConcreteFlyweight(c);&#125;</span><br><span class="line">		return m_flyweights[c];	// 此处简单以ConcreteFlyweight的intrinsicState，即char m_inner，作为索引。</span><br><span class="line">	&#125;</span><br><span class="line">	virtual Flyweight* create_unshared_concrete_flyweight()</span><br><span class="line">	&#123;</span><br><span class="line">		return new UnsharedConcreteFlyweight();</span><br><span class="line">	&#125;</span><br><span class="line">private:</span><br><span class="line">	Flyweight* m_flyweights[MAX_NUM];</span><br><span class="line">&#125;;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">class Client</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	void test()</span><br><span class="line">	&#123;</span><br><span class="line">		ExtrinsicState ex;</span><br><span class="line">		ex.set_num(3);</span><br><span class="line">		FlyweightFactory factory;</span><br><span class="line">		Flyweight* share1 = factory.create_concrete_flyweight('c');</span><br><span class="line">		Flyweight* share2 = factory.create_concrete_flyweight('c');</span><br><span class="line">		share1-&gt;operation(ex);</span><br><span class="line">		share2-&gt;operation(ex);</span><br><span class="line">		Flyweight* unshare1 = factory.create_unshared_concrete_flyweight();</span><br><span class="line">		Flyweight* unshare2 = factory.create_unshared_concrete_flyweight();</span><br><span class="line">		unshare1-&gt;operation(ex);</span><br><span class="line">		unshare2-&gt;operation(ex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line">//---------------------------------------------------</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	Client s;</span><br><span class="line">	s.test();</span><br><span class="line">	system("Pause");</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优点"><a class="markdownIt-Anchor" href="#优点"></a> 优点</h2>
+<ul>
+<li>减少运行时对象实例的个数，节省内存。</li>
+<li>将许多“虚拟”对象的状态集中管理。</li>
+</ul>
+<h2 id="用途和缺点"><a class="markdownIt-Anchor" href="#用途和缺点"></a> 用途和缺点</h2>
+<ul>
+<li>当一个类有许多的实例，而这些实例能被同一方法控制的时候，我们就可以使用蝇量模式。</li>
+<li>蝇量模式的缺点在于，一旦你实现了它，那么单个的逻辑实例将无法拥有独立而不同的行为。</li>
+</ul>
+<h2 id="相关模式"><a class="markdownIt-Anchor" href="#相关模式"></a> 相关模式</h2>
+<ul>
+<li>Flyweight模式通常和Composite模式结合起来，用共享叶节点的有向无环图实现一个逻辑上的层次结构。</li>
+<li>最好用Flyweight实现State和Strategy对象。</li>
+</ul>
+<p>[1] 设计模式：可复用面向对象软件的基础<br>
+[2] Head First 设计模式</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#蝇量"><span class="toc-number">1.</span> <span class="toc-text"> 蝇量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">5.</span> <span class="toc-text"> 实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-number">6.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途和缺点"><span class="toc-number">7.</span> <span class="toc-text"> 用途和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">8.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/30/flyweight/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/30/flyweight/&text=Flyweight"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/30/flyweight/&is_video=false&description=Flyweight"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Flyweight&body=Check out this article: http://conglang.github.io/2014/12/30/flyweight/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/30/flyweight/&title=Flyweight"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/30/flyweight/&name=Flyweight&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

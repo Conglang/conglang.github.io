@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="设计模式之访问者。当想要为一个对象的组合增加新的能力，且封装不重要时，就使用访问者模式。可以在不改变各元素的类的前提下定义作用于这些元素的新操作。适用性、结构与示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Visitor">
+<meta property="og:url" content="http://conglang.github.io/2015/01/03/visitor/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="设计模式之访问者。当想要为一个对象的组合增加新的能力，且封装不重要时，就使用访问者模式。可以在不改变各元素的类的前提下定义作用于这些元素的新操作。适用性、结构与示例代码。">
+<meta property="og:image" content="http://conglang.github.io/img/visitor_scenario.png">
+<meta property="og:image" content="http://conglang.github.io/img/visitor_class.png">
+<meta property="og:image" content="http://conglang.github.io/img/visitor_sequence.png">
+<meta property="og:updated_time" content="2018-07-03T15:32:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Visitor">
+<meta name="twitter:description" content="设计模式之访问者。当想要为一个对象的组合增加新的能力，且封装不重要时，就使用访问者模式。可以在不改变各元素的类的前提下定义作用于这些元素的新操作。适用性、结构与示例代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/visitor_scenario.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Visitor</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/04/stl-iterator/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/03/template-method/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/03/visitor/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/03/visitor/&text=Visitor"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/03/visitor/&is_video=false&description=Visitor"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Visitor&body=Check out this article: http://conglang.github.io/2015/01/03/visitor/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/03/visitor/&name=Visitor&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问者"><span class="toc-number">1.</span> <span class="toc-text"> 访问者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">5.</span> <span class="toc-text"> 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-number">6.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途和缺点"><span class="toc-number">7.</span> <span class="toc-text"> 用途和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">8.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Visitor
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-03T13:56:02.000Z" itemprop="datePublished">2015-01-03</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Design-Pattern/">Design Pattern</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="访问者"><a class="markdownIt-Anchor" href="#访问者"></a> 访问者</h2>
+<blockquote>
+<p>当想要为一个对象的组合增加新的能力，且封装不重要时，就使用访问者模式。可以在不改变各元素的类的前提下定义作用于这些元素的新操作。</p>
+</blockquote>
+<h2 id="适用性"><a class="markdownIt-Anchor" href="#适用性"></a> 适用性</h2>
+<ul>
+<li>一个对象结构包含很多类对象，它们有不同的接口，而你想对这些对象实施一些依赖于其具体类的操作。</li>
+<li>需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而你想避免让这些操作“污染”这些对象的类。Visitor使得你可以将相关的操作集中起来定义在一个类中。当该对象结构被很多应用共享时，用Visitor模式让每个应用仅包含需要用到的操作。</li>
+<li>定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重定义对所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作较好。</li>
+</ul>
+<h2 id="典型情境"><a class="markdownIt-Anchor" href="#典型情境"></a> 典型情境</h2>
+<p>客户要求知道每道菜/原料的卡路里/蛋白质情况。此时不需要为每个菜单项和原料都添加这两个方法，只要添加一个访问者，这个访问者可以收集每道菜和原料的信息，有问题客户只要问访问者就可以了。<br>
+<img src="/img/visitor_scenario.png" alt="Visitor Scenario"></p>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/visitor_class.png" alt="Visitor Class"><br>
+<img src="/img/visitor_sequence.png" alt="Visitor Sequence"></p>
+<blockquote>
+<p><strong>Visitor</strong> - 为该对象结构中ConcreteElement的每一个类声明一个Visit操作。该操作的名字和特征标识了发送Visit请求给该访问者的那个类。这使得访问者可以确定正被访问的元素的具体的类。这样访问者就可以通过该元素的特定接口直接访问它。<br>
+<strong>ConcreteVisitor</strong> - 实现每个由Visitor声明的操作。每个操作实现本算法的一部分，而该算法片段乃是对应于结构中对象的类。ConcreteVisitor为该算法提供了上下文并存储它的局部状态。这一状态常常在遍历该结构的过程中累积结果。<br>
+<strong>Element</strong> - 定义一个Accept操作，它以一个访问者为参数。<br>
+<strong>ConcreteElement</strong> - 实现Accept操作，该操作以一个访问者为参数。<br>
+<strong>ObjectStructure</strong> - 能枚举它的元素。可以提供一个高层的接口以允许该访问者访问它的元素。可以是一个Composite或是一个集合，如一个列表或一个无序集合。</p>
+<blockquote>
+<p>协作：<br>
+一个使用Visitor模式的客户必须创建一个ConcreteVisitor对象，然后遍历该对象结构，并用该访问者访问每一个元素。<br>
+当一个元素被访问时，它调用对应于它的类的Visitor操作。如果必要，该元素将自身作为这个操作的一个参数以便该访问者访问它的状态。</p>
+</blockquote>
+</blockquote>
+<h2 id="示例"><a class="markdownIt-Anchor" href="#示例"></a> 示例</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Element;</span><br><span class="line"><span class="keyword">class</span> ElementA;</span><br><span class="line"><span class="keyword">class</span> ElementB;</span><br><span class="line"><span class="keyword">class</span> CompositeElement;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Visitor</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_elementA</span><span class="params">(ElementA* ea)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_elementB</span><span class="params">(ElementB* eb)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_composite_element</span><span class="params">(CompositeElement* ce)</span></span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Element</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">virtual</span> ~Element()&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Visitor&amp; v)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ElementA : <span class="keyword">public</span> Element</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ElementA() : Element(), m_a_num(<span class="number">50</span>), m_a_string(<span class="string">"I'm A. "</span>)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Visitor&amp; v)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		v.visit_elementA(<span class="keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_a_num</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_a_num;&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">get_a_string</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_a_string;&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="keyword">int</span> m_a_num;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_a_string;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ElementB : <span class="keyword">public</span> Element</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ElementB() : Element(), m_b_num(<span class="number">30</span>), m_b_string(<span class="string">"I'm B. "</span>)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Visitor&amp; v)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		v.visit_elementB(<span class="keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_b_num</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_b_num;&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">get_b_string</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_b_string;&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="keyword">int</span> m_b_num;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_b_string;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> CompositeElement : <span class="keyword">public</span> Element</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(Element* e)</span> </span>&#123;m_children.push_back(e);&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">remove</span><span class="params">(Element* e)</span> </span>&#123;m_children.remove(e);&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(Visitor&amp; v)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Element*&gt;::iterator it = m_children.begin(); it != m_children.end(); ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (!(*it)) <span class="keyword">continue</span>;</span><br><span class="line">			(*it)-&gt;accept(v);</span><br><span class="line">		&#125;</span><br><span class="line">		v.visit_composite_element(<span class="keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_composite_num</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> m_children.size();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">get_composite_string</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"From All of Us. "</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">list</span>&lt;Element*&gt; m_children;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ConcreteVisitor1 : <span class="keyword">public</span> Visitor</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ConcreteVisitor1() : Visitor(), m_total(<span class="string">""</span>)&#123;&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">get_total_string</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_total;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_elementA</span><span class="params">(ElementA* ea)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!ea) <span class="keyword">return</span>;</span><br><span class="line">		m_total += ea-&gt;get_a_string();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_elementB</span><span class="params">(ElementB* eb)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!eb) <span class="keyword">return</span>;</span><br><span class="line">		m_total += eb-&gt;get_b_string();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_composite_element</span><span class="params">(CompositeElement* ce)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!ce) <span class="keyword">return</span>;</span><br><span class="line">		m_total += ce-&gt;get_composite_string();</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_total;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ConcreteVisitor2 : <span class="keyword">public</span> Visitor</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ConcreteVisitor2() : Visitor(), m_total(<span class="number">0</span>) &#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">get_total_num</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> m_total;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_elementA</span><span class="params">(ElementA* ea)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!ea) <span class="keyword">return</span>;</span><br><span class="line">		m_total += ea-&gt;get_a_num();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_elementB</span><span class="params">(ElementB* eb)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!eb) <span class="keyword">return</span>;</span><br><span class="line">		m_total += eb-&gt;get_b_num();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">visit_composite_element</span><span class="params">(CompositeElement* ce)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!ce) <span class="keyword">return</span>;</span><br><span class="line">		m_total += ce-&gt;get_composite_num();</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="keyword">int</span> m_total;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ObjectStructure</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		Element* ea = <span class="keyword">new</span> ElementA();</span><br><span class="line">		Element* eb = <span class="keyword">new</span> ElementB();</span><br><span class="line">		ConcreteVisitor2 cv2;</span><br><span class="line">		ea-&gt;accept(cv2);</span><br><span class="line">		eb-&gt;accept(cv2);</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Get Int Sum of ElementA and ElementB: (50 + 30 = 80)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; cv2.get_total_num() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		Element* ea = <span class="keyword">new</span> ElementA();</span><br><span class="line">		Element* eb = <span class="keyword">new</span> ElementB();</span><br><span class="line">		CompositeElement* ce = <span class="keyword">new</span> CompositeElement();</span><br><span class="line">		ce-&gt;add(ea);</span><br><span class="line">		ce-&gt;add(eb);</span><br><span class="line">		ConcreteVisitor1 cv1;</span><br><span class="line">		ce-&gt;accept(cv1);</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Get String Sum of CompositeElement: (ElementA + ElementB + CompositeElement)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; cv1.get_total_string() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	ObjectStructure o;</span><br><span class="line">	o.test1();</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	o.test2();</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优点"><a class="markdownIt-Anchor" href="#优点"></a> 优点</h2>
+<ul>
+<li>允许你对组合结构加入新的操作，而无需改变结构本身。</li>
+<li>想要加入新的操作，相对容易。</li>
+<li>访问者所进行的操作，其代码是集中在一起的。</li>
+</ul>
+<h2 id="用途和缺点"><a class="markdownIt-Anchor" href="#用途和缺点"></a> 用途和缺点</h2>
+<ul>
+<li>当采用访问者模式的时候，会打破组合类的封装。</li>
+<li>因为游走的功能牵涉其中，所以对组合结构的改变就更加困难。</li>
+</ul>
+<h2 id="相关模式"><a class="markdownIt-Anchor" href="#相关模式"></a> 相关模式</h2>
+<ul>
+<li>Composite: 访问者可以用于对一个由Composite模式定义的对象结构进行操作。</li>
+<li>Interpreter: 访问者可以用于解释。</li>
+</ul>
+<p>[1] 设计模式：可复用面向对象软件的基础<br>
+[2] Head First设计模式</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#访问者"><span class="toc-number">1.</span> <span class="toc-text"> 访问者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">5.</span> <span class="toc-text"> 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-number">6.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途和缺点"><span class="toc-number">7.</span> <span class="toc-text"> 用途和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">8.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/03/visitor/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/03/visitor/&text=Visitor"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/03/visitor/&is_video=false&description=Visitor"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Visitor&body=Check out this article: http://conglang.github.io/2015/01/03/visitor/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/03/visitor/&title=Visitor"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/03/visitor/&name=Visitor&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

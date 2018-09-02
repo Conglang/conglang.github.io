@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="STL标准库之无序容器unordered container。unordered set/multiset/map/multimap。定义、成员函数与示例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL Unordered Container">
+<meta property="og:url" content="http://conglang.github.io/2015/01/01/stl-unordered-container/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="STL标准库之无序容器unordered container。unordered set/multiset/map/multimap。定义、成员函数与示例。">
+<meta property="og:image" content="http://conglang.github.io/img/unordered_containers.png">
+<meta property="og:image" content="http://conglang.github.io/img/internal_structure_of_unordered_sets_and_multisets.png">
+<meta property="og:image" content="http://conglang.github.io/img/internal_structure_of_unordered_maps_and_multimaps.png">
+<meta property="og:updated_time" content="2018-07-03T15:49:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STL Unordered Container">
+<meta name="twitter:description" content="STL标准库之无序容器unordered container。unordered set/multiset/map/multimap。定义、成员函数与示例。">
+<meta name="twitter:image" content="http://conglang.github.io/img/unordered_containers.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>STL Unordered Container</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/02/choose-stl-container/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/01/stl-map-and-multimap/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/01/stl-unordered-container/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&text=STL Unordered Container"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&is_video=false&description=STL Unordered Container"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Unordered Container&body=Check out this article: http://conglang.github.io/2015/01/01/stl-unordered-container/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&name=STL Unordered Container&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#unordered-container"><span class="toc-number">1.</span> <span class="toc-text"> Unordered Container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unordered容器的操作"><span class="toc-number">2.</span> <span class="toc-text"> Unordered容器的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-copy-and-destroy"><span class="toc-number">2.1.</span> <span class="toc-text"> Create, Copy, and Destroy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layout-operations"><span class="toc-number">2.2.</span> <span class="toc-text"> Layout Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nonmodifying-operations"><span class="toc-number">2.3.</span> <span class="toc-text"> Nonmodifying Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#special-search-operations"><span class="toc-number">2.4.</span> <span class="toc-text"> Special Search Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assignments"><span class="toc-number">2.5.</span> <span class="toc-text"> Assignments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iterator-operations"><span class="toc-number">2.6.</span> <span class="toc-text"> Iterator Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#insert-and-remove-operations"><span class="toc-number">2.7.</span> <span class="toc-text"> Insert and Remove Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#direct-element-access-of-unordered-maps"><span class="toc-number">2.8.</span> <span class="toc-text"> Direct Element Access of Unordered Maps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用unordered容器的示例"><span class="toc-number">3.</span> <span class="toc-text"> 使用Unordered容器的示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unordered-set"><span class="toc-number">3.1.</span> <span class="toc-text"> Unordered Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unordered-multiset"><span class="toc-number">3.2.</span> <span class="toc-text"> Unordered Multiset</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STL Unordered Container
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-01T13:27:11.000Z" itemprop="datePublished">2015-01-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Container/">Container</a>, <a class="tag-link" href="/tags/STL/">STL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="unordered-container"><a class="markdownIt-Anchor" href="#unordered-container"></a> Unordered Container</h2>
+<p><img src="/img/unordered_containers.png" alt="Unordered Containers"><br>
+<img src="/img/internal_structure_of_unordered_sets_and_multisets.png" alt="Internal Structure of Unordered Sets and Multisets"><br>
+<img src="/img/internal_structure_of_unordered_maps_and_multimaps.png" alt="Internal Structure of Unordered Maps and Multimaps"></p>
+<p>包含头文件<code>&lt;unordered_set&gt;</code>或<code>&lt;unordered_map&gt;</code>。</p>
+<p>定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="built_in">std</span> &#123;</span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T,</span><br><span class="line">		<span class="keyword">typename</span> Hash = hash&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> EqPred = equal_to&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> Allocator = allocator&lt;T&gt; &gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">unordered_set</span>;</span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T,</span><br><span class="line">		<span class="keyword">typename</span> Hash = hash&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> EqPred = equal_to&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> Allocator = allocator&lt;T&gt; &gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">unordered_multiset</span>;</span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> T,</span><br><span class="line">		<span class="keyword">typename</span> Hash = hash&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> EqPred = equal_to&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> Allocator = allocator&lt;pair&lt;<span class="keyword">const</span> Key, T&gt; &gt; &gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">unordered_map</span>;</span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Key, <span class="keyword">typename</span> T,</span><br><span class="line">		<span class="keyword">typename</span> Hash = hash&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> EqPred = equal_to&lt;T&gt;,</span><br><span class="line">		<span class="keyword">typename</span> Allocator = allocator&lt;pair&lt;<span class="keyword">const</span> Key, T&gt; &gt; &gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">unordered_multimap</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>unordered set或multiset的元素必须是可比较的。<br>
+unordered map或multimap的key和value都必须copyable或movable。key必须在指定相等比较标准下可比较。<br>
+内置的hash&lt;&gt;支持所有内置类型，特殊的类型需要提供自己的hash function。性能就取决于hash function的质量。<br>
+Unordered Container。内部用hash table实现。<br>
+前向迭代器。key是const的，只能删除再添加，不能修改。erase操作不会让迭代器失效。insert/rehash/reverse/clear会导致rehash，从而让迭代器失效。</p>
+<h2 id="unordered容器的操作"><a class="markdownIt-Anchor" href="#unordered容器的操作"></a> Unordered容器的操作</h2>
+<h3 id="create-copy-and-destroy"><a class="markdownIt-Anchor" href="#create-copy-and-destroy"></a> Create, Copy, and Destroy</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unord c</td>
+<td>Default constructor; creates an empty unordered container without any elements</td>
+</tr>
+<tr>
+<td>Unord c(bnum)</td>
+<td>Creates an empty unordered container that internally uses at least bnum buckets</td>
+</tr>
+<tr>
+<td>Unord c(bnum, hf)</td>
+<td>Creates an empty unordered container that internally uses at least bnum buckets and hfas hash function</td>
+</tr>
+<tr>
+<td>Unord c(bnum, hf, cmp)</td>
+<td>Creates an empty unordered container that internally uses at least bnum buckets, hfas hash function, and cmp as predicate to identify equal values</td>
+</tr>
+<tr>
+<td>Unord c(c2)</td>
+<td>Copy constructor; creates a copy of another unordered container of the same type (all elements are copied)</td>
+</tr>
+<tr>
+<td>Unord c = c2</td>
+<td>Copy constructor; creates a copy of another unordered container of the same type (all elements are copied)</td>
+</tr>
+<tr>
+<td>Unord c(rv)</td>
+<td>Move constructor; creates an unordered container, taking the contents of the rvalue rv (since C++11)</td>
+</tr>
+<tr>
+<td>Unord c = rv</td>
+<td>Move constructor; creates an unordered container, taking the contents of the rvalue rv (since C++11)</td>
+</tr>
+<tr>
+<td>Unord c(beg, end)</td>
+<td>Creates an unordered container initialized by the elements of the range [beg,end)</td>
+</tr>
+<tr>
+<td>Unord c(beg, end, bnum)</td>
+<td>Creates an unordered container initialized by the elements of the range [beg,end) that internally uses at least bnum buckets</td>
+</tr>
+<tr>
+<td>Unord c(beg, end, bnum, hf)</td>
+<td>Creates an unordered container initialized by the elements of the range [beg,end) that internally uses at least bnum buckets and hfas hash function</td>
+</tr>
+<tr>
+<td>Unord c(beg, end, bnum, hf, cmp)</td>
+<td>Creates an unordered container initialized by the elements of the range [beg,end) that internally uses at least bnum buckets, hfas hash function, and cmp as predicate to identify equal values</td>
+</tr>
+<tr>
+<td>Unord c(initlist)</td>
+<td>Creates an unordered unordered container initialized by the elements of the initializer list initlist</td>
+</tr>
+<tr>
+<td>Unord c = initlist</td>
+<td>Creates an unordered unordered container initialized by the elements of the initializer list initlist</td>
+</tr>
+<tr>
+<td>c.~Unord()</td>
+<td>Destroys all elements and frees the memory</td>
+</tr>
+</tbody>
+</table>
+<p>其中Unord可以是：</p>
+<table>
+<thead>
+<tr>
+<th>Unord</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unordered_set&lt;Elem&gt;</code></td>
+<td>An unordered set that by default hashes with hash&lt;&gt; and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_set&lt;Elem, Hash&gt;</code></td>
+<td>An unordered set that by default hashes with Hash and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_set&lt;Elem, Hash, Cmp&gt;</code></td>
+<td>An unordered set that by default hashes with Hash and compares with Cmp</td>
+</tr>
+<tr>
+<td><code>unordered_multiset&lt;Elem&gt;</code></td>
+<td>An unordered multiset that by default hashes with hash&lt;&gt; and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_multiset&lt;Elem, Hash&gt;</code></td>
+<td>An unordered multiset that by default hashes with Hash and compares equal_to&lt;&gt;  (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_multiset&lt;Elem, Hash, Cmp&gt;</code></td>
+<td>An unordered multiset that by default hashes with Hash and compares with Cmp</td>
+</tr>
+<tr>
+<td><code>unordered_map&lt;Key, T&gt;</code></td>
+<td>An unordered map that by default hashes with hash&lt;&gt; and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_map&lt;Key, T, Hash&gt;</code></td>
+<td>An unordered map that by default hashes with Hash and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_map&lt;Key, T, Hash, Cmp&gt;</code></td>
+<td>An unordered map that by default hashes with Hash and compares with Cmp</td>
+</tr>
+<tr>
+<td><code>unordered_multimap&lt;Key, T&gt;</code></td>
+<td>An unordered multimap that by default hashes with hash&lt;&gt; and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_multimap&lt;Key, T, Hash&gt;</code></td>
+<td>An unordered multimap that by default hashes with Hash and compares equal_to&lt;&gt; (operator ==)</td>
+</tr>
+<tr>
+<td><code>unordered_multimap&lt;Key, T, Hash, Cmp&gt;</code></td>
+<td>An unordered multimap that by default hashes with Hash and compares with Cmp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="layout-operations"><a class="markdownIt-Anchor" href="#layout-operations"></a> Layout Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c.hash_function()</td>
+<td>Returns the hash function</td>
+</tr>
+<tr>
+<td>c.key_eq()</td>
+<td>Returns the equivalence predicate</td>
+</tr>
+<tr>
+<td>c.bucket_count()</td>
+<td>Returns the current number of buckets</td>
+</tr>
+<tr>
+<td>c.max_bucket_count()</td>
+<td>Returns the maximum number of buckets possible</td>
+</tr>
+<tr>
+<td>c.load_factor()</td>
+<td>Returns the current load factor</td>
+</tr>
+<tr>
+<td>c.max_load_factor()</td>
+<td>Returns the current maximum load factor</td>
+</tr>
+<tr>
+<td>c.max_load_factor(val)</td>
+<td>Sets the maximum load factor to val</td>
+</tr>
+<tr>
+<td>c.rehash(bnum)</td>
+<td>Rehashes the container so that it has a bucket size of at least bnum</td>
+</tr>
+<tr>
+<td>c.reserve(num)</td>
+<td>Rehashes the container so that is has space for at least num elements (since C++11)</td>
+</tr>
+</tbody>
+</table>
+<p>影响内部布局的操作。<br>
+rehash与reserve的比较：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">coll.rehash(<span class="number">100</span>);	<span class="comment">//prepare for 100/max_load_factor() elements</span></span><br><span class="line">coll.reserve(<span class="number">100</span>);	<span class="comment">//prepare for 100 elements (since C++11)</span></span><br></pre></td></tr></table></figure>
+<h3 id="nonmodifying-operations"><a class="markdownIt-Anchor" href="#nonmodifying-operations"></a> Nonmodifying Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c.empty()</td>
+<td>Returns whether the container is empty (equivalent to size()==0 but might be faster)</td>
+</tr>
+<tr>
+<td>c.size()</td>
+<td>Returns the current number of elements</td>
+</tr>
+<tr>
+<td>c.max_size()</td>
+<td>Returns the maximum number of elements possible</td>
+</tr>
+<tr>
+<td>c1 == c2</td>
+<td>Returns whether c1 is equal to c2</td>
+</tr>
+<tr>
+<td>c1 != c2</td>
+<td>Returns whether c1 is not equal to c2 (equivalent to !(c1==c2) )</td>
+</tr>
+</tbody>
+</table>
+<h3 id="special-search-operations"><a class="markdownIt-Anchor" href="#special-search-operations"></a> Special Search Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c.count(val)</td>
+<td>Returns the number of elements with value val</td>
+</tr>
+<tr>
+<td>c.find(val)</td>
+<td>Returns the position of the first element with value val (or end() if none found)</td>
+</tr>
+<tr>
+<td>c.equal_range(val)</td>
+<td>Returns a range with all elements with a value equal to val (i.e., the first and last positions, where val would get inserted)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assignments"><a class="markdownIt-Anchor" href="#assignments"></a> Assignments</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c = c2</td>
+<td>Assigns all elements of c2 to c</td>
+</tr>
+<tr>
+<td>c = rv</td>
+<td>Move assigns all elements of the rvalue rv to c (since C++11)</td>
+</tr>
+<tr>
+<td>c = initlist</td>
+<td>Assigns all elements of the initializer list initlist to c (since C++11)</td>
+</tr>
+<tr>
+<td>c1.swap(c2)</td>
+<td>Swaps the data of c1 and c2</td>
+</tr>
+<tr>
+<td>swap(c1, c2)</td>
+<td>Swaps the data of c1 and c2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="iterator-operations"><a class="markdownIt-Anchor" href="#iterator-operations"></a> Iterator Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c.begin()</td>
+<td>Returns a forward iterator for the first element</td>
+</tr>
+<tr>
+<td>c.end()</td>
+<td>Returns a forward iterator for the position after the last element</td>
+</tr>
+<tr>
+<td>c.cbegin()</td>
+<td>Returns a constant forward iterator for the first element (since C++11)</td>
+</tr>
+<tr>
+<td>c.cend()</td>
+<td>Returns a constant forward iterator for the position after the last element (since C++11)</td>
+</tr>
+<tr>
+<td>c.rbegin()</td>
+<td>Returns a reverse iterator for the first element of a reverse iteration</td>
+</tr>
+<tr>
+<td>c.rend()</td>
+<td>Returns a reverse iterator for the position after the last element of a reverse iteration</td>
+</tr>
+<tr>
+<td>c.crbegin()</td>
+<td>Returns a constant reverse iterator for the first element of a reverse iteration (since C++11)</td>
+</tr>
+<tr>
+<td>c.crend()</td>
+<td>Returns a constant reverse iterator for the position after the last element of a reverse iteration (since C++11)</td>
+</tr>
+</tbody>
+</table>
+<p>前向迭代器。</p>
+<h3 id="insert-and-remove-operations"><a class="markdownIt-Anchor" href="#insert-and-remove-operations"></a> Insert and Remove Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c.insert(val)</td>
+<td>Inserts a copy of val and returns the position of the new element and, for unordered containers, whether it succeeded</td>
+</tr>
+<tr>
+<td>c.insert(pos, val)</td>
+<td>Inserts a copy of val and returns the position of the new element (pos is used as a hint pointing to where the insert should start the search)</td>
+</tr>
+<tr>
+<td>c.insert(beg, end)</td>
+<td>Inserts a copy of all elements of the range [beg,end) (returns nothing)</td>
+</tr>
+<tr>
+<td>c.insert(initlist)</td>
+<td>Inserts a copy of all elements in the initializer list initlist (returns nothing; since C++11)</td>
+</tr>
+<tr>
+<td>c.emplace(args…)</td>
+<td>Inserts a copy of an element initialized with args and returns the position of the new element and, for unordered containers, whether it succeeded (since C++11)</td>
+</tr>
+<tr>
+<td>c.emplace_hint(pos, args…)</td>
+<td>Inserts a copy of an element initialized with args and returns the position of the new element (pos is used as a hint pointing to where the insert should start the search)</td>
+</tr>
+<tr>
+<td>c.erase(val)</td>
+<td>Removes all elements equal to val and returns the number of removed elements</td>
+</tr>
+<tr>
+<td>c.erase(pos)</td>
+<td>Removes the element at iterator position pos and returns the following position (returned nothing before C++11)</td>
+</tr>
+<tr>
+<td>c.erase(beg, end)</td>
+<td>Removes all elements of the range [beg,end) and returns the following position (returned nothing before C++11)</td>
+</tr>
+<tr>
+<td>c.clear()</td>
+<td>Removes all elements (empties the container)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Unordered Sets</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pair&lt;iterator,<span class="keyword">bool</span>&gt;	insert(<span class="keyword">const</span> value_type&amp; val);</span><br><span class="line"><span class="function">iterator		<span class="title">insert</span><span class="params">(iterator posHint, <span class="keyword">const</span> value_type&amp; val)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</span><br><span class="line">pair&lt;iterator,<span class="keyword">bool</span>&gt;	emplace(Args&amp;&amp;... args);</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function">iterator		<span class="title">emplace_hint</span><span class="params">(const_iterator posHint, Args&amp;&amp;... args)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>Unordered multisets</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator	<span class="title">insert</span><span class="params">(<span class="keyword">const</span> value_type&amp; val)</span></span>;</span><br><span class="line"><span class="function">iterator	<span class="title">insert</span><span class="params">(iterator posHint, <span class="keyword">const</span> value_type&amp; val)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function">iterator	<span class="title">emplace</span><span class="params">(Args&amp;&amp;... args)</span></span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function">iterator	<span class="title">emplace_hint</span><span class="params">(const_iterator posHint, Args&amp;&amp;... args)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="direct-element-access-of-unordered-maps"><a class="markdownIt-Anchor" href="#direct-element-access-of-unordered-maps"></a> Direct Element Access of Unordered Maps</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c[key]</td>
+<td>Inserts an element with key, if it does not yet exist, and returns a reference to the value of the element with key (only for nonconstant unordered maps)</td>
+</tr>
+<tr>
+<td><a href="http://c.at" target="_blank" rel="external">c.at</a>(key)</td>
+<td>Returns a reference to the value of the element with key (since C++11)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用unordered容器的示例"><a class="markdownIt-Anchor" href="#使用unordered容器的示例"></a> 使用Unordered容器的示例</h2>
+<h3 id="unordered-set"><a class="markdownIt-Anchor" href="#unordered-set"></a> Unordered Set</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;numeric&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// create and initialize unordered set</span></span><br><span class="line">	<span class="comment">//unordered_set&lt;int&gt; coll = &#123;1,2,3,5,7,11,13,17,19,77&#125;;</span></span><br><span class="line">	<span class="keyword">int</span> temp[<span class="number">10</span>] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">17</span>,<span class="number">19</span>,<span class="number">77</span>&#125;;</span><br><span class="line">	<span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt; coll(temp, temp+<span class="number">10</span>);</span><br><span class="line">	<span class="comment">// print elements</span></span><br><span class="line">	<span class="comment">// - elements are in arbitrary order</span></span><br><span class="line">	copy(coll.begin(), coll.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// insert some additional elements</span></span><br><span class="line">	<span class="comment">// - might cause rehashing and create different order</span></span><br><span class="line">	<span class="comment">//coll.insert(&#123;-7,17,33,-11,17,19,1,13&#125;);</span></span><br><span class="line">	<span class="keyword">int</span> temp1[<span class="number">8</span>] = &#123;<span class="number">-7</span>,<span class="number">17</span>,<span class="number">33</span>,<span class="number">-11</span>,<span class="number">17</span>,<span class="number">19</span>,<span class="number">1</span>,<span class="number">13</span>&#125;;</span><br><span class="line">	coll.insert(temp1, temp1+<span class="number">8</span>);</span><br><span class="line">	copy(coll.begin(), coll.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// remove element with specific value</span></span><br><span class="line">	coll.erase(<span class="number">33</span>);</span><br><span class="line">	<span class="comment">// insert sum of all existing values</span></span><br><span class="line">	coll.insert(accumulate(coll.begin(), coll.end(), <span class="number">0</span>));</span><br><span class="line">	copy(coll.begin(), coll.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// check if value 19 is in the set</span></span><br><span class="line">	<span class="keyword">if</span> (coll.find(<span class="number">19</span>) != coll.end())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"19 is available"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// remove all negative values</span></span><br><span class="line">	<span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt;::iterator pos;</span><br><span class="line">	<span class="keyword">for</span> (pos = coll.begin(); pos != coll.end();)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (*pos &lt; <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			pos = coll.erase(pos);</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			++pos;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	copy(coll.begin(), coll.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="unordered-multiset"><a class="markdownIt-Anchor" href="#unordered-multiset"></a> Unordered Multiset</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unordered_set&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;numeric&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// create and initialize, expand, and print unordered multiset</span></span><br><span class="line">	<span class="comment">//unordered_multiset&lt;int&gt; coll = &#123; 1,2,3,5,7,11,13,17,19,77 &#125;;</span></span><br><span class="line">	<span class="keyword">int</span> temp[<span class="number">10</span>] = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">11</span>,<span class="number">13</span>,<span class="number">17</span>,<span class="number">19</span>,<span class="number">77</span> &#125;;</span><br><span class="line">	<span class="built_in">unordered_multiset</span>&lt;<span class="keyword">int</span>&gt; coll(temp, temp+<span class="number">10</span>);</span><br><span class="line">	<span class="comment">// coll.insert(&#123;-7,17,33,-11,17,19,1,13&#125;);</span></span><br><span class="line">	<span class="keyword">int</span> temp1[<span class="number">8</span>] = &#123;<span class="number">-7</span>,<span class="number">17</span>,<span class="number">33</span>,<span class="number">-11</span>,<span class="number">17</span>,<span class="number">19</span>,<span class="number">1</span>,<span class="number">13</span>&#125;;</span><br><span class="line">	coll.insert(temp1, temp1+<span class="number">8</span>);</span><br><span class="line">	copy(coll.begin(), coll.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// remove all elements with specific value</span></span><br><span class="line">	coll.erase(<span class="number">17</span>);</span><br><span class="line">	<span class="comment">// remove one of the elements with specific value</span></span><br><span class="line">	<span class="keyword">auto</span> pos = coll.find(<span class="number">13</span>);</span><br><span class="line">	<span class="keyword">if</span> (pos != coll.end())</span><br><span class="line">	&#123;</span><br><span class="line">		coll.erase(pos);</span><br><span class="line">	&#125;</span><br><span class="line">	copy(coll.begin(), coll.end(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, <span class="string">" "</span>));</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] The C++ Standard Library 2nd Edition</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#unordered-container"><span class="toc-number">1.</span> <span class="toc-text"> Unordered Container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unordered容器的操作"><span class="toc-number">2.</span> <span class="toc-text"> Unordered容器的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-copy-and-destroy"><span class="toc-number">2.1.</span> <span class="toc-text"> Create, Copy, and Destroy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layout-operations"><span class="toc-number">2.2.</span> <span class="toc-text"> Layout Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nonmodifying-operations"><span class="toc-number">2.3.</span> <span class="toc-text"> Nonmodifying Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#special-search-operations"><span class="toc-number">2.4.</span> <span class="toc-text"> Special Search Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assignments"><span class="toc-number">2.5.</span> <span class="toc-text"> Assignments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iterator-operations"><span class="toc-number">2.6.</span> <span class="toc-text"> Iterator Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#insert-and-remove-operations"><span class="toc-number">2.7.</span> <span class="toc-text"> Insert and Remove Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#direct-element-access-of-unordered-maps"><span class="toc-number">2.8.</span> <span class="toc-text"> Direct Element Access of Unordered Maps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用unordered容器的示例"><span class="toc-number">3.</span> <span class="toc-text"> 使用Unordered容器的示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unordered-set"><span class="toc-number">3.1.</span> <span class="toc-text"> Unordered Set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unordered-multiset"><span class="toc-number">3.2.</span> <span class="toc-text"> Unordered Multiset</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/01/stl-unordered-container/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&text=STL Unordered Container"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&is_video=false&description=STL Unordered Container"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Unordered Container&body=Check out this article: http://conglang.github.io/2015/01/01/stl-unordered-container/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&title=STL Unordered Container"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/01/stl-unordered-container/&name=STL Unordered Container&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

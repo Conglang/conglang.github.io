@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="HuabanWallpaper是一个抓取图片并设置Ubuntu系统桌面壁纸的小工具。采用Scrapy0.24框架，使用Python编写。制作过程中克服了关于Scrapy框架的动态网页分析、发送Javascript加载更多命令、使用自定义FilesPipeline下载文件、在脚本中调用Scrapy的API、ReactorNotRestartable错误解决，以及python相关的xml文件编写、Gn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scrapy爬虫抓取用户自定义花瓣画板设置壁纸">
+<meta property="og:url" content="http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="HuabanWallpaper是一个抓取图片并设置Ubuntu系统桌面壁纸的小工具。采用Scrapy0.24框架，使用Python编写。制作过程中克服了关于Scrapy框架的动态网页分析、发送Javascript加载更多命令、使用自定义FilesPipeline下载文件、在脚本中调用Scrapy的API、ReactorNotRestartable错误解决，以及python相关的xml文件编写、Gn">
+<meta property="og:image" content="https://github.com/Conglang/SpiderPig/raw/master/huabanwallpaper_gui.png">
+<meta property="og:image" content="http://conglang.github.io/img/huabanwallpaper_structure.png">
+<meta property="og:image" content="http://conglang.github.io/img/scrapy_structure.png">
+<meta property="og:image" content="http://conglang.github.io/img/huabanwallpaper_firebug.png">
+<meta property="og:image" content="https://github.com/Conglang/SpiderPig/raw/master/huabanwallpaper_gui.png">
+<meta property="og:updated_time" content="2018-07-03T15:34:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scrapy爬虫抓取用户自定义花瓣画板设置壁纸">
+<meta name="twitter:description" content="HuabanWallpaper是一个抓取图片并设置Ubuntu系统桌面壁纸的小工具。采用Scrapy0.24框架，使用Python编写。制作过程中克服了关于Scrapy框架的动态网页分析、发送Javascript加载更多命令、使用自定义FilesPipeline下载文件、在脚本中调用Scrapy的API、ReactorNotRestartable错误解决，以及python相关的xml文件编写、Gn">
+<meta name="twitter:image" content="https://github.com/Conglang/SpiderPig/raw/master/huabanwallpaper_gui.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Scrapy爬虫抓取用户自定义花瓣画板设置壁纸</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/04/28/programmer-competency-matrix/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/04/06/spf13-vim-cheat-sheet/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&text=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&is_video=false&description=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸&body=Check out this article: http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&name=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text"> 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于scrapy"><span class="toc-number">1.1.</span> <span class="toc-text"> 关于Scrapy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-number">1.2.</span> <span class="toc-text"> 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目结构"><span class="toc-number">1.3.</span> <span class="toc-text"> 项目结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发流程"><span class="toc-number">1.4.</span> <span class="toc-text"> 开发流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析抓取画板图片url并保存到xml"><span class="toc-number">2.</span> <span class="toc-text"> 分析抓取画板图片url并保存到xml</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析网页"><span class="toc-number">2.1.</span> <span class="toc-text"> 分析网页</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#图片url"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 图片url</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#持续加载"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 持续加载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huabanitem"><span class="toc-number">2.2.</span> <span class="toc-text"> huabanItem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huabanspider"><span class="toc-number">2.3.</span> <span class="toc-text"> huabanSpider</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huabanpipeline"><span class="toc-number">2.4.</span> <span class="toc-text"> huabanPipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scrapy-command-line调试"><span class="toc-number">2.5.</span> <span class="toc-text"> Scrapy Command line调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抓取本地xml并下载图片"><span class="toc-number">3.</span> <span class="toc-text"> 抓取本地xml并下载图片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#downloaditem"><span class="toc-number">3.1.</span> <span class="toc-text"> downloadItem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#downloadspider"><span class="toc-number">3.2.</span> <span class="toc-text"> downloadSpider</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#downloadpipeline"><span class="toc-number">3.3.</span> <span class="toc-text"> downloadPipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scrapy-command-line调试-2"><span class="toc-number">3.4.</span> <span class="toc-text"> Scrapy Command line调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在python中调用scrapy的api运行爬虫"><span class="toc-number">4.</span> <span class="toc-text"> 在Python中调用Scrapy的API运行爬虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gui"><span class="toc-number">5.</span> <span class="toc-text"> GUI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置壁纸"><span class="toc-number">6.</span> <span class="toc-text"> 设置壁纸</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ubuntu"><span class="toc-number">6.1.</span> <span class="toc-text"> Ubuntu</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Scrapy爬虫抓取用户自定义花瓣画板设置壁纸
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-04-18T09:49:57.000Z" itemprop="datePublished">2015-04-18</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Project/">Project</a>, <a class="tag-link" href="/tags/Python/">Python</a>, <a class="tag-link" href="/tags/Scrapy/">Scrapy</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><strong>HuabanWallpaper</strong>是一个抓取图片并设置壁纸的小工具，目前可以运行在Ubuntu系统上。<br>
+<img src="https://github.com/Conglang/SpiderPig/raw/master/huabanwallpaper_gui.png" alt="HuabanWallpaper"><br>
+用户输入目标花瓣画板后，点击按钮就可以下载画板中所有图片，或者随机选择一张设置为壁纸。<br>
+两天+五个晚上终于从无到有写完了，开心**(●′ω｀●)φ**</p>
+<h2 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h2>
+<p>HuabanWallpaper用<strong>Python</strong>编写，使用<strong>Scrapy</strong>框架进行抓取，运行在<strong>Ubuntu</strong>上。当前版本环境是：Scrapy0.24，Python2.7，Ubuntu14.04。</p>
+<p>本项目的<a href="https://github.com/Conglang/SpiderPig" target="_blank" rel="external">代码开放在Github上</a>。</p>
+<h3 id="关于scrapy"><a class="markdownIt-Anchor" href="#关于scrapy"></a> 关于Scrapy</h3>
+<p><a href="http://scrapy.org/" target="_blank" rel="external">Scrapy</a>是一个抓取web站点并提取内容的开源框架，目前支持Python2.7。安装过程详见<a href="http://doc.scrapy.org/en/0.24/intro/install.html" target="_blank" rel="external">官网</a>，针对Ubuntu系统有一些<a href="http://doc.scrapy.org/en/0.24/topics/ubuntu.html" target="_blank" rel="external">额外注意的问题</a>。<br>
+学习Scrapy最佳素材就是<a href="http://doc.scrapy.org/en/0.24/index.html" target="_blank" rel="external">官网</a>，另外有一个<a href="http://scrapy-chs.readthedocs.org/zh_CN/latest/index.html" target="_blank" rel="external">中文翻译计划</a>，不过里面的内容不太全并且很多已经过时。建议可以先快速浏览中文了解概念，然后根据需求细读英文官网。<br>
+建议阅读本文之前，首先阅读<a href="http://doc.scrapy.org/en/0.24/intro/tutorial.html" target="_blank" rel="external">Scrapy的入门教程</a>。</p>
+<h3 id="使用方法"><a class="markdownIt-Anchor" href="#使用方法"></a> 使用方法</h3>
+<p>设置HuabanWallpaper为当前目录，在Terminal中运行<code>python main.py</code>。</p>
+<p>项目的GUI界面会弹出，输入想要抓取的花瓣画板的网址，如<code>http://huaban.com/boards/344630/</code>。<br>
+点击Apply按钮，此时爬虫huabanSpider会将此画板所有图片地址抓取并存入xml文件pic_urls中。<br>
+然后，如果点击Download Board会重命名并下载所有图片在pic/&lt;board_id&gt;目录；如果点击Shuffle Wallpaper会随机下载一张图片，并在pic的子目录中随机选一张图片作为壁纸。</p>
+<h3 id="项目结构"><a class="markdownIt-Anchor" href="#项目结构"></a> 项目结构</h3>
+<p><img src="/img/huabanwallpaper_structure.png" alt="HuabanWallpaper的工程结构"><br>
+顶层目录是HuabanWallpaper。其中的main.py包含界面、调用开启、设置壁纸等一些通用python功能。pic_urls是抓取画板信息结束后生成的xml文件。<br>
+pic文件夹是下载图片时图片的目标目录。<br>
+子目录huaban是Scrapy使用<code>scrapy startproject huaban</code>自动生成的工程目录。<br>
+我们需要在子目录huaban/spiders中创建自定义的huabanSpider.py和downloadSpider.py，<a href="http://xn--items-3h2hohp3q1zvgzfgshh4lqkl048cyu5dkh4c.py" target="_blank" rel="external">并对其他默认生成文件如items.py</a>、<a href="http://pipelines.py" target="_blank" rel="external">pipelines.py</a>、settings.py进行编辑。</p>
+<p>Scrapy生成的工程都有与huaban子目录相同的目录结构。本项目是在其上又添了一层，用于添加GUI等辅助功能，使用Scrapy的API接口处理爬虫功能。<br>
+<img src="/img/scrapy_structure.png" alt="Scrapy官网示例工程的文件夹结构"><br>
+阅读入门教程后应该已经了解，item是要抓取数据的数据结构，spider则具体进行抓取并将抓取到的数据存入item数据结构，pipeline是对抓取到的Item进行后处理如保存到文件，settings用于配置spider或pipeline等的开启、优先级等。</p>
+<h3 id="开发流程"><a class="markdownIt-Anchor" href="#开发流程"></a> 开发流程</h3>
+<p>简单流程如下：</p>
+<ol>
+<li><a href="http://xn--HuabanWallpapermain-fd55am12e6uz32n64b802ywg2h.py" target="_blank" rel="external">在顶层目录HuabanWallpaper创建main.py</a>，写基本的GUI。</li>
+<li>使用scrapy命令创建huaban工程项目。</li>
+<li>定义huabanItem。表示要抓取的图片信息的结构体。</li>
+<li>编写huabanSpider。分析网页，将信息填入item。</li>
+<li>编写huabanPipeline。将item里的数据取出，拼接为完整图片url，存入xml文件。</li>
+<li>使用Scrapy控制台测试huabanSpider等一系列功能。</li>
+<li>编写downloadItem。表示图片的结构体。</li>
+<li>编写downloadSpider。分析之前保存的xml文件，填充item。</li>
+<li>编写huabanPipeline。下载图片。</li>
+<li>使用Scrapy控制台测试downloadSpider等一系列功能。</li>
+<li>在main.py中调用scrapy的API控制爬虫运行。</li>
+<li>编写设置为壁纸的功能代码。</li>
+</ol>
+<hr>
+<h2 id="分析抓取画板图片url并保存到xml"><a class="markdownIt-Anchor" href="#分析抓取画板图片url并保存到xml"></a> 分析抓取画板图片url并保存到xml</h2>
+<h3 id="分析网页"><a class="markdownIt-Anchor" href="#分析网页"></a> 分析网页</h3>
+<h4 id="图片url"><a class="markdownIt-Anchor" href="#图片url"></a> 图片url</h4>
+<p>打开一个花瓣画板，使用Chrome查看网页源代码(Firefox的页面不换行，看着麻烦)。可以看到在第7-14行的script标签内的javascript中包含了一组一组单独图片的信息，格式类似：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"pin_id"</span>:<span class="number">362744150</span>, <span class="string">"user_id"</span>:<span class="number">119629</span>, <span class="string">"board_id"</span>:<span class="number">344630</span>, <span class="string">"file_id"</span>:<span class="number">72016656</span>, </span><br><span class="line"><span class="string">"file"</span>:&#123;<span class="string">"farm"</span>:<span class="string">"farm1"</span>, <span class="string">"bucket"</span>:<span class="string">"hbimg"</span>, <span class="string">"key"</span>:<span class="string">"c0637c5df70fd08a5434226e0fb08c138d0b26692e249-c0mNjH"</span>, <span class="string">"type"</span>:<span class="string">"image/jpeg"</span>, <span class="string">"width"</span>:<span class="number">531</span>, <span class="string">"height"</span>:<span class="number">800</span>, <span class="string">"frames"</span>:<span class="number">1</span>&#125;, </span><br><span class="line"><span class="string">"media_type"</span>:<span class="number">0</span>, <span class="string">"source"</span>:<span class="string">"redbubble.com"</span>, </span><br><span class="line"><span class="string">"link"</span>:<span class="string">"http://www.redbubble.com/people/jasonfitzgibbon/works/12415387-gudbrandsdalslagen-norway?ref=work_carousel_work_portfolio_1"</span>, </span><br><span class="line"><span class="string">"raw_text"</span>:<span class="string">"(40) Tumblr"</span>, <span class="string">"text_meta"</span>:&#123;&#125;, <span class="string">"via"</span>:<span class="number">362724638</span>, </span><br><span class="line"><span class="string">"via_user_id"</span>:<span class="number">974342</span>, <span class="string">"original"</span>:<span class="number">362715855</span>, <span class="string">"created_at"</span>:<span class="number">1429355336</span>, </span><br><span class="line"><span class="string">"like_count"</span>:<span class="number">0</span>, <span class="string">"comment_count"</span>:<span class="number">0</span>, <span class="string">"repin_count"</span>:<span class="number">0</span>, <span class="string">"is_private"</span>:<span class="number">0</span>, </span><br><span class="line"><span class="string">"orig_source"</span>:<span class="literal">null</span>, <span class="string">"hide_origin"</span>:<span class="literal">false</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>通过打开该图片<code>http://huaban.com/pins/362744150/zoom/</code>的大图地址<code>http://img.hb.aicdn.com/c0637c5df70fd08a5434226e0fb08c138d0b26692e249-c0mNjH</code>可以知道，图片信息中的pin_id是该图片的标志号，可以用来在花瓣上找到该图片；key是图片地址的标志号，可用来下载图片；type是图片的文件类型。</p>
+<h4 id="持续加载"><a class="markdownIt-Anchor" href="#持续加载"></a> 持续加载</h4>
+<p>花瓣的画板是动态加载的，一次只加载20张图片，用户使用过程中通过拖动到页面底部加载后20张图片。<br>
+从之前的网页源代码也可看出，只有20张图片的信息。<br>
+使用Firefox的Firebug可以查看页面的每次动态调用。<br>
+<img src="/img/huabanwallpaper_firebug.png" alt="Firebug查看网页命令"><br>
+可以看到，拖动到页面底部时，执行了一个javascript命令。<code>http://huaban.com/boards/344630/?i8puh8bp&amp;max=363930695&amp;limit=20&amp;wfl=1</code><br>
+过一阵再向下拖动一下，执行命令变化为<code>http://huaban.com/boards/344630/?i8puh8br&amp;max=362253714&amp;limit=20&amp;wfl=1</code>。<br>
+可以总结其格式为<code>USER_INPUT?A&amp;max=B&amp;limit=20&amp;wfl=1</code>。<br>
+B可以看出是上一次加载的最后一个图片的pin_id。A两次生成的字符串头几位字符相同，对同网页同位置在不同时间加载生成的字符串却不同，令人怀疑与时间有关系。</p>
+<p>为证明我们的猜想，让我们深入虎穴，看看生成调用命令的js文件mootools.js。<br>
+在mootools.js中搜索<code>Date</code>，果然找到了蛛丝马迹。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var q=Date.now();</span><br><span class="line">String.extend(&quot;uniqueID&quot;,function()&#123;return(q++).toString(36)&#125;</span><br></pre></td></tr></table></figure>
+<p>这个<code>uniqueID</code>名字就看起来超可疑是不是，我们再搜索它。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var k=f.lastIndexOf(&quot;/&quot;);</span><br><span class="line">k&gt;-1&amp;&amp;(k=f.indexOf(&quot;#&quot;))&gt;-1&amp;&amp;(f=f.substr(0,k)),</span><br><span class="line">this.options.noCache&amp;&amp;(f+=(f.contains(&quot;?&quot;)?&quot;&amp;&quot;:&quot;?&quot;)+String.uniqueID()),</span><br><span class="line">e&amp;&amp;g==&quot;get&quot;&amp;&amp;(f+=(f.contains(&quot;?&quot;)?&quot;&amp;&quot;:&quot;?&quot;)+e,e=null);</span><br></pre></td></tr></table></figure>
+<p>罪证坐实！那么这个uniqueID其实就是当前时间的毫秒数再加1，再转为36进制的字符串。<br>
+斗智斗勇，斗智斗勇啊**( ͡° ͜ʖ ͡°)✧**<br>
+加载命令解析完毕，我们每次加载完本页20个图片后，生成该命令发送就可以了。</p>
+<h3 id="huabanitem"><a class="markdownIt-Anchor" href="#huabanitem"></a> huabanItem</h3>
+<p>huabanItem里定义了从网页要抓取的信息的数据结构。前文我们已经分析了需要哪些字段。<br>
+代码片段，完整请看<a href="https://github.com/Conglang/SpiderPig" target="_blank" rel="external">这里</a>，之后不再声明。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuabanItem</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    folder = Field()</span><br><span class="line">    pin_id = Field()</span><br><span class="line">    key = Field()</span><br><span class="line">    pic_type = Field()</span><br></pre></td></tr></table></figure>
+<p>folder是该图片所在的画板名，pin_id是图片的id，key是前文分析的图片地址标识串，pic_type是图片的格式。</p>
+<h3 id="huabanspider"><a class="markdownIt-Anchor" href="#huabanspider"></a> huabanSpider</h3>
+<p>huabanSpider执行主要抓取动作。抓取当前页面所需字段并存入item，之后发送js命令加载更多图片，如此循环。<br>
+huabanSpider的大概样貌如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class huabanSpider(CrawlSpider):</span><br><span class="line">    name = &apos;huabanSpider&apos;</span><br><span class="line">    allow_domain = [&apos;huaban.com&apos;]</span><br><span class="line">    start_urls = []</span><br><span class="line">    last_num = &quot;000000000&quot;</span><br><span class="line">    # get start_url from user input.</span><br><span class="line">    def __init__(self, **kw):</span><br><span class="line">        ...</span><br><span class="line">    # Parse javascript strings under xpath script using regex.</span><br><span class="line">    def parse(self, response):</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p><code>name</code>用来唯一标识一个Spider。<br>
+<code>start_urls</code>包含Spider启动时最初抓取的url列表。后续抓取的页面都从此列表中的页面生发。<br>
+<code>__init__</code>自然是类的初始化函数，此处可以传入参数。<br>
+<code>parse()</code>负责解析Response，提取数据生成item，并生成后续Request。</p>
+<p>一一来看。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, **kw)</span>:</span></span><br><span class="line">        super(huabanSpider, self).__init__(**kw)</span><br><span class="line">        url = kw.get(<span class="string">'url'</span>) <span class="keyword">or</span> kw.get(<span class="string">'domain'</span>) <span class="keyword">or</span> <span class="string">'http://huaban.com/boards/344630/'</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> url.startswith(<span class="string">'http://'</span>) <span class="keyword">and</span> <span class="keyword">not</span> url.startswith(<span class="string">'https://'</span>):</span><br><span class="line">            url = <span class="string">'http://%s/'</span> % url</span><br><span class="line">        self.start_urls = [url]</span><br></pre></td></tr></table></figure>
+<p>在<code>__init__</code>函数中唯一值得注意的是参数<code>**kw</code>，此处利用它将用户输入的画板url传入start_urls中。即让用户自定义从哪个页面开始抓取。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Parse javascript strings under xpath script using regex.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> sel <span class="keyword">in</span> response.xpath(<span class="string">'//script'</span>).re(<span class="string">"\&#123;\"pin_id.*?hide_origin.*?\&#125;"</span>):</span><br><span class="line">        item = HuabanItem()</span><br><span class="line">        item[<span class="string">'folder'</span>] = response.url.split(<span class="string">"/"</span>)[<span class="number">-2</span>]</span><br><span class="line">        <span class="comment"># get pin id</span></span><br><span class="line">        spinid = re.findall(<span class="string">u"pin_id..\d*"</span>, sel)</span><br><span class="line">        <span class="keyword">if</span> spinid <span class="keyword">and</span> spinid[<span class="number">0</span>]:</span><br><span class="line">            sspinid = spinid[<span class="number">0</span>].split(<span class="string">":"</span>)</span><br><span class="line">            <span class="keyword">if</span> sspinid:</span><br><span class="line">                self.last_num = sspinid[<span class="number">-1</span>]</span><br><span class="line">                item[<span class="string">'pin_id'</span>] = self.last_num</span><br><span class="line">        <span class="comment"># get key</span></span><br><span class="line">        skey = re.findall(<span class="string">u"key\":\"\w+-\w+\""</span>, sel)</span><br><span class="line">        <span class="keyword">if</span> skey <span class="keyword">and</span> skey[<span class="number">0</span>]:</span><br><span class="line">            sskey = skey[<span class="number">0</span>].split(<span class="string">"\""</span>)</span><br><span class="line">            <span class="keyword">if</span> sskey:</span><br><span class="line">                item[<span class="string">'key'</span>] = sskey[<span class="number">-2</span>]</span><br><span class="line">        <span class="comment"># get pictype</span></span><br><span class="line">        spictype = re.findall(<span class="string">u"type\":\"\w+/.+?\""</span>, sel)</span><br><span class="line">        <span class="keyword">if</span> spictype <span class="keyword">and</span> spictype[<span class="number">0</span>]:</span><br><span class="line">            sspictype = spictype[<span class="number">0</span>].split(<span class="string">"\""</span>)</span><br><span class="line">            <span class="keyword">if</span> sspictype:</span><br><span class="line">                ssipictype = sspictype[<span class="number">-2</span>]</span><br><span class="line">                <span class="keyword">if</span> ssipictype:</span><br><span class="line">                    ssspictype = ssipictype.split(<span class="string">"/"</span>)</span><br><span class="line">                    <span class="keyword">if</span> ssspictype:</span><br><span class="line">                        item[<span class="string">'pic_type'</span>] = ssspictype[<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">yield</span> item</span><br><span class="line">    <span class="keyword">yield</span> Request(url = self.load_more(self.start_urls[<span class="number">0</span>], self.last_num), callback = self.parse)</span><br><span class="line"><span class="comment"># Decimal to hexadecimal thirty-six to generate uniqueid in jquery.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ten_to_thirtysix</span><span class="params">(self, num)</span>:</span></span><br><span class="line">    loop = <span class="string">'0123456789abcdefghijklmnopqrstuvwxyz'</span></span><br><span class="line">    result = []</span><br><span class="line">    num = int(num)</span><br><span class="line">    <span class="keyword">while</span> num != <span class="number">0</span>:</span><br><span class="line">        i = num % <span class="number">36</span></span><br><span class="line">        result.append(loop[int(i)%<span class="number">36</span>])</span><br><span class="line">        num = num / <span class="number">36</span></span><br><span class="line">    result.reverse()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join(result)</span><br><span class="line"><span class="comment"># Load more content at the end of current page by sending jquery.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_more</span><span class="params">(self, url, no)</span>:</span></span><br><span class="line">    milliseconds = time.time()+<span class="number">1</span></span><br><span class="line">    uniqueid = str(self.ten_to_thirtysix(milliseconds))</span><br><span class="line">    resulturl = <span class="string">'%s'</span> % str(url+<span class="string">"?"</span>+uniqueid+<span class="string">"&amp;max="</span>+self.last_num+<span class="string">"&amp;limit=20&amp;wfl=1"</span>)</span><br><span class="line">    <span class="keyword">return</span> resulturl</span><br></pre></td></tr></table></figure>
+<p><code>parse</code>函数的主要操作就是利用<a href="http://www.w3school.com.cn/xpath/" target="_blank" rel="external">xpath</a>和正则表达式提取出需要的内容并放入item，然后发送可能需要的后续request。<br>
+从代码可以看出，folder字段的内容可以直接从当前url中提取。<br>
+随后我们从页面的script标签中取出内容，然后利用正则表达式找到描述一个图片的形如<code>{pin_id...hide_origin..}</code>的一段话，再针对每个满足这个条件的一段话，用正则表达式提取其中pin_id、key、pic_type部分内容(此处变量判空比较恐怖，不知Python中怎么写比较优美？)。<br>
+然后把提取到的内容填充进item，用yield将item添加到返回值中。<br>
+之后用load_more成员函数加载更多图片。<br>
+<code>load_more</code>函数的功能就是拼接前文讲过的js加载命令，其中用到了将10进制转为36进制的成员函数<code>ten_to_thirtysix</code>。</p>
+<p>有一点需要注意的是<code>xpath()</code>或<code>css()</code>命令返回的是<a href="http://doc.scrapy.org/en/0.24/topics/selectors.html" target="_blank" rel="external">Selector</a>，后面可以继续接更多的<code>xpath()</code>等。而<code>re()</code>返回的是字符串。</p>
+<p>如果对xpath路径是否正确不太自信，可以在控制台实时测试一下。在Terminal中运行对网页的调试<code>scrapy shell &quot;http://huaban.com/boards/344630/&quot;</code>或对本地文件的调试<code>scrapy shell &quot;file:///media/sf_haha/SpiderPig/HuabanWallpaper/pic_urls&quot;</code>。然后运行类似<code>response.xpath('//title').extract()</code>的命令查看xpath结果。<code>Ctrl+D</code>退出。官网教程中对此也有讲解。</p>
+<h3 id="huabanpipeline"><a class="markdownIt-Anchor" href="#huabanpipeline"></a> huabanPipeline</h3>
+<p>huabanPipeline对抓取到的item进行后处理。即用item中的字段拼接图片url，写入xml文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Combine item fields into one single url and store it in a xml file.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuabanPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.doc = ElementTree()</span><br><span class="line">        self.allpic = Element(<span class="string">"all_pic"</span>)</span><br><span class="line">        self.allpic.tail = <span class="string">'\n'</span></span><br><span class="line">        self.doc._setroot(self.allpic)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> spider.name == <span class="string">'huabanSpider'</span>:</span><br><span class="line">            url = [item[<span class="string">'pin_id'</span>], <span class="string">"http://img.hb.aicdn.com/"</span>+item[<span class="string">'key'</span>], item[<span class="string">'pic_type'</span>], item[<span class="string">'folder'</span>]]</span><br><span class="line">            pic = Element(<span class="string">'pic'</span>)</span><br><span class="line">            pic.tail = <span class="string">'\n'</span></span><br><span class="line">            self.allpic.append(pic)</span><br><span class="line">            SubElement(pic, <span class="string">'pin_id'</span>).text = url[<span class="number">0</span>]</span><br><span class="line">            SubElement(pic, <span class="string">'pic_url'</span>).text = url[<span class="number">1</span>]</span><br><span class="line">            SubElement(pic, <span class="string">'pic_type'</span>).text = url[<span class="number">2</span>]</span><br><span class="line">            SubElement(pic, <span class="string">'folder'</span>).text = url[<span class="number">3</span>]</span><br><span class="line">            <span class="keyword">return</span> item</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close_spider</span><span class="params">(self, spider)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> spider.name == <span class="string">'huabanSpider'</span>:</span><br><span class="line">            self.f = open(<span class="string">'pic_urls'</span>, <span class="string">'w'</span>)</span><br><span class="line">            self.doc.write(self.f)</span><br><span class="line">            self.f.close()</span><br></pre></td></tr></table></figure>
+<p><code>__init__</code>函数对建立xml树做了一些创建工作。<br>
+<code>process_item</code>将item中的字段取出，拼接成完整的url，添加到xml的子树上。<br>
+<code>close_spider</code>打开待写入的文件，写入xml后关闭。</p>
+<p>另外注意，使用pipeline需要将其在settings.py中添加到<code>ITEM_PIPELINES</code>列表中。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    &apos;huaban.pipelines.DownloadPipeline&apos;:2,</span><br><span class="line">    &apos;huaban.pipelines.HuabanPipeline&apos;:3</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="scrapy-command-line调试"><a class="markdownIt-Anchor" href="#scrapy-command-line调试"></a> Scrapy Command line调试</h3>
+<p>设置scrapy的工程目录，即HuabanWallpaper/huaban目录，为当前目录，在Terminal执行命令<code>scrapy crawl huabanSpider</code>，可以在控制台运行huabanSpider，进行调试。在此处运行与在顶层运行的目录不同，要注意代码中的相对路径。</p>
+<hr>
+<h2 id="抓取本地xml并下载图片"><a class="markdownIt-Anchor" href="#抓取本地xml并下载图片"></a> 抓取本地xml并下载图片</h2>
+<h3 id="downloaditem"><a class="markdownIt-Anchor" href="#downloaditem"></a> downloadItem</h3>
+<p>与huabanItem类似，定义保存图片需要的数据结构。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Item to download picture.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PicItem</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    file_urls = Field()</span><br><span class="line">    files = Field()</span><br><span class="line">    folder = Field()</span><br><span class="line">    pic_type = Field()</span><br><span class="line">    pin_id = Field()</span><br></pre></td></tr></table></figure>
+<p>注意其中的<code>file_urls</code>和<code>files</code>字段是使用scrapy的FilesPipeline所必需的，将文件地址存入<code>file_urls</code>则FilesPipeline会自动将文件内容填充<code>files</code>用于下载。为使用FilesPipeline还需要在settings.py中添加<code>FILES_STORE = 'pic'</code>指定文件下载父目录。<br>
+这里之所以不用官网案例所写的<a href="http://doc.scrapy.org/en/0.24/topics/images.html" target="_blank" rel="external">ImagesPipeline</a>是因为其默认将所有图片都转为JPEG格式，所以干脆改用<a href="https://github.com/scrapy/scrapy/blob/master/scrapy/contrib/pipeline/files.py" target="_blank" rel="external">FilesPipeline</a>直接下载原始文件。<br>
+其余字段都是为了后续文件重命名与指定保存目录而定义。</p>
+<h3 id="downloadspider"><a class="markdownIt-Anchor" href="#downloadspider"></a> downloadSpider</h3>
+<p>downloadSpider抓取本地xml文件，解析出刚才保存的图片信息，填充item并下载。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">downloadSpider</span><span class="params">(CrawlSpider)</span>:</span></span><br><span class="line">    name = <span class="string">'downloadSpider'</span></span><br><span class="line">    allow_domain = [<span class="string">'http://img.hb.aicdn.com/'</span>]</span><br><span class="line">    start_urls = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, **kw)</span>:</span></span><br><span class="line">        super(downloadSpider, self).__init__(**kw)</span><br><span class="line">        url = kw.get(<span class="string">'url'</span>) <span class="keyword">or</span> kw.get(<span class="string">'domain'</span>) <span class="keyword">or</span> <span class="string">"pic_urls"</span></span><br><span class="line">        self.chooseone = kw.get(<span class="string">'chooseone'</span>)</span><br><span class="line">        url = <span class="string">"file://"</span>+os.path.abspath(<span class="string">"."</span>)+<span class="string">"/"</span>+url</span><br><span class="line">        self.start_urls = [url]</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        index = int(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> response.xpath(<span class="string">"//pic"</span>):</span><br><span class="line">            index = index + <span class="number">1</span></span><br><span class="line">        rn = random.randint(<span class="number">0</span>,index<span class="number">-1</span>)</span><br><span class="line">        count = int(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">for</span> sel <span class="keyword">in</span> response.xpath(<span class="string">"//pic"</span>):</span><br><span class="line">            item = PicItem()</span><br><span class="line">            item[<span class="string">'file_urls'</span>] = sel.xpath(<span class="string">"./pic_url/text()"</span>).extract()</span><br><span class="line">            item[<span class="string">'folder'</span>] = sel.xpath(<span class="string">"./folder/text()"</span>).extract()</span><br><span class="line">            item[<span class="string">'pic_type'</span>] = sel.xpath(<span class="string">"./pic_type/text()"</span>).extract()</span><br><span class="line">            item[<span class="string">'pin_id'</span>] = sel.xpath(<span class="string">"./pin_id/text()"</span>).extract()</span><br><span class="line">            <span class="keyword">if</span> rn != count <span class="keyword">and</span> self.chooseone:</span><br><span class="line">                item[<span class="string">'file_urls'</span>] = []</span><br><span class="line">            count = count +<span class="number">1</span></span><br><span class="line">            <span class="keyword">yield</span> item</span><br></pre></td></tr></table></figure>
+<p>该Spider类样式与前文huabanSpider基本相同。只是用于解析的xpath不同而已。<br>
+此处的参数<code>chooseone</code>表示是否开启随机下一张，如果开启就只下载一张，不开启就全部下载。</p>
+<h3 id="downloadpipeline"><a class="markdownIt-Anchor" href="#downloadpipeline"></a> downloadPipeline</h3>
+<p>downloadPipeline将FilesPipeline自动下载下来的文件重命名并存入指定文件夹。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Another way of download files using FilesPipeline</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DownloadPipeline</span><span class="params">(FilesPipeline)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_media_requests</span><span class="params">(self, item, info)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> [Request(x,meta=&#123;<span class="string">'item'</span>:item&#125;) <span class="keyword">for</span> x <span class="keyword">in</span> item.get(<span class="string">'file_urls'</span>, [])]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">file_downloaded</span><span class="params">(self, response, request, info)</span>:</span></span><br><span class="line">        <span class="comment">#path = self.file_path(request, response=response, info=info)</span></span><br><span class="line">        path = response.meta.get(<span class="string">'item'</span>)[<span class="string">'folder'</span>][<span class="number">0</span>] + <span class="string">'/'</span> + response.meta.get(<span class="string">'item'</span>)[<span class="string">'pin_id'</span>][<span class="number">0</span>] + <span class="string">'.'</span> + response.meta.get(<span class="string">'item'</span>)[<span class="string">'pic_type'</span>][<span class="number">0</span>]</span><br><span class="line">        buf = BytesIO(response.body)</span><br><span class="line">        self.store.persist_file(path, buf, info)</span><br><span class="line">        checksum = md5sum(buf)</span><br><span class="line">        <span class="keyword">return</span> checksum</span><br></pre></td></tr></table></figure>
+<p>唯一要注意的就是在<code>file_downloaded</code>函数中对<code>path</code>变量的重新赋值。其余部分都与其父类<code>FilesPipeline</code>相同。</p>
+<h3 id="scrapy-command-line调试-2"><a class="markdownIt-Anchor" href="#scrapy-command-line调试-2"></a> Scrapy Command line调试</h3>
+<p>与前文一样，在huaban目录中执行命令<code>scrapy crawl downloadSpider</code>，即可在控制台运行downloadSpider调试。</p>
+<hr>
+<h2 id="在python中调用scrapy的api运行爬虫"><a class="markdownIt-Anchor" href="#在python中调用scrapy的api运行爬虫"></a> 在Python中调用Scrapy的API运行爬虫</h2>
+<p>在main.py中，按钮的响应函数需要相应开启对应的Spider进行抓取或下载。<br>
+对于调用scrapy的API，<a href="http://doc.scrapy.org/en/0.24/topics/practices.html#run-scrapy-from-a-script" target="_blank" rel="external">官网上是这么写的</a>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> twisted.internet <span class="keyword">import</span> reactor</span><br><span class="line"><span class="keyword">from</span> scrapy.crawler <span class="keyword">import</span> Crawler</span><br><span class="line"><span class="keyword">from</span> scrapy <span class="keyword">import</span> log, signals</span><br><span class="line"><span class="keyword">from</span> testspiders.spiders.followall <span class="keyword">import</span> FollowAllSpider</span><br><span class="line"><span class="keyword">from</span> scrapy.utils.project <span class="keyword">import</span> get_project_settings</span><br><span class="line">spider = FollowAllSpider(domain=<span class="string">'scrapinghub.com'</span>)</span><br><span class="line">settings = get_project_settings()</span><br><span class="line">crawler = Crawler(settings)</span><br><span class="line">crawler.signals.connect(reactor.stop, signal=signals.spider_closed)</span><br><span class="line">crawler.configure()</span><br><span class="line">crawler.crawl(spider)</span><br><span class="line">crawler.start()</span><br><span class="line">log.start()</span><br><span class="line">reactor.run() <span class="comment"># the script will block here until the spider_closed signal was sent</span></span><br></pre></td></tr></table></figure>
+<p>但这种方式只能开启Spider一次，再次开启就会出现<code>ReactorNotRestartable</code>的错误。具体到本项目中就是说，点击Apply按钮抓取一次，之后换个网址再点击就会出错，这当然是不可接受的。</p>
+<p>在stackoverflow上看到了一种解决方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># start log</span></span><br><span class="line">log.start()</span><br><span class="line"><span class="comment"># to avoid ReactorNotRestartable issue</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UrlCrawlerScript</span><span class="params">(Process)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, spider)</span>:</span></span><br><span class="line">        Process.__init__(self)</span><br><span class="line">        setting = Settings()</span><br><span class="line">        setting.setmodule(settings,<span class="number">1</span>)</span><br><span class="line">        self.crawler = Crawler(setting)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> hasattr(project, <span class="string">'crawler'</span>):</span><br><span class="line">            self.crawler.configure()</span><br><span class="line">            self.crawler.signals.connect(reactor.stop, signal = signals.spider_closed)</span><br><span class="line">        self.spider = spider</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.crawler.crawl(self.spider)</span><br><span class="line">        self.crawler.start()</span><br><span class="line">        reactor.run()</span><br><span class="line"><span class="comment"># start collecting all picture urls from inputed board</span></span><br><span class="line"><span class="comment"># and store them in a xml file</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_crawling</span><span class="params">(url)</span>:</span></span><br><span class="line">    spider = huabanSpider(domain=url)</span><br><span class="line">    crawler = UrlCrawlerScript(spider)</span><br><span class="line">    crawler.start()</span><br><span class="line">    crawler.join()</span><br><span class="line"><span class="comment"># start downloading picture from the urls stored in xml</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_downloading</span><span class="params">(filename, chooseone)</span>:</span></span><br><span class="line">    spider = downloadSpider(domain=filename,chooseone=chooseone)</span><br><span class="line">    crawler = UrlCrawlerScript(spider)</span><br><span class="line">    crawler.start()</span><br><span class="line">    crawler.join()</span><br></pre></td></tr></table></figure>
+<p><code>start_crawling()</code>和<code>start_downloading()</code>就是两个创建并开启爬虫的函数。类<code>UrlCrawlerScript</code>封装了部分爬虫创建与配置的功能，并使用多线程规避了<code>ReactorNotRestartable</code>的问题。</p>
+<hr>
+<h2 id="gui"><a class="markdownIt-Anchor" href="#gui"></a> GUI</h2>
+<p>GUI部分简单使用了Python的标准Tkinter模块。包括一个输入框和三个按钮。<br>
+<img src="https://github.com/Conglang/SpiderPig/raw/master/huabanwallpaper_gui.png" alt="简陋的界面"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># set up canvas</span><br><span class="line">root = Tk()</span><br><span class="line">root.title(&quot;HuabanWallpaper&quot;)</span><br><span class="line"># entry for enter board url</span><br><span class="line">url_text = StringVar()</span><br><span class="line">url_entry = Entry(root, width=30, textvariable=url_text)</span><br><span class="line">url_entry.pack()</span><br><span class="line"># button to apply board url and start crawling</span><br><span class="line">def crawling_all_pics():</span><br><span class="line">    start_crawling(url_text.get())</span><br><span class="line">Button(root, text=&quot;Apply&quot;,command=crawling_all_pics).pack()</span><br><span class="line"># button for download all picture</span><br><span class="line">def download_all_pics():</span><br><span class="line">    start_downloading(&quot;pic_urls&quot;, False)</span><br><span class="line">Button(root, text=&quot;Download Board&quot;, command=download_all_pics).pack()</span><br><span class="line"># button for randomly choose a picture as wallpaper</span><br><span class="line">def shuffle_wallpaper():</span><br><span class="line">    start_downloading(&quot;pic_urls&quot;, True)</span><br><span class="line">    set_wallpaper()</span><br><span class="line">Button(root, text=&quot;Shuffle Wallpaper&quot;, command=shuffle_wallpaper).pack()</span><br><span class="line"># running</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="设置壁纸"><a class="markdownIt-Anchor" href="#设置壁纸"></a> 设置壁纸</h2>
+<h3 id="ubuntu"><a class="markdownIt-Anchor" href="#ubuntu"></a> Ubuntu</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_picture_list</span><span class="params">(filedir)</span>:</span></span><br><span class="line">    filelist = os.listdir(filedir)</span><br><span class="line">    pic = <span class="string">""</span></span><br><span class="line">    <span class="keyword">if</span> any(filelist):</span><br><span class="line">        <span class="keyword">while</span>(len(pic) == <span class="number">0</span> <span class="keyword">or</span> <span class="keyword">not</span> os.path.isfile(filedir+pic)):</span><br><span class="line">            <span class="comment">#print(filedir+pic)</span></span><br><span class="line">            <span class="comment">#print(pic)</span></span><br><span class="line">            rn = random.randint(<span class="number">0</span>, len(filelist)<span class="number">-1</span>)</span><br><span class="line">            pic = filelist[rn]</span><br><span class="line">    <span class="keyword">return</span> pic</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_dir_list</span><span class="params">(topdir)</span>:</span></span><br><span class="line">    filelist = os.listdir(topdir)</span><br><span class="line">    subdir = <span class="string">""</span></span><br><span class="line">    <span class="keyword">if</span> any(filelist):</span><br><span class="line">        <span class="keyword">while</span> (len(subdir) == <span class="number">0</span> <span class="keyword">or</span> <span class="keyword">not</span> os.path.isdir(topdir+subdir)):</span><br><span class="line">            print(topdir+<span class="string">'/'</span>+subdir)</span><br><span class="line">            rn = random.randint(<span class="number">0</span>, len(filelist)<span class="number">-1</span>)</span><br><span class="line">            subdir = filelist[rn]</span><br><span class="line">    <span class="keyword">return</span> subdir</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_ubuntu_wallpaper</span><span class="params">()</span>:</span></span><br><span class="line">    board = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> re.findall(<span class="string">'\d+'</span>,url_text.get()):</span><br><span class="line">        board = re.findall(<span class="string">'\d+'</span>,url_text.get())[<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">if</span> len(board) == <span class="number">0</span>:</span><br><span class="line">        board = get_dir_list(os.path.abspath(<span class="string">"."</span>)+<span class="string">"/pic/"</span>)</span><br><span class="line">    <span class="keyword">if</span> len(board) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    filedir = os.path.abspath(<span class="string">"."</span>)+<span class="string">"/pic/%s/"</span> %board</span><br><span class="line">    pic = get_picture_list(filedir)</span><br><span class="line">    path = filedir + <span class="string">"/"</span> + pic</span><br><span class="line">    <span class="comment">#os.system('DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-uri "%s"' %(path))    # notice this doesn't work</span></span><br><span class="line">    path = path.encode(<span class="string">'utf-8'</span>)</span><br><span class="line">    uri = <span class="string">'file://'</span> + urllib.quote(path)</span><br><span class="line">    bg_setting = Gio.Settings.new(<span class="string">'org.gnome.desktop.background'</span>)</span><br><span class="line">    bg_setting.set_string(<span class="string">'picture-uri'</span>, uri)</span><br><span class="line">    bg_setting.apply()</span><br><span class="line">    os.system(<span class="string">'gsettings set org.gnome.desktop.background picture-options "spanned"'</span>)</span><br></pre></td></tr></table></figure>
+<p><code>set_ubuntu_wallpaper</code>首先得到用户输入的画板id，查找对应目录。如果用户没有输入，就从父目录pic下随机选一个目录，函数<code>get_dir_list</code>。目录定下后，从该目录中随机选择一个文件，函数<code>get_picture_list</code>。<br>
+图片定下后，对Gnome的desktop.background属性进行修改。注意直接用<code>os.system()</code>调用shell的方式不可行，网上说的什么DISPLAY:=0之类的方法也不管用，可能就是权限的问题吧。<br>
+此处应直接加载其接口设置并应用。</p>
+<hr>
+<p>终于写完啦！<strong>ヽ（´∀｀）ノ</strong></p>
+<hr>
+<p>[1] <a href="http://doc.scrapy.org/en/0.24/index.html" target="_blank" rel="external">http://doc.scrapy.org/en/0.24/index.html</a><br>
+[2] <a href="http://yupengyan.com/how-to-download-a-file-with-scrapy.html" target="_blank" rel="external">http://yupengyan.com/how-to-download-a-file-with-scrapy.html</a><br>
+[3] <a href="https://github.com/scrapy/scrapy/blob/master/scrapy/contrib/pipeline/files.py" target="_blank" rel="external">https://github.com/scrapy/scrapy/blob/master/scrapy/contrib/pipeline/files.py</a><br>
+[4] <a href="http://www.w3school.com.cn/xpath/xpath_syntax.asp" target="_blank" rel="external">http://www.w3school.com.cn/xpath/xpath_syntax.asp</a><br>
+[5] <a href="http://stackoverflow.com/questions/8372703/how-can-i-use-different-pipelines-for-different-spiders-in-a-single-scrapy-proje" target="_blank" rel="external">http://stackoverflow.com/questions/8372703/how-can-i-use-different-pipelines-for-different-spiders-in-a-single-scrapy-proje</a><br>
+[6] <a href="http://stackoverflow.com/questions/8550114/can-scrapy-be-used-to-scrape-dynamic-content-from-websites-that-are-using-ajax" target="_blank" rel="external">http://stackoverflow.com/questions/8550114/can-scrapy-be-used-to-scrape-dynamic-content-from-websites-that-are-using-ajax</a><br>
+[7] <a href="http://www.cnblogs.com/kissdodog/archive/2012/12/19/2825699.html" target="_blank" rel="external">http://www.cnblogs.com/kissdodog/archive/2012/12/19/2825699.html</a><br>
+[8] <a href="http://stackoverflow.com/questions/22116493/run-a-scrapy-spider-in-a-celery-task" target="_blank" rel="external">http://stackoverflow.com/questions/22116493/run-a-scrapy-spider-in-a-celery-task</a><br>
+[9] <a href="http://stackoverflow.com/questions/12707411/setting-background-with-python2-7-crontab-in-ubuntu-12-04" target="_blank" rel="external">http://stackoverflow.com/questions/12707411/setting-background-with-python2-7-crontab-in-ubuntu-12-04</a><br>
+[10] <a href="https://wiki.archlinux.org/index.php/GNOME_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" target="_blank" rel="external">https://wiki.archlinux.org/index.php/GNOME_(简体中文)</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text"> 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于scrapy"><span class="toc-number">1.1.</span> <span class="toc-text"> 关于Scrapy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-number">1.2.</span> <span class="toc-text"> 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目结构"><span class="toc-number">1.3.</span> <span class="toc-text"> 项目结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发流程"><span class="toc-number">1.4.</span> <span class="toc-text"> 开发流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分析抓取画板图片url并保存到xml"><span class="toc-number">2.</span> <span class="toc-text"> 分析抓取画板图片url并保存到xml</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析网页"><span class="toc-number">2.1.</span> <span class="toc-text"> 分析网页</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#图片url"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 图片url</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#持续加载"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 持续加载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huabanitem"><span class="toc-number">2.2.</span> <span class="toc-text"> huabanItem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huabanspider"><span class="toc-number">2.3.</span> <span class="toc-text"> huabanSpider</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huabanpipeline"><span class="toc-number">2.4.</span> <span class="toc-text"> huabanPipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scrapy-command-line调试"><span class="toc-number">2.5.</span> <span class="toc-text"> Scrapy Command line调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抓取本地xml并下载图片"><span class="toc-number">3.</span> <span class="toc-text"> 抓取本地xml并下载图片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#downloaditem"><span class="toc-number">3.1.</span> <span class="toc-text"> downloadItem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#downloadspider"><span class="toc-number">3.2.</span> <span class="toc-text"> downloadSpider</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#downloadpipeline"><span class="toc-number">3.3.</span> <span class="toc-text"> downloadPipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scrapy-command-line调试-2"><span class="toc-number">3.4.</span> <span class="toc-text"> Scrapy Command line调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在python中调用scrapy的api运行爬虫"><span class="toc-number">4.</span> <span class="toc-text"> 在Python中调用Scrapy的API运行爬虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gui"><span class="toc-number">5.</span> <span class="toc-text"> GUI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置壁纸"><span class="toc-number">6.</span> <span class="toc-text"> 设置壁纸</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ubuntu"><span class="toc-number">6.1.</span> <span class="toc-text"> Ubuntu</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&text=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&is_video=false&description=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸&body=Check out this article: http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&title=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/04/18/scrapy-huaban-wallpaper/&name=Scrapy爬虫抓取用户自定义花瓣画板设置壁纸&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

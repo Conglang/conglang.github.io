@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="设计模式之责任链。当你想要让一个以上的对象有机会能够处理某个请求的时候，就使用责任链模式（Chain of Responsibility Pattern）。适用性、结构与示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chain of Responsibility">
+<meta property="og:url" content="http://conglang.github.io/2014/12/31/chain-of-responsibility/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="设计模式之责任链。当你想要让一个以上的对象有机会能够处理某个请求的时候，就使用责任链模式（Chain of Responsibility Pattern）。适用性、结构与示例代码。">
+<meta property="og:image" content="http://conglang.github.io/img/chain_of_responsibility_scenario.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/chain_of_responsibility_class.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/chain_of_responsibility_object.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:43:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chain of Responsibility">
+<meta name="twitter:description" content="设计模式之责任链。当你想要让一个以上的对象有机会能够处理某个请求的时候，就使用责任链模式（Chain of Responsibility Pattern）。适用性、结构与示例代码。">
+<meta name="twitter:image" content="http://conglang.github.io/img/chain_of_responsibility_scenario.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Chain of Responsibility</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2014/12/31/command/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2014/12/30/proxy/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/31/chain-of-responsibility/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&text=Chain of Responsibility"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&is_video=false&description=Chain of Responsibility"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Chain of Responsibility&body=Check out this article: http://conglang.github.io/2014/12/31/chain-of-responsibility/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&name=Chain of Responsibility&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#责任链"><span class="toc-number">1.</span> <span class="toc-text"> 责任链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">5.</span> <span class="toc-text"> 实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-number">6.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途和缺点"><span class="toc-number">7.</span> <span class="toc-text"> 用途和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">8.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Chain of Responsibility
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2014-12-31T07:02:33.000Z" itemprop="datePublished">2014-12-31</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/C/">C++</a>, <a class="tag-link" href="/tags/Design-Pattern/">Design Pattern</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="责任链"><a class="markdownIt-Anchor" href="#责任链"></a> 责任链</h2>
+<blockquote>
+<p>当你想要让一个以上的对象有机会能够处理某个请求的时候，就使用责任链模式（Chain of Responsibility Pattern）。</p>
+</blockquote>
+<h2 id="适用性"><a class="markdownIt-Anchor" href="#适用性"></a> 适用性</h2>
+<ul>
+<li>有多个对象可以处理一个请求，哪个对象处理该请求运行时刻自动确定。</li>
+<li>你想在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。</li>
+<li>可处理一个请求的对象集合应被动态指定。</li>
+</ul>
+<h2 id="典型情境"><a class="markdownIt-Anchor" href="#典型情境"></a> 典型情境</h2>
+<p>邮件从各部门层级依次被处理。<br>
+<img src="/img/chain_of_responsibility_scenario.jpg" alt="Chain of Responsibility Scenario"></p>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p><img src="/img/chain_of_responsibility_class.jpg" alt="Chain of Responsibility Class"><br>
+<img src="/img/chain_of_responsibility_object.jpg" alt="Chain of Responsibility Object"></p>
+<blockquote>
+<p><strong>Handler</strong> - 定义一个处理请求的接口。（可选）实现后继链。<br>
+<strong>ConcreteHandler</strong> - 处理它所负责的请求。可访问它的后继者。如果可处理该请求，就处理之；否则将该请求转发给它的后继者。<br>
+<strong>Client</strong> - 向链上的具体处理者（ConcreteHandler）对象提交请求。</p>
+<blockquote>
+<p>协作：<br>
+当客户提交一个请求时，请求沿链传递直至有一个ConcreteHandler对象负责处理它。</p>
+</blockquote>
+</blockquote>
+<h2 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> Handler</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Handler(Handler* suc = <span class="number">0</span>, <span class="built_in">std</span>::<span class="built_in">string</span> word = <span class="string">"No"</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		m_successor = suc;</span><br><span class="line">		m_word = word;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">handle_request</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (!m_successor) <span class="keyword">return</span>;</span><br><span class="line">		m_successor-&gt;handle_request();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">can_handle</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> m_word != <span class="string">"No"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	Handler* m_successor;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_word;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ConcreteHandlerBottom : <span class="keyword">public</span> Handler</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ConcreteHandlerBottom(<span class="built_in">std</span>::<span class="built_in">string</span> word = <span class="string">"No"</span>) : Handler(<span class="number">0</span>, word)</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">handle_request</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"ConcreteHandlerBottom has to handle: "</span>&lt;&lt;m_word&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ConcreteHandler1 : <span class="keyword">public</span> Handler</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ConcreteHandler1(Handler* suc = <span class="number">0</span>, <span class="built_in">std</span>::<span class="built_in">string</span> word = <span class="string">"No"</span>) : Handler(suc, word)</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">handle_request</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (can_handle())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"ConcreteHandler1 Handled itself: "</span>&lt;&lt;m_word&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"Go to Next Level."</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">			Handler::handle_request();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">can_handle</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> m_word == <span class="string">"I'm Second"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="keyword">class</span> ConcreteHandler2 : <span class="keyword">public</span> Handler</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	ConcreteHandler2(Handler* suc = <span class="number">0</span>, <span class="built_in">std</span>::<span class="built_in">string</span> word = <span class="string">"No"</span>) : Handler(suc, word)</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">handle_request</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (can_handle())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"ConcreteHandler2 Handled itself: "</span>&lt;&lt;m_word&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"Go to Next Level."</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">			Handler::handle_request();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">can_handle</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> m_word == <span class="string">"I'm First"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//---------------------------------------------------</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">msg</span><span class="params">(<span class="string">"Straight to Bottom"</span>)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandlerBottom <span class="title">cb</span><span class="params">(msg)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandler1 <span class="title">c1</span><span class="params">(&amp;cb, msg)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandler2 <span class="title">c2</span><span class="params">(&amp;c1, msg)</span></span>;</span><br><span class="line">		c2.handle_request();</span><br><span class="line">	&#125;</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">msg</span><span class="params">(<span class="string">"I'm Second"</span>)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandlerBottom <span class="title">cb</span><span class="params">(msg)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandler1 <span class="title">c1</span><span class="params">(&amp;cb, msg)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandler2 <span class="title">c2</span><span class="params">(&amp;c1, msg)</span></span>;</span><br><span class="line">		c2.handle_request();</span><br><span class="line">	&#125;</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">msg</span><span class="params">(<span class="string">"I'm First"</span>)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandlerBottom <span class="title">cb</span><span class="params">(msg)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandler1 <span class="title">c1</span><span class="params">(&amp;cb, msg)</span></span>;</span><br><span class="line">		<span class="function">ConcreteHandler2 <span class="title">c2</span><span class="params">(&amp;c1, msg)</span></span>;</span><br><span class="line">		c2.handle_request();</span><br><span class="line">	&#125;</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="优点"><a class="markdownIt-Anchor" href="#优点"></a> 优点</h2>
+<ul>
+<li>将请求的发送者和接受者解耦。</li>
+<li>可以简化你的对象，因为它不需要知道链的结构。</li>
+<li>通过改变链内的成员或调用它们的次序，允许你动态地新增或者删除责任。</li>
+</ul>
+<h2 id="用途和缺点"><a class="markdownIt-Anchor" href="#用途和缺点"></a> 用途和缺点</h2>
+<ul>
+<li>经常被使用在窗口系统中，处理鼠标和键盘之类的事件。</li>
+<li>并不保证请求一定会被执行；如果没有任何对象处理它的话，它可能会落到链尾端之外（这可以是优点也可以是缺点）。</li>
+<li>可能不容易观察运行时的特征，有碍于除错。</li>
+</ul>
+<h2 id="相关模式"><a class="markdownIt-Anchor" href="#相关模式"></a> 相关模式</h2>
+<ul>
+<li>责任链常与Composite一起使用。这种情况下，一个Composite的父Composite可作为它的后继。</li>
+</ul>
+<p>[1] 设计模式：可复用面向对象软件的基础<br>
+[2] Head First 设计模式</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#责任链"><span class="toc-number">1.</span> <span class="toc-text"> 责任链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#适用性"><span class="toc-number">2.</span> <span class="toc-text"> 适用性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#典型情境"><span class="toc-number">3.</span> <span class="toc-text"> 典型情境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">4.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">5.</span> <span class="toc-text"> 实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-number">6.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用途和缺点"><span class="toc-number">7.</span> <span class="toc-text"> 用途和缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关模式"><span class="toc-number">8.</span> <span class="toc-text"> 相关模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/31/chain-of-responsibility/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&text=Chain of Responsibility"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&is_video=false&description=Chain of Responsibility"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Chain of Responsibility&body=Check out this article: http://conglang.github.io/2014/12/31/chain-of-responsibility/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&title=Chain of Responsibility"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/31/chain-of-responsibility/&name=Chain of Responsibility&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

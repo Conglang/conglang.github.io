@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="算法之迭代改进。通过不断优化可行解得到最优解。介绍了使用此思想的一些算法如，线性规划的单纯形法、最大流量问题、二分图的最大匹配以及稳定婚姻问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Iterative Improvement">
+<meta property="og:url" content="http://conglang.github.io/2015/01/31/iterative-improvement/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="算法之迭代改进。通过不断优化可行解得到最优解。介绍了使用此思想的一些算法如，线性规划的单纯形法、最大流量问题、二分图的最大匹配以及稳定婚姻问题。">
+<meta property="og:image" content="http://conglang.github.io/img/simplex_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/simplex_example_solution.png">
+<meta property="og:image" content="http://conglang.github.io/img/linear_original_problem.png">
+<meta property="og:image" content="http://conglang.github.io/img/linear_geometric_solution.png">
+<meta property="og:image" content="http://conglang.github.io/img/linear_simplex_standard.png">
+<meta property="og:image" content="http://conglang.github.io/img/linear_simplex_process.png">
+<meta property="og:image" content="http://conglang.github.io/img/flow_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/flow_defination.png">
+<meta property="og:image" content="http://conglang.github.io/img/flow_conservation.png">
+<meta property="og:image" content="http://conglang.github.io/img/flow_shortest_increment_process.png">
+<meta property="og:image" content="http://conglang.github.io/img/flow_tree_pseudocode.png">
+<meta property="og:image" content="http://conglang.github.io/img/dinner_problem_net.png">
+<meta property="og:image" content="http://conglang.github.io/img/bitpartite_graph_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/bitpartite_graph_process.png">
+<meta property="og:image" content="http://conglang.github.io/img/domino_problem.png">
+<meta property="og:image" content="http://conglang.github.io/img/domino_solution_b.png">
+<meta property="og:image" content="http://conglang.github.io/img/domino_solution_c.png">
+<meta property="og:image" content="http://conglang.github.io/img/stable_marriage_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/stable_marriage_process.png">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Iterative Improvement">
+<meta name="twitter:description" content="算法之迭代改进。通过不断优化可行解得到最优解。介绍了使用此思想的一些算法如，线性规划的单纯形法、最大流量问题、二分图的最大匹配以及稳定婚姻问题。">
+<meta name="twitter:image" content="http://conglang.github.io/img/simplex_example.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Iterative Improvement</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/02/02/limitations-of-algorithm-power/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/28/greedy-technique/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/31/iterative-improvement/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/31/iterative-improvement/&text=Iterative Improvement"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/31/iterative-improvement/&is_video=false&description=Iterative Improvement"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Iterative Improvement&body=Check out this article: http://conglang.github.io/2015/01/31/iterative-improvement/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/31/iterative-improvement/&name=Iterative Improvement&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#迭代改进"><span class="toc-number">1.</span> <span class="toc-text"> 迭代改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单纯形法"><span class="toc-number">1.1.</span> <span class="toc-text"> 单纯形法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线性规划问题定义"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 线性规划问题定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单纯形法解线性规划问题"><span class="toc-number">1.1.2.</span> <span class="toc-text"> 单纯形法解线性规划问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关问题"><span class="toc-number">1.1.3.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最大流量问题"><span class="toc-number">1.2.</span> <span class="toc-text"> 最大流量问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关问题-2"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二分图的最大匹配"><span class="toc-number">1.3.</span> <span class="toc-text"> 二分图的最大匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#稳定婚姻问题"><span class="toc-number">1.4.</span> <span class="toc-text"> 稳定婚姻问题</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Iterative Improvement
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-31T03:56:42.000Z" itemprop="datePublished">2015-01-31</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Algorithm/">Algorithm</a>, <a class="tag-link" href="/tags/C/">C++</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="迭代改进"><a class="markdownIt-Anchor" href="#迭代改进"></a> 迭代改进</h2>
+<blockquote>
+<p><strong>迭代改进技术</strong>用来求最优问题的解，它生成一系列使问题的目标函数值不断改进的可行解。这一系列的可行解中，后续解相比前面的解一般总是有些小的、局部的改变。如果目标函数值无法再得到优化，该算法就把最后的可行解作为最优解返回，然后算法就结束了。<br>
+正好可以用迭代改进算法求解的重要问题包括线性规划、网络流量最大化以及图的最大数量顶点匹配问题。</p>
+</blockquote>
+<h3 id="单纯形法"><a class="markdownIt-Anchor" href="#单纯形法"></a> 单纯形法</h3>
+<blockquote>
+<p><strong>单纯形法</strong>是求解一般线性规划问题的经典方法。它的思路是：生成问题可行区域的一系列邻接极点，使得目标函数值不断改进。</p>
+</blockquote>
+<h4 id="线性规划问题定义"><a class="markdownIt-Anchor" href="#线性规划问题定义"></a> 线性规划问题定义</h4>
+<p>之前已经介绍过线性规划问题的定义，见<a href="/2015/01/22/transform-and-conquer/#%E7%BA%BF%E6%80%A7%E8%A7%84%E5%88%92">变治法中问题化简思想下线性规划一节</a>。<br>
+<strong>线性规划问题的例子</strong>：考虑下列两个变量的线性规划问题。求3x+5y的最大或最小值。<br>
+<img src="/img/simplex_example.png" alt="Image Loading"><br>
+用图示的方法解决：<br>
+<img src="/img/simplex_example_solution.png" alt="用几何法来解二维的线性规划问题"><br>
+可行区域的顶点称为<strong>极点</strong>。可以得到定理：可行区域非空的任意线性规划问题有最优解，而且，最优解总是能够在其可行区域的一个极点上找到。<br>
+坏消息是：随着问题规模的增长，极点的数量是指数级增长的。此时对极点穷举就不现实了。</p>
+<h4 id="单纯形法解线性规划问题"><a class="markdownIt-Anchor" href="#单纯形法解线性规划问题"></a> 单纯形法解线性规划问题</h4>
+<p>好消息是：<strong>单纯形法</strong>可以在一般情况下只需要检测可行区域极点中的一小部分就能找到最优点。<br>
+<strong>算法的思想可以用几何术语描述</strong>：现在可行区域中找到一个极点。然后检查一下是不是在邻接极点处可以让目标函数取值更佳。如果不是，当前顶点就是最优点，然后算法停止；如果是，转而处理那个能让目标函数取值更佳的邻接顶点。有限步以后，该算法要么发现了一个取到最优解的极点，要么证明了最优解不存在。</p>
+<p><strong>步骤</strong>：</p>
+<ol>
+<li><strong>初始化</strong>。将给定的线性规划问题表示成标准形式，并建立一个初始表格，它最右列的单元格都是非负的，接下来的m列组成了一个<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>×</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">m\times m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.58333em;"></span><span class="strut bottom" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit">m</span><span class="mbin">×</span><span class="mord mathit">m</span></span></span></span>的单位矩阵(目标行的单元格则不必满足这一条件)。这m列确定了初始的基本可行解的基本变量，而表格中的行用基本变量来标识。</li>
+<li><strong>最优测试</strong>。如果目标行中的所有单元格都是非负的(除了最右列中代表目标函数值的那个单元格)，就可以停止了：该表格代表了一个最优解，它的基本变量的值在最右列中，而剩下的非基本变量的值是0。</li>
+<li><strong>确定输入变量</strong>。从目标行的前n个单元格中选择一个非负的单元格(一个常用规则是，选择绝对值最大的那个负单元格，至于是哪个单元格则无关紧要)。该单元格所在的列确定了输入变量和主元列。</li>
+<li><strong>确定分离变量</strong>。对于主元列上的每个正单元格，将其所在行最右单元格除以主元列的单元格，求得一个所谓的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi></mrow><annotation encoding="application/x-tex">\Theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">Θ</span></span></span></span>比率(如果主元列单元格都为负或0，该问题是无界的，算法终止)。找出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi></mrow><annotation encoding="application/x-tex">\Theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">Θ</span></span></span></span>比率最小的行，该行确定了分离变量和主元行。</li>
+<li><strong>建立下一张表格</strong>。将主元行中的所有单元格除以主元得到新主元行。包括主元行在内的每一行，要减去该行主元列单元格和新主元行的乘积(除了主元行的1，这一步会把主元列的所有单元格变成0)。把主元行前的标识用主元列的变量名代替，返回第0步。</li>
+</ol>
+<p><strong>一个例子</strong><br>
+<img src="/img/linear_original_problem.png" alt="原始题目"><br>
+<img src="/img/linear_geometric_solution.png" alt="如果用几何方法解决"><br>
+用单纯形法。<br>
+<img src="/img/linear_simplex_standard.png" alt="把原始题目转化为标准形式，有两个松弛变量"><br>
+然后计算表格。每个约束一行，目标将参数取反一行，并代入初始基本可行解(0,0,1,4)。<br>
+取目标行负值最大的一列为主元列。<br>
+对于主元列上的每个正单元格，将其所在行最后一个单元格除以主元列的单元格，求得<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">θ</span></span></span></span>比率。比率最小的行是主元行。<br>
+将主元行中所有单元格除以主元(主元是主元行和主元列的相交单元格)。<br>
+其他行的每个单元格减去自己主元列单元格与新的主元行本列的乘积。如uy上，1-(-1)*(1/2)= 3/2。<br>
+当目标行没有负数时，目标行最后一列的数就是最优解。<br>
+<img src="/img/linear_simplex_process.png" alt="计算过程产生的表格"><br>
+最优解是x=2,y=0，最大值为6。</p>
+<h4 id="相关问题"><a class="markdownIt-Anchor" href="#相关问题"></a> 相关问题</h4>
+<ol>
+<li><strong>议会绥靖</strong>。在一个议会中，每个议员最多有三个政敌。设计一个算法把议会分成两个议院，使得一个议员在所在议院中没有一个以上的政敌。<br>
+<strong>思路</strong>：先将议员随机分为两院。遍历一遍，如果某个议员在自己院有两个政敌的话，就把他分到另一个院。于是自己和自己的政敌都得到解脱，每次减少至少一个政敌组。设一共有p对同议院政敌组，小于p次遍历即可完成。</li>
+</ol>
+<h3 id="最大流量问题"><a class="markdownIt-Anchor" href="#最大流量问题"></a> 最大流量问题</h3>
+<blockquote>
+<p><strong>最大流量问题</strong>要求找出一个网络中可能存在的最大流量，网络是包含一个源点和一个汇点的加权有向图。</p>
+</blockquote>
+<p><img src="/img/flow_example.png" alt="网络图的例子。顶点中的数字是顶点的&quot;名字&quot;;边上的数字是边的容量"><br>
+源点和汇点分别是物质流唯一的出发地和目的地，所有其他的顶点只能改变流的方向，但不能消耗或者添加物质。<strong>流量守恒要求</strong>。<br>
+根据流量守恒要求，最大流量问题可以这样定义：<br>
+<img src="/img/flow_defination.png" alt="最大流量问题可用这个最优问题来正式定义"></p>
+<blockquote>
+<p><strong>Ford-Fulkerson法</strong>是利用迭代改进技术求解最大流量问题的经典方法。<strong>最短增益路径法</strong>通过一种广度优先查找的方式对网络的顶点做标记，从而实现了上述思想。</p>
+</blockquote>
+<p><img src="/img/flow_conservation.png" alt="在顶点i上存在前向边和后向边的4中可能组合，都是流量守恒的"><br>
+首先将网络中的每条边都设为0，然后在每次迭代时试着找到一条可以传输更多流量的从源点到汇点的路径，即增益路径。</p>
+<p><strong>最短增益路径法</strong>利用广度优先查找，用数量最少的边来生成增益路径。<br>
+用两个记号来标记一个新的(未标记)顶点。第一个标记指出从源点到被标记顶点还能增加多少流量。第二个标记指出另一个顶点的名字，就是从该顶点访问到被标记顶点的。前向边为+，后向边为-。</p>
+<ul>
+<li>首先将源点入队列，对其所有有残留流量的邻接点进行标记，先标记所有经前向边到达的，再标记所有经后向边到达的，首点出队列。把这些新标记的点加入队列。继续取出首点，遍历，直到队列为空。</li>
+<li>然后根据汇点的第二个标记，反向推出路径，用第一个标记更新路径上的容量。</li>
+<li>除了源点，所有标记擦除，重复上面过程。如果一次迭代后汇点没有被标记，那就是最优了。<br>
+<img src="/img/flow_shortest_increment_process.png" alt="演示了最短增益路径算法。左边的图显示了在下一次迭代开始前的当前流量；右边的图显示了该次迭代对顶点标记的结果、找到的增益路径(粗线)，以及增益前的流量。从队列中删除的顶点用↑表示"></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TODO</span></span><br></pre></td></tr></table></figure>
+<h4 id="相关问题-2"><a class="markdownIt-Anchor" href="#相关问题-2"></a> 相关问题</h4>
+<ol>
+<li>
+<p>考虑<strong>网络是有根树</strong>的情况，它的根是源点，叶子是它的汇点，所有的边都是和从根到叶子的路径同向的。设计一个高效的算法来求出这种网络的最大流量。时间效率是什么。<br>
+<strong>思路</strong>：见伪代码。<br>
+<img src="/img/flow_tree_pseudocode.png" alt="有根树流量的伪代码"></p>
+</li>
+<li>
+<p><strong>就餐问题</strong>。几个家庭一起外出就餐。为了增进社交，他们希望同一个家庭的人不要坐在一张桌子上。试述如何利用最大流量问题找到一个满足要求的座位排法(或者证明这种排法不存在)。假设该就餐团具有p个家庭、第i个家庭有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>个成员。还假设有q张桌子，第j张桌子的座位容量是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">b_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>。<br>
+<strong>思路</strong>：用如下图进行计算。<br>
+<img src="/img/dinner_problem_net.png" alt="就餐问题的网络"><br>
+如果求得的最大容量等于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">a_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>a</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">a_p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">a</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">p</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>所有家庭的人数之和，就是有解。</p>
+</li>
+</ol>
+<h3 id="二分图的最大匹配"><a class="markdownIt-Anchor" href="#二分图的最大匹配"></a> 二分图的最大匹配</h3>
+<blockquote>
+<p><strong>最大基数匹配</strong>是图中边的最大子集，该子集中的任何两条边都不共顶点。对于二分图来说，可以对之前求得的匹配进行一系列增益来获得这个子集。</p>
+</blockquote>
+<p>在一个<strong>二分图</strong>中，所有的顶点都可以分为两个不相交的集合V和U，两个集合大小不一定相等，但每条边都连接两个集合中各一个顶点。<br>
+<img src="/img/bitpartite_graph_example.png" alt="二分图的例子"><br>
+匹配的方式就是从两边子集各拿一个可以连接的自由顶点连接。<br>
+<strong>算法思路</strong>：大概就是某集合U自由的遍历所有可能的匹配，发现对方V也自由就赶紧连接；发现对方V不自由就宣布要争抢，让其考虑。对方V答应考虑，并叫自己的原始匹配U决定行不行。被叫到的U如果有替补的自由V匹配就结成新对，让原来配对的V和争抢的U结对；如果没有替补的自由V就不肯变化。遍历U中所有的自由节点，直到没有为止。<br>
+<strong>具体到本例</strong>：</p>
+<ul>
+<li>选择V的所有自由顶点放进队列。队首弹出1，查找在U中与1相连的所有顶点遍历，先走到6，发现其自由。加(1,6)到M。删去所有标记。将队列重新初始化为V中的所有自由顶点，即2,3。退出遍历。</li>
+<li>队首弹出2，查找U中与2相连的所有顶点遍历，遍历到6发现其不自由，标记6说2要6，并把6放入队列让其以后看着办。走到3，3遍历到6，发现6已被标记，再遍历到8，标记8为3。走到6，6说我是U集的，我想让原来和我匹配的1再考虑考虑，给1标记上6，把1放入队列。走到8，8也是U集，让4考虑，放入队列。走到1，1遍历到6，无事，遍历到7，发现7自由，加入(1,7)到M，这时1发现自己被6标记了，就从M中去掉(1,6)组合，让6被标记的(2,6)组合加入M。删去所有标记。将队列重新初始化为V中的所有自由顶点，即3。退出遍历。</li>
+<li>队首弹出3，查找U中与3相连的所有顶点遍历，遍历到6发现其不自由，标记6说3要6，并把6放入队列让其考虑，继续遍历到8，发现8也不自由，标记8说3要8，把8放进队列让其考虑。走到6，6是U集的，标记原来匹配的2一个6，把2放入队列考虑。走到8，8是U集的，标记原来匹配的4一个8，放入队列重新考虑。走到2，2走到6无事，又没有下一个选择让其发现不对，就没变化。走到4，4经过8无事，遍历到9发现其不自由，标记9说4要9，把其放入队列考虑，遍历到10发现其自由，立刻结组(4,10)放入M，此时发现自己被8标记了，就放(3,8)进M。删去所有标记。将队列重新初始化为V中的所有自由顶点，为空。退出遍历。<br>
+<img src="/img/bitpartite_graph_process.png" alt="最大基数匹配算法的应用。左边一列显示了在下一次迭代开始时的当前匹配和初始队列；右边一列显示了在增益开始之前该算法对顶点所做的标记。匹配边用粗线表示。顶点上方的标记显示出该标记是从哪个顶点做出的。为清晰起见，所找到的增益路径的顶点加上了阴影还进行了标记。从队列中删除的顶点用↑符号指出来"></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="相关题目"><a class="markdownIt-Anchor" href="#相关题目"></a> 相关题目</h4>
+<ol>
+<li><strong>多米诺谜题</strong>。多米诺是一块<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2\times1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">1</span></span></span></span>的方块，方向上既可以水平放置也可以垂直放置。一块由多个<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">1\times1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span><span class="mbin">×</span><span class="mord mathrm">1</span></span></span></span>的格子组成的板，如果能够正好用多米诺覆盖，而且没有重叠，则称为一个覆盖。对于下面的板，确定它是不是可以用多米诺覆盖。如果是，之处如何覆盖；如果否，说明为什么。<br>
+<img src="/img/domino_problem.png" alt="多米诺谜题"><br>
+<strong>解答</strong>：<br>
+a. 不能。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>7</mn><mo>×</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">7\times7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">7</span><span class="mbin">×</span><span class="mord mathrm">7</span></span></span></span>的总数是奇数，不是2的倍数。<br>
+b. 能。对于2n某列缺1的板子总是可以。如图。<br>
+<img src="/img/domino_solution_b.png" alt="Image Loading"><br>
+c. 不能。把格子交错变成一黑一白相连，一个多米诺每次覆盖一个黑点一个白点。本例中是32个白点，30个黑点，无法覆盖。其他两问也可用这个方法解决。<br>
+<img src="/img/domino_solution_c.png" alt="Image Loading"></li>
+</ol>
+<h3 id="稳定婚姻问题"><a class="markdownIt-Anchor" href="#稳定婚姻问题"></a> 稳定婚姻问题</h3>
+<blockquote>
+<p><strong>稳定婚姻问题</strong>要求基于给定的匹配优先级，求出两个n元素集合的元素之间的<strong>稳定匹配</strong>。该问题可以用<strong>稳定婚姻算法</strong>求解，而且总有解。是二分图匹配问题的一个有趣版本。</p>
+</blockquote>
+<p>有一个n个男士的集合Y=\\{m_1,m_2,..,m_n\\}和一个n个女士的集合X=\\{w_1,w_2,..,w_n\\}。每个男士有一个排序的列表，把女士按照潜在结婚对象的优先级进行排序。同样，每个女士也有一个男士的优先级列表。一对一进行匹配。如果在匹配M中，某男士和某女士都更倾向于对方而不是自己的匹配对象，称为<strong>受阻对</strong>。那么M就是不稳定的。<strong>稳定婚姻问题</strong>就是要根据给定的男士和女士的优先选择，求出一个稳定的婚姻匹配。<br>
+<img src="/img/stable_marriage_example.png" alt="一个稳定婚姻问题的实例的数据：(a)男士的优先列表；(b)女士的优先列表；(c)等级矩阵(加框的元素组成了一个不稳定的匹配)"></p>
+<p><strong>稳定婚姻算法</strong><br>
+输入：有一个n个男士的集合和一个n个女士的集合，以及每个男士选择女士的优先级和每个女士选择男士的优先级。<br>
+输出：一个稳定的婚姻匹配。<br>
+<strong>第0步</strong>：一开始所有的男士和女士都是自由的。<br>
+<strong>第1步</strong>：如果有自由男士，从中任选一个然后执行以下步骤：</p>
+<ul>
+<li><strong>求婚</strong>：选中的自由男士m向w求婚，w是他优先列表上的下一个女士(即优先级最高而且之前没有拒绝过他)。</li>
+<li><strong>回应</strong>：如果w是自由的，她接受求婚和m配对。如果她不是自由的，她把m和她当前的配偶作比较。如果她更喜欢m，她接受m的求婚，她的前配偶就变成自由人。否则，她拒绝m的求婚，m还是自由的。</li>
+</ul>
+<p><strong>第2步</strong>：返回n个匹配对的集合。<br>
+<img src="/img/stable_marriage_process.png" alt="稳定婚姻算法的应用。被接受的求婚用加框的单元来表示；被拒绝的求婚用加下划线的单元来表示"></p>
+<p>稳定婚姻算法有一个明显的<strong>缺陷</strong>，有“性别倾向”。<strong>它更容易满足男士的偏好</strong>。</p>
+<p>[1] 算法设计与分析基础(第2版)</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#迭代改进"><span class="toc-number">1.</span> <span class="toc-text"> 迭代改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单纯形法"><span class="toc-number">1.1.</span> <span class="toc-text"> 单纯形法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线性规划问题定义"><span class="toc-number">1.1.1.</span> <span class="toc-text"> 线性规划问题定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单纯形法解线性规划问题"><span class="toc-number">1.1.2.</span> <span class="toc-text"> 单纯形法解线性规划问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关问题"><span class="toc-number">1.1.3.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最大流量问题"><span class="toc-number">1.2.</span> <span class="toc-text"> 最大流量问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关问题-2"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 相关问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二分图的最大匹配"><span class="toc-number">1.3.</span> <span class="toc-text"> 二分图的最大匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#相关题目"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 相关题目</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#稳定婚姻问题"><span class="toc-number">1.4.</span> <span class="toc-text"> 稳定婚姻问题</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/31/iterative-improvement/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/31/iterative-improvement/&text=Iterative Improvement"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/31/iterative-improvement/&is_video=false&description=Iterative Improvement"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Iterative Improvement&body=Check out this article: http://conglang.github.io/2015/01/31/iterative-improvement/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/31/iterative-improvement/&title=Iterative Improvement"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/31/iterative-improvement/&name=Iterative Improvement&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="总结记录Git in Practice书中一些可能用到的技巧和一些原理图。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一点git">
+<meta property="og:url" content="http://conglang.github.io/2016/04/28/git-notes/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="总结记录Git in Practice书中一些可能用到的技巧和一些原理图。">
+<meta property="og:image" content="http://conglang.github.io/img/note_git_add_commit_checkout_workflow.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_a_typical_commit_broken_down_into_its_parts.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_commit_blob_and_tree_objects.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_parent_commit_pointers.png">
+<meta property="og:image" content="http://conglang.github.io/img/note_git_add_commit_push_pull_checkout_cycle.png">
+<meta property="og:updated_time" content="2018-07-03T15:49:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一点git">
+<meta name="twitter:description" content="总结记录Git in Practice书中一些可能用到的技巧和一些原理图。">
+<meta name="twitter:image" content="http://conglang.github.io/img/note_git_add_commit_checkout_workflow.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>一点git</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/07/17/programming-in-ubuntu-python/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/04/17/note-programming-collective-intelligence/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/28/git-notes/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/28/git-notes/&text=一点git"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/28/git-notes/&is_video=false&description=一点git"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=一点git&body=Check out this article: http://conglang.github.io/2016/04/28/git-notes/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/28/git-notes/&name=一点git&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#part-1-introduction-to-git"><span class="toc-number">1.</span> <span class="toc-text"> Part 1 Introduction to Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#local-git"><span class="toc-number">1.1.</span> <span class="toc-text"> Local Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remote-git"><span class="toc-number">1.2.</span> <span class="toc-text"> Remote Git</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#part-2-git-essentials"><span class="toc-number">2.</span> <span class="toc-text"> Part 2 Git essentials</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#filesystem-interactions"><span class="toc-number">2.1.</span> <span class="toc-text"> Filesystem interactions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#history-visualization"><span class="toc-number">2.2.</span> <span class="toc-text"> History visualization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#advanced-branching"><span class="toc-number">2.3.</span> <span class="toc-text"> Advanced branching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rewriting-history-and-disaster-recovery"><span class="toc-number">2.4.</span> <span class="toc-text"> Rewriting history and disaster recovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#part-3-advanced-git"><span class="toc-number">3.</span> <span class="toc-text"> Part 3 Advanced Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#personalizing-git"><span class="toc-number">3.1.</span> <span class="toc-text"> Personalizing Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vendoring-dependencies-as-submodules"><span class="toc-number">3.2.</span> <span class="toc-text"> Vendoring dependencies as submodules</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#working-with-subversion"><span class="toc-number">3.3.</span> <span class="toc-text"> Working with Subversion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-best-practices"><span class="toc-number">4.</span> <span class="toc-text"> Git best practices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#useful-figures"><span class="toc-number">5.</span> <span class="toc-text"> Useful Figures</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        一点git
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-04-28T12:49:41.000Z" itemprop="datePublished">2016-04-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Book/">Book</a>, <a class="tag-link" href="/tags/Git/">Git</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="part-1-introduction-to-git"><a class="markdownIt-Anchor" href="#part-1-introduction-to-git"></a> Part 1 Introduction to Git</h2>
+<h3 id="local-git"><a class="markdownIt-Anchor" href="#local-git"></a> Local Git</h3>
+<ul>
+<li><strong>Creating a repository: git init</strong><br>
+Create a new local Git repository in a new subdirectory named GitInPracticeRedux</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/</span><br><span class="line">git init GitInPracticeRedux</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Building a new commit in the index staging area: git add</strong><br>
+Add an existing file GitInPractice.asciidoc to the index staging area for inclusion in the next commit.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git add GitInPractice.asciidoc</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Committing changes to files: git commit</strong><br>
+Commit the contents of an existing file GitInPractice.asciidoc, which has already been added to the index staging area.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --message &apos;Initial commit of book.&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Viewing history: git log</strong><br>
+View the commit history of a repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Viewing the differences between commits: git diff</strong><br>
+View the differences between the previoius commit and the latest.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git diff master~1 master</span><br><span class="line">git diff master~1 master --GitInPractice.asciidoc	## 只比较此文件</span><br><span class="line">git diff	# compare any changes you&apos;ve made but not yet added with git add.</span><br></pre></td></tr></table></figure>
+<h3 id="remote-git"><a class="markdownIt-Anchor" href="#remote-git"></a> Remote Git</h3>
+<ul>
+<li><strong>Adding a remote repository: git remote add</strong><br>
+Add the new GitInPractice remote repository to your current repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin https://github.com/username/GitInPracticeRedux.git</span><br><span class="line">git remote --verbose	# 验证一下</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Pushing changes to a remote repository: git push</strong><br>
+Push the changes from the local GitInPracticeRedux repository to the origin remote on GitHub.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --set-upstream origin master</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Cloning a remote/GitHub repository onto your local machine: git clone</strong><br>
+Remove the existing GitInPracticeRedux local repository and re-create it by cloning from GitHub.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/</span><br><span class="line">rm -rf GitInPracticeRedux</span><br><span class="line">git clone https://github.com/username/GitInPracticeRedux.git GitInPracticeRedux</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Pulling changes from another repository: git pull</strong><br>
+Pull new commits into the current branch on the local GitInPracticeRedux repository from the remote repository on GitHub.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Fetching changes from a remote without modifying local branches: git fetch</strong><br>
+git fetch performs the fetching action of downloading the new commits but skips the merge step.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch</span><br><span class="line">git pull	# pull after fetch</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Creating a new local branch from the current branch: git branch</strong><br>
+Create a new local branch named chapter-two from the current(master) branch.<br>
+这个命令创建一个新分支，但并不切换到这个分支上，要切换还是要用<code>git checkout</code>。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch chapter-two master</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Checking out a local branch: git checkout</strong><br>
+Change to a local branch named chapter-two from the current(master) branch.<br>
+切换分支前，如果当前分支还有内容没提交，切换分支会失败，需要commit或用<code>git stash</code>。如果不想要这些内容了，可以用<code>git checkout --force</code>。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout chapter-two</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Pushing a local branch remotely</strong><br>
+Push the changes from the local chapter-two branch to create the remote branch chapter-two on GitHub.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --set-upstream origin chapter-two</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Merging an existing branch into the current branch: git merge</strong><br>
+Make a commit on the local branch named chapter-two and merge this into the master branch.<br>
+git pull约等于git fecth &amp;&amp; git merge.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git add GitInPractice.asciidoc</span><br><span class="line">git commit --message &apos;Start Chapter2.&apos;</span><br><span class="line">git checkout master</span><br><span class="line">git merge chapter-two</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Deleting a remote branch</strong><br>
+Push the current master branch and delete the branch named chapter-two on the remote origin.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git push</span><br><span class="line">git push --delete origin chapter-two</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Deleting the current local branch after merging</strong><br>
+Delete the local branch named chapter-two.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git branch --delete chapter-two</span><br></pre></td></tr></table></figure>
+<h2 id="part-2-git-essentials"><a class="markdownIt-Anchor" href="#part-2-git-essentials"></a> Part 2 Git essentials</h2>
+<h3 id="filesystem-interactions"><a class="markdownIt-Anchor" href="#filesystem-interactions"></a> Filesystem interactions</h3>
+<ul>
+<li><strong>Renaming or moving a file: git mv</strong><br>
+Rename a previously committed file named GitInPractice.asciidoc to 01-IntroducingGitInPractice.asciidoc and commit the newly renamed file.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git mv GitInPractice.asciidoc 01-IntroducingGitInPractice.asciidoc</span><br><span class="line">git commit --message &apos;Rename book file to first part file.&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Removing a file: git rm</strong><br>
+Remove a previously committed file named GitInPracticeReviews.tmp in your Git working directory and commit the removed file.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git rm GitInPracticeReviews.tmp</span><br><span class="line">git commit -- message &apos;Remove unfavourable review file.&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Resetting files to the last commit: git reset</strong><br>
+Reset the state of all the files in your working directory to their last committed state.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">echo EXTRA &gt;&gt; 01-IntroducingGitInPractice.asciidoc</span><br><span class="line">git reset --hard	# 暂存区和工作目录都重置</span><br><span class="line">git reset --mixed	# 只重置暂存区</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Deleting untracked files: git clean</strong><br>
+Remove an untracked file named GitInPracticeIdeas.tmp from a Git working directory.<br>
+如果想删除文件夹的话可以加一个-d选项。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git clean --dry-run	# 可以先预览一下会移除哪些文件</span><br><span class="line">git clean --force</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Ignoring files: .gitignore</strong><br>
+Ignore all files with the extension .tmp in a Git repository.<br>
+用<code>git help gitignore</code>看帮助。GitHub提供了一些有用的<a href="https://github.com/github/gitignore" target="_blank" rel="external">gitignore模板</a>。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd ?Users/mike/GitInPracticeRedux/</span><br><span class="line">echo \*.tmp &gt; .gitignore</span><br><span class="line">git add .gitignore</span><br><span class="line">git commit --message=&apos;Ignore .tmp files.&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Deleting ignored files</strong><br>
+Delete all ignored files from a Git working directory.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git clean --force -X	# 只删除ignore的文件</span><br><span class="line">git clean --force -x	# 删除ignore的文件和untrack的文件。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># reset all files to their last-committed state and remove all uncommitted files.</span><br><span class="line">git reset --hard</span><br><span class="line">git clean -xdf</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Temporarily stashing some changes: git stash</strong><br>
+Stash all your uncommitted changes for later retrieval.<br>
+Create a temporary commit with a prepopulated commit message and then returns your current branch to the state before the temporary commit was made.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">echo EXTRA &gt;&gt; 01-IntroducingGitInPractice.asciidoc</span><br><span class="line">git stash save</span><br><span class="line">git stash list	# 可以看所有stash</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Reapplying stashed changes: git stash pop</strong><br>
+Pop the changes from the last git stash save into the current working directory.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git stash pop	# 会弹出最顶上的stash</span><br><span class="line">git stash apply	# 不会弹出最顶上的stash，只是应用，于是可以应用多次</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Clearing stashed changes: git stash clear</strong><br>
+Clear all previously stashed changes.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git stash clear</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Assuming files are unchanged</strong><br>
+Let Git assume there have been no changes made to 01-IntroducingGitInPractice.asciidoc.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git update-index --assume-unchanged 01-IntroducingGitInPractice.asciidoc</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Listing assumed-unchanged files</strong><br>
+Let Git list all the files that it has been told to assume haven’t changed.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-files -v</span><br></pre></td></tr></table></figure>
+<p>输出结果中H开头的是committed file，h开头的是Assumed-unchanged file。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-files -v | grep &apos;^[hsmrck?]&apos; | cut -c 3-</span><br></pre></td></tr></table></figure>
+<p>这样就只输出Assumed-unchanged file的文件名。</p>
+<ul>
+<li><strong>Stopping assuming files are unchanged</strong><br>
+Let Git stop assuming there have been no changes made to 01-IntroducingGitInPractice.asciidoc.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git update-index --no-assume-unchanged 01-IntroducingGitInPractice.asciidoc</span><br><span class="line">git ls-files -v | grep 01-IntroducingGitInPractice.asciidoc	# 验证一下。结果应该是H打头的</span><br></pre></td></tr></table></figure>
+<h3 id="history-visualization"><a class="markdownIt-Anchor" href="#history-visualization"></a> History visualization</h3>
+<ul>
+<li><strong>Listing only certain commits</strong><br>
+List the commits authord by Mike McQuaid after November 10,2013, with the string “file.” in their message.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --author &quot;Mike McQuaid&quot; --after &quot;Nov 10 2013&quot; --grep &apos;file\.&apos;</span><br></pre></td></tr></table></figure>
+<p>还有一些参数，如–max-count限制只输出几条commit。–reverse让输出从老到新排序。–before是在什么时间之前。–merges只显示merge commit们。</p>
+<ul>
+<li><strong>Listing commits with different formatting</strong><br>
+List the last two commits in an email format with the oldest displayed first.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --format=email --reverse --max-count 2</span><br></pre></td></tr></table></figure>
+<p>也可以自定义格式。参看<code>git log --help</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --format=&quot;%ar %an did: %s&quot;	# 6 weeks ago Mike McQuaid did: Ignore .tmp files.</span><br></pre></td></tr></table></figure>
+<p>常用于open source software-release的格式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git shortlog HEAD~6..HEAD</span><br></pre></td></tr></table></figure>
+<p>作者推荐的一个格式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --oneline --graph --decorate</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Showing who last changed each line of a file: git blame<br>
+Show the commit, person, and date on which each line of GitInPractice.asciidoc was changed.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git blame --date=short 01-IntroducingGitInPractice.asciidoc</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Finding which commit caused a particular bug: git bisect</strong><br>
+Locate the commit that renamed GitInPractice.asciidoc to 01-IntroducingGitInPractice.asciidoc<br>
+在使用之前要commit或stash当前内容，因为bisect操作将当前目录checkout到该相关commit。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git bisect start</span><br><span class="line">git bisect bad</span><br><span class="line">git bisect good 6576b6</span><br><span class="line">git bisect reset</span><br></pre></td></tr></table></figure>
+<p>还可用<code>git bisect log</code>查看历史。<code>git bisect start src/gui</code>只检查此目录下的更改。<code>git bisect skip</code>在不知该版本good还是bad时跳过此版本。<br>
+<code>git bisect run</code>可以通过process的返回值(0是success，1是failure)自动判断是good还是bad。</p>
+<h3 id="advanced-branching"><a class="markdownIt-Anchor" href="#advanced-branching"></a> Advanced branching</h3>
+<ul>
+<li><strong>Merging branches and always creating a merge commit</strong><br>
+Merge the chapter-spacing branch into the master branch and create a merge commit, not perform a fast-forward merge.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git merge --no-ff chapter-spacing</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Resolving a merge conflict</strong><br>
+Merge the separate-files branch into the master branch and resolve the resulting merge conflict.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git merge separate-files</span><br><span class="line"># 然后编辑冲突文件解决冲突</span><br><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git add 01-IntroducingGitInPractice.asciidoc</span><br><span class="line">git commit</span><br><span class="line">git branch --delete separate-files	# 此时可以删除分支separate-files</span><br></pre></td></tr></table></figure>
+<p>可以用一个graphical merge tool。<code>git mergetool</code>。</p>
+<ul>
+<li><strong>Resolving each merge conflict only once: git rerere</strong><br>
+rerere代表Reuse Recorded Resolution。<br>
+Set up git rerere to integrate with the merge workflow so you don’t need to repeatedly resolve the same merges.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --add rerere.enabled 1</span><br></pre></td></tr></table></figure>
+<p>如果想要忘记某次错误的resolve，可以用<code>git rerere forget 01-IntroducingGitInPractice.asciidoc</code>。</p>
+<ul>
+<li><strong>Creating a tag: git tag</strong><br>
+A tag is another ref(or pointer) for a single commit. Tags differ from branches in that they’re (usually) permanent.<br>
+Tag the current state of the GitInPracticeRedux master branch as version v0.1。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git tag v0.1</span><br><span class="line">git tag	# 显示当前repository的所有tag</span><br><span class="line">git push -tags</span><br></pre></td></tr></table></figure>
+<p>可用–delete删除某tag。</p>
+<ul>
+<li><strong>Generating a version number based on previous tags: git describe</strong><br>
+Generate a version number for a software project based on existing tags in the repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git describe --tags</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Adding a single commit to the current branch: git cherry-pick</strong><br>
+cherry-pick a commit from the v0.1-release branch to the master branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git cherry-pick v0.1-release	# 或 git cherry-pick df32377</span><br></pre></td></tr></table></figure>
+<p>添加额外的commit信息用–edit。从远程分支cherry-pick一个到另一远程分支最好加上-x，会指明从哪个commit来的。–signoff会附上执行cherry-pick的人的信息。cherry-pick时如果遇到冲突，改正之后用<code>git cherry-pick --continue</code>提交，如果此时想放弃，用<code>git cherry-pick --abort</code>。</p>
+<ul>
+<li><strong>Reverting a previous commit: git revert</strong><br>
+Revert a commit to reverse its changes. 尤其是已经push到远程的情况下。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git revert c18c9ef</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Listing what branches contain a commit: git cherry</strong><br>
+See what commits remain unmerged to the master branch from the v0.1-release branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout v0.1-release</span><br><span class="line">git cherry --verbose master</span><br></pre></td></tr></table></figure>
+<h3 id="rewriting-history-and-disaster-recovery"><a class="markdownIt-Anchor" href="#rewriting-history-and-disaster-recovery"></a> Rewriting history and disaster recovery</h3>
+<ul>
+<li><strong>Listing all changes including history rewrites: git reflog</strong><br>
+View the state of the reflog for the HEAD pointer.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git reflog</span><br></pre></td></tr></table></figure>
+<p>更建议使用commit然后之后修改，而不是使用stash，因为stash不会出现在reflog上。reflog只在本地仓库，不会被push到远程。<br>
+防止数据丢失的原则就是commit early and commit often。</p>
+<ul>
+<li><strong>Resetting a branch to a previous commit: git reset</strong><br>
+还没被push的commit用reset处理更合适。<br>
+Undo the last commit on the master branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset HEAD^</span><br></pre></td></tr></table></figure>
+<p>如果想要restore。注意超过90天且不是别人parent的commit的commit会从reflog中删去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reflog HEAD</span><br><span class="line">git reset 4455fa9</span><br></pre></td></tr></table></figure>
+<p>修改上一次的commit。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Rebasing commits on top of another branch: git rebase</strong><br>
+Rebase the inspiration branch on top of the v0.1-release branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout inspiration</span><br><span class="line">git rebase v0.1-release</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Rebasing commits interactively: git rebase --interactive</strong><br>
+Interactively rebase the history of a branch. 应该常用。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git checkout inspiration</span><br><span class="line">git rebase --interactive v0.1	# 会弹出一个editor</span><br><span class="line">输入</span><br><span class="line">pick 6d4ad83 Add Chapter 1 inspiration.</span><br><span class="line">p df32377 Advanced practice technique.</span><br><span class="line">f a8200e1 Add release preface.</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Pulling a branch and rebasing commits: git pull --rebase</strong><br>
+避免出现merge commit，常用。<br>
+Pull commits from origin/master and rebase your current commits in master on top of the upstream changes.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull --rebase	# 等价于git fetch &amp;&amp; git rebase</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Rewriting history on a remote branch: git push --force</strong><br>
+Rewrite the history on the remote origin/inspiration branch based on the contents of the local inspiration branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git checkout inspiration</span><br><span class="line">git pull --rebase</span><br><span class="line">git push origin +inspiration</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Rewriting the entire history of a branch: git filter-branch</strong><br>
+Remove all references to the file 00-Preface.asciidoc on the master branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch --prune-empty --index-filter &quot;git rm --cached --ignore-unmatch 00-Preface.asciidoc&quot; master</span><br></pre></td></tr></table></figure>
+<h2 id="part-3-advanced-git"><a class="markdownIt-Anchor" href="#part-3-advanced-git"></a> Part 3 Advanced Git</h2>
+<h3 id="personalizing-git"><a class="markdownIt-Anchor" href="#personalizing-git"></a> Personalizing Git</h3>
+<ul>
+<li><strong>Setting the configuration for all repositories</strong><br>
+Set your Git username in your global Git configuration.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;Mike McQuaid&quot;	# 会写到/Users/mike/.gitconfig里</span><br><span class="line">git config --global user.name					# 查询该项</span><br><span class="line">git config --global --unset rerere.enabled		# 取消某项设置</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Setting the configuration for a single repository</strong><br>
+Set your Git user email in your repository Git configuration.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git config user.email mike.mcquaid@github.com	# 会写到.git/config</span><br><span class="line">git config --local user.email	# 查询该项</span><br></pre></td></tr></table></figure>
+<p>在浏览器里看git help。<code>git help --help --web</code>。或者直接去看http://git-scm.com/docs</p>
+<ul>
+<li><strong>Aliasing commands</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.ultimate-log &quot;log --graph --oneline --decorate&quot;</span><br></pre></td></tr></table></figure>
+<p>在GitHub上建一个dotfiles repository记录自己的gitconfig文件。作者的在https://github.com/mikemcquaid/dotfiles。运行install-dotfiles.sh即可。<br>
+GitHub上还有一些共享的dotfiles库，<a href="http://dotfiles.github.io" target="_blank" rel="external">http://dotfiles.github.io</a>。</p>
+<h3 id="vendoring-dependencies-as-submodules"><a class="markdownIt-Anchor" href="#vendoring-dependencies-as-submodules"></a> Vendoring dependencies as submodules</h3>
+<p>Learn how to maintain dependencies on other Git-based software projects within your own using Git submodules.<br>
+把别人用git管理的开源代码库作为自己代码的submodule。<br>
+Git’s submodules store the reference to a specific SHA-1 reference in another remote Git repository and store these in subdirectories of the current repository.</p>
+<ul>
+<li><strong>Adding a git submodule: git submodule add</strong><br>
+Add a the GitInPracticeReduxSubmodule repository as a submodule of the GitInPracticeRedux repository in the master branch.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git checkout master</span><br><span class="line">git submodule add https://github.com/username/GitInPracticeReduxSubmodule.git submodule</span><br><span class="line">git commit --message &quot;Add submodule&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Showing the status of submodules: git submodule status</strong><br>
+Show the current states of all submodules of a repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git submodule status</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Updating and initializing all submodules: git submodule update --init</strong><br>
+Initialize all submodules in your repository and update them to the latest revision.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeRedux/</span><br><span class="line">git submodule update --init</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Running a command in every submodule: git submodule foreach</strong><br>
+Output some status information for every submodule in the GitInPracticeRedux repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule foreach &apos;echo $name: $toplevel/$path [$sha1]&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="working-with-subversion"><a class="markdownIt-Anchor" href="#working-with-subversion"></a> Working with Subversion</h3>
+<ul>
+<li><strong>Importing an SVN repository into a Git repository</strong><br>
+Import a Subversion repository into a local Git repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git svn clone --prefix=origin/ --stdlayout http://google-enterprise-connector-notes.googlecode.com/svn/ google-notes</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Committing and pushing to an SVN repository from a Git repository</strong><br>
+Commit and push changes to a Subversion repository.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitSVN/</span><br><span class="line">git commit --message &quot;README.txt: improve grammar.&quot; README.txt</span><br><span class="line">git svn dcommit</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Accessing a GitHub repository with Subversion</strong><br>
+Check out the GitInPracticeRedux repository from earlier chapters using Subversion.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /Users/mike/GitInPracticeReduxSVN/</span><br><span class="line">svn co http://github.com/username/GitInPracticeRedux GitInPracticeReduxSVN</span><br></pre></td></tr></table></figure>
+<h2 id="git-best-practices"><a class="markdownIt-Anchor" href="#git-best-practices"></a> Git best practices</h2>
+<ul>
+<li><strong>Writing a good commit message</strong><br>
+<a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html" target="_blank" rel="external">A Git commit message guide</a> by Tim Pope.</li>
+<li><strong>Building a commit from parts of files: git add --patch</strong><br>
+同一个文件里的改动想分为多次提交。会有一个交互性界面来选择文件中每个hunk是否要stage。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add --patch</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Avoiding whitespace issues: git diff --check</strong><br>
+Good Git practice:
+<ul>
+<li>No lines in files end with whitespace (trailing tab or space characters).</li>
+<li>No lines in files start with one or more space characters followed immediately by one or more tab characters.</li>
+<li>All files end with one or more newline character(s): a line-feed character on Unix or a carriage-return and a line-feed character on Windows.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff --check</span><br></pre></td></tr></table></figure>
+<h2 id="useful-figures"><a class="markdownIt-Anchor" href="#useful-figures"></a> Useful Figures</h2>
+<ul>
+<li>Git add/commit/checkout workflow<br>
+<img src="/img/note_git_add_commit_checkout_workflow.png" alt="Git add/commit/checkout workflow"></li>
+<li>A typical commit broken down into its parts<br>
+<img src="/img/note_a_typical_commit_broken_down_into_its_parts.png" alt="A typical commit broken down into its part"></li>
+<li>Commit, blob, and tree objects<br>
+<img src="/img/note_commit_blob_and_tree_objects.png" alt="Commit, blob, and tree objects"></li>
+<li>Parent commit pointers<br>
+<img src="/img/note_parent_commit_pointers.png" alt="Parent commit pointers"></li>
+<li>Git add/commit/push/pull/checkout cycle<br>
+<img src="/img/note_git_add_commit_push_pull_checkout_cycle.png" alt="Git add/commit/push/pull/checkout cycle"></li>
+</ul>
+<p>Ref: 《Git in Practice》</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#part-1-introduction-to-git"><span class="toc-number">1.</span> <span class="toc-text"> Part 1 Introduction to Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#local-git"><span class="toc-number">1.1.</span> <span class="toc-text"> Local Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remote-git"><span class="toc-number">1.2.</span> <span class="toc-text"> Remote Git</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#part-2-git-essentials"><span class="toc-number">2.</span> <span class="toc-text"> Part 2 Git essentials</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#filesystem-interactions"><span class="toc-number">2.1.</span> <span class="toc-text"> Filesystem interactions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#history-visualization"><span class="toc-number">2.2.</span> <span class="toc-text"> History visualization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#advanced-branching"><span class="toc-number">2.3.</span> <span class="toc-text"> Advanced branching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rewriting-history-and-disaster-recovery"><span class="toc-number">2.4.</span> <span class="toc-text"> Rewriting history and disaster recovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#part-3-advanced-git"><span class="toc-number">3.</span> <span class="toc-text"> Part 3 Advanced Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#personalizing-git"><span class="toc-number">3.1.</span> <span class="toc-text"> Personalizing Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vendoring-dependencies-as-submodules"><span class="toc-number">3.2.</span> <span class="toc-text"> Vendoring dependencies as submodules</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#working-with-subversion"><span class="toc-number">3.3.</span> <span class="toc-text"> Working with Subversion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-best-practices"><span class="toc-number">4.</span> <span class="toc-text"> Git best practices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#useful-figures"><span class="toc-number">5.</span> <span class="toc-text"> Useful Figures</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/28/git-notes/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/28/git-notes/&text=一点git"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/28/git-notes/&is_video=false&description=一点git"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=一点git&body=Check out this article: http://conglang.github.io/2016/04/28/git-notes/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/28/git-notes/&title=一点git"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/28/git-notes/&name=一点git&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

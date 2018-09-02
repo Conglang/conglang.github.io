@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Pedro Domingos所写的关于Machine Learning中的black art的论文，总结了12点要注意避免的陷阱、重点关注的问题和一些常见问题的解答。有总结性质，但并不适合初学者阅读。不过可以对Machine Learning的混沌属性有一些了解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Few Useful Things to Know about Machine Learning 笔记">
+<meta property="og:url" content="http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="Pedro Domingos所写的关于Machine Learning中的black art的论文，总结了12点要注意避免的陷阱、重点关注的问题和一些常见问题的解答。有总结性质，但并不适合初学者阅读。不过可以对Machine Learning的混沌属性有一些了解。">
+<meta property="og:image" content="http://conglang.github.io/img/note_aftml_bias_variance_in_dart_throwing.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/note_aftml_different_frontiers_with_similar_predictions.jpg">
+<meta property="og:updated_time" content="2018-07-03T15:52:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A Few Useful Things to Know about Machine Learning 笔记">
+<meta name="twitter:description" content="Pedro Domingos所写的关于Machine Learning中的black art的论文，总结了12点要注意避免的陷阱、重点关注的问题和一些常见问题的解答。有总结性质，但并不适合初学者阅读。不过可以对Machine Learning的混沌属性有一些了解。">
+<meta name="twitter:image" content="http://conglang.github.io/img/note_aftml_bias_variance_in_dart_throwing.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>A Few Useful Things to Know about Machine Learning 笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/04/17/note-programming-collective-intelligence/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/04/03/note-the-discipline-of-machine-learning/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&text=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&is_video=false&description=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=A Few Useful Things to Know about Machine Learning 笔记&body=Check out this article: http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&name=A Few Useful Things to Know about Machine Learning 笔记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#learning-representation-evaluation-optimization"><span class="toc-number">2.</span> <span class="toc-text"> Learning = Representation + Evaluation + Optimization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#its-generalization-that-counts"><span class="toc-number">3.</span> <span class="toc-text"> It’s Generalization that Counts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-alone-is-not-enough"><span class="toc-number">4.</span> <span class="toc-text"> Data Alone is not Enough</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#overfitting-has-many-faces"><span class="toc-number">5.</span> <span class="toc-text"> Overfitting Has Many Faces</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#intuition-fails-in-high-dimensions"><span class="toc-number">6.</span> <span class="toc-text"> Intuition Fails in High Dimensions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#theoretical-guarantees-are-not-what-they-seem"><span class="toc-number">7.</span> <span class="toc-text"> Theoretical Guarantees Are Not What They Seem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#feature-engineering-is-the-key"><span class="toc-number">8.</span> <span class="toc-text"> Feature Engineering is the Key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#more-data-beats-a-cleverer-algorithm"><span class="toc-number">9.</span> <span class="toc-text"> More Data Beats a Cleverer Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#learn-many-models-not-just-one"><span class="toc-number">10.</span> <span class="toc-text"> Learn Many Models, Not Just One</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#simplicity-does-not-imply-accuracy"><span class="toc-number">10.1.</span> <span class="toc-text"> Simplicity Does Not Imply Accuracy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#representable-does-not-imply-learnable"><span class="toc-number">10.2.</span> <span class="toc-text"> Representable Does Not Imply Learnable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#correlation-does-not-imply-causation"><span class="toc-number">10.3.</span> <span class="toc-text"> Correlation Does Not Imply Causation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#conclusion"><span class="toc-number">10.4.</span> <span class="toc-text"> Conclusion</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        A Few Useful Things to Know about Machine Learning 笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-04-04T13:49:17.000Z" itemprop="datePublished">2016-04-04</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Essay/">Essay</a>, <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Pedro Domingos所写的关于Machine Learning中的black art的<a href="http://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf" target="_blank" rel="external">论文</a>，总结了12点要注意避免的陷阱、重点关注的问题和一些常见问题的解答。</p>
+<h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h2>
+<p>Machine learning systems automatically learn programs from data. 被广泛应用在Web search, spam filters, recommender systems, ad placement, credit scoring, fraud detection, stock trading, drug design等许多领域。</p>
+<p>本论文以classification为例，但在machine learning各领域都是通用的。</p>
+<p>A <em>Classifier</em> is a system that inputs (typically) a vector of discrete and/or continuous <em>feature values</em> and outputs a single discrete value, the <em>class</em>.<br>
+例如：<br>
+A spam filter classifies email messages into “spam” or “not spam”, and its input may be a Boolean vector <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mo>(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>x</mi><mi>j</mi></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>d</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">x=(x_1, ..., x_j, \ldots , x_d)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="minner">…</span><span class="mpunct">,</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">d</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x_j = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.9305479999999999em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span> if the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span>th word in the dictionary appears in the email and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x_j=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.9305479999999999em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mord mathrm">0</span></span></span></span> other wise.<br>
+A <em>learner</em> inputs a <em>training set</em> of <em>examples</em> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">(x_i, y_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>=</mo><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>x</mi><mi>i</mi><mo separator="true">,</mo><mi>d</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">x_i = (x_i, 1, \ldots , xi,d )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">=</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="minner">…</span><span class="mpunct">,</span><span class="mord mathit">x</span><span class="mord mathit">i</span><span class="mpunct">,</span><span class="mord mathit">d</span><span class="mclose">)</span></span></span></span> is an observed input and <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">y_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> is the corresponding output, and outputs a classifier. The test of the learner is whether this classifier produces the correct output <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>y</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">y_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> for future examples <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">x_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">t</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>.</p>
+<h2 id="learning-representation-evaluation-optimization"><a class="markdownIt-Anchor" href="#learning-representation-evaluation-optimization"></a> Learning = Representation + Evaluation + Optimization</h2>
+<p>这许多算法都由这三个元素组成：</p>
+<ul>
+<li>Representation.<br>
+Choosing a representation for a learner is tantamount to choosing the set of classifiers that it can possibly learn. If a classifier is not in the hypothesis space, it cannot be learned.</li>
+<li>Evaluation.<br>
+An evaluation function (also called objective function or scoring function) is needed to distinguish good classifiers from bad ones.</li>
+<li>Optimization.<br>
+A method to search among the classifiers in the language for the highest-scoring one. The choice of optimization technique is key to the efficiency of the learner, and also helps determine the classifier produced if the evaluation function has more than one optimum.</li>
+</ul>
+<p><strong>The three components of learning algorithms</strong></p>
+<ul>
+<li>Representation</li>
+</ul>
+<blockquote>
+<p>Instances<br>
+    K-nearest neighbor<br>
+    Support vector machines<br>
+Hyperplanes<br>
+    Naive Bayes<br>
+    Logistic regression<br>
+Decision trees<br>
+Sets of rules<br>
+    Propositional rules<br>
+    Logic programs<br>
+Neural networks<br>
+Graphical models<br>
+    Bayesian networks<br>
+    Conditional random fields</p>
+</blockquote>
+<ul>
+<li>Evaluation</li>
+</ul>
+<blockquote>
+<p>Accuracy/Error rate<br>
+Precision and recall<br>
+Squared error<br>
+Likelihood<br>
+Posterior probability<br>
+Information gain<br>
+K-L divergence<br>
+Cost/Utility<br>
+Margin</p>
+</blockquote>
+<ul>
+<li>Optimization</li>
+</ul>
+<blockquote>
+<p>Combinatorial optimization<br>
+    Greedy search<br>
+    Beam search<br>
+    Branch-and-bound<br>
+Continuous optimization<br>
+    Unconstrained<br>
+        Gradient descent<br>
+        Conjugate gradient<br>
+        Quasi-Newton methods<br>
+    Constrained<br>
+        Linear programming<br>
+        Quadratic programming</p>
+</blockquote>
+<p>它们之间的组合还是有倾向性的。</p>
+<h2 id="its-generalization-that-counts"><a class="markdownIt-Anchor" href="#its-generalization-that-counts"></a> It’s Generalization that Counts</h2>
+<p>Machine Learning的本质目的就是generalize beyond the examples in the training set。不要用test data去污染调试中的classifier。</p>
+<p>留出test data可能导致训练数据不够，此时可以用cross-validation的方法来缓和：把training data随机分成(比如)10组，每次留出1组作为test data，用剩下9组training。最后把各项参数的结果平均一下。</p>
+<h2 id="data-alone-is-not-enough"><a class="markdownIt-Anchor" href="#data-alone-is-not-enough"></a> Data Alone is not Enough</h2>
+<p>归纳法和演绎法一样是知识杠杆，从很少的输入知识得到很多的输出知识，并且需要的输入知识更少。</p>
+<p>选择Representation的时候就要想，哪种知识用这种方式表达更熨帖。<br>
+For example, if we have a lot of knowledge about what makes examples similar in our domain, instance-based methods may be a good choice. If we have knowldege about probabilistic dependencies, graphical models are a good fit. And if we have knowledge about what kinds of preconditions are required by each class, “IF … THEN …” rules may be the best option.<br>
+The most useful learners in this regard are those that don’t just have assumptions hard-wired into them, but allow us to state them explicitly, vary them widely, and incorporate them automatically into the learning.</p>
+<h2 id="overfitting-has-many-faces"><a class="markdownIt-Anchor" href="#overfitting-has-many-faces"></a> Overfitting Has Many Faces</h2>
+<p>有时overfitting表现的不是很明显，可以用将generalization error分解成bias and variance的方法测试出来。<br>
+Bias is a learner’s tendency to consistently learn the same wrong thing.<br>
+Variance is the tendency to learn random things irrespective of the real signal.<br>
+用扔飞镖做比喻是这样：<br>
+<img src="/img/note_aftml_bias_variance_in_dart_throwing.jpg" alt="Bias and variance in dart-throwing"></p>
+<p>例子：<br>
+A linear learner has high bias, because when the frontier between two classes is not a hyperplane the learner is unable to induce it.<br>
+Decision trees don’t have this problem because they can represent any Bollean function, but on the other hand they can suffer from high variance: decision trees learned on different training sets generated by the same phenomenon are often very different, when in fact they should be the same.<br>
+Beam search has lower bias than greedy search, but higher variance, because it tries more hypotheses.</p>
+<p>对抗Overfitting的一些方法：</p>
+<ul>
+<li>Cross-validation.</li>
+<li>Adding a regularization term to the evaluation function: penalize classifiers with more structure, thereby favoring smaller ones with less room to overfit.</li>
+<li>Perform a statistical significance test like chi-square before adding new structure, to decide whether the distribution of the class really is different with and without this structure.</li>
+</ul>
+<h2 id="intuition-fails-in-high-dimensions"><a class="markdownIt-Anchor" href="#intuition-fails-in-high-dimensions"></a> Intuition Fails in High Dimensions</h2>
+<p>除了overfitting，Machine Learning领域最大的问题就是the curse of dimensionality了。</p>
+<ul>
+<li>Generalizing correctly becomes exponentially harder as the dimensionality (number of features) of the examples grows, because a fixed-size training set covers a dwindling fraction of the input space.</li>
+<li>More seriously, the similarity-based reasoning that machine learning algorithms depend on (explicitly or implicitly) breaks down in high dimensions.</li>
+<li>我们在三维空间培养出的直觉在高维空间时往往是错的。</li>
+</ul>
+<h2 id="theoretical-guarantees-are-not-what-they-seem"><a class="markdownIt-Anchor" href="#theoretical-guarantees-are-not-what-they-seem"></a> Theoretical Guarantees Are Not What They Seem</h2>
+<p>The main role of theoretical guarantees in machine learning is not as a criterion for practical decisions, but as a source of understanding and driving force for algorithm design.</p>
+<h2 id="feature-engineering-is-the-key"><a class="markdownIt-Anchor" href="#feature-engineering-is-the-key"></a> Feature Engineering is the Key</h2>
+<p>从原始数据中选择feature是Machine Learning项目中花费最多精力的地方，不过也是很有趣的，除技术外还需要intuituion, creativity和black art。<br>
+收集数据、整合、清理和预处理很花时间，调试feature也消耗很多精力，算法实际跑的时间其实很短。<br>
+Feature engineering is domain-specific, while learners can be largely general-purpose.</p>
+<h2 id="more-data-beats-a-cleverer-algorithm"><a class="markdownIt-Anchor" href="#more-data-beats-a-cleverer-algorithm"></a> More Data Beats a Cleverer Algorithm</h2>
+<p>After all, machine learning is all about letting data do the heavy lifting.<br>
+Machine Learning中缺的东西：time, memory, training data。过去最缺data，现在最缺time，数据太多，没时间处理。所以我们事实上还是倾向于设计聪明简单的算法。<br>
+这些不同的聪明算法往往结果也很相似。All learners essentially work by grouping nearby examples into the same class; the key difference is in the meaning of “nearby”.<br>
+<img src="/img/note_aftml_different_frontiers_with_similar_predictions.jpg" alt="Very different frontiers can yield similar class predictions.(+ and - are training examples of two classes.)"><br>
+所以先试试那些简单的算法，比如Naive Bayes在Logistic Regression之前，K-Nearest neighbor在Support Vector Machines之前。</p>
+<p>Learners可以分成两大类：</p>
+<ul>
+<li>Fixed-size learners whose representation has a fixed size, like linear classifiers.</li>
+<li>Variable-size learners whose representation can grow with the data, like decision trees.</li>
+</ul>
+<p>要把Machine Learning techniques和Domain-specific knowledge结合起来，这需要人的智慧。</p>
+<h2 id="learn-many-models-not-just-one"><a class="markdownIt-Anchor" href="#learn-many-models-not-just-one"></a> Learn Many Models, Not Just One</h2>
+<p>同一个问题用多种learner学习，然后整合在一起，效果会好很多。并且目前的趋势是，这个集合(Model ensembles)越大效果越好。<br>
+一些技术：</p>
+<ul>
+<li>bagging. Simplest, generate random variations of the training set by resampling, learn a classifier on each, and combine the results by voting. This works because it greatly reduces variance while only slightly increasing bias.</li>
+<li>boosting. Training examples have weights, and these are varied so that each new classifier focuses on the examples the previous ones tended to get wrong.</li>
+<li>stacking. The outputs of individual classifiers become the inputs of a “higher-level” learner that figures out how best to combine them.</li>
+</ul>
+<p>Model Ensembles和Bayesian Model Averaging(BMA)不应被混淆。<br>
+BMA is the theoretically optimal approach to learning. In BMA, predictions on new examples are made by averaging the individual predictions of all classifiers in the hypothesis space, weighted by how well the calssifiers explain the training data and how much we believe in them a priori.<br>
+它们的不同之处：<br>
+Ensembles change the hypothesis space, and can take a wide variety of forms.<br>
+BMA assigns weights to the hypotheses in the original space according to a fixed formula.</p>
+<h3 id="simplicity-does-not-imply-accuracy"><a class="markdownIt-Anchor" href="#simplicity-does-not-imply-accuracy"></a> Simplicity Does Not Imply Accuracy</h3>
+<p>Simpler hypotheses should be preferred because simplicity is a virtue in its own right, not because of a hypothetical connection with accuracy.<br>
+所以parameter的数量，hypotheses的复杂度，hypothesis space的大小并不能预示模型的准确性如何。</p>
+<h3 id="representable-does-not-imply-learnable"><a class="markdownIt-Anchor" href="#representable-does-not-imply-learnable"></a> Representable Does Not Imply Learnable</h3>
+<p>某learner能表示某function并不代表这个function可以用此法learn到。所以还是要选择合适的learner。</p>
+<h3 id="correlation-does-not-imply-causation"><a class="markdownIt-Anchor" href="#correlation-does-not-imply-causation"></a> Correlation Does Not Imply Causation</h3>
+<p>相关性不代表有因果关系，GRE里常常强调的啦。<br>
+之前提到的learner基本上都只能说明相关性而已。有相关性只暗示了也许有因果关系，值得继续调查。<br>
+Machine Learning时基本只有观察数据observational data，没有实验数据experimental data，如果能拿到实验数据就尽量拿到。</p>
+<h3 id="conclusion"><a class="markdownIt-Anchor" href="#conclusion"></a> Conclusion</h3>
+<p>可以继续学习The Master Algorithm这本书，对Machine Learning的非技术性介绍。<br>
+一门在线课程：<a href="https://www.coursera.org/course/machlearning" target="_blank" rel="external">https://www.coursera.org/course/machlearning</a><br>
+可以找到很多相关视频：<a href="http://videolectures.net" target="_blank" rel="external">http://videolectures.net</a><br>
+一个常用的Machine Learning Toolkit是Weka。</p>
+<p>Happy learning!</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#learning-representation-evaluation-optimization"><span class="toc-number">2.</span> <span class="toc-text"> Learning = Representation + Evaluation + Optimization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#its-generalization-that-counts"><span class="toc-number">3.</span> <span class="toc-text"> It’s Generalization that Counts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-alone-is-not-enough"><span class="toc-number">4.</span> <span class="toc-text"> Data Alone is not Enough</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#overfitting-has-many-faces"><span class="toc-number">5.</span> <span class="toc-text"> Overfitting Has Many Faces</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#intuition-fails-in-high-dimensions"><span class="toc-number">6.</span> <span class="toc-text"> Intuition Fails in High Dimensions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#theoretical-guarantees-are-not-what-they-seem"><span class="toc-number">7.</span> <span class="toc-text"> Theoretical Guarantees Are Not What They Seem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#feature-engineering-is-the-key"><span class="toc-number">8.</span> <span class="toc-text"> Feature Engineering is the Key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#more-data-beats-a-cleverer-algorithm"><span class="toc-number">9.</span> <span class="toc-text"> More Data Beats a Cleverer Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#learn-many-models-not-just-one"><span class="toc-number">10.</span> <span class="toc-text"> Learn Many Models, Not Just One</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#simplicity-does-not-imply-accuracy"><span class="toc-number">10.1.</span> <span class="toc-text"> Simplicity Does Not Imply Accuracy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#representable-does-not-imply-learnable"><span class="toc-number">10.2.</span> <span class="toc-text"> Representable Does Not Imply Learnable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#correlation-does-not-imply-causation"><span class="toc-number">10.3.</span> <span class="toc-text"> Correlation Does Not Imply Causation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#conclusion"><span class="toc-number">10.4.</span> <span class="toc-text"> Conclusion</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&text=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&is_video=false&description=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=A Few Useful Things to Know about Machine Learning 笔记&body=Check out this article: http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&title=A Few Useful Things to Know about Machine Learning 笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/04/04/note-a-few-useful-things-to-know-about-machine-learning/&name=A Few Useful Things to Know about Machine Learning 笔记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

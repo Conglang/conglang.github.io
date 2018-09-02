@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="编辑中。STL标准库之Concurrency。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL Concurrency">
+<meta property="og:url" content="http://conglang.github.io/2017/01/31/stl-concurrency/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="编辑中。STL标准库之Concurrency。">
+<meta property="og:image" content="http://conglang.github.io/img/concurrency_layers_of_thread_interfaces.png">
+<meta property="og:updated_time" content="2018-07-03T14:31:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STL Concurrency">
+<meta name="twitter:description" content="编辑中。STL标准库之Concurrency。">
+<meta name="twitter:image" content="http://conglang.github.io/img/concurrency_layers_of_thread_interfaces.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>STL Concurrency</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/02/12/tower-of-hanoi-cpp-implementation/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/01/30/custom-smart-pointer-implementation/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2017/01/31/stl-concurrency/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2017/01/31/stl-concurrency/&text=STL Concurrency"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2017/01/31/stl-concurrency/&is_video=false&description=STL Concurrency"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Concurrency&body=Check out this article: http://conglang.github.io/2017/01/31/stl-concurrency/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2017/01/31/stl-concurrency/&name=STL Concurrency&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-high-level-interface-async-and-futures"><span class="toc-number">1.</span> <span class="toc-text"> The High-Level Interface: async() and Futures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-first-example-using-async-and-futures"><span class="toc-number">1.1.</span> <span class="toc-text"> A First Example Using async() and Futures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#an-example-of-waiting-for-two-tasks"><span class="toc-number">1.2.</span> <span class="toc-text"> An Example of Waiting for Two Tasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shared-futures"><span class="toc-number">1.3.</span> <span class="toc-text"> Shared Futures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-low-level-interface-threads-and-promises"><span class="toc-number">2.</span> <span class="toc-text"> The Low-Level Interface: Threads and Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#class-stdthread"><span class="toc-number">2.1.</span> <span class="toc-text"> Class std::thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#promises"><span class="toc-number">2.2.</span> <span class="toc-text"> Promises</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-packaged_task"><span class="toc-number">2.3.</span> <span class="toc-text"> Class packaged_task<></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#starting-a-thread-in-detail"><span class="toc-number">3.</span> <span class="toc-text"> Starting a Thread in Detail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#async-in-detail"><span class="toc-number">3.1.</span> <span class="toc-text"> async() in Detail</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronizing-threads-or-the-problem-of-concurrency"><span class="toc-number">4.</span> <span class="toc-text"> Synchronizing Threads, or the Problem of Concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mutexes-and-locks"><span class="toc-number">5.</span> <span class="toc-text"> Mutexes and Locks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-mutexes-and-locks"><span class="toc-number">5.1.</span> <span class="toc-text"> Using Mutexes and Locks</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一个简单例子"><span class="toc-number">5.1.1.</span> <span class="toc-text"> 一个简单例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#recursive-locks"><span class="toc-number">5.1.2.</span> <span class="toc-text"> Recursive Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tried-and-timed-locks"><span class="toc-number">5.1.3.</span> <span class="toc-text"> Tried and Timed Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dealing-with-multiple-locks"><span class="toc-number">5.1.4.</span> <span class="toc-text"> Dealing with Multiple Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#class-unique_lock"><span class="toc-number">5.1.5.</span> <span class="toc-text"> Class unique_lock</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STL Concurrency
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-01-31T15:25:48.000Z" itemprop="datePublished">2017-01-31</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Concurrency/">Concurrency</a>, <a class="tag-link" href="/tags/STL/">STL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Further Reading可看&quot;C++ Concurrency in Action&quot;。</p>
+<h2 id="the-high-level-interface-async-and-futures"><a class="markdownIt-Anchor" href="#the-high-level-interface-async-and-futures"></a> The High-Level Interface: async() and Futures</h2>
+<ul>
+<li><code>async()</code> provides an interface to let a piece of functionality, a callable object run in the background as a separate thread, if possible.</li>
+<li>class <code>future&lt;&gt;</code> allows you to wait for the thread to be finished and provides access to its outcome: return value or exception, if any.</li>
+</ul>
+<h3 id="a-first-example-using-async-and-futures"><a class="markdownIt-Anchor" href="#a-first-example-using-async-and-futures"></a> A First Example Using async() and Futures</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">// start func1() asynchronously (now or later or never)</span></span><br><span class="line"><span class="built_in">std</span>::future&lt;<span class="keyword">int</span>&gt; result1(<span class="built_in">std</span>::async(func1));</span><br><span class="line"><span class="keyword">int</span> result2 = func2();	<span class="comment">// call func2() synchronously (here and now)</span></span><br><span class="line"><span class="comment">// print result (wait for func1() to finish and add its result to result2)</span></span><br><span class="line"><span class="keyword">int</span> result = result1.get() + result2;</span><br></pre></td></tr></table></figure>
+<p>如果支持，async()中的任务会立刻执行；如果环境不支持，默认情况下async()中定义的任务会被搁置，直到直接调用需要结果时才执行，也就是调用get()的时候。<br>
+尽量让调用async()和调用get()之间的距离更远。Call early and return late.<br>
+为一个future&lt;&gt;只能调用一次get()，之后这个future就处于不可用状态了，可用valid()查看。<br>
+有launch policy。</p>
+<h3 id="an-example-of-waiting-for-two-tasks"><a class="markdownIt-Anchor" href="#an-example-of-waiting-for-two-tasks"></a> An Example of Waiting for Two Tasks</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;random&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">char</span> c)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// random-number generator (use c as seed to get different sequences)</span></span><br><span class="line">	<span class="function">default_random_engine <span class="title">dre</span><span class="params">(c)</span></span>;</span><br><span class="line">	uniform_int_distribution&lt;<span class="keyword">int</span>&gt; id(<span class="number">10</span>, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// loop to print character after a random period of time</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		this_thread::sleep_for(chrono::milliseconds(id(dre)));</span><br><span class="line">		<span class="built_in">cout</span>.put(c).flush();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"starting 2 operations asynchronously"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// start two loops in the background printing characters . or +</span></span><br><span class="line">	<span class="keyword">auto</span> f1 = async([] &#123;doSomething(<span class="string">'.'</span>); &#125;);</span><br><span class="line">	<span class="keyword">auto</span> f2 = async([] &#123;doSomething(<span class="string">'+'</span>); &#125;);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// if at least one of the background tasks is running</span></span><br><span class="line">	<span class="keyword">if</span> (f1.wait_for(chrono::seconds(<span class="number">0</span>)) != future_status::deferred ||</span><br><span class="line">		f2.wait_for(chrono::seconds(<span class="number">0</span>)) != future_status::deferred)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// poll until at least one of the loops finished</span></span><br><span class="line">		<span class="keyword">while</span> (f1.wait_for(chrono::seconds(<span class="number">0</span>)) != future_status::ready &amp;&amp;</span><br><span class="line">			f2.wait_for(chrono::seconds(<span class="number">0</span>)) != future_status::ready)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// ...</span></span><br><span class="line">			this_thread::yield();	<span class="comment">// hint to reschedule to the next thread</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span>.put(<span class="string">'\n'</span>).flush();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// wait for all loops to be finished and process any exception</span></span><br><span class="line">	<span class="comment">// or none of them was started</span></span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		f1.get();</span><br><span class="line">		f2.get();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (<span class="keyword">const</span> exception&amp; e) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\nEXCEPTION: "</span> &lt;&lt; e.what() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\ndone"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向async()里传参不要是外部变量的引用，因为可能此thread还没执行完，该变量的生命周期就结束了。所以，永远以值传参，不可用引用。</p>
+<h3 id="shared-futures"><a class="markdownIt-Anchor" href="#shared-futures"></a> Shared Futures</h3>
+<p><code>std::shared_future</code>允许多次调用get()。<br>
+Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdexcept&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">queryNumber</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// read number</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"read number: "</span>;</span><br><span class="line">	<span class="keyword">int</span> num;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// throw exception if none</span></span><br><span class="line">	<span class="keyword">if</span> (!<span class="built_in">cin</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">throw</span> runtime_error(<span class="string">"no number read"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">char</span> c, shared_future&lt;<span class="keyword">int</span>&gt; f)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="comment">// wait for number of characters to print</span></span><br><span class="line">		<span class="keyword">int</span> num = f.get();	<span class="comment">// get result of queryNumber()</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			this_thread::sleep_for(chrono::milliseconds(<span class="number">100</span>));</span><br><span class="line">			<span class="built_in">cout</span>.put(c).flush();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (<span class="keyword">const</span> exception&amp; e) &#123;</span><br><span class="line">		<span class="built_in">cerr</span> &lt;&lt; <span class="string">"EXCEPTION in thread "</span> &lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">": "</span> &lt;&lt; e.what() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="comment">// start one thread to query a number</span></span><br><span class="line">		shared_future&lt;<span class="keyword">int</span>&gt; f = async(queryNumber());</span><br><span class="line"></span><br><span class="line">		<span class="comment">// start three threads each processing this number in a loop</span></span><br><span class="line">		<span class="keyword">auto</span> f1 = async(launch::async, doSomething, <span class="string">'.'</span>, f);</span><br><span class="line">		<span class="keyword">auto</span> f2 = async(launch::async, doSomething, <span class="string">'+'</span>, f);</span><br><span class="line">		<span class="keyword">auto</span> f3 = async(launch::async, doSomething, <span class="string">'*'</span>, f);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// wait for all loops to be finished</span></span><br><span class="line">		f1.get();</span><br><span class="line">		f2.get();</span><br><span class="line">		f3.get();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (<span class="keyword">const</span> exception&amp; e) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\nEXCEPTION: "</span> &lt;&lt; e.what() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"\ndone"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="the-low-level-interface-threads-and-promises"><a class="markdownIt-Anchor" href="#the-low-level-interface-threads-and-promises"></a> The Low-Level Interface: Threads and Promises</h2>
+<h3 id="class-stdthread"><a class="markdownIt-Anchor" href="#class-stdthread"></a> Class std::thread</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="function">thread <span class="title">t</span><span class="params">(doSomething)</span></span>;	<span class="comment">// start doSomething() in the background</span></span><br><span class="line">t.join();	<span class="comment">// wait for t to finish (block until doSomething() ends)</span></span><br></pre></td></tr></table></figure>
+<p>与async()的不同之处是：</p>
+<ul>
+<li>thread不支持launch policy。总是试图立即启动，不支持的话就抛出std::system_error，code是resource_unavailable_try_again。</li>
+<li>没有取得thread运行结果的接口，只能拿到threadID。</li>
+<li>如果thread有异常并没在内部catch的话，程序立刻调用std::terminate()进行abort。如果想把exception传到外部要用exception_ptrs。</li>
+<li>必须选择是等待thread执行结束(join)，还是让它背后执行不管了(detach)。如果不在thread生命期完结前指定，就abort给你看。</li>
+<li>如果选择让thread背后执行，main()结束的时候，所有thread也都骤然终结。</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;random&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">int</span> num, <span class="keyword">char</span> c)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="comment">// random-number generator (use c as seed to get different sequences)</span></span><br><span class="line">		<span class="function">default_random_engine <span class="title">dre</span><span class="params">(<span class="number">42</span> * c)</span></span>;</span><br><span class="line">		uniform_int_distribution&lt;<span class="keyword">int</span>&gt; id(<span class="number">10</span>, <span class="number">1000</span>);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num; ++i) &#123;</span><br><span class="line">			this_thread::sleep_for(chrono::milliseconds(id(dre)));</span><br><span class="line">			<span class="built_in">cout</span>.put(c).flush();</span><br><span class="line">			<span class="comment">// ...</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// make sure no exception leaves the thread and terminates the program</span></span><br><span class="line">	<span class="keyword">catch</span> (<span class="keyword">const</span> exception&amp; e) &#123;</span><br><span class="line">		<span class="built_in">cerr</span> &lt;&lt; <span class="string">"THREAD-EXCEPTION (thread "</span></span><br><span class="line">			&lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">"): "</span> &lt;&lt; e.what() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (...) &#123;</span><br><span class="line">		<span class="built_in">cerr</span> &lt;&lt; <span class="string">"THREAD-EXCEPTION (thread "</span></span><br><span class="line">			&lt;&lt; this_thread::get_id() &lt;&lt; <span class="string">")"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="function">thread <span class="title">t1</span><span class="params">(doSomething, <span class="number">5</span>, <span class="string">'.'</span>)</span></span>; <span class="comment">// print five dots in separate thread</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"- started fg thread "</span> &lt;&lt; t1.get_id() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="comment">// print other characters in other background threads</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; ++i) &#123;</span><br><span class="line">			<span class="function">thread <span class="title">t</span><span class="params">(doSomething, <span class="number">10</span>, <span class="string">'a'</span> + i)</span></span>; <span class="comment">// print 10 chars in separate thread</span></span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">"- detach started bg thread "</span> &lt;&lt; t.get_id() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">			t.detach(); <span class="comment">// detach thread into the background</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">cin</span>.get(); <span class="comment">// wait for any input (return)</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"- join fg thread "</span> &lt;&lt; t1.get_id() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		t1.join(); <span class="comment">// wait for t1 to finish</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (<span class="keyword">const</span> exception&amp; e) &#123;</span><br><span class="line">		<span class="built_in">cerr</span> &lt;&lt; <span class="string">"EXCEPTION: "</span> &lt;&lt; e.what() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最好不要使用detached threads。<br>
+对于thread ID唯一合法的操作就是比较和输出。</p>
+<h3 id="promises"><a class="markdownIt-Anchor" href="#promises"></a> Promises</h3>
+<p>std::promise对应future物体，可以暂时存储一个shared state。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;thread&gt;</span><br><span class="line">#include &lt;future&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;exception&gt;</span><br><span class="line">#include &lt;stdexcept&gt;</span><br><span class="line">#include &lt;functional&gt;</span><br><span class="line">#include &lt;utility&gt;</span><br><span class="line">void doSomething(std::promise&lt;std::string&gt;&amp; p)</span><br><span class="line">&#123;</span><br><span class="line">	try &#123;</span><br><span class="line">		// read character and throw exceptiopn if 'x'</span><br><span class="line">		std::cout &lt;&lt; "read char ('x' for exception): ";</span><br><span class="line">		char c = std::cin.get();</span><br><span class="line">		if (c == 'x') &#123;</span><br><span class="line">			throw std::runtime_error(std::string("char ") + c + " read");</span><br><span class="line">		&#125;</span><br><span class="line">		// ...</span><br><span class="line">			std::string s = std::string("char ") + c + " processed";</span><br><span class="line">		p.set_value(std::move(s)); // store result</span><br><span class="line">	&#125;</span><br><span class="line">	catch (...) &#123;</span><br><span class="line">		p.set_exception(std::current_exception()); // store exception</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	try &#123;</span><br><span class="line">		// start thread using a promise to store the outcome</span><br><span class="line">		std::promise&lt;std::string&gt; p;</span><br><span class="line">		std::thread t(doSomething, std::ref(p));</span><br><span class="line">		t.detach();</span><br><span class="line">		...</span><br><span class="line">			// create a future to process the outcome</span><br><span class="line">			std::future&lt;std::string&gt; f(p.get_future());</span><br><span class="line">		// process the outcome</span><br><span class="line">		std::cout &lt;&lt; "result: " &lt;&lt; f.get() &lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">	catch (const std::exception&amp; e) &#123;</span><br><span class="line">		std::cerr &lt;&lt; "EXCEPTION: " &lt;&lt; e.what() &lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">	catch (...) &#123;</span><br><span class="line">		std::cerr &lt;&lt; "EXCEPTION " &lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="class-packaged_task"><a class="markdownIt-Anchor" href="#class-packaged_task"></a> Class packaged_task&lt;&gt;</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">double compute(int x, int y);</span><br><span class="line">std::packaged_task&lt;double(int, int)&gt; task(compute); // create a task</span><br><span class="line">std::future&lt;double&gt; f = task.get_future(); // get its future</span><br><span class="line">// ...</span><br><span class="line">task(7, 5); // start the task (typically in a separate thread)</span><br><span class="line">// ...</span><br><span class="line">double res = f.get(); // wait for its end and process result/exception</span><br></pre></td></tr></table></figure>
+<h2 id="starting-a-thread-in-detail"><a class="markdownIt-Anchor" href="#starting-a-thread-in-detail"></a> Starting a Thread in Detail</h2>
+<p><img src="/img/concurrency_layers_of_thread_interfaces.png" alt="Layers of Thread Interfaces"></p>
+<h3 id="async-in-detail"><a class="markdownIt-Anchor" href="#async-in-detail"></a> async() in Detail</h3>
+<h2 id="synchronizing-threads-or-the-problem-of-concurrency"><a class="markdownIt-Anchor" href="#synchronizing-threads-or-the-problem-of-concurrency"></a> Synchronizing Threads, or the Problem of Concurrency</h2>
+<p>使用multiple threads不可避免要用到concurrent data access，此时容易出问题。<br>
+data race: two conflicting actions in different threads, at least one of which is not atomic, and neither happens before the other.<br>
+除非明确说明，STL并不保证线程安全。</p>
+<p>一个原则：<br>
+<strong>The only safe way to concurrently access the same data by multiple threads without synchronization is when ALL threads only READ the data.</strong></p>
+<p>可能的问题：</p>
+<ul>
+<li>Unsynchronized data access: When two threads running in parallel read and write the same data, it is open which statement comes first.</li>
+<li>Half-written data: When one thread reads data, which another thread modifies, the reading thread might even read the data in the middle of the write of the other thread, thus reading neither the old nor the new value.</li>
+<li>Reordered statements: Statements and operations might be reordered so that the behavior of each single thread is correct, but in combination of all threads, expected behavior is broken. (compiler and/or the hardware might reorder the statements.)</li>
+</ul>
+<p>解决问题的方法：</p>
+<ul>
+<li>Atomicity: This means that read or write access to a variable or to a sequence of statements happens exclusively and without any interruption, so that one thread can’t read intermediate states caused by another thread.</li>
+<li>Order: We need some ways to guarantee the order of specific statements or of a group of specific statements.</li>
+</ul>
+<p>STL中可以用到的feature有：</p>
+<ul>
+<li>futures和promises保证atomicity和order。</li>
+<li>使用mutexes和locks来处理critical sections或protected zones。lock可以保证atomicity。The release of a lock object acquired by one thread is guaranteed to happen before the acquisition of the same lock object by another thread is sucessful.</li>
+<li>用condition variables来allow one thread to wait for some predicate controlled by another thread to become true.有助于解决order问题。</li>
+<li>可使用atomic data types来保证每次access一个变量都是atomic的。</li>
+<li>可以使用low-level interface of atomic data types, which allow experts to relax the order of atomic statements or to use manual barriers for memory access (so-called fences).</li>
+</ul>
+<h2 id="mutexes-and-locks"><a class="markdownIt-Anchor" href="#mutexes-and-locks"></a> Mutexes and Locks</h2>
+<p>mutex, or mutual exclusion, is an object that helps to control the concurrent access of a resource by providing exclusive access to it. To get exclusive access to the resource, the corresponding thread locks the mutex, which<br>
+prevents other threads from locking that mutex until the first thread unlocks the mutex.</p>
+<h3 id="using-mutexes-and-locks"><a class="markdownIt-Anchor" href="#using-mutexes-and-locks"></a> Using Mutexes and Locks</h3>
+<p>防止异常发生时一个锁会永远锁上，采用RAII principle (Resource Acquisition Is Initialization), whereby the constructor acquires a resource so that the destructor, which is always called even when an exception causes the end of the lifetime, releases the resource automatically. 所以STL提供了std::lock_guard。<br>
+单独添加大括号，保证锁能及时解开。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> val;</span><br><span class="line"><span class="built_in">std</span>::mutex valMutex; <span class="comment">// control exclusive access to val</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lg(valMutex); <span class="comment">// lock and automatically unlock</span></span><br><span class="line">	<span class="keyword">if</span> (val &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">		f(val); <span class="comment">// val is positive</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		f(-val); <span class="comment">// pass negated negative val</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125; <span class="comment">// ensure that lock gets released here</span></span><br></pre></td></tr></table></figure>
+<h4 id="一个简单例子"><a class="markdownIt-Anchor" href="#一个简单例子"></a> 一个简单例子</h4>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="built_in">std</span>::mutex printMutex; <span class="comment">// enable synchronized output with print()</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; s)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; l(printMutex);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">char</span> c : s) &#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span>.put(c);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">auto</span> f1 = <span class="built_in">std</span>::async(<span class="built_in">std</span>::launch::async,</span><br><span class="line">		print, <span class="string">"Hello from a first thread"</span>);</span><br><span class="line">	<span class="keyword">auto</span> f2 = <span class="built_in">std</span>::async(<span class="built_in">std</span>::launch::async,</span><br><span class="line">		print, <span class="string">"Hello from a second thread"</span>);</span><br><span class="line">	print(<span class="string">"Hello from the main thread"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="recursive-locks"><a class="markdownIt-Anchor" href="#recursive-locks"></a> Recursive Locks</h4>
+<p>普通的mutex可能会出现这种死锁情况，第一个函数上了这个锁，其所调用的第二个函数又要上这个锁，然后就死锁了，因为只有第一个锁解开后才能重新锁上。此时可用recursive_mutex，允许同一线程内多次上同一个锁，最后一个unlock时就解锁。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> DatabaseAccess</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">std</span>::recursive_mutex dbMutex;</span><br><span class="line">	... <span class="comment">// state of database access</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insertData</span><span class="params">(...)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::recursive_mutex&gt; lg(dbMutex);</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">insertData</span><span class="params">(...)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::recursive_mutex&gt; lg(dbMutex);</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">createTableAndinsertData</span><span class="params">(...)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::recursive_mutex&gt; lg(dbMutex);</span><br><span class="line">		...</span><br><span class="line">			createTable(...); <span class="comment">// OK: no deadlock</span></span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="tried-and-timed-locks"><a class="markdownIt-Anchor" href="#tried-and-timed-locks"></a> Tried and Timed Locks</h4>
+<p>试着锁一下，不行就拉倒。可用try_lock()</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::mutex m;</span><br><span class="line"><span class="comment">// try to acquire a lock and do other stuff while this isn’t possible</span></span><br><span class="line"><span class="keyword">while</span> (m.try_lock() == <span class="literal">false</span>) &#123;</span><br><span class="line">	doSomeOtherStuff();</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lg(m, <span class="built_in">std</span>::adopt_lock);</span><br></pre></td></tr></table></figure>
+<p>可以计时。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::timed_mutex m;</span><br><span class="line"><span class="comment">// try for one second to acquire a lock</span></span><br><span class="line"><span class="keyword">if</span> (m.try_lock_for(<span class="built_in">std</span>::chrono::seconds(<span class="number">1</span>))) &#123;</span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::timed_mutex&gt; lg(m, <span class="built_in">std</span>::adopt_lock);</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	couldNotGetTheLock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="dealing-with-multiple-locks"><a class="markdownIt-Anchor" href="#dealing-with-multiple-locks"></a> Dealing with Multiple Locks</h4>
+<p>一个线程内要上多个锁时。可以用global std::lock()。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::mutex m1;</span><br><span class="line"><span class="built_in">std</span>::mutex m2;</span><br><span class="line">...</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">std</span>::lock(m1, m2); <span class="comment">// lock both mutexes (or none if not possible)</span></span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lockM1(m1, <span class="built_in">std</span>::adopt_lock);</span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lockM2(m2, <span class="built_in">std</span>::adopt_lock);</span><br><span class="line">	...</span><br><span class="line">&#125; <span class="comment">// automatically unlock all mutexes</span></span><br></pre></td></tr></table></figure>
+<p>或者也先try一下。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::mutex m1;</span><br><span class="line"><span class="built_in">std</span>::mutex m2;</span><br><span class="line"><span class="keyword">int</span> idx = <span class="built_in">std</span>::try_lock(m1, m2); <span class="comment">// try to lock both mutexes</span></span><br><span class="line"><span class="keyword">if</span> (idx &lt; <span class="number">0</span>) &#123; <span class="comment">// both locks succeeded</span></span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lockM1(m1, <span class="built_in">std</span>::adopt_lock);</span><br><span class="line">	<span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lockM2(m2, <span class="built_in">std</span>::adopt_lock);</span><br><span class="line">	...</span><br><span class="line">&#125; <span class="comment">// automatically unlock all mutexes</span></span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">// idx has zero-based index of first failed lock</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cerr</span> &lt;&lt; <span class="string">"could not lock mutex m"</span> &lt;&lt; idx + <span class="number">1</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="class-unique_lock"><a class="markdownIt-Anchor" href="#class-unique_lock"></a> Class unique_lock</h4>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-high-level-interface-async-and-futures"><span class="toc-number">1.</span> <span class="toc-text"> The High-Level Interface: async() and Futures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-first-example-using-async-and-futures"><span class="toc-number">1.1.</span> <span class="toc-text"> A First Example Using async() and Futures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#an-example-of-waiting-for-two-tasks"><span class="toc-number">1.2.</span> <span class="toc-text"> An Example of Waiting for Two Tasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shared-futures"><span class="toc-number">1.3.</span> <span class="toc-text"> Shared Futures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-low-level-interface-threads-and-promises"><span class="toc-number">2.</span> <span class="toc-text"> The Low-Level Interface: Threads and Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#class-stdthread"><span class="toc-number">2.1.</span> <span class="toc-text"> Class std::thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#promises"><span class="toc-number">2.2.</span> <span class="toc-text"> Promises</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-packaged_task"><span class="toc-number">2.3.</span> <span class="toc-text"> Class packaged_task<></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#starting-a-thread-in-detail"><span class="toc-number">3.</span> <span class="toc-text"> Starting a Thread in Detail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#async-in-detail"><span class="toc-number">3.1.</span> <span class="toc-text"> async() in Detail</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronizing-threads-or-the-problem-of-concurrency"><span class="toc-number">4.</span> <span class="toc-text"> Synchronizing Threads, or the Problem of Concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mutexes-and-locks"><span class="toc-number">5.</span> <span class="toc-text"> Mutexes and Locks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-mutexes-and-locks"><span class="toc-number">5.1.</span> <span class="toc-text"> Using Mutexes and Locks</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一个简单例子"><span class="toc-number">5.1.1.</span> <span class="toc-text"> 一个简单例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#recursive-locks"><span class="toc-number">5.1.2.</span> <span class="toc-text"> Recursive Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tried-and-timed-locks"><span class="toc-number">5.1.3.</span> <span class="toc-text"> Tried and Timed Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dealing-with-multiple-locks"><span class="toc-number">5.1.4.</span> <span class="toc-text"> Dealing with Multiple Locks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#class-unique_lock"><span class="toc-number">5.1.5.</span> <span class="toc-text"> Class unique_lock</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2017/01/31/stl-concurrency/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2017/01/31/stl-concurrency/&text=STL Concurrency"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2017/01/31/stl-concurrency/&is_video=false&description=STL Concurrency"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Concurrency&body=Check out this article: http://conglang.github.io/2017/01/31/stl-concurrency/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2017/01/31/stl-concurrency/&title=STL Concurrency"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2017/01/31/stl-concurrency/&name=STL Concurrency&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

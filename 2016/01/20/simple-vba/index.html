@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="VBA 简易复习流。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VBA 简易复习">
+<meta property="og:url" content="http://conglang.github.io/2016/01/20/simple-vba/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="VBA 简易复习流。">
+<meta property="og:image" content="http://conglang.github.io/img/vba_most_useful_built_in_functions1.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/vba_most_useful_built_in_functions2.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/vba_most_useful_built_in_functions3.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/vba_built_in_data_types.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/vba_operators.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/vba_logical_operators.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/vba_programming_constructs_for_making_decisions.jpg">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VBA 简易复习">
+<meta name="twitter:description" content="VBA 简易复习流。">
+<meta name="twitter:image" content="http://conglang.github.io/img/vba_most_useful_built_in_functions1.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>VBA 简易复习</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2016/02/01/debug-in-vmware/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/11/26/note-cpp-primer5-4/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/01/20/simple-vba/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/01/20/simple-vba/&text=VBA 简易复习"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/01/20/simple-vba/&is_video=false&description=VBA 简易复习"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VBA 简易复习&body=Check out this article: http://conglang.github.io/2016/01/20/simple-vba/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/01/20/simple-vba/&name=VBA 简易复习&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vba-environment-in-office"><span class="toc-number">1.</span> <span class="toc-text"> VBA Environment in Office</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#office-object-model-help"><span class="toc-number">2.</span> <span class="toc-text"> Office Object Model Help</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vba-language-elements"><span class="toc-number">3.</span> <span class="toc-text"> VBA Language Elements</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sub和function"><span class="toc-number">3.1.</span> <span class="toc-text"> Sub和Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#variables-constants-and-data-types"><span class="toc-number">3.2.</span> <span class="toc-text"> Variables, Constants, and Data Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#statements"><span class="toc-number">3.3.</span> <span class="toc-text"> Statements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arrays"><span class="toc-number">3.4.</span> <span class="toc-text"> Arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flow-control"><span class="toc-number">3.5.</span> <span class="toc-text"> Flow Control</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example"><span class="toc-number">3.6.</span> <span class="toc-text"> Example</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        VBA 简易复习
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2016-01-20T07:37:47.000Z" itemprop="datePublished">2016-01-20</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/VBA/">VBA</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>工作中偶尔要用到VBA，简单学习一下。</p>
+<p>VBA - Visual Basic for Application</p>
+<h2 id="vba-environment-in-office"><a class="markdownIt-Anchor" href="#vba-environment-in-office"></a> VBA Environment in Office</h2>
+<ul>
+<li>宏(Alt+F8)<br>
+可以录了看看Office自己怎么写的。</li>
+<li>Visual Basic Editor(Alt+F11)<br>
+IDE。对象浏览器(F2)、立即窗口(Ctrl+G)。<br>
+Debug常用语句：</li>
+</ul>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">' 代码里</span></span><br><span class="line">MsgBox LoopIndex &amp; vbNewLine &amp; CellCount &amp; vbNewLine &amp; MyVal</span><br><span class="line">MsgBox ActiveSheet.Name &amp; <span class="string">" "</span> &amp; TypeName(ActiveSheet)</span><br><span class="line">Debug.Print LoopIndex, CellCount, MyVal</span><br><span class="line"><span class="comment">' Immidiate Window里</span></span><br><span class="line">Print CellCount</span><br><span class="line">? CellCount</span><br></pre></td></tr></table></figure>
+<h2 id="office-object-model-help"><a class="markdownIt-Anchor" href="#office-object-model-help"></a> Office Object Model Help</h2>
+<p>包括Collections(如Workbooks, Worksheets, Charts, Sheets)和Objects(如Addin, Window, Workbook)。<br>
+Events。</p>
+<ul>
+<li>VBA’s Help System<br>
+F1-&gt;搜索按钮右侧箭头-&gt;开发人员参考<br>
+Object Model Map</li>
+<li>The Object Browser。在Visual Basic Editor里按F2。</li>
+<li>Auto List Members。输入时的自动补全功能。</li>
+</ul>
+<h2 id="vba-language-elements"><a class="markdownIt-Anchor" href="#vba-language-elements"></a> VBA Language Elements</h2>
+<h3 id="sub和function"><a class="markdownIt-Anchor" href="#sub和function"></a> Sub和Function</h3>
+<p>区别是Function过程可以返回一个值给调用的过程。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> ShowMessage()</span><br><span class="line">	MsgBox <span class="string">"That's all folks!"</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"><span class="keyword">Function</span> CubeRoot(number) <span class="keyword">As</span> <span class="built_in">Double</span></span><br><span class="line">	CubeRoot = number ^ (<span class="number">1</span> / <span class="number">3</span>)	<span class="comment">'返回值需与函数同名</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Function</span></span><br><span class="line"><span class="keyword">Sub</span> Test()</span><br><span class="line">	<span class="keyword">Call</span> ShowMessage()</span><br><span class="line">	<span class="keyword">Dim</span> Tmp <span class="keyword">As</span> <span class="built_in">Double</span></span><br><span class="line">	Tmp = CubeRoot(<span class="number">2</span>)</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/vba_most_useful_built_in_functions1.jpg" alt="Image Loading"><br>
+<img src="/img/vba_most_useful_built_in_functions2.jpg" alt="Image Loading"><br>
+<img src="/img/vba_most_useful_built_in_functions3.jpg" alt="VBA's Most Useful Built-In Functions"></p>
+<h3 id="variables-constants-and-data-types"><a class="markdownIt-Anchor" href="#variables-constants-and-data-types"></a> Variables, Constants, and Data Types</h3>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1</span></span><br><span class="line">InterestRate = <span class="number">0.075</span></span><br><span class="line">LoanPayoffAmount = <span class="number">243089</span></span><br><span class="line">DataEntered = <span class="literal">False</span></span><br><span class="line">x = x + <span class="number">1</span></span><br><span class="line">UserName = <span class="string">"John Doe"</span></span><br><span class="line">DateStarted = <span class="meta">#1/20/2016 12:00:00 AM#</span></span><br><span class="line">MyNum = YourNum * <span class="number">1.25</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/vba_built_in_data_types.jpg" alt="VBA's Built-In Data Types"></p>
+<p>应当先声明，再定义。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Dim</span> King <span class="keyword">As</span> <span class="built_in">String</span>, Kong <span class="keyword">As</span> <span class="built_in">Long</span></span><br><span class="line"><span class="keyword">Dim</span> Mouthful <span class="keyword">as</span> <span class="built_in">Byte</span></span><br><span class="line"><span class="keyword">Dim</span> Julian <span class="keyword">As</span> <span class="built_in">Boolean</span></span><br><span class="line"><span class="keyword">Dim</span> Unmarried <span class="keyword">As</span> <span class="built_in">Single</span></span><br><span class="line"><span class="keyword">Dim</span> Trouble <span class="keyword">As</span> <span class="built_in">Double</span></span><br><span class="line"><span class="keyword">Dim</span> WindingRoad <span class="keyword">As</span> <span class="built_in">Long</span></span><br><span class="line"><span class="keyword">Dim</span> Blind <span class="keyword">As</span> <span class="built_in">Date</span></span><br><span class="line"><span class="keyword">Public</span> Nuisance</span><br><span class="line"><span class="keyword">Private</span> FirstClass</span><br><span class="line"><span class="keyword">Static</span> Cling, Electricity</span><br><span class="line"><span class="keyword">Dim</span> BaseballCards <span class="keyword">As</span> <span class="keyword">New</span> Collection</span><br><span class="line"><span class="keyword">Dim</span> DentalFloss <span class="keyword">As</span> <span class="built_in">String</span></span><br></pre></td></tr></table></figure>
+<p>全局变量。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Public</span> CurrentRate <span class="keyword">As</span> <span class="built_in">Long</span>	<span class="comment">'全局变量</span></span><br><span class="line"><span class="keyword">Static</span> Counter <span class="keyword">As</span> <span class="built_in">Integer</span>	<span class="comment">'静态变量</span></span><br><span class="line"><span class="keyword">Const</span> NumQuarters <span class="keyword">As</span> <span class="built_in">Integer</span> = <span class="number">4</span>	<span class="comment">'自定义Const常量</span></span><br></pre></td></tr></table></figure>
+<h3 id="statements"><a class="markdownIt-Anchor" href="#statements"></a> Statements</h3>
+<p><img src="/img/vba_operators.jpg" alt="VBA's Operators"><br>
+<img src="/img/vba_logical_operators.jpg" alt="VBA's Logical Operators"></p>
+<h3 id="arrays"><a class="markdownIt-Anchor" href="#arrays"></a> Arrays</h3>
+<p><strong>Declaring arrays</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Dim MyArray (1 To 100) As Integer	// 100 Integers</span><br><span class="line">Dim MyArray (0 To 100) As Integer	// 101 Integers</span><br><span class="line">Dim MyArray (100) As Integer	// 101 Integers</span><br><span class="line">Option Base 1	// Set 1 to be the default lower index</span><br><span class="line">Dim MyArray (100) As Integer	// 100 Integers</span><br></pre></td></tr></table></figure>
+<p><strong>Multidimensional arrays</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Dim</span> MyArray (<span class="number">1</span> <span class="keyword">To</span> <span class="number">9</span>, <span class="number">1</span> <span class="keyword">To</span> <span class="number">9</span>) <span class="keyword">As</span> <span class="built_in">Integer</span></span><br><span class="line">MyArray (<span class="number">3</span>, <span class="number">4</span>) = <span class="number">125</span></span><br></pre></td></tr></table></figure>
+<p><strong>Dynamic arrays</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Dim MyArray () As Integer</span><br><span class="line">ReDim MyArray (1 To NumElements)	// Destroy old values in array</span><br><span class="line">ReDim Perserve MyArray (1 To NumElements)	// Keep old values in array</span><br></pre></td></tr></table></figure>
+<h3 id="flow-control"><a class="markdownIt-Anchor" href="#flow-control"></a> Flow Control</h3>
+<p><img src="/img/vba_programming_constructs_for_making_decisions.jpg" alt="Programming Constructs for Making Decisions"></p>
+<p><strong>GoTo Statement</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> GoToDemo()</span><br><span class="line">	UserName = InputBox(<span class="string">"Enter Your Name: "</span>)</span><br><span class="line">	<span class="keyword">If</span> UserName &lt;&gt; <span class="string">"Bill Gates"</span> <span class="keyword">Then</span> <span class="keyword">GoTo</span> WrongName</span><br><span class="line">	MsgBox (<span class="string">"Welcome Bill..."</span>)</span><br><span class="line">	<span class="comment">' ...................</span></span><br><span class="line">	<span class="keyword">Exit</span> <span class="keyword">Sub</span></span><br><span class="line">WrongName:</span><br><span class="line">	MsgBox <span class="string">"Sorry. Only Bill Gates can run this."</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><strong>If-Then Structure</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> GreetMe()</span><br><span class="line">	<span class="keyword">Dim</span> Msg <span class="keyword">As</span> <span class="built_in">String</span></span><br><span class="line">	<span class="keyword">If</span> Time &lt; <span class="number">0.5</span> <span class="keyword">Then</span></span><br><span class="line">		Msg = <span class="string">"Morning"</span></span><br><span class="line">	<span class="keyword">ElseIf</span> Time &gt;= <span class="number">0.5</span> <span class="keyword">And</span> Time &lt; <span class="number">0.75</span> <span class="keyword">Then</span></span><br><span class="line">		Msg = <span class="string">"Afternoon"</span></span><br><span class="line">	<span class="keyword">Else</span></span><br><span class="line">		Msg = <span class="string">"Evening"</span></span><br><span class="line">	<span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">	MsgBox <span class="string">"Good "</span> &amp; Msg</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><strong>Select Case Structure</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> ShowDiscount()</span><br><span class="line">	<span class="keyword">Dim</span> Quantity <span class="keyword">As</span> <span class="built_in">Integer</span></span><br><span class="line">	<span class="keyword">Dim</span> Discount <span class="keyword">As</span> <span class="built_in">Double</span></span><br><span class="line">	Quantity = InputBox(<span class="string">"Enter Quantity: "</span>)</span><br><span class="line">	<span class="keyword">Select</span> <span class="keyword">Case</span> Quantity</span><br><span class="line">		<span class="keyword">Case</span> <span class="number">0</span> <span class="keyword">To</span> <span class="number">24</span></span><br><span class="line">			Discount = <span class="number">0.1</span></span><br><span class="line">		<span class="keyword">Case</span> <span class="number">25</span> <span class="keyword">To</span> <span class="number">49</span></span><br><span class="line">			Discount = <span class="number">0.15</span></span><br><span class="line">		<span class="keyword">Case</span> <span class="keyword">Is</span> &gt;= <span class="number">50</span></span><br><span class="line">			Discount = <span class="number">0.2</span></span><br><span class="line">	<span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line">	MsgBox <span class="string">"Discount: "</span> &amp; Discount</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><strong>For-Next Loops</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> ExitForDemo()</span><br><span class="line">	<span class="keyword">Dim</span> MaxVal <span class="keyword">As</span> <span class="built_in">Double</span></span><br><span class="line">	<span class="keyword">Dim</span> Row <span class="keyword">As</span> <span class="built_in">Long</span></span><br><span class="line">	MaxVal = WorksheetFunction.Max(Range(<span class="string">"A:A"</span>))</span><br><span class="line">	<span class="keyword">For</span> Row = <span class="number">1</span> <span class="keyword">To</span> Rows.Count <span class="keyword">Step</span> <span class="number">1</span></span><br><span class="line">		<span class="keyword">If</span> Range(<span class="string">"A1"</span>).Offset(Row<span class="number">-1</span>, <span class="number">0</span>).Value = MaxVal <span class="keyword">Then</span></span><br><span class="line">			Range(<span class="string">"A1"</span>).Offset(Row<span class="number">-1</span>, <span class="number">0</span>).Activate</span><br><span class="line">			MsgBox <span class="string">"Max value is in Row "</span> &amp; Row</span><br><span class="line">			<span class="keyword">Exit</span> <span class="keyword">For</span></span><br><span class="line">		<span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">	<span class="keyword">Next</span> Row	</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><strong>Do-While Loop</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> DoLoopWhileDemo()</span><br><span class="line">	<span class="keyword">Do</span></span><br><span class="line">		ActiveCell.Value = ActiveCell.Value * <span class="number">2</span></span><br><span class="line">		ActiveCell.Offset(<span class="number">1</span>, <span class="number">0</span>).<span class="keyword">Select</span></span><br><span class="line">	<span class="keyword">Loop</span> <span class="keyword">While</span> ActiveCell.Valud &lt;&gt; Empty</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><strong>Do-Until Loop</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> DoLoopUntilDemo()</span><br><span class="line">	<span class="keyword">Do</span></span><br><span class="line">		ActiveCell.Value = ActiveCell.Value * <span class="number">2</span></span><br><span class="line">		ActiveCell.Offset(<span class="number">1</span>, <span class="number">0</span>).<span class="keyword">Select</span></span><br><span class="line">	<span class="keyword">Loop</span> <span class="keyword">Until</span> IsEmpty(ActiveCell.Value)</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p><strong>Looping Through a Collection</strong></p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> ChangeSign()</span><br><span class="line">	<span class="keyword">Dim</span> Cell <span class="keyword">As</span> Range</span><br><span class="line">	<span class="keyword">For</span> <span class="keyword">Each</span> Cell <span class="keyword">In</span> Range(<span class="string">"A1:E50"</span>)</span><br><span class="line">		<span class="keyword">If</span> <span class="keyword">Not</span> Cell.HasFormula <span class="keyword">Then</span></span><br><span class="line">			<span class="keyword">If</span> IsNumeric(Cell.Value) <span class="keyword">Then</span></span><br><span class="line">				Cell.Value = Cell.Value * <span class="number">-1</span></span><br><span class="line">			<span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">		<span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">	<span class="keyword">Next</span> Cell</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> ChangeCharts()</span><br><span class="line">	<span class="keyword">Dim</span> Cht <span class="keyword">As</span> ChartObject</span><br><span class="line">	<span class="keyword">For</span> <span class="keyword">Each</span> Cht <span class="keyword">In</span> Sheets(<span class="string">"Sheet1"</span>).ChartObjects</span><br><span class="line">		Cht.Chart.ChartType = xlLine</span><br><span class="line">	<span class="keyword">Next</span> Cht</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<h3 id="example"><a class="markdownIt-Anchor" href="#example"></a> Example</h3>
+<p>删除 PowerPoint 2010 中的空文本框</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Sub</span> RemoveEmptyTextBoxes()</span><br><span class="line">    <span class="keyword">Dim</span> SlideObj <span class="keyword">As</span> Slide</span><br><span class="line">    <span class="keyword">Dim</span> ShapeObj <span class="keyword">As</span> Shape</span><br><span class="line">    <span class="keyword">Dim</span> ShapeIndex <span class="keyword">As</span> <span class="built_in">Integer</span></span><br><span class="line">    <span class="keyword">For</span> <span class="keyword">Each</span> SlideObj <span class="keyword">In</span> ActivePresentation.Slides</span><br><span class="line">        <span class="keyword">For</span> ShapeIndex = SlideObj.Shapes.Count <span class="keyword">To</span> <span class="number">1</span> <span class="keyword">Step</span> <span class="number">-1</span></span><br><span class="line">            <span class="keyword">Set</span> ShapeObj = SlideObj.Shapes(ShapeIndex)</span><br><span class="line">            <span class="keyword">If</span> ShapeObj.Type = msoTextBox <span class="keyword">Then</span></span><br><span class="line">                <span class="keyword">If</span> Trim(ShapeObj.TextFrame.TextRange.<span class="keyword">Text</span>) = <span class="string">""</span> <span class="keyword">Then</span></span><br><span class="line">                    ShapeObj.Delete</span><br><span class="line">                <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">            <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">        <span class="keyword">Next</span> ShapeIndex</span><br><span class="line">    <span class="keyword">Next</span> SlideObj</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>[1] <a href="https://msdn.microsoft.com/zh-cn/library/ee814735.aspx" target="_blank" rel="external">Office 2010 中的 VBA 入门</a><br>
+[2] Excel VBA Programming For Dummies</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vba-environment-in-office"><span class="toc-number">1.</span> <span class="toc-text"> VBA Environment in Office</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#office-object-model-help"><span class="toc-number">2.</span> <span class="toc-text"> Office Object Model Help</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vba-language-elements"><span class="toc-number">3.</span> <span class="toc-text"> VBA Language Elements</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sub和function"><span class="toc-number">3.1.</span> <span class="toc-text"> Sub和Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#variables-constants-and-data-types"><span class="toc-number">3.2.</span> <span class="toc-text"> Variables, Constants, and Data Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#statements"><span class="toc-number">3.3.</span> <span class="toc-text"> Statements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arrays"><span class="toc-number">3.4.</span> <span class="toc-text"> Arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flow-control"><span class="toc-number">3.5.</span> <span class="toc-text"> Flow Control</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example"><span class="toc-number">3.6.</span> <span class="toc-text"> Example</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2016/01/20/simple-vba/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2016/01/20/simple-vba/&text=VBA 简易复习"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2016/01/20/simple-vba/&is_video=false&description=VBA 简易复习"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VBA 简易复习&body=Check out this article: http://conglang.github.io/2016/01/20/simple-vba/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2016/01/20/simple-vba/&title=VBA 简易复习"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2016/01/20/simple-vba/&name=VBA 简易复习&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

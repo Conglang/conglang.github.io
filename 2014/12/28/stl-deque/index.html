@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="STL标准库之顺序容器deque。定义、成员函数与示例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL Deque">
+<meta property="og:url" content="http://conglang.github.io/2014/12/28/stl-deque/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="STL标准库之顺序容器deque。定义、成员函数与示例。">
+<meta property="og:image" content="http://conglang.github.io/img/deque_logical_structure.png">
+<meta property="og:image" content="http://conglang.github.io/img/deque_internal_structure.png">
+<meta property="og:updated_time" content="2018-07-03T15:50:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STL Deque">
+<meta name="twitter:description" content="STL标准库之顺序容器deque。定义、成员函数与示例。">
+<meta name="twitter:image" content="http://conglang.github.io/img/deque_logical_structure.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>STL Deque</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2014/12/30/facade/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2014/12/28/stl-list/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/28/stl-deque/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/28/stl-deque/&text=STL Deque"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/28/stl-deque/&is_video=false&description=STL Deque"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Deque&body=Check out this article: http://conglang.github.io/2014/12/28/stl-deque/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/28/stl-deque/&name=STL Deque&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#deque"><span class="toc-number">1.</span> <span class="toc-text"> Deque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deque容器的操作"><span class="toc-number">2.</span> <span class="toc-text"> Deque容器的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-copy-and-destroy"><span class="toc-number">2.1.</span> <span class="toc-text"> Create, Copy and Destroy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nonmodifying-operations"><span class="toc-number">2.2.</span> <span class="toc-text"> Nonmodifying Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#modifying-operations-of-deque"><span class="toc-number">2.3.</span> <span class="toc-text"> Modifying Operations of Deque</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用deque的示例"><span class="toc-number">3.</span> <span class="toc-text"> 使用Deque的示例</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STL Deque
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2014-12-28T07:18:04.000Z" itemprop="datePublished">2014-12-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Container/">Container</a>, <a class="tag-link" href="/tags/Deque/">Deque</a>, <a class="tag-link" href="/tags/STL/">STL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="deque"><a class="markdownIt-Anchor" href="#deque"></a> Deque</h2>
+<p><img src="/img/deque_logical_structure.png" alt="Logical Structure of a Deque"><br>
+<img src="/img/deque_internal_structure.png" alt="Internal Structure of a Deque"></p>
+<p>包含头文件<code>&lt;deque&gt;</code>。<br>
+定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="built_in">std</span> &#123;</span><br><span class="line">	<span class="keyword">template</span> &lt;	<span class="keyword">typename</span> T,</span><br><span class="line">			<span class="keyword">typename</span> Allocator = allocator&lt;T&gt; &gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">deque</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>顺序容器。几乎与vector接口一样。随机存取。首尾均可快速插入删除。非首尾的插入删除操作会使所有迭代器失效。</p>
+<h2 id="deque容器的操作"><a class="markdownIt-Anchor" href="#deque容器的操作"></a> Deque容器的操作</h2>
+<h3 id="create-copy-and-destroy"><a class="markdownIt-Anchor" href="#create-copy-and-destroy"></a> Create, Copy and Destroy</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deque<elem> c</elem></td>
+<td>Default constructor; creates an empty deque without any elements</td>
+</tr>
+<tr>
+<td>deque<elem> c(c2)</elem></td>
+<td>Copy constructor; creates a new deque as a copy of c2 (all elements are copied)</td>
+</tr>
+<tr>
+<td>deque<elem> c = c2</elem></td>
+<td>Copy constructor; creates a new deque as a copy of c2 (all elements are copied)</td>
+</tr>
+<tr>
+<td>deque<elem> c(rv)</elem></td>
+<td>Move constructor; creates a new deque, taking the contents of the rvalue rv (since C++11)</td>
+</tr>
+<tr>
+<td>deque<elem> c = rv</elem></td>
+<td>Move constructor; creates a new deque, taking the contents of the rvalue rv (since C++11)</td>
+</tr>
+<tr>
+<td>deque<elem> c(n)</elem></td>
+<td>Creates a deque with n elements created by the default constructor</td>
+</tr>
+<tr>
+<td>deque<elem> c(n, elem)</elem></td>
+<td>Creates a deque initialized with n copies of element elem</td>
+</tr>
+<tr>
+<td>deque<elem> c(beg, end)</elem></td>
+<td>Creates a deque initialized with the elements of the range [beg,end)</td>
+</tr>
+<tr>
+<td>deque<elem> c(initlist)</elem></td>
+<td>Creates a deque initialized with the elements of initializer list initlist (since C++11)</td>
+</tr>
+<tr>
+<td>deque<elem> c = initlist</elem></td>
+<td>Creates a deque initialized with the elements of initializer list initlist (since C++11)</td>
+</tr>
+<tr>
+<td>c.~deque()</td>
+<td>Destroys all elements and frees the memory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="nonmodifying-operations"><a class="markdownIt-Anchor" href="#nonmodifying-operations"></a> Nonmodifying Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c.empty()</td>
+<td>Returns whether the container is empty (equivalent to size()==0 but might be faster)</td>
+</tr>
+<tr>
+<td>c.size()</td>
+<td>Returns the current number of elements</td>
+</tr>
+<tr>
+<td>c.max_size()</td>
+<td>Returns the maximum number of elements possible</td>
+</tr>
+<tr>
+<td>c.shrink_to_fit()</td>
+<td>Request to reduce capacity to fit number of elements (since C++11)8</td>
+</tr>
+<tr>
+<td>c1 == c2</td>
+<td>Returns whether c1 is equal to c2 (calls == for the elements)</td>
+</tr>
+<tr>
+<td>c1 != c2</td>
+<td>Returns whether c1 is not equal to c2 (equivalent to !(c1==c2) )</td>
+</tr>
+<tr>
+<td>c1 &lt; c2</td>
+<td>Returns whether c1 is less than c2</td>
+</tr>
+<tr>
+<td>c1 &gt; c2</td>
+<td>Returns whether c1 is greater than c2 (equivalent to c2&lt;c1)</td>
+</tr>
+<tr>
+<td>c1 &lt;= c2</td>
+<td>Returns whether c1 is less than or equal to c2 (equivalent to !(c2&lt;c1) )</td>
+</tr>
+<tr>
+<td>c1 &gt;= c2</td>
+<td>Returns whether c1 is greater than or equal to c2 (equivalent to !(c1&lt;c2) ) c[idx] Returns the element with index idx (no range checking)</td>
+</tr>
+<tr>
+<td><a href="http://c.at" target="_blank" rel="external">c.at</a>(idx)</td>
+<td>Returns the element with index idx (throws range-error exception if idx is out of range)</td>
+</tr>
+<tr>
+<td>c.front()</td>
+<td>Returns the first element (no check whether a first element exists)</td>
+</tr>
+<tr>
+<td>c.back()</td>
+<td>Returns the last element (no check whether a last element exists)</td>
+</tr>
+<tr>
+<td>c.begin()</td>
+<td>Returns a random-access iterator for the first element</td>
+</tr>
+<tr>
+<td>c.end()</td>
+<td>Returns a random-access iterator for the position after the last element</td>
+</tr>
+<tr>
+<td>c.cbegin()</td>
+<td>Returns a constant random-access iterator for the first element (since C++11)</td>
+</tr>
+<tr>
+<td>c.cend()</td>
+<td>Returns a constant random-access iterator for the position after the last element (since C++11)</td>
+</tr>
+<tr>
+<td>c.rbegin()</td>
+<td>Returns a reverse iterator for the first element of a reverse iteration</td>
+</tr>
+<tr>
+<td>c.rend()</td>
+<td>Returns a reverse iterator for the position after the last element of a reverse iteration</td>
+</tr>
+<tr>
+<td>c.crbegin()</td>
+<td>Returns a constant reverse iterator for the first element of a reverse iteration (since C++11)</td>
+</tr>
+<tr>
+<td>c.crend()</td>
+<td>Returns a constant reverse iterator for the position after the last element of a reverse iteration (since C++11)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modifying-operations-of-deque"><a class="markdownIt-Anchor" href="#modifying-operations-of-deque"></a> Modifying Operations of Deque</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>c = c2</td>
+<td>Assigns all elements of c2 to c</td>
+</tr>
+<tr>
+<td>c = rv</td>
+<td>Move assigns all elements of the rvalue rv to c (since C++11)</td>
+</tr>
+<tr>
+<td>c = initlist</td>
+<td>Assigns all elements of the initializer list initlist to c (since C++11)</td>
+</tr>
+<tr>
+<td>c.assign(n, elem)</td>
+<td>Assigns n copies of element elem</td>
+</tr>
+<tr>
+<td>c.assign(beg, end)</td>
+<td>Assigns the elements of the range [beg,end)</td>
+</tr>
+<tr>
+<td>c.assign(initlist)</td>
+<td>Assigns all the elements of the initializer list initlist</td>
+</tr>
+<tr>
+<td>c1.swap(c2)</td>
+<td>Swaps the data of c1 and c2</td>
+</tr>
+<tr>
+<td>swap(c1, c2)</td>
+<td>Swaps the data of c1 and c2</td>
+</tr>
+<tr>
+<td>c.push_back(elem)</td>
+<td>Appends a copy of elem at the end</td>
+</tr>
+<tr>
+<td>c.pop_back()</td>
+<td>Removes the last element (does not return it)</td>
+</tr>
+<tr>
+<td>c.push_front(elem)</td>
+<td>Inserts a copy of elem at the beginning</td>
+</tr>
+<tr>
+<td>c.pop_front()</td>
+<td>Removes the first element (does not return it)</td>
+</tr>
+<tr>
+<td>c.insert(pos, elem)</td>
+<td>Inserts a copy of elem before iterator position pos and returns the position of the new element</td>
+</tr>
+<tr>
+<td>c.insert(pos, n, elem)</td>
+<td>Inserts n copies of elem before iterator position pos and returns the position of the first new element (or pos if there is no new element)</td>
+</tr>
+<tr>
+<td>c.insert(pos, beg, end)</td>
+<td>Inserts a copy of all elements of the range [beg,end) before iterator position pos and returns the position of the first new element (or pos if there is no new element)</td>
+</tr>
+<tr>
+<td>c.insert(pos, initlist)</td>
+<td>Inserts a copy of all elements of the initializer list initlist before iterator position pos and returns the position of the first new element (or pos if there is no new element; since C++11)</td>
+</tr>
+<tr>
+<td>c.emplace(pos, args…)</td>
+<td>Inserts a copy of an element initialized with args before iterator position pos and returns the position of the new element (since C++11)</td>
+</tr>
+<tr>
+<td>c.emplace_back(args…)</td>
+<td>Appends a copy of an element initialized with args at the end (returns nothing; since C++11)</td>
+</tr>
+<tr>
+<td>c.emplace_front(args…)</td>
+<td>Inserts a copy of an element initialized with args at the beginning (returns nothing; since C++11)</td>
+</tr>
+<tr>
+<td>c.erase(pos)</td>
+<td>Removes the element at iterator position pos and returns the position of the next element</td>
+</tr>
+<tr>
+<td>c.erase(beg, end)</td>
+<td>Removes all elements of the range [beg,end) and returns the position of the next element</td>
+</tr>
+<tr>
+<td>c.resize(num)</td>
+<td>Changes the number of elements to num (if size() grows new elements are created by their default constructor)</td>
+</tr>
+<tr>
+<td>c.resize(num, elem)</td>
+<td>Changes the number of elements to num (if size() grows new elements are copies of elem)</td>
+</tr>
+<tr>
+<td>c.clear()</td>
+<td>Removes all elements (empties the container)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用deque的示例"><a class="markdownIt-Anchor" href="#使用deque的示例"></a> 使用Deque的示例</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Examples of Using Deque</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// create empty deque of strings</span></span><br><span class="line">	<span class="built_in">deque</span>&lt;<span class="built_in">string</span>&gt; coll;</span><br><span class="line">	<span class="comment">// insert several elements</span></span><br><span class="line">	coll.assign(<span class="number">3</span>, <span class="built_in">string</span>(<span class="string">"string"</span>));</span><br><span class="line">	coll.push_back(<span class="string">"last string"</span>);</span><br><span class="line">	coll.push_front(<span class="string">"first string"</span>);</span><br><span class="line">	<span class="comment">// print elements separated by newlines</span></span><br><span class="line">	copy(coll.cbegin(), coll.cend(), ostream_iterator&lt;<span class="built_in">string</span>&gt;(<span class="built_in">cout</span>, <span class="string">"\n"</span>));</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// remove first and last element</span></span><br><span class="line">	coll.pop_front();</span><br><span class="line">	coll.pop_back();</span><br><span class="line">	<span class="comment">// insert "another" into every element but the first</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">unsigned</span> i = <span class="number">1</span>; i &lt; coll.size(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		coll[i] = <span class="string">"another "</span> + coll[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// change size to four elements</span></span><br><span class="line">	coll.resize(<span class="number">4</span>, <span class="string">"resized string"</span>);</span><br><span class="line">	<span class="comment">// print elements separated by newlines</span></span><br><span class="line">	copy(coll.cbegin(), coll.cend(), ostream_iterator&lt;<span class="built_in">string</span>&gt;(<span class="built_in">cout</span>, <span class="string">"\n"</span>));</span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] The C++ Standard Library 2nd Edition</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#deque"><span class="toc-number">1.</span> <span class="toc-text"> Deque</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deque容器的操作"><span class="toc-number">2.</span> <span class="toc-text"> Deque容器的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-copy-and-destroy"><span class="toc-number">2.1.</span> <span class="toc-text"> Create, Copy and Destroy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nonmodifying-operations"><span class="toc-number">2.2.</span> <span class="toc-text"> Nonmodifying Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#modifying-operations-of-deque"><span class="toc-number">2.3.</span> <span class="toc-text"> Modifying Operations of Deque</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用deque的示例"><span class="toc-number">3.</span> <span class="toc-text"> 使用Deque的示例</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2014/12/28/stl-deque/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2014/12/28/stl-deque/&text=STL Deque"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2014/12/28/stl-deque/&is_video=false&description=STL Deque"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Deque&body=Check out this article: http://conglang.github.io/2014/12/28/stl-deque/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2014/12/28/stl-deque/&title=STL Deque"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2014/12/28/stl-deque/&name=STL Deque&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

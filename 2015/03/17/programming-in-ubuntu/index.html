@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="在Ubuntu下搭建C/C++编程环境，综合起来说就是`vim+gcc+gdb+valgrind`。其中vim用于文本编辑，gcc用于程序编译，gdb和valgrind用于代码调试。在程序编译那部分，有一些自动化工具。可以用makefile来管理文件编译，而makefile又可以用CMake生成。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Ubuntu下搭建C/C++编程环境">
+<meta property="og:url" content="http://conglang.github.io/2015/03/17/programming-in-ubuntu/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="在Ubuntu下搭建C/C++编程环境，综合起来说就是`vim+gcc+gdb+valgrind`。其中vim用于文本编辑，gcc用于程序编译，gdb和valgrind用于代码调试。在程序编译那部分，有一些自动化工具。可以用makefile来管理文件编译，而makefile又可以用CMake生成。">
+<meta property="og:image" content="http://conglang.github.io/img/ubuntu_desktop_shortcuts.png">
+<meta property="og:image" content="http://conglang.github.io/img/linux_common_commands.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/Linux-Command-Line-Guide.png">
+<meta property="og:image" content="http://conglang.github.io/img/vi-vim-cheat-sheet.gif">
+<meta property="og:image" content="http://conglang.github.io/img/vim-cheat-sheet-cn.png">
+<meta property="og:image" content="http://conglang.github.io/img/vim-cheat-sheet-en.png">
+<meta property="og:image" content="http://conglang.github.io/img/vim_cheat_sheet_for_programmers_screen.png">
+<meta property="og:image" content="http://conglang.github.io/img/spf13-vim_example.png">
+<meta property="og:image" content="http://conglang.github.io/img/gdb-commands-list.png">
+<meta property="og:updated_time" content="2018-07-31T15:04:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Ubuntu下搭建C/C++编程环境">
+<meta name="twitter:description" content="在Ubuntu下搭建C/C++编程环境，综合起来说就是`vim+gcc+gdb+valgrind`。其中vim用于文本编辑，gcc用于程序编译，gdb和valgrind用于代码调试。在程序编译那部分，有一些自动化工具。可以用makefile来管理文件编译，而makefile又可以用CMake生成。">
+<meta name="twitter:image" content="http://conglang.github.io/img/ubuntu_desktop_shortcuts.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>在Ubuntu下搭建C/C++编程环境</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/04/04/generic-makefile-for-c-cpp-program/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/03/09/virtualbox-ubuntu/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/03/17/programming-in-ubuntu/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&text=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&is_video=false&description=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Ubuntu下搭建C/C++编程环境&body=Check out this article: http://conglang.github.io/2015/03/17/programming-in-ubuntu/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&name=在Ubuntu下搭建C/C++编程环境&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#桌面系统的快捷键"><span class="toc-number">1.</span> <span class="toc-text"> 桌面系统的快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#terminal的一些基本命令"><span class="toc-number">2.</span> <span class="toc-text"> Terminal的一些基本命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编辑"><span class="toc-number">3.</span> <span class="toc-text"> 编辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vim入门"><span class="toc-number">3.1.</span> <span class="toc-text"> vim入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vim自定义配置"><span class="toc-number">3.2.</span> <span class="toc-text"> vim自定义配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译运行"><span class="toc-number">4.</span> <span class="toc-text"> 编译运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gcc"><span class="toc-number">4.1.</span> <span class="toc-text"> gcc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#gcc常用命令"><span class="toc-number">4.1.1.</span> <span class="toc-text"> gcc常用命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几种情境"><span class="toc-number">4.1.2.</span> <span class="toc-text"> 几种情境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预处理"><span class="toc-number">4.1.3.</span> <span class="toc-text"> 预处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能"><span class="toc-number">4.1.4.</span> <span class="toc-text"> 性能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile文件"><span class="toc-number">4.2.</span> <span class="toc-text"> makefile文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#最基础的用法"><span class="toc-number">4.2.1.</span> <span class="toc-text"> 最基础的用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#小示例"><span class="toc-number">4.2.2.</span> <span class="toc-text"> 小示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用cmake自动生成makefile"><span class="toc-number">4.3.</span> <span class="toc-text"> 使用CMake自动生成makefile</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-number">4.3.1.</span> <span class="toc-text"> 简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编写cmakeliststxt的示例"><span class="toc-number">4.3.2.</span> <span class="toc-text"> 编写CMakeLists.txt的示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">5.</span> <span class="toc-text"> 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gdb"><span class="toc-number">5.1.</span> <span class="toc-text"> gdb</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单的调试步骤示例"><span class="toc-number">5.1.1.</span> <span class="toc-text"> 简单的调试步骤示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常用命令介绍"><span class="toc-number">5.1.2.</span> <span class="toc-text"> 常用命令介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valgrind"><span class="toc-number">5.2.</span> <span class="toc-text"> Valgrind</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        在Ubuntu下搭建C/C++编程环境
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-03-17T15:30:23.000Z" itemprop="datePublished">2015-03-17</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CMake/">CMake</a>, <a class="tag-link" href="/tags/GCC/">GCC</a>, <a class="tag-link" href="/tags/GDB/">GDB</a>, <a class="tag-link" href="/tags/Makefile/">Makefile</a>, <a class="tag-link" href="/tags/Ubuntu/">Ubuntu</a>, <a class="tag-link" href="/tags/Vim/">Vim</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>在Ubuntu下搭建C/C++编程环境，综合起来说就是<code>vim+gcc+gdb</code>。其中vim用于文本编辑，gcc用于程序编译，gdb用于代码调试。<br>
+要安装编程环境，在Terminal中执行<code>sudo apt-get install build-essential</code>。</p>
+<h2 id="桌面系统的快捷键"><a class="markdownIt-Anchor" href="#桌面系统的快捷键"></a> 桌面系统的快捷键</h2>
+<p>如果不用桌面系统，可以关闭。<br>
+打开Terminal的快捷键是<code>Ctrl+Alt+T</code>，使用快捷键<code>Ctrl+Super+Up</code>最大化，<code>Alt+F4</code>关闭。<br>
+使用快捷键<code>Alt+Tab</code>切换窗口。<br>
+长按Super键(默认为Windows键)，可以看到关于桌面的所有快捷键。<br>
+<img src="/img/ubuntu_desktop_shortcuts.png" alt="Image Loading"></p>
+<hr>
+<h2 id="terminal的一些基本命令"><a class="markdownIt-Anchor" href="#terminal的一些基本命令"></a> Terminal的一些基本命令</h2>
+<p><img src="/img/linux_common_commands.jpg" alt="常用命令"><br>
+<img src="/img/Linux-Command-Line-Guide.png" alt="另一个更全一点的"><br>
+一般最常用的是cd, ls, mkdir, rmdir, cp, rm, mv, clear, pwd, shutdown.<br>
+一般使用时只需记住常用命令，不清楚的时候用man查询。如需查看更多命令可以阅读《The Linux Command Line》(《Linux命令行大全》)。</p>
+<hr>
+<h2 id="编辑"><a class="markdownIt-Anchor" href="#编辑"></a> 编辑</h2>
+<p>不去管vim与Emacs的世纪之争，vim真的是很强大的编辑器，摆脱对图形界面的依赖，效率会有很大提高。vim有无穷尽的插件，善加选择利用，有很多针对编程的快捷功能是vs也提供不了的。<br>
+vim的学习曲线虽然有些陡峭，但还是很值得的。<br>
+网上有很多学习Vim的资源，推荐几本书：《Vim用户手册中文版7.3》《A Byte of Vim》《Practical Vim》，还有这个<a href="http://derekwyatt.org/vim/tutorials" target="_blank" rel="external">视频教程</a>(需要翻墙)。<br>
+使用vim，一般只需动用肌肉“记住”一些常用操作(如下表)，其余功能用的时候查询即可。</p>
+<h3 id="vim入门"><a class="markdownIt-Anchor" href="#vim入门"></a> vim入门</h3>
+<p>vim入门主要是熟练使用基本命令。最直接的学习资源是在Terminal里输入<code>vimtutor</code>，会有一个差不多30分钟的入门教程。<br>
+或者学习上文提到的书籍和视频，对常见命令均有讲解。<br>
+推荐直接从官方文档或是书籍入手，比在网上搜来搜去只鳞片爪有效率的多。四处搜索别人的学习经验，出发点是少走弯路，结果反而欲速则不达，还不如沉下心好好看完一本书。<br>
+有几张不同角度的cheat sheet，方便查阅。作者见文末参考链接。<br>
+<img src="/img/vi-vim-cheat-sheet.gif" alt="vi/vim graphical cheat sheet"><br>
+<img src="/img/vim-cheat-sheet-cn.png" alt="中文版"><br>
+<img src="/img/vim-cheat-sheet-en.png" alt="vim cheat sheet"><br>
+<img src="/img/vim_cheat_sheet_for_programmers_screen.png" alt="程序员使用"><br>
+在vim中，获得帮助的命令是<code>:help</code>。<br>
+如果不知道自己想查什么，可以运行<code>:help user-manual</code>查看整个用户手册的目录。<br>
+如果大概知道想使用的功能而不知道具体命令，可以使用<code>:helpgrep</code>在整个文档中搜索相关内容。比如想了解如何查看词首，可以运行<code>:helpgrep beginning of a word</code>。可以使用<code>:cnext</code>和<code>:cprev</code>在搜索结果间跳转。<br>
+更多关于帮助的帮助，参看《A Byte of Vim》中Vim en:Help这一节。</p>
+<h3 id="vim自定义配置"><a class="markdownIt-Anchor" href="#vim自定义配置"></a> vim自定义配置</h3>
+<p>基本操作熟练之后，多半都会开始安插件折腾自定义配置。<br>
+自定义配置与插件包括vimrc、global plugin、filetype plugin、syntax highlighting plugin、compiler plugin。<br>
+一般将简单配置记录在vimrc文件里，高级功能使用插件来实现。</p>
+<p>在Linux系统中，vimrc文件地址是<code>$HOME/.vimrc</code>。vim安装时自带的插件在<code>$VIMRUNTIME/plugin/</code>目录下。自定义插件放在<code>$HOME/.vim/plugin/</code>的相应子目录下，且需在vimrc文件里设置自动加载此插件。<br>
+详细的配置与插件使用及编写请参看《A Byte of Vim》中Vim en:Plugins这一节。</p>
+<p>偷了个懒，在github上发现一个很棒的配置方案spf13-vim，就直接安上了。<br>
+spf13-vim是运行在vim层之上，为方便编程，对vimrc和plugin都做了很多特殊优化配置的一个工具。<br>
+<a href="https://github.com/spf13/spf13-vim" target="_blank" rel="external">spf13-vim</a>。安装很容易，根据readme上的指示进行即可。<br>
+<img src="/img/spf13-vim_example.png" alt="spf13-vim例图"><br>
+安装成功后，可以打开<code>~/.vimrc</code>看到spf13-vim的预置配置。创建<code>~/.vimrc.local</code>和<code>~/.gvimrc.local</code>进行自定义配置。<br>
+spf13-vim已经预置了很多插件，关于这些插件的启动和使用可以看<a href="http://vim.spf13.com/" target="_blank" rel="external">spf13-vim的介绍</a>和这些插件自己的github页面。此处唯一提醒的一点是<code>&lt;leader&gt;</code>键在spf13-vim这里是逗号<code>,</code>。<br>
+我目前也在摸索中，有心得会随时更新。这是我的<a href="/2015/04/06/spf13-vim-cheat-sheet/">操作速查表</a>。</p>
+<p>在Quora上看到有些人并不推荐使用spf13等工具，认为会引诱你学习这个工具的配置方式，而不是真正学习vim的配置文件，使用自定义的针对自己需求的配置文件才最符合vim精神。不过对于初学者来说，我觉得spf13-vim还是很有价值的，毕竟时间这么宝贵，折腾是很累人的。</p>
+<hr>
+<h2 id="编译运行"><a class="markdownIt-Anchor" href="#编译运行"></a> 编译运行</h2>
+<h3 id="gcc"><a class="markdownIt-Anchor" href="#gcc"></a> gcc</h3>
+<p>GCC(GNU Compiler Collection)是一组编译工具的总称，支持多平台、多语言源文件到可执行文件的编译与生成。其中也包括gcc(C编译器)和g++(C++编译器)。<br>
+推荐书籍《An Introduction to GCC》。<br>
+在GCC内部寻找帮助，使用<code>gcc --help</code>，如果想看gcc选项的完整列表使用<code>gcc -v --help 2&gt;&amp;1 | more</code>。<br>
+最简单的应用示例：一个hello.cpp文件。一下语句就是编译与运行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g++ hello.cpp hello</span><br><span class="line">./hello</span><br></pre></td></tr></table></figure>
+<h4 id="gcc常用命令"><a class="markdownIt-Anchor" href="#gcc常用命令"></a> gcc常用命令</h4>
+<p><strong>基本语法格式如下。</strong><br>
+对于C：<code>gcc [options] [filenames]</code><br>
+对于C++：<code>g++ [options] [filenames]</code><br>
+上述命令行按编译选项(options)指定的操作对给定的文件(filenames)进行编译处理。</p>
+<p><strong>选项主要列表如下。</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>选项描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c</td>
+<td>只对文件进行编译和汇编，但不进行连接，生成目标文件&quot;.o&quot;</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>只对文件进行编译，但不汇编和连接</td>
+</tr>
+<tr>
+<td>-E</td>
+<td>只对文件进行预处理，但不编译汇编和连接</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>在可执行程序中包含标准调试信息</td>
+</tr>
+<tr>
+<td>-o file1 [file2]</td>
+<td>将文件file1编译成可执行文件file2</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>打印出编译器内部编译各过程的命令行信息和编译器的版本</td>
+</tr>
+<tr>
+<td>-I dir</td>
+<td>在头文件的搜索路径列表中添加dir目录</td>
+</tr>
+<tr>
+<td>-L dir</td>
+<td>在库文件的搜索路径列表中添加dir目录</td>
+</tr>
+<tr>
+<td>-static</td>
+<td>强制链接静态库</td>
+</tr>
+<tr>
+<td>-lNAME</td>
+<td>连接名为libNAME的库文件</td>
+</tr>
+<tr>
+<td>-Wall -W</td>
+<td>开启GCC最常用的警告，GCC的warning一般格式为file:line-number:message</td>
+</tr>
+<tr>
+<td>-pedantic</td>
+<td>要求严格符合ANSI标准</td>
+</tr>
+<tr>
+<td>-Wconversion</td>
+<td>开启隐式类型转换警告</td>
+</tr>
+<tr>
+<td>-Wshadow</td>
+<td>开启同名变量函数警告</td>
+</tr>
+<tr>
+<td>-Wcast-qual</td>
+<td>开启对特性移除的cast的警告，如const</td>
+</tr>
+<tr>
+<td>-O(-O1)</td>
+<td>对编译出的代码进行优化</td>
+</tr>
+<tr>
+<td>-O2</td>
+<td>进行比-O高一级的优化</td>
+</tr>
+<tr>
+<td>-O3</td>
+<td>产生更高级别的优化</td>
+</tr>
+<tr>
+<td>-Os</td>
+<td>产生最小的可执行文件</td>
+</tr>
+<tr>
+<td>-pg</td>
+<td>开启性能测试，记录每个函数的调用次数与时长</td>
+</tr>
+<tr>
+<td>-ftest-coverage</td>
+<td>记录每一行被执行的次数</td>
+</tr>
+<tr>
+<td>-fprofile-arcs</td>
+<td>记录每个分支语句执行的频率</td>
+</tr>
+</tbody>
+</table>
+<p>注意选项的大小写。只在最后发行版时再使用优化。即使在最后发行版也应该加上-g选项。</p>
+<h4 id="几种情境"><a class="markdownIt-Anchor" href="#几种情境"></a> 几种情境</h4>
+<p>以c++为例。<br>
+<strong>编译单个文件为可执行文件：</strong></p>
+<blockquote>
+<p><code>g++ -Wall -W hello.cpp -o hello</code></p>
+</blockquote>
+<p><strong>编译多个文件为可执行文件：</strong></p>
+<blockquote>
+<p><code>g++ -Wall -W main.cpp hello_fun.cpp -o newhello</code></p>
+</blockquote>
+<p><strong>编译单个文件为可执行文件，连接静态库static library：</strong></p>
+<blockquote>
+<p>系统默认库文件在目录<code>/usr/lib</code>和<code>/lib</code>，还会自动搜索<code>/usr/local/lib/</code>和<code>/usr/lib/</code>。<br>
+相应的，系统默认头文件在目录，会自动搜索<code>/usr/local/include/</code>和<code>/usr/include/</code>。<br>
+显式指定库目录与文件，<code>g++ -Wall -W calc.cpp /usr/lib/libm.a -o calc</code><br>
+或更好的写法<code>g++ -Wall -W -static calc.cpp -lm -o calc</code>，连接系统自动搜索库目录里的库文件。注意g++优先使用shared library。如果找到同名.so就不会用同名.a。所以如果需要强制使用.a文件的话，应使用<code>-static</code>。<br>
+如果不在自动搜索的库目录，两种方法。一般使用命令行这一种。</p>
+<ul>
+<li>使用命令行<code>-I</code>添加搜索头文件的目录和<code>-L</code>添加搜索库文件的目录，例如<code>g++ -Wall -W -static -I/code/test/include -I/code/another/include -I. -L/code/test/lib -L/code/another/lib -L. calc.cpp -ltest</code>。.表示当前目录。</li>
+<li>或使用环境变量<code>C_INCLUDE_PATH</code>©或<code>CPLUS_INCLUDE_PATH</code>(C++)和<code>LIBRARY_PATH</code>。用如下语句添加搜索路径，之后就可以使用<code>g++ -Wall -W -static calc.cpp -ltest</code>了。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CPLUS_INCLUDE_PATH = /code/test/include:/code/another/include:.:$CPLUS_INCLUDE_PATH</span><br><span class="line">export CPLUS_INCLUDE_PATH</span><br><span class="line">LIBRARY_PATH = /code/test/lib:/code/another/lib:.:$LIBRARY_PATH</span><br><span class="line">export LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+<p><strong>编译单个文件为可执行文件，连接共享库shared library：</strong></p>
+<blockquote>
+<p>如果只是用了系统默认库，<code>g++ -Wall -W calc.cpp -lm -o calc</code><br>
+除了前文系统自动搜索库文件目录之外，如果要添加其他共享库目录，必须在环境变量<code>LD_LIBRARY_PATH</code>中添加路径。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LD_LIBRARY_PATH = /code/test/lib:/code/another/lib:.:$LD_LIBRARY_PATH</span><br><span class="line">export LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>之后可以使用<code>g++ -Wall -W calc.cpp /usr/lib/libm.so -o calc</code>或<code>g++ -Wall -W -I/code/test/include -I/code/another/include -I. -L/code/test/lib -L/code/another/lib -L. calc.cpp -ltest</code>。<br>
+使用<code>ldd calc</code><a href="http://xn--klqvgzb24bx6oba37ogy5czhgclg2s2cqj6b90j15e.so" target="_blank" rel="external">可以查看该可执行文件依赖哪些.so</a>。</p>
+</blockquote>
+<p><strong>编译多个文件为静态库文件.a：</strong></p>
+<blockquote>
+<p>将多个.o文件集合为一个静态库文件.a。其中cr表示&quot;create and replace&quot;。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g++ -Wall -c hello_fn.cpp</span><br><span class="line">g++ -Wall -c bye_fn.cpp</span><br><span class="line">ar cr libhello.a hello_fn.o bye_fn.o</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以查看一个.a文件里包含哪些.o。使用<code>ar t libhello.a</code>。</p>
+</blockquote>
+<p><strong><a href="http://xn--ciq6a1y2jc229adsrnukuwpfa8703en65a.so" target="_blank" rel="external">编译多个文件为共享库文件.so</a>：</strong></p>
+<blockquote>
+<p><code>g++ x.cpp y.cpp z.cpp -fPIC -shared -o libtest.so</code>。其中-fPIC表示编译为位置独立的代码。</p>
+</blockquote>
+<h4 id="预处理"><a class="markdownIt-Anchor" href="#预处理"></a> 预处理</h4>
+<p>可以用gcc选项定义宏，-DNAME会定义一个名为NAME的宏。如<code>g++ -Wall -DTEST dtest.cpp</code>，定义了名为TEST的宏。定义的宏会对代码产生影响。<br>
+也可以为宏定义值，-DNAME=VALUE。如<code>g++ -Wall -DNUM=100 dtestval.cpp</code>，<code>g++ -Wall -DNUM=&quot;2+2&quot; dtestval.cpp</code>，<code>g++ -Wall -DMESSAGE=&quot;\&quot;Hello,World!\&quot;&quot; dteststr.cpp</code>。在代码中把宏用括号括起来是好习惯。</p>
+<h4 id="性能"><a class="markdownIt-Anchor" href="#性能"></a> 性能</h4>
+<p>开启-pg选项生成可执行文件后。首先正常运行一次可执行文件<code>./hello</code>，然后运行<code>gprof hello</code>查看数据。<br>
+开启-fprofile-arcs -ftest-coverage选项生成可执行文件后。首先正常运行一次可执行文件<code>./hello</code>，然后运行<code>gcov hello.cpp</code>查看数据。未被执行的语句会在.gcov文件中标记上-，可以通过执行<code>grep '-' *.gcov</code>查找未被执行的语句。</p>
+<h3 id="makefile文件"><a class="markdownIt-Anchor" href="#makefile文件"></a> makefile文件</h3>
+<p>对于较大的工程，如果还像前文一样写命令行就太痛苦了。而使用makefile可以管理整个工程的编译规则，之后用一个make命令就可自动编译，相对方便很多。</p>
+<p>推荐书籍《跟我一起写Makefile》和<a href="http://www.gnu.org/software/make/manual/" target="_blank" rel="external">官方文档</a>。内容看起来还是很晦涩…(・-・*)还好现在有了自动化工具，用来自动生成的工具也可以用工具自动生成了。</p>
+<h4 id="最基础的用法"><a class="markdownIt-Anchor" href="#最基础的用法"></a> 最基础的用法</h4>
+<p><strong>makefile基本规则是：</strong></p>
+<blockquote>
+<p>target1 target2 target3: prerequisite1 prerequisite2<br>
+command1<br>
+command2</p>
+</blockquote>
+<p>其中target是目标文件。prerequisites是要生成target所需文件或目标。command是make需要执行的命令。规则表示了一个文件的依赖关系，即target依赖于prerequisites，生成规则为command。如果target不存在或prerequisites中至少一个文件比target新的话，command定义的命令就会执行。这就是makefile中最核心的内容。</p>
+<p><strong>make工作的流程是：</strong><br>
+当我们输入make命令之后，</p>
+<ol>
+<li>读入所有的makefile文件。</li>
+<li>读入被include包括的其他makefile文件。</li>
+<li>初始化文件中的变量。</li>
+<li>推导隐式规则，分析所有规则。</li>
+<li>为所有的目标文件创建依赖关系链。</li>
+<li>根据依赖关系，决定哪些目标要重新生成。</li>
+<li>执行生成命令。</li>
+</ol>
+<p><strong>makefile文件名</strong>应为<code>Makefile</code>或<code>makefile</code>。</p>
+<h4 id="小示例"><a class="markdownIt-Anchor" href="#小示例"></a> 小示例</h4>
+<p>我为自己刷题的一个小项目写了一个将几个目录下所有的源文件一起编译的一个makefile。在这里看<a href="https://github.com/Conglang/MyLeetCode" target="_blank" rel="external">工程的目录结构</a>。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">EXEC = MyLeetCode</span><br><span class="line">SRC_DIR = ../../catch ../../include ../../src</span><br><span class="line">SOURCES := <span class="variable">$(foreach x, $&#123;SRC_DIR&#125;,\</span><br><span class="line">	$(wildcard \</span><br><span class="line">	$(addprefix $&#123;x&#125;/*,.cpp)</span>))</span><br><span class="line">OBJECTS = <span class="variable">$(SOURCES:.cpp=.o)</span></span><br><span class="line">CXX = g++</span><br><span class="line">CXXFLAGS = -I../../catch -I../../include -I../../src -std=c++11</span><br><span class="line">$(EXEC): $(OBJECTS)</span><br><span class="line">	<span class="variable">$(CXX)</span> -o $@ $^</span><br><span class="line">.PHONY : clean</span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	<span class="variable">$(RM)</span> <span class="variable">$(OBJECTS)</span></span><br><span class="line">	<span class="variable">$(RM)</span> <span class="variable">$(EXEC)</span></span><br></pre></td></tr></table></figure>
+<p>网上看到一个<a href="/2015/04/04/generic-makefile-for-c-cpp-program/">Generic Makefile for C/C++ Program</a>。</p>
+<h3 id="使用cmake自动生成makefile"><a class="markdownIt-Anchor" href="#使用cmake自动生成makefile"></a> 使用CMake自动生成makefile</h3>
+<p>当处理较大型的项目时，手动书写makefile就比较痛苦，这时用来用来自动化自动化工具makefile的自动化工具就是CMake。不过天下哪有那么便宜的事，它也是要写自己的CMakeLists.txt的。<br>
+推荐书籍《CMake实践》《Mastering CMake》和<a href="http://www.cmake.org/cmake/help/v3.2/" target="_blank" rel="external">官网帮助</a>。</p>
+<h4 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h4>
+<p>CMake是一个跨平台的自动化建构系统，它是用一个名为CMakeLists.txt的文件来描述构建过程，可以产生标准的构建文件，如Unix的makefile或Windows Visual Studio的projects/workspaces。<br>
+文件CMakeLists.txt需要手工编写，也可以通过编写脚本进行半自动的生成。</p>
+<p>在Linux平台下使用CMake生成makefile并编译的流程如下：</p>
+<ol>
+<li>安装CMake。在Ubuntu上安装cmake很简单<code>$sudo apt-get install cmake</code>。如果想要其Qt图形界面另需安装<code>sudo apt-get install cmake-qt-gui</code>。一般不需要，在Ubuntu系统上用ccmake就可以了。</li>
+<li>编写CMakeLists.txt。</li>
+<li>运行CMake。用<code>cd</code>将当前目录设为生成目标目录，执行命令<code>ccmake srcdir</code>(文字界面)或<code>cmake -i</code>(交互命令行)，如果想使用Qt图形界面使用<code>cmake-gui</code>。</li>
+<li>Makefile已经生成。使用make命令进行编译。</li>
+<li>如果想清理工程。使用<code>make clean</code>。</li>
+</ol>
+<p><strong>简单语法</strong><br>
+注释：<code>#</code><br>
+命令语法：<code>COMMAND(参数1 参数2 ...)</code><br>
+字符串列表：<code>A;B;C</code>或<code>A B C</code>。分号或空格分隔的值。<br>
+变量(字符串或字符串列表)：</p>
+<blockquote>
+<p><code>set(Foo a b c)</code>设置变量Foo。<br>
+<code>command(${Foo})</code>等价于<code>command(a b c)</code>。<br>
+<code>command(&quot;${Foo}&quot;)</code>等价于<code>command(&quot;a b c&quot;)</code>。<br>
+<code>command(&quot;/${Foo}&quot;)</code>转义，和a b c无关联。</p>
+</blockquote>
+<p>流控制结构：</p>
+<blockquote>
+<p><code>IF()...ELSE()/ELSEIF()...ENDIF()</code><br>
+<code>WHILE()...ENDWHILE()</code><br>
+<code>FOREACH()...ENDFOREACH()</code></p>
+</blockquote>
+<p>正则表达式：</p>
+<p><strong>常用命令总结</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INCLUDE_DIRECTORIES( “dir1” “dir2” … )</td>
+<td>头文件路径，相当于编译器参数 -Idir1 -Idir2</td>
+</tr>
+<tr>
+<td>AUX_SOURCE_DIRECTORY( “sourcedir” variable)</td>
+<td>收集目录中的文件名并赋值给变量</td>
+</tr>
+<tr>
+<td>ADD_EXECUTABLE</td>
+<td>可执行程序目标</td>
+</tr>
+<tr>
+<td>ADD_LIBRARY</td>
+<td>库目标</td>
+</tr>
+<tr>
+<td>ADD_CUSTOM_TARGET</td>
+<td>自定义目标</td>
+</tr>
+<tr>
+<td>ADD_DEPENDENCIES( target1 t2 t3 )</td>
+<td>目标target1依赖于t2 t3</td>
+</tr>
+<tr>
+<td>ADD_DEFINITIONS( “-Wall -ansi”)</td>
+<td>本意是供设置 -D… /D… 等编译预处理需要的宏定义参数，对比 REMOVE_DEFINITIONS()</td>
+</tr>
+<tr>
+<td>TARGET_LINK_LIBRARIES( target-name lib1 lib2 …)</td>
+<td>设置单个目标需要链接的库</td>
+</tr>
+<tr>
+<td>LINK_LIBRARIES( lib1 lib2 …)</td>
+<td>设置所有目标需要链接的库</td>
+</tr>
+<tr>
+<td>SET_TARGET_PROPERTIES( … )</td>
+<td>设置目标的属性 OUTPUT_NAME, VERSION, …</td>
+</tr>
+<tr>
+<td>MESSAGE(…)</td>
+<td>这个指令用于向终端输出用户定义的信息</td>
+</tr>
+<tr>
+<td>INSTALL( FILES “f1” “f2”DESTINATION . )</td>
+<td>DESTINATION 相对于 ${CMAKE_INSTALL_PREFIX}</td>
+</tr>
+<tr>
+<td>SET( VAR value [CACHE TYPE DOCSTRING [FORCE]])</td>
+<td>定义与修改变量</td>
+</tr>
+<tr>
+<td>LIST( APPEND/INSERT/LENGTH/GET/REMOVE_ITEM/REMOVE_AT/SORT …)</td>
+<td>列表操作</td>
+</tr>
+<tr>
+<td>STRING( TOUPPER/TOLOWER/LENGTH/SUBSTRING/REPLACE/REGEX …)</td>
+<td>字符串操作</td>
+</tr>
+<tr>
+<td>SEPARATE_ARGUMENTS( VAR )</td>
+<td>转换空格分隔的字符串到列表</td>
+</tr>
+<tr>
+<td>FILE( WRITE/READ/APPEND/GLOB/GLOB_RECURSE/REMOVE/MAKE_DIRECTORY …)</td>
+<td>文件操作</td>
+</tr>
+<tr>
+<td>FIND_FILE</td>
+<td>注意 CMAKE_INCLUDE_PATH</td>
+</tr>
+<tr>
+<td>FIND_PATH</td>
+<td>注意 CMAKE_INCLUDE_PATH</td>
+</tr>
+<tr>
+<td>FIND_LIBRARY</td>
+<td>注意 CMAKE_LIBRARY_PATH</td>
+</tr>
+<tr>
+<td>FIND_PROGRAM</td>
+<td></td>
+</tr>
+<tr>
+<td>FIND_PACKAGE</td>
+<td>注意 CMAKE_MODULE_PATH</td>
+</tr>
+<tr>
+<td>EXEC_PROGRAM( bin [work_dir] ARGS &lt;…&gt; [OUTPUT_VARIABLE var] [RETURN_VALUE var] )</td>
+<td>执行外部程序</td>
+</tr>
+<tr>
+<td>OPTION( OPTION_VAR “description” [initial value] )</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>变量</strong><br>
+工程路径</p>
+<blockquote>
+<p><code>CMAKE_SOURCE_DIR</code> <code>PROJECT_SOURCE_DIR</code> <code>&lt;projectname&gt;_SOURCE_DIR</code>表示工程顶层目录。<br>
+<code>CMAKE_BINARY_DIR</code> <code>PROJECT_BINARY_DIR</code> <code>&lt;projectname&gt;_BINARY_DIR</code>表示生成目标目录。<br>
+<code>CMAKE_CURRENT_SOURCE_DIR</code>表示当前处理的CMakeLists.txt所在的目录。<br>
+<code>CMAKE_CURRRENT_BINARY_DIR</code>表示当前处理的CMakeLists.txt的目标目录。<br>
+<code>CMAKE_CURRENT_LIST_FILE</code>输出调用这个变量的CMakeLists.txt的完整路径。</p>
+</blockquote>
+<p>Debug和Release模式的构建</p>
+<blockquote>
+<p>在CMakeList.txt文件中使用<code>SET(CMAKE_BUILD_TYPE Debug)</code>。<br>
+或命令行参数<code>cmake DCMAKE_BUILD_TYPE=Release</code>。</p>
+</blockquote>
+<p>编译器参数</p>
+<blockquote>
+<p><code>CMAKE_C_FLAGS</code> <code>CMAKE_CXX_FLAGS</code><br>
+也可以通过指令<code>ADD_DEFINITIONS()</code>添加。</p>
+</blockquote>
+<p>包含路径</p>
+<blockquote>
+<p><code>CMAKE_INCLUDE_PATH</code>配合<code>FIND_FILE()</code>以及<code>FIND_PATH()</code>使用。如果头文件没有存放在常规路径(/usr/include, /usr/local/include等)，则可以通过这些变量就行弥补。如果不使用<code>FIND_FILE</code>和<code>FIND_PATH</code>的话，<code>CMAKE_INCLUDE_PATH</code>没有任何作用。<br>
+<code>CMAKE_LIBRARY_PATH</code>配合配合<code>FIND_LIBRARY()</code>使用。否则没有任何作用。<br>
+<code>CMAKE_MODULE_PATH</code>CMake为上百个软件包提供了查找器(finder):FindXXXX.cmake。当使用非CMake自带的finder时，需要指定finder的路径，这就是<code>CMAKE_MODULE_PATH</code>，配合<code>FIND_PACKAGE()</code>使用。</p>
+</blockquote>
+<h4 id="编写cmakeliststxt的示例"><a class="markdownIt-Anchor" href="#编写cmakeliststxt的示例"></a> 编写CMakeLists.txt的示例</h4>
+<p>对于如下的目录结构。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">+example</span><br><span class="line">|</span><br><span class="line">+--- CMakeList.txt</span><br><span class="line">+--+ src/</span><br><span class="line">|  |</span><br><span class="line">|  +--- main.cpp</span><br><span class="line">|  /--- CMakeList.txt</span><br><span class="line">|</span><br><span class="line">+--+ thirdparty/</span><br><span class="line">|  |</span><br><span class="line">|  +--- hello.h</span><br><span class="line">|  +--- hello.cpp</span><br><span class="line">|  /--- CMakeList.txt</span><br><span class="line">|</span><br><span class="line">/--+ build/</span><br></pre></td></tr></table></figure>
+<p><font size="5"><strong>多文件夹编译(手动)</strong></font></p>
+<blockquote>
+<p>将所有子文件夹中的源文件包含进来，然后生成。</p>
+</blockquote>
+<p>在顶文件夹中example的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line">project(HELLO)</span><br><span class="line">## include src</span><br><span class="line">include(src/CMakeLists.txt)</span><br><span class="line">foreach(FILE $&#123;FILES&#125;)</span><br><span class="line">    set(subdir1Files $&#123;subdir1Files&#125; src/$&#123;FILE&#125;)</span><br><span class="line">endforeach(FILE)</span><br><span class="line">## include thirdparty</span><br><span class="line">include(thirdparty/CMakeLists.txt)</span><br><span class="line">foreach(FILE $&#123;FILES&#125;)</span><br><span class="line">    set(subdir2Files $&#123;subdir2Files&#125; thirdparty/$&#123;FILE&#125;)</span><br><span class="line">endforeach(FILE)</span><br><span class="line">## add the source files to the executable</span><br><span class="line">add_executable(hello $&#123;subdir1Files&#125; $&#123;subdir2Files&#125;)</span><br></pre></td></tr></table></figure>
+<p>在src目录的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## list the source files for this directory</span><br><span class="line">set (FILES main.cpp)</span><br></pre></td></tr></table></figure>
+<p>在thirdparty目录的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## list the source files for this directory</span><br><span class="line">set(FILES hello.h hello.cpp)</span><br></pre></td></tr></table></figure>
+<p><font size="5"><strong>多文件夹编译(自动)</strong></font></p>
+<blockquote>
+<p>和上一种方式一样，只不过是自动包含。</p>
+</blockquote>
+<p>在顶文件夹中example的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line">project(HELLO)</span><br><span class="line">AUX_SOURCE_DIRECTORY(./thirdparty subdir1Files)</span><br><span class="line">AUX_SOURCE_DIRECTORY(./src subdir2Files)</span><br><span class="line">add_executable(hello $&#123;subdir1Files&#125; $&#123;subdir2Files&#125;)</span><br></pre></td></tr></table></figure>
+<p><font size="5"><strong>另一种多文件夹编译(自动)</strong></font></p>
+<blockquote>
+<p>也是将所有子文件夹中符合后缀的文件自动包含进来，然后生成。</p>
+</blockquote>
+<p>在顶文件夹example中的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line">FILE(GLOB_RECURSE SRC_LIST &quot;$&#123;PROJECT_SOURCE_DIR&#125;/thirdparty/*.cpp&quot; &quot;$&#123;PROJECT_SOURCE_DIR&#125;/src/*.cpp&quot;)</span><br><span class="line">FOREACH(src $&#123;SRC_LIST&#125;)</span><br><span class="line">    MESSAGE($&#123;src&#125;)</span><br><span class="line">ENDFOREACH()</span><br><span class="line">add_executable(hello $&#123;SRC_LIST&#125;)</span><br></pre></td></tr></table></figure>
+<p><font size="5"><strong>多文件夹使用静态库</strong></font></p>
+<blockquote>
+<p>将thirdparty中的文件编译为一个静态库，由src中的另一个源文件在生成可执行文件时调用。</p>
+</blockquote>
+<p>在顶文件夹中example的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line">project(HELLO)</span><br><span class="line">add_subdirectory(src)</span><br><span class="line">add_subdirectory(thirdparty)</span><br></pre></td></tr></table></figure>
+<p>在src目录的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include_directories($&#123;PROJECT_SOURCE_DIR&#125;/thirdparty)</span><br><span class="line">set(APP_SRC main.cpp)</span><br><span class="line">set(EXECUTABLE_OUTPUT_PATH $&#123;PROJECT_BINARY_DIR&#125;/bin)</span><br><span class="line">add_executable(hello $&#123;APP_SRC&#125;)</span><br><span class="line">target_link_libraries(hello hi)</span><br></pre></td></tr></table></figure>
+<p>在thirdparty目录的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set(LIB_SRC hello.cpp)</span><br><span class="line">add_library(hi $&#123;LIB_SRC&#125;)</span><br><span class="line">set(LIBRARY_OUTPUT_PATH $&#123;PROJECT_BINARY_DIR&#125;/lib)</span><br><span class="line">set_target_properties(hi PROPERTIES OUTPUT_NAME &quot;hi&quot;)</span><br></pre></td></tr></table></figure>
+<p><font size="5"><strong>多文件夹使用动态库</strong></font></p>
+<blockquote>
+<p>将thirdparty中的文件编译为一个动态库，由src中的另一个源文件在生成可执行文件时调用。<br>
+与之前静态库的区别是add_library时的参数，和兼顾平台的部分。</p>
+</blockquote>
+<p>thirdparty目录中的hello.h文件添加WIN32平台的导入导出设置：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined _WIN32</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">if</span> LIBBUILD</span></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">define</span> LIBHI_API __declspec(dllexport)</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        <span class="meta">#<span class="meta-keyword">define</span> LIBHI_API __declspec(dllimport)</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> LIBHI_API</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="function">LIBHI_API <span class="keyword">void</span> <span class="title">say_hello</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>在thirdparty目录的CMakeLists.txt中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">set(LIB_SRC hello.cpp)</span><br><span class="line">add_definitions(&quot;-DLIBBUILD&quot;)</span><br><span class="line">add_library(hi SHARED $&#123;LIB_SRC&#125;)</span><br><span class="line">set(LIBRARY_OUTPUT_PATH $&#123;PROJECT_BINARY_DIR&#125;/lib)</span><br><span class="line">set_target_properties(hi PROPERTIES OUTPUT_NAME &quot;hi&quot;)</span><br></pre></td></tr></table></figure>
+<p><font size="5"><strong>查找并使用其他程序库</strong></font></p>
+<p><font size="5"><strong>为VS生成debug和release版</strong></font></p>
+<blockquote>
+<p>使用<code>CMAKE_CXX_FLAGS_DEBUG</code>和<code>CMAKE_CXX_FLAGS_RELEASE</code>。</p>
+</blockquote>
+<p>以上文“多文件夹编译(自动)”为例，顶文件夹中example的CMakeLists.txt修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line">project(HELLO)</span><br><span class="line">SET(CMAKE_CXX_FLAGS_DEBUG &quot;$ENV&#123;CXXFLAGS&#125; -O0 -Wall -g -ggdb&quot;)</span><br><span class="line">SET(CMAKE_CXX_FLAGS_RELEASE &quot;$ENV&#123;CXXFLAGS&#125; -O3 -Wall&quot;)</span><br><span class="line">AUX_SOURCE_DIRECTORY(./thirdparty subdir1Files)</span><br><span class="line">AUX_SOURCE_DIRECTORY(./src subdir2Files)</span><br><span class="line">add_executable(hello $&#123;subdir1Files&#125; $&#123;subdir2Files&#125;)</span><br></pre></td></tr></table></figure>
+<p>在用ccmake生成时，图形界面会出现<code>CMAKE_BUILD_TYPE</code>的选项。根据不同选择会生成不同结果。</p>
+<hr>
+<h2 id="调试"><a class="markdownIt-Anchor" href="#调试"></a> 调试</h2>
+<h3 id="gdb"><a class="markdownIt-Anchor" href="#gdb"></a> gdb</h3>
+<p>gdb是一个用来调试C和C++程序的功能强大的调试器，能在程序运行时观察程序的内部结构和内存使用情况。<br>
+gdb主要提供以下功能：</p>
+<ul>
+<li>监视程序中变量的值的变化。</li>
+<li>设置断点，使程序在指定的代码行上暂停执行，便于观察。</li>
+<li>单步执行代码。</li>
+<li>分析崩溃程序产生的core文件。</li>
+</ul>
+<p>推荐书籍《Debugging with GDB》[<a href="http://sourceware.org/gdb/download/onlinedocs/gdb/index.html" target="_blank" rel="external">在线</a>][<a href="http://sourceware.org/gdb/download/onlinedocs/gdb.pdf.gz" target="_blank" rel="external">下载pdf</a>]。通过在gdb下输入<code>help</code>或在命令行上输入<code>gdb h</code>查看关于gdb选项说明的简单列表。键入help后跟命令的分类名。可以获得该类命令的详细清单。搜索和word相关的命令可用<code>apropos word</code>。</p>
+<p>为使gdb能正常工作，必须在程序编译时包含调试信息。即<code>-g</code>选项。前文有讲解。</p>
+<h4 id="简单的调试步骤示例"><a class="markdownIt-Anchor" href="#简单的调试步骤示例"></a> 简单的调试步骤示例</h4>
+<ol>
+<li>载入test可执行文件<code>gdb test --silent</code>。</li>
+<li>运行<code>run</code>。</li>
+<li>查看程序出错的地方<code>where</code>。</li>
+<li>查看出错函数附近的代码<code>list</code>。</li>
+<li>打开堆栈<code>backtrace</code>。</li>
+<li>单步调节<code>next</code>或<code>step</code>。</li>
+<li>查看可疑表达式值<code>print var</code>。</li>
+<li>在可疑行打断点<code>break 8</code>。</li>
+<li>重新运行会在断点处停止。用<code>set variable</code>修改变量值。</li>
+<li>继续运行<code>continue</code>。看结果是否正确。</li>
+<li>退出gdb<code>quit</code>。</li>
+</ol>
+<h4 id="常用命令介绍"><a class="markdownIt-Anchor" href="#常用命令介绍"></a> 常用命令介绍</h4>
+<p><img src="/img/gdb-commands-list.png" alt="常用命令"></p>
+<h3 id="valgrind"><a class="markdownIt-Anchor" href="#valgrind"></a> Valgrind</h3>
+<p><a href="http://valgrind.org/" target="_blank" rel="external">Valgrind</a>是一个工具集，其中最著名的就是可以检查内存泄露的Memcheck。<br>
+在ubuntu上安装Valgrind的命令<code>sudo apt-get install valgrind</code>。<br>
+与gdb的要求相同，程序编译时需要有-g参数。<br>
+对于平时用<code>myprog arg1 arg2</code>启动的可执行文件，使用<code>valgrind --leak-check=yes myprog arg1 arg2</code>就可以开启内存检查，如果有错误会输出。</p>
+<p>Valgrind命令的一般格式为<code>valgrind [valgrind-options] your-prog [your-prog-options]</code>。<br>
+<code>--tool=&lt;toolname&gt;</code>可以选择当前运行的工具，默认即为memcheck。<br>
+<code>--help</code>显示帮助。</p>
+<hr>
+<p>[1] <a href="http://www.viemu.com/" target="_blank" rel="external">http://www.viemu.com/</a><br>
+[2] <a href="http://bbs.zol.com.cn/diybbs/d34450_19858.html" target="_blank" rel="external">http://bbs.zol.com.cn/diybbs/d34450_19858.html</a><br>
+[3] <a href="http://4gamers.cn/blog/2014/06/19/make-your-vim-weapon/" target="_blank" rel="external">http://4gamers.cn/blog/2014/06/19/make-your-vim-weapon/</a><br>
+[4] <a href="http://derekwyatt.org/vim/tutorials/" target="_blank" rel="external">http://derekwyatt.org/vim/tutorials/</a><br>
+[5] <a href="http://www.phecda.org" target="_blank" rel="external">http://www.phecda.org</a><br>
+[6] <a href="http://blog.vgod.tw/tag/mit/?variant=zh-cn" target="_blank" rel="external">http://blog.vgod.tw/tag/mit/?variant=zh-cn</a><br>
+[7] <a href="http://vim.spf13.com/#vimrc" target="_blank" rel="external">http://vim.spf13.com/#vimrc</a><br>
+[8] <a href="http://ram.kossboss.com/spf13c/" target="_blank" rel="external">http://ram.kossboss.com/spf13c/</a><br>
+[9] A Byte of Vim<br>
+[10] <a href="http://michael.peopleofhonoronly.com/vim/" target="_blank" rel="external">http://michael.peopleofhonoronly.com/vim/</a><br>
+[11] Linux环境编程<br>
+[12] Linux C编程一站式学习<br>
+[13] Linux环境下C编程指南<br>
+[14] An Introduction to GCC<br>
+[15] 跟我一起写Makefile<br>
+[16] Mastering CMake<br>
+[17] <a href="http://www.ibm.com/developerworks/cn/linux/l-cn-cmake/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/linux/l-cn-cmake/</a><br>
+[18] <a href="http://blog.sina.com.cn/s/blog_9ce5a1b501015avz.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_9ce5a1b501015avz.html</a><br>
+[19] <a href="http://blog.csdn.net/dbzhang800/article/details/6314073" target="_blank" rel="external">http://blog.csdn.net/dbzhang800/article/details/6314073</a><br>
+[20] <a href="http://blog.csdn.net/dbzhang800/article/details/6329068" target="_blank" rel="external">http://blog.csdn.net/dbzhang800/article/details/6329068</a><br>
+[21] 用GDB调试程序<br>
+[22] GDB调试命令手册<br>
+[23] Debugging with GDB<br>
+[24] <a href="http://www.vingel.com/tools/reference/gdb-commands-list.png" target="_blank" rel="external">http://www.vingel.com/tools/reference/gdb-commands-list.png</a><br>
+[25] <a href="https://wiki.ubuntu.com/Valgrind" target="_blank" rel="external">https://wiki.ubuntu.com/Valgrind</a><br>
+[26] <a href="http://valgrind.org/docs/manual/quick-start.html" target="_blank" rel="external">http://valgrind.org/docs/manual/quick-start.html</a><br>
+[27] <a href="http://valgrind.org/docs/manual/manual.html" target="_blank" rel="external">http://valgrind.org/docs/manual/manual.html</a></p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#桌面系统的快捷键"><span class="toc-number">1.</span> <span class="toc-text"> 桌面系统的快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#terminal的一些基本命令"><span class="toc-number">2.</span> <span class="toc-text"> Terminal的一些基本命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编辑"><span class="toc-number">3.</span> <span class="toc-text"> 编辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vim入门"><span class="toc-number">3.1.</span> <span class="toc-text"> vim入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vim自定义配置"><span class="toc-number">3.2.</span> <span class="toc-text"> vim自定义配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译运行"><span class="toc-number">4.</span> <span class="toc-text"> 编译运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gcc"><span class="toc-number">4.1.</span> <span class="toc-text"> gcc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#gcc常用命令"><span class="toc-number">4.1.1.</span> <span class="toc-text"> gcc常用命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几种情境"><span class="toc-number">4.1.2.</span> <span class="toc-text"> 几种情境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预处理"><span class="toc-number">4.1.3.</span> <span class="toc-text"> 预处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#性能"><span class="toc-number">4.1.4.</span> <span class="toc-text"> 性能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#makefile文件"><span class="toc-number">4.2.</span> <span class="toc-text"> makefile文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#最基础的用法"><span class="toc-number">4.2.1.</span> <span class="toc-text"> 最基础的用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#小示例"><span class="toc-number">4.2.2.</span> <span class="toc-text"> 小示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用cmake自动生成makefile"><span class="toc-number">4.3.</span> <span class="toc-text"> 使用CMake自动生成makefile</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-number">4.3.1.</span> <span class="toc-text"> 简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编写cmakeliststxt的示例"><span class="toc-number">4.3.2.</span> <span class="toc-text"> 编写CMakeLists.txt的示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">5.</span> <span class="toc-text"> 调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gdb"><span class="toc-number">5.1.</span> <span class="toc-text"> gdb</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单的调试步骤示例"><span class="toc-number">5.1.1.</span> <span class="toc-text"> 简单的调试步骤示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常用命令介绍"><span class="toc-number">5.1.2.</span> <span class="toc-text"> 常用命令介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valgrind"><span class="toc-number">5.2.</span> <span class="toc-text"> Valgrind</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/03/17/programming-in-ubuntu/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&text=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&is_video=false&description=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Ubuntu下搭建C/C++编程环境&body=Check out this article: http://conglang.github.io/2015/03/17/programming-in-ubuntu/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&title=在Ubuntu下搭建C/C++编程环境"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/03/17/programming-in-ubuntu/&name=在Ubuntu下搭建C/C++编程环境&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

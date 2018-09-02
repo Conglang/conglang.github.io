@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="STL标准库之Smart Pointer。包括shared_ptr和unique_ptr两大类。介绍与用例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL Smart Pointers">
+<meta property="og:url" content="http://conglang.github.io/2015/06/04/stl-smart-pointers/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="STL标准库之Smart Pointer。包括shared_ptr和unique_ptr两大类。介绍与用例。">
+<meta property="og:image" content="http://conglang.github.io/img/stl_shared_ptr_operations.png">
+<meta property="og:image" content="http://conglang.github.io/img/stl_weak_ptr_operations.png">
+<meta property="og:image" content="http://conglang.github.io/img/stl_atomic_operations_of_shared_ptr.png">
+<meta property="og:image" content="http://conglang.github.io/img/stl_unique_ptr_operations.png">
+<meta property="og:updated_time" content="2018-07-03T15:42:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STL Smart Pointers">
+<meta name="twitter:description" content="STL标准库之Smart Pointer。包括shared_ptr和unique_ptr两大类。介绍与用例。">
+<meta name="twitter:image" content="http://conglang.github.io/img/stl_shared_ptr_operations.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>STL Smart Pointers</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/06/09/note-cpp-primer5-2/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/05/31/note-cpp-primer5-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/06/04/stl-smart-pointers/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&text=STL Smart Pointers"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&is_video=false&description=STL Smart Pointers"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Smart Pointers&body=Check out this article: http://conglang.github.io/2015/06/04/stl-smart-pointers/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&name=STL Smart Pointers&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#class-shared_ptr"><span class="toc-number">1.</span> <span class="toc-text"> Class shared_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-class-shared_ptr"><span class="toc-number">1.1.</span> <span class="toc-text"> Using Class shared_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defining-a-deleter"><span class="toc-number">1.2.</span> <span class="toc-text"> Defining a Deleter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dealing-with-arrays"><span class="toc-number">1.3.</span> <span class="toc-text"> Dealing with Arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dealing-with-other-destruction-policies"><span class="toc-number">1.4.</span> <span class="toc-text"> Dealing with Other Destruction Policies</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-weak_ptr"><span class="toc-number">2.</span> <span class="toc-text"> Class weak_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-class-weak_ptr"><span class="toc-number">2.1.</span> <span class="toc-text"> Using Class weak_ptr</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#misusing-shared-pointers"><span class="toc-number">3.</span> <span class="toc-text"> Misusing Shared Pointers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shared-and-weak-pointers-in-detail"><span class="toc-number">4.</span> <span class="toc-text"> Shared and Weak Pointers in Detail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#class-shared_ptr-in-detail"><span class="toc-number">4.1.</span> <span class="toc-text"> Class shared_ptr in Detail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#more-sophisticated-shared_ptr-operations"><span class="toc-number">4.2.</span> <span class="toc-text"> More Sophisticated shared_ptr Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-weak_ptr-in-detail"><span class="toc-number">4.3.</span> <span class="toc-text"> Class weak_ptr in Detail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-safe-shared-pointer-interface"><span class="toc-number">4.4.</span> <span class="toc-text"> Thread-Safe Shared Pointer Interface</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-unique_ptr"><span class="toc-number">5.</span> <span class="toc-text"> Class unique_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-a-unique_ptr"><span class="toc-number">5.1.</span> <span class="toc-text"> Using a unique_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#transfer-of-ownership-by-unique_ptr"><span class="toc-number">5.2.</span> <span class="toc-text"> Transfer of Ownership by unique_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#source-and-sink"><span class="toc-number">5.3.</span> <span class="toc-text"> Source and Sink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unique_ptr-as-members"><span class="toc-number">5.4.</span> <span class="toc-text"> unique_ptr as Members</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dealing-with-arrays-2"><span class="toc-number">5.5.</span> <span class="toc-text"> Dealing with Arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deleters-for-other-associated-resources"><span class="toc-number">5.6.</span> <span class="toc-text"> Deleters for Other Associated Resources</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-unique_ptr-in-detail"><span class="toc-number">6.</span> <span class="toc-text"> Class unique_ptr in Detail</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#final-words-on-smart-pointers"><span class="toc-number">7.</span> <span class="toc-text"> Final Words on Smart Pointers</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#performance-issues"><span class="toc-number">7.1.</span> <span class="toc-text"> Performance Issues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#usage-issues"><span class="toc-number">7.2.</span> <span class="toc-text"> Usage Issues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意智能指针陷阱"><span class="toc-number">7.3.</span> <span class="toc-text"> 注意：智能指针陷阱</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STL Smart Pointers
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-06-04T15:08:41.000Z" itemprop="datePublished">2015-06-04</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/STL/">STL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>看书的时候跳过了这一节，被抓个正着。<strong>・゜・(ノД`)</strong></p>
+<p>C<ins>98提供的<code>auto_ptr&lt;&gt;</code>由于当时语言特性缺失(比如构造函数的move)，有很多问题，一直被各种C</ins>教材不建议使用。<br>
+C++11后，智能指针部分也添加很多新功能，<code>auto_ptr&lt;&gt;</code>也被正式废弃了。</p>
+<p>从C++11开始，STL提供2种智能指针：</p>
+<ol>
+<li><code>shared_ptr</code>表示shared ownership。多个智能指针指向同一个资源，当最后一个指向该资源的指针被删除时，该资源被释放。如果遇到更复杂的情况，可以使用一些帮助类，如<code>weak_ptr</code>，<code>bad_weak_ptr</code>，<code>enable_shared_from_this</code>等。</li>
+<li><code>unique_ptr</code>表示exclusive ownership或strict ownership。这个智能指针保证同时只有一个该指针指向某一资源。不过所有权是可以变更的。这个智能指针尤其适用于防止内存泄露的场合，比如忘了调用delete删除new出来的对象时。</li>
+</ol>
+<p>所有的智能指针都定义在头文件<code>&lt;memory&gt;</code>里。</p>
+<h2 id="class-shared_ptr"><a class="markdownIt-Anchor" href="#class-shared_ptr"></a> Class shared_ptr</h2>
+<p>shared ownership。最后一个走的记住锁门。</p>
+<h3 id="using-class-shared_ptr"><a class="markdownIt-Anchor" href="#using-class-shared_ptr"></a> Using Class shared_ptr</h3>
+<p>可以assign/copy/compare，也可以用<code>*</code>和<code>-&gt;</code>。<br>
+例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// two shared pointers representing two persons by their name</span></span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; pNico(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"nico"</span>));</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; pJutta(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"jutta"</span>));</span><br><span class="line">	<span class="comment">// capitalize person names</span></span><br><span class="line">	(*pNico)[<span class="number">0</span>] = <span class="string">'N'</span>;</span><br><span class="line">	pJutta-&gt;replace(<span class="number">0</span>,<span class="number">1</span>,<span class="string">"J"</span>);</span><br><span class="line">	<span class="comment">// put them multiple times in a container</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt;&gt; whoMadeCoffee;</span><br><span class="line">	whoMadeCoffee.push_back(pJutta);</span><br><span class="line">	whoMadeCoffee.push_back(pJutta);</span><br><span class="line">	whoMadeCoffee.push_back(pNico);</span><br><span class="line">	whoMadeCoffee.push_back(pJutta);</span><br><span class="line">	whoMadeCoffee.push_back(pNico);</span><br><span class="line">	<span class="comment">// print all elements</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> ptr : whoMadeCoffee)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; *ptr &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// overwrite a name again</span></span><br><span class="line">	*pNico = <span class="string">"Nicolai"</span>;</span><br><span class="line">	<span class="comment">// print all elements again</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> ptr : whoMadeCoffee)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; *ptr &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// print some internal data</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"use_count: "</span> &lt;&lt; whoMadeCoffee[<span class="number">0</span>].use_count() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//运行结果：</span></span><br><span class="line"><span class="comment">/*</span><br><span class="line">Jutta Jutta Nico Jutta Nico</span><br><span class="line">Jutta Jutta Nicolai Jutta Nicolai</span><br><span class="line">use_count: 4</span><br><span class="line">*/</span></span><br></pre></td></tr></table></figure>
+<p>创建方式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; pNico&#123;<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"nico"</span>)&#125;;</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; pNico = make_shared&lt;<span class="built_in">string</span>&gt;(<span class="string">"nico"</span>);	<span class="comment">//better</span></span><br></pre></td></tr></table></figure>
+<p>可以先声明再赋值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; pNico;</span><br><span class="line">pNico.reset(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"nico"</span>));</span><br></pre></td></tr></table></figure>
+<h3 id="defining-a-deleter"><a class="markdownIt-Anchor" href="#defining-a-deleter"></a> Defining a Deleter</h3>
+<p>可以自定义deleter。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; pNico(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"nico"</span>),</span><br><span class="line">			[](<span class="built_in">string</span>* p) &#123;</span><br><span class="line">				<span class="built_in">cout</span> &lt;&lt; <span class="string">"delete "</span> &lt;&lt; *p &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">				<span class="keyword">delete</span> p;</span><br><span class="line">			&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="dealing-with-arrays"><a class="markdownIt-Anchor" href="#dealing-with-arrays"></a> Dealing with Arrays</h3>
+<p>shared_ptr删除时默认调用delete，而非delete[]。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>]);	<span class="comment">// ERROR, but compiles</span></span><br></pre></td></tr></table></figure>
+<p>这种时候应该自定义函数/函数对象/lambda做为deleter。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>],</span><br><span class="line">			[](<span class="keyword">int</span>* p) &#123;</span><br><span class="line">				<span class="keyword">delete</span>[] p;</span><br><span class="line">			&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="dealing-with-other-destruction-policies"><a class="markdownIt-Anchor" href="#dealing-with-other-destruction-policies"></a> Dealing with Other Destruction Policies</h3>
+<p>删除时的额外操作。<br>
+例如，当最后一个引用被移除时，希望删除一个临时文件。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> FileDeleter</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> filename;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	FileDeleter(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; fn) : filename(fn)&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="built_in">std</span>::ofstream* fp)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		fp-&gt;close();	<span class="comment">// close file</span></span><br><span class="line">		<span class="built_in">std</span>::remove(filename.c_str());	<span class="comment">// delete file</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// create and open temporary file:</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="built_in">std</span>::ofstream&gt; fp(<span class="keyword">new</span> <span class="built_in">std</span>::ofstream(<span class="string">"tmpfile.txt"</span>), FileDeleter(<span class="string">"tmpfile.txt"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不过更好的办法其实是创建一个新类，构造函数进行初始化工作，析构函数做清理。只用shared_ptr们管理这个类new出的对象。</p>
+<h2 id="class-weak_ptr"><a class="markdownIt-Anchor" href="#class-weak_ptr"></a> Class weak_ptr</h2>
+<p>某些情况下，shared_ptr并不适用，例如：</p>
+<ul>
+<li>循环指向，两个智能指针分别指向对方。如果是shared_ptr会导致无法释放数据，因为他们的use_count()都还是1。</li>
+<li>想要显式分享但不持有一个对象。shared_ptr会导致无法释放该对象。普通指针则有可能变成野指针。</li>
+</ul>
+<p>这些情况下就要用weak_ptr了，可以分享但并不持有一个对象。创建时需要指定一个shared_ptr，当最后一个shared_ptr被释放时，这个weak_ptr也就自动变成空了。<br>
+weak_ptr不提供<code>*</code>和<code>-&gt;</code>，而是通过从其创建出一个shared_ptr来控制引用对象。因为这样才能保证操作时该对象会存在。<br>
+所以weak_ptr提供的操作很少：只能创建、复制、赋值为shared-ptr和检查指向对象是否存在。</p>
+<h3 id="using-class-weak_ptr"><a class="markdownIt-Anchor" href="#using-class-weak_ptr"></a> Using Class weak_ptr</h3>
+<p>通过使用weak_ptr将双向指向变成单向。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>:</span><br><span class="line"><span class="keyword">class</span> Person</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">string</span> name;</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;Person&gt; mother;</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;Person&gt; father;</span><br><span class="line">	<span class="built_in">vector</span>&lt;weak_ptr&lt;Person&gt;&gt; kids;	<span class="comment">// weak pointer</span></span><br><span class="line">	Person(<span class="keyword">const</span> <span class="built_in">string</span> &amp;n, <span class="built_in">shared_ptr</span>&lt;Person&gt; m = <span class="literal">nullptr</span>, <span class="built_in">shared_ptr</span>&lt;Person&gt; f = <span class="literal">nullptr</span>) : name(n), mother(m), father(f)</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	~Person()&#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"delete "</span> &lt;&lt; name &lt;&lt; <span class="built_in">endl</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;Person&gt; initFamily(<span class="keyword">const</span> <span class="built_in">string</span> &amp;name)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;Person&gt; mom(<span class="keyword">new</span> Person(name+<span class="string">"'s mom"</span>));</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;Person&gt; dad(<span class="keyword">new</span> Person(name+<span class="string">"'s dad"</span>));</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;Person&gt; kid(<span class="keyword">new</span> Person(name, mom, dad));</span><br><span class="line">	mom-&gt;kids.push_back(kid);</span><br><span class="line">	dad-&gt;kids.push_back(kid);</span><br><span class="line">	<span class="keyword">return</span> kid;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;Person&gt; p = initFamily(<span class="string">"nico"</span>);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"nico's family exists"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"- nico is shared "</span> &lt;&lt; p.use_count() &lt;&lt; <span class="string">" times"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"- name of 1st kid of nico's mom: "</span> &lt;&lt; p-&gt;mother-&gt;kids[<span class="number">0</span>].lock()-&gt;name &lt;&lt; <span class="built_in">endl</span>;	<span class="comment">// notice lock</span></span><br><span class="line">	p = initFamily(<span class="string">"jim"</span>);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"jim's family exists"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">/*</span><br><span class="line">nico's family exists</span><br><span class="line">- nico shared 1 times</span><br><span class="line">- name of 1st kid of nico's mom: nico</span><br><span class="line">delete nico</span><br><span class="line">delete nico's dad</span><br><span class="line">delete nico's mom</span><br><span class="line">jim's family exists</span><br><span class="line">delete jim</span><br><span class="line">delete jim's dad</span><br><span class="line">delete jim's mom</span><br><span class="line">*/</span></span><br></pre></td></tr></table></figure>
+<p>lock操作从weak_ptr中复制出一个shared_ptr。如果该weak_ptr所指向的对象已经被释放，复制出的shared_ptr也是空的，可能会引起未定义操作。<br>
+如果不确定weak_ptr所指向的对象是否还存在，有几种处理方法：</p>
+<ol>
+<li>调用expired()，如果weak_ptr指向对象已不存在就会返回true。等价于用use_count()判断是否是0，并且更快一些。</li>
+<li>可以从weak_ptr到shared_ptr显式转化，用shared_ptr的构造函数。如果对象不存在，会抛出一个bad_weak_ptr错误。</li>
+<li>可以用use_count()查询对象引用数目，如果是0就算了。STL上明确说了use_count()可能性能不怎样，所以只能在debug时用。</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; sp(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"hi"</span>));	<span class="comment">// create shared pointer</span></span><br><span class="line">	weak_ptr&lt;<span class="built_in">string</span>&gt; wp = sp;	<span class="comment">// create weak pointer out of it</span></span><br><span class="line">	sp.reset();	<span class="comment">// release object of shared pointer</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; wp.use_count() &lt;&lt; <span class="built_in">endl</span>;	<span class="comment">// prints: 0</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; boolalpha &lt;&lt; wp.expired() &lt;&lt; <span class="built_in">endl</span>;	<span class="comment">// prints: true</span></span><br><span class="line">	<span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; p(wp);	<span class="comment">// throws std::bad_weak_ptr</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (<span class="keyword">const</span> <span class="built_in">std</span>::exception &amp;e) &#123;</span><br><span class="line">	<span class="built_in">cerr</span> &lt;&lt; <span class="string">"exception: "</span> &lt;&lt; e.what() &lt;&lt; <span class="built_in">endl</span>;	<span class="comment">// prints: bad_weak_ptr</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="misusing-shared-pointers"><a class="markdownIt-Anchor" href="#misusing-shared-pointers"></a> Misusing Shared Pointers</h2>
+<p>除了要小心循环指向，还要小心同时只能有一组shared_ptr持有某个对象。不然同一对象会被delete两次而出错。<br>
+错误写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p = <span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp1(p);</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp2(p);	<span class="comment">// ERROR: two shared pointers manage allocated int.</span></span><br></pre></td></tr></table></figure>
+<p>正确写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp1(<span class="keyword">new</span> <span class="keyword">int</span>);</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp2(sp1);	<span class="comment">// OK</span></span><br></pre></td></tr></table></figure>
+<p>继承<code>std::enable_shared_from_this&lt;&gt;</code>允许用<code>shared_from_this()</code>得到本类的唯一智能指针，但不能在构造函数中调用。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Person : <span class="keyword">public</span> <span class="built_in">std</span>::enable_shared_from_this&lt;Person&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	...</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setParentsAndTheirKids</span><span class="params">(<span class="built_in">shared_ptr</span>&lt;Person&gt; m = <span class="literal">nullptr</span>,	<span class="built_in">shared_ptr</span>&lt;Person&gt; f = <span class="literal">nullptr</span>)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		mother = m;</span><br><span class="line">		father = f;</span><br><span class="line">		<span class="keyword">if</span> (m != <span class="literal">nullptr</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			m-&gt;kids.push_back(shared_from_this());	<span class="comment">//OK</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (f != <span class="literal">nullptr</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			f-&gt;kids.push_back(shared_from_this());	<span class="comment">//OK</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="shared-and-weak-pointers-in-detail"><a class="markdownIt-Anchor" href="#shared-and-weak-pointers-in-detail"></a> Shared and Weak Pointers in Detail</h2>
+<p>总结shared_ptr和weak_ptr。</p>
+<h3 id="class-shared_ptr-in-detail"><a class="markdownIt-Anchor" href="#class-shared_ptr-in-detail"></a> Class shared_ptr in Detail</h3>
+<p>shared ownership.</p>
+<p>定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="built_in">std</span> &#123;</span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">shared_ptr</span></span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="keyword">typedef</span> T element_type;</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中T可以是void，就类似void*。</p>
+<p>shared_ptr提供的所有操作：<br>
+<img src="/img/stl_shared_ptr_operations.png" alt="Operations of shared_ptr"><br>
+其中get_deleter的用法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> del = [](<span class="keyword">int</span> *p) &#123;</span><br><span class="line">				<span class="keyword">delete</span> p;</span><br><span class="line">			&#125;;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p(<span class="keyword">new</span> <span class="keyword">int</span>, del);</span><br><span class="line"><span class="keyword">decltype</span>(del)* pd = <span class="built_in">std</span>::get_deleter&lt;<span class="keyword">decltype</span>(del)&gt;(p);</span><br></pre></td></tr></table></figure>
+<h3 id="more-sophisticated-shared_ptr-operations"><a class="markdownIt-Anchor" href="#more-sophisticated-shared_ptr-operations"></a> More Sophisticated shared_ptr Operations</h3>
+<p>使用aliasing constructor要注意，表示了一个对象拥有另一个对象的关系。程序员要注意保证他们生存期是一致的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> X</span><br><span class="line">&#123;<span class="keyword">int</span> a;&#125;;</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;X&gt; px(<span class="keyword">new</span> X);</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; pi(px, &amp;px-&gt;a);	<span class="comment">// X owns a. 创建指向a的指针需要保证其所在X存在，所以用aliasing constructor。</span></span><br></pre></td></tr></table></figure>
+<p>一个错误示例：TODO</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;X&gt; sp1(<span class="keyword">new</span> X);</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;X&gt; sp2(sp1, <span class="keyword">new</span> X);	<span class="comment">// ERROR: delete for this X will never be called</span></span><br><span class="line">sp1.reset();	<span class="comment">// deletes first X; makes sp1 empty</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;X&gt; sp3(sp1, newX);	<span class="comment">// use_count()==0, but get()!=nullptr</span></span><br></pre></td></tr></table></figure>
+<p>用<code>make_shared&lt;X&gt;(...)</code>比较好。</p>
+<p>使用cast：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">void</span>&gt; sp(<span class="keyword">new</span> <span class="keyword">int</span>);	<span class="comment">// shared pointer holds a void* internally</span></span><br><span class="line">static_pointer_cast&lt;<span class="keyword">int</span>*&gt;(sp);	<span class="comment">// OK</span></span><br></pre></td></tr></table></figure>
+<h3 id="class-weak_ptr-in-detail"><a class="markdownIt-Anchor" href="#class-weak_ptr-in-detail"></a> Class weak_ptr in Detail</h3>
+<p>share an object without owing it.<br>
+定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="built_in">std</span> &#123;</span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">	<span class="keyword">class</span> weak_ptr</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="keyword">typedef</span> T element_type;</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/stl_weak_ptr_operations.png" alt="Operations of weak_ptrs"></p>
+<h3 id="thread-safe-shared-pointer-interface"><a class="markdownIt-Anchor" href="#thread-safe-shared-pointer-interface"></a> Thread-Safe Shared Pointer Interface</h3>
+<p>shared_ptr不是线程安全的。<br>
+有重载版的shared_ptr可以做到指针自己的线程安全。如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;X&gt; global;	<span class="comment">// initially nullptr</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;X&gt; local&#123;<span class="keyword">new</span> X&#125;;</span><br><span class="line">	...</span><br><span class="line">	<span class="built_in">std</span>::atomic_store(&amp;global,local);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/stl_atomic_operations_of_shared_ptr.png" alt="High-Level Atomic Operations of shared_ptr"></p>
+<h2 id="class-unique_ptr"><a class="markdownIt-Anchor" href="#class-unique_ptr"></a> Class unique_ptr</h2>
+<p>当程序出现exception时仍能防止内存泄露。exclusive ownership。</p>
+<h3 id="using-a-unique_ptr"><a class="markdownIt-Anchor" href="#using-a-unique_ptr"></a> Using a unique_ptr</h3>
+<p>和普通指针接口差不多。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create and initialize (pointer to) string:</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; up(<span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(<span class="string">"nico"</span>));</span><br><span class="line">(*up)[<span class="number">0</span>] = <span class="string">'N'</span>;	<span class="comment">// replace first character</span></span><br><span class="line">up-&gt;append(<span class="string">"lai"</span>);	<span class="comment">// append some characters</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; *up &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;	<span class="comment">// print whole string</span></span><br></pre></td></tr></table></figure>
+<p>但是没有指针算术如++之类的操作。可以是空的即不持有一个对象。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; up;</span><br><span class="line">up = <span class="literal">nullptr</span>;</span><br><span class="line">up.reset();</span><br></pre></td></tr></table></figure>
+<p>用release来把所有权交出。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; up(<span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(<span class="string">"nico"</span>));</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span>* sp = up.release();	<span class="comment">// up loses ownership</span></span><br></pre></td></tr></table></figure>
+<p>检查unique_ptr是否为空。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (up) &#123;&#125;	<span class="comment">// if up is not empty</span></span><br><span class="line"><span class="keyword">if</span> (up != <span class="literal">nullptr</span>) &#123;&#125;	<span class="comment">// if up is not empty</span></span><br><span class="line"><span class="keyword">if</span> (up.get() != <span class="literal">nullptr</span>)&#123;&#125;	<span class="comment">// if up is not empty</span></span><br></pre></td></tr></table></figure>
+<h3 id="transfer-of-ownership-by-unique_ptr"><a class="markdownIt-Anchor" href="#transfer-of-ownership-by-unique_ptr"></a> Transfer of Ownership by unique_ptr</h3>
+<p>程序员需要保证从同一个普通指针初始化的unique_ptr只有一个。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> *sp = <span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>(<span class="string">"hello"</span>);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; up1(sp);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; up2(sp);	<span class="comment">// RUNTIME　ERROR: up1 and up2 own same data</span></span><br></pre></td></tr></table></figure>
+<p>如果要转移，应用C++11的move。如果被转移的unique_ptr之前指向别人，别人被删除。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// initialize a unique_ptr with a new object</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; up1(<span class="keyword">new</span> ClassA);</span><br><span class="line"><span class="comment">// transfer ownership of the unique_ptr</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; up2(<span class="built_in">std</span>::move(up1));</span><br><span class="line"><span class="comment">// delete old object and own new</span></span><br><span class="line">up2 = <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt;(<span class="keyword">new</span> ClassA);</span><br><span class="line"><span class="comment">// delete the associated object</span></span><br><span class="line">up2 = <span class="literal">nullptr</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="source-and-sink"><a class="markdownIt-Anchor" href="#source-and-sink"></a> Source and Sink</h3>
+<p>Sink指的是外部获得的资源通过unique_ptr转移进某函数，然后在某函数内随着函数执行完毕被消灭。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sink</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; up)</span></span>&#123;...&#125;	<span class="comment">// sink() gets ownership</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; up(<span class="keyword">new</span> ClassA);</span><br><span class="line">sink(<span class="built_in">std</span>::move(up));	<span class="comment">// up loses ownership</span></span><br></pre></td></tr></table></figure>
+<p>Source指的是某函数可以被用作数据源，每次传一个新的来，用完即弃。之所以返回值不用加move是因为C++11有规定，编译器会自动尝试move。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; source()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; ptr(<span class="keyword">new</span> ClassA);	<span class="comment">// ptr owns the new object</span></span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">return</span> ptr;	<span class="comment">// transfer ownership to calling function</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; p;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		p = source();	<span class="comment">// p gets ownership of the returned object (previously returned object of f() gets deleted)</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="unique_ptr-as-members"><a class="markdownIt-Anchor" href="#unique_ptr-as-members"></a> unique_ptr as Members</h3>
+<p>在类中使用unique_ptr也可以防止资源泄露。几乎都用不上析构函数了。必须提供拷贝构造函数和赋值运算符重载，因为unique_ptr原生不支持。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> ClassB</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; ptr1;	<span class="comment">// unique_ptr members</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA&gt; ptr2;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// constructor that initializes the unique_ptrs</span></span><br><span class="line">	<span class="comment">// - no resource leak possible</span></span><br><span class="line">	ClassB (in val1, <span class="keyword">int</span> val2) : ptr1(<span class="keyword">new</span> ClassA(val1), ptr2(<span class="keyword">new</span> ClassA(val2)))</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	<span class="comment">// copy constructor</span></span><br><span class="line">	<span class="comment">// - no resource leak possible</span></span><br><span class="line">	ClassB (<span class="keyword">const</span> ClassB&amp; x) : ptr1(<span class="keyword">new</span> ClassA(*x.ptr1)), ptr2(<span class="keyword">new</span> ClassA(*x.ptr2))</span><br><span class="line">	&#123;&#125;</span><br><span class="line">	<span class="comment">// assignment operator</span></span><br><span class="line">	<span class="keyword">const</span> ClassB&amp; <span class="keyword">operator</span>= (<span class="keyword">const</span> ClassB&amp; x)</span><br><span class="line">	&#123;</span><br><span class="line">		*ptr1 = *x.ptr1;</span><br><span class="line">		*ptr2 = *x.ptr2;</span><br><span class="line">		<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// no destructor necessary</span></span><br><span class="line">	<span class="comment">// (default destructor lets ptr1 and ptr2 delete their objects)</span></span><br><span class="line">	...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="dealing-with-arrays-2"><a class="markdownIt-Anchor" href="#dealing-with-arrays-2"></a> Dealing with Arrays</h3>
+<p>unique_ptr默认删除用delete而非delete[]。<br>
+应该用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>[]&gt; up(<span class="keyword">new</span> <span class="built_in">std</span>::<span class="built_in">string</span>[<span class="number">10</span>]);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; up[<span class="number">0</span>] &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="deleters-for-other-associated-resources"><a class="markdownIt-Anchor" href="#deleters-for-other-associated-resources"></a> Deleters for Other Associated Resources</h3>
+<p>与定义shared_ptr的稍有不同，必须在模板的第二个参数指定deleter的类型，如函数对象或函数指针或函数。<br>
+函数对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// function object</span></span><br><span class="line"><span class="keyword">class</span> ClassADeleter</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span> <span class="params">()</span> <span class="params">(ClassA* p)</span> </span>&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"call delete for ClassA object"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">delete</span> p;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line">...</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;ClassA,ClassADeleter&gt; up(<span class="keyword">new</span> ClassA());</span><br></pre></td></tr></table></figure>
+<p>lambda：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lambda 1</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>,<span class="keyword">void</span>(*)(<span class="keyword">int</span>*)&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>],</span><br><span class="line">	[](<span class="keyword">int</span>* p) &#123;</span><br><span class="line">		...</span><br><span class="line">		<span class="keyword">delete</span>[] p;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lambda 2</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>,<span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(<span class="keyword">int</span>*)&gt;&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>],</span><br><span class="line">	[](<span class="keyword">int</span>* p) &#123;</span><br><span class="line">		...</span><br><span class="line">		<span class="keyword">delete</span>[] p;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> l = [](<span class="keyword">int</span>* p) &#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">delete</span>[] p;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>,<span class="keyword">decltype</span>(l)&gt;&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>], l);</span><br></pre></td></tr></table></figure>
+<p>为了躲避填写deleter的类型，可以用C++11提供的alias template。这样接口就和shared_ptr差不多了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">using</span> uniquePtr = <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;T,<span class="keyword">void</span>(*)(T*)&gt;; <span class="comment">// alias template</span></span><br><span class="line">...</span><br><span class="line">uniquePtr&lt;<span class="keyword">int</span>&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>], [](<span class="keyword">int</span>* p) &#123; <span class="comment">// used here</span></span><br><span class="line">					...</span><br><span class="line">					<span class="keyword">delete</span>[] p;</span><br><span class="line">				&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="class-unique_ptr-in-detail"><a class="markdownIt-Anchor" href="#class-unique_ptr-in-detail"></a> Class unique_ptr in Detail</h2>
+<p>exclusive ownership。<br>
+定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="built_in">std</span> &#123;</span><br><span class="line">	<span class="comment">// primary template:</span></span><br><span class="line">	<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> D = default_delete&lt;T&gt;&gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">unique_ptr</span></span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="keyword">typedef</span> ... pointer; <span class="comment">// may be D::pointer</span></span><br><span class="line">		<span class="keyword">typedef</span> T element_type;</span><br><span class="line">		<span class="keyword">typedef</span> D deleter_type;</span><br><span class="line">		...</span><br><span class="line">		T&amp; <span class="keyword">operator</span>*() <span class="keyword">const</span>;</span><br><span class="line">		T* <span class="keyword">operator</span>-&gt;() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</span><br><span class="line">		...</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="comment">// partial specialization for arrays:</span></span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> D&gt;</span><br><span class="line">	<span class="keyword">class</span> <span class="built_in">unique_ptr</span>&lt;T[], D&gt;</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="keyword">typedef</span> ... pointer; <span class="comment">// may be D::pointer</span></span><br><span class="line">		<span class="keyword">typedef</span> T element_type;</span><br><span class="line">		<span class="keyword">typedef</span> D deleter_type;</span><br><span class="line">		...</span><br><span class="line">		T&amp; <span class="keyword">operator</span>[](<span class="keyword">size_t</span> i) <span class="keyword">const</span>;</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/stl_unique_ptr_operations.png" alt="Operations of unique_ptrs"><br>
+其中变量是一个pointer和一个deleter的构造函数重载多个。TODO</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">D d; <span class="comment">//instance of the deleter type</span></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>, D&gt; p1(<span class="keyword">new</span> <span class="keyword">int</span>, D()); <span class="comment">// D must be MoveConstructible</span></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>, D&gt; p2(<span class="keyword">new</span> <span class="keyword">int</span>, d); <span class="comment">// D must be CopyConstructible</span></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>, D&amp;&gt; p3(<span class="keyword">new</span> <span class="keyword">int</span>, d); <span class="comment">// p3 holds a reference to d</span></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>, <span class="keyword">const</span> D&amp;&gt; p4(<span class="keyword">new</span> <span class="keyword">int</span>, D()); <span class="comment">//Error: rvalue deleter object, can’t have reference deleter type</span></span><br></pre></td></tr></table></figure>
+<p>为数组特化的类型与普通unique_ptr的不同之处是：</p>
+<ul>
+<li>提供<code>[]</code>而非<code>*</code>和<code>-&gt;</code>。</li>
+<li>默认deleter调用delete[]而非delete。</li>
+<li>不支持类型转换。所以派生类指针就不能这样用了。</li>
+</ul>
+<h2 id="final-words-on-smart-pointers"><a class="markdownIt-Anchor" href="#final-words-on-smart-pointers"></a> Final Words on Smart Pointers</h2>
+<h3 id="performance-issues"><a class="markdownIt-Anchor" href="#performance-issues"></a> Performance Issues</h3>
+<p>shared_ptr和weak_ptr支持通用类型，不能做特化的优化，内部需要的帮助对象就比较多，所以性能比较差。<br>
+unique_ptr没有这些问题，如果deleter使用lambda则性能更优化。</p>
+<h3 id="usage-issues"><a class="markdownIt-Anchor" href="#usage-issues"></a> Usage Issues</h3>
+<p>永远不要从一个原生指针创建出多个智能指针。<br>
+shared_ptr和unique_ptr处理数组的接口不太一样，要注意。<br>
+智能指针一般情况下并不是线程安全的。</p>
+<h3 id="注意智能指针陷阱"><a class="markdownIt-Anchor" href="#注意智能指针陷阱"></a> 注意：智能指针陷阱</h3>
+<ul>
+<li>不使用相同的内置指针值初始化(或reset)多个智能指针。</li>
+<li>不delete get()返回的指针。</li>
+<li>不使用get()初始化或reset另一个智能指针。</li>
+<li>如果你使用get()返回的指针，记住当最后一个对应的智能指针销毁后，你的指针就变为无效了。</li>
+<li>如果你使用智能指针管理的资源不是new分配的内存，记住传递给它一个删除器。</li>
+</ul>
+<p>[1] The C++ Standard Library 2nd Edition<br>
+[2] C++ Primer, 5th Edition</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#class-shared_ptr"><span class="toc-number">1.</span> <span class="toc-text"> Class shared_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-class-shared_ptr"><span class="toc-number">1.1.</span> <span class="toc-text"> Using Class shared_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defining-a-deleter"><span class="toc-number">1.2.</span> <span class="toc-text"> Defining a Deleter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dealing-with-arrays"><span class="toc-number">1.3.</span> <span class="toc-text"> Dealing with Arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dealing-with-other-destruction-policies"><span class="toc-number">1.4.</span> <span class="toc-text"> Dealing with Other Destruction Policies</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-weak_ptr"><span class="toc-number">2.</span> <span class="toc-text"> Class weak_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-class-weak_ptr"><span class="toc-number">2.1.</span> <span class="toc-text"> Using Class weak_ptr</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#misusing-shared-pointers"><span class="toc-number">3.</span> <span class="toc-text"> Misusing Shared Pointers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shared-and-weak-pointers-in-detail"><span class="toc-number">4.</span> <span class="toc-text"> Shared and Weak Pointers in Detail</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#class-shared_ptr-in-detail"><span class="toc-number">4.1.</span> <span class="toc-text"> Class shared_ptr in Detail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#more-sophisticated-shared_ptr-operations"><span class="toc-number">4.2.</span> <span class="toc-text"> More Sophisticated shared_ptr Operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-weak_ptr-in-detail"><span class="toc-number">4.3.</span> <span class="toc-text"> Class weak_ptr in Detail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-safe-shared-pointer-interface"><span class="toc-number">4.4.</span> <span class="toc-text"> Thread-Safe Shared Pointer Interface</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-unique_ptr"><span class="toc-number">5.</span> <span class="toc-text"> Class unique_ptr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-a-unique_ptr"><span class="toc-number">5.1.</span> <span class="toc-text"> Using a unique_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#transfer-of-ownership-by-unique_ptr"><span class="toc-number">5.2.</span> <span class="toc-text"> Transfer of Ownership by unique_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#source-and-sink"><span class="toc-number">5.3.</span> <span class="toc-text"> Source and Sink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unique_ptr-as-members"><span class="toc-number">5.4.</span> <span class="toc-text"> unique_ptr as Members</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dealing-with-arrays-2"><span class="toc-number">5.5.</span> <span class="toc-text"> Dealing with Arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deleters-for-other-associated-resources"><span class="toc-number">5.6.</span> <span class="toc-text"> Deleters for Other Associated Resources</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#class-unique_ptr-in-detail"><span class="toc-number">6.</span> <span class="toc-text"> Class unique_ptr in Detail</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#final-words-on-smart-pointers"><span class="toc-number">7.</span> <span class="toc-text"> Final Words on Smart Pointers</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#performance-issues"><span class="toc-number">7.1.</span> <span class="toc-text"> Performance Issues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#usage-issues"><span class="toc-number">7.2.</span> <span class="toc-text"> Usage Issues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意智能指针陷阱"><span class="toc-number">7.3.</span> <span class="toc-text"> 注意：智能指针陷阱</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/06/04/stl-smart-pointers/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&text=STL Smart Pointers"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&is_video=false&description=STL Smart Pointers"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Smart Pointers&body=Check out this article: http://conglang.github.io/2015/06/04/stl-smart-pointers/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&title=STL Smart Pointers"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/06/04/stl-smart-pointers/&name=STL Smart Pointers&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

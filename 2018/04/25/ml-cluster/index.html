@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Cluster 聚类。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cluster 聚类">
+<meta property="og:url" content="http://conglang.github.io/2018/04/25/ml-cluster/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="Cluster 聚类。">
+<meta property="og:image" content="http://conglang.github.io/img/2B36299D-4533-4C25-98B7-54FB688B8344.png">
+<meta property="og:image" content="http://conglang.github.io/img/4B8FD166-7BDD-4A3B-A3B3-59C0C68A1694.png">
+<meta property="og:image" content="http://conglang.github.io/img/BA1A745D-9B68-4C6C-961C-DF3A02F9DCE2.png">
+<meta property="og:image" content="http://conglang.github.io/img/599F074D-95AD-4A34-8550-481BB0FEA0C1.png">
+<meta property="og:image" content="http://conglang.github.io/img/070C6131-4123-47C6-BA2E-A012532FBA18.png">
+<meta property="og:image" content="http://conglang.github.io/img/A024285C-19B7-49E1-B9A9-06A815A7D6C2.png">
+<meta property="og:image" content="http://conglang.github.io/img/340F0D8C-1612-407F-9B32-651866C83E64.png">
+<meta property="og:image" content="http://conglang.github.io/img/7CBA88D8-746A-472A-9543-24D54D33DFD4.png">
+<meta property="og:image" content="http://conglang.github.io/img/6C5CE195-F46F-40E4-A84A-6B12A9836B40.png">
+<meta property="og:image" content="http://conglang.github.io/img/221C63D1-7AE2-488A-9E73-71217BDE572D.png">
+<meta property="og:image" content="http://conglang.github.io/img/A3AF73F5-C77A-4B32-9FF1-954B0AE1E31D.png">
+<meta property="og:image" content="http://conglang.github.io/img/D226DF4E-4944-4DFD-BF32-7E6BAB465F8E.png">
+<meta property="og:image" content="http://conglang.github.io/img/D4F2CE69-F066-4D09-909F-F37C1796F6F9.png">
+<meta property="og:image" content="http://conglang.github.io/img/16C9978F-1C45-4DFA-BCC9-9FCC89F4A3BD.png">
+<meta property="og:image" content="http://conglang.github.io/img/DCD39306-F1EE-4B10-B4BF-61B96376FC32.png">
+<meta property="og:image" content="http://conglang.github.io/img/23FB797B-7196-4839-A762-8CF0FB7858AB.png">
+<meta property="og:image" content="http://conglang.github.io/img/F9F182DC-0FFF-4809-88C8-20E9B81FB3EF.png">
+<meta property="og:image" content="http://conglang.github.io/img/B00606D2-83B7-4C8A-B810-F206B6423DB0.png">
+<meta property="og:image" content="http://conglang.github.io/img/95ED235A-2FFE-4E43-875E-45F568620488.png">
+<meta property="og:image" content="http://conglang.github.io/img/65E65FBE-E695-41A4-B1B9-6E722581BB73.png">
+<meta property="og:image" content="http://conglang.github.io/img/7ACEA72E-96E4-4B9F-B69B-C98BB7785AF9.png">
+<meta property="og:image" content="http://conglang.github.io/img/1C26B2E2-7096-4A57-A30E-C70555042511.png">
+<meta property="og:image" content="http://conglang.github.io/img/A7C69336-B19C-4CF2-8403-A7424C2ADC53.png">
+<meta property="og:image" content="http://conglang.github.io/img/9C1285B0-705D-402A-A54F-E69412BEC645.png">
+<meta property="og:image" content="http://conglang.github.io/img/C4CE03B5-9C91-43F7-8E51-AF8CE2F6F315.png">
+<meta property="og:image" content="http://conglang.github.io/img/9884D88B-9568-4E15-8C8C-53FFB656FDAD.png">
+<meta property="og:image" content="http://conglang.github.io/img/4144A600-6775-4712-88A4-8A0BB2CEEE4D.png">
+<meta property="og:image" content="http://conglang.github.io/img/4BFA3D3D-382E-41B6-AC94-EFD0089DEB6C.png">
+<meta property="og:image" content="http://conglang.github.io/img/077E37B4-7B83-4273-8BE7-03EA39A40BB6.png">
+<meta property="og:image" content="http://conglang.github.io/img/F6516E9E-4A90-4354-BA2C-74A3561DA295.png">
+<meta property="og:updated_time" content="2018-08-12T06:48:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cluster 聚类">
+<meta name="twitter:description" content="Cluster 聚类。">
+<meta name="twitter:image" content="http://conglang.github.io/img/2B36299D-4533-4C25-98B7-54FB688B8344.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>Cluster 聚类</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/04/30/ml-k-means/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/04/20/ml-feature-selection/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/04/25/ml-cluster/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/04/25/ml-cluster/&text=Cluster 聚类"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/04/25/ml-cluster/&is_video=false&description=Cluster 聚类"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cluster 聚类&body=Check out this article: http://conglang.github.io/2018/04/25/ml-cluster/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/04/25/ml-cluster/&name=Cluster 聚类&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#性能度量"><span class="toc-number">1.</span> <span class="toc-text"> 性能度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#距离计算"><span class="toc-number">2.</span> <span class="toc-text"> 距离计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prototype-based-clustering-原型聚类"><span class="toc-number">3.</span> <span class="toc-text"> prototype-based clustering 原型聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#k-means-k-均值算法"><span class="toc-number">3.1.</span> <span class="toc-text"> k-means k 均值算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#learning-vector-quantization-学习向量量化"><span class="toc-number">3.2.</span> <span class="toc-text"> Learning Vector Quantization 学习向量量化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mixture-of-gaussian-高斯混合聚类"><span class="toc-number">3.3.</span> <span class="toc-text"> Mixture-of-Gaussian 高斯混合聚类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#density-based-clustering-密度聚类"><span class="toc-number">4.</span> <span class="toc-text"> density-based clustering 密度聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dbscan"><span class="toc-number">4.1.</span> <span class="toc-text"> DBSCAN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hierarchical-clustering-层次聚类"><span class="toc-number">5.</span> <span class="toc-text"> hierarchical clustering 层次聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#agnes"><span class="toc-number">5.1.</span> <span class="toc-text"> AGNES</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">6.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Cluster 聚类
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-04-25T14:00:00.000Z" itemprop="datePublished">2018-04-25</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Machine-Learning/">Machine Learning</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>无监督学习 unsupervised learning。</p>
+<p>聚类试图将数据集中的样本划分为若干个通常是不相交的子集，每个子集称为一个簇 cluster。</p>
+<p>聚类既能作为一个单独过程，用于找寻数据内在的分布结构，也可作为分类等其他学习任务的前驱过程。比如，商业中对新用户的类型先聚类，然后基于这些类训练分类模型，用于判断新用户的类型。也可用于异常检测，远离簇中心的样本为异常点，或密度极低处的样本为异常点。</p>
+<p>聚类算法设计的两个基本问题：性能度量、距离计算。</p>
+<h2 id="性能度量"><a class="markdownIt-Anchor" href="#性能度量"></a> 性能度量</h2>
+<p>聚类结果的簇内相似度 intra-cluster similarity 高，且簇间相似度 inter-cluster similarity 低。</p>
+<p>两类：</p>
+<ul>
+<li>将聚类结果与某个参考模型 reference model 进行比较，称为外部指标 external index。</li>
+<li>直接考察聚类结果而不利用任何参考模型，称为内部指标 internal index。</li>
+</ul>
+<p>外部指标：<br>
+<img src="/img/2B36299D-4533-4C25-98B7-54FB688B8344.png" alt="Image Loading"><br>
+<img src="/img/4B8FD166-7BDD-4A3B-A3B3-59C0C68A1694.png" alt="Image Loading"><br>
+<img src="/img/BA1A745D-9B68-4C6C-961C-DF3A02F9DCE2.png" alt="Image Loading"></p>
+<p>内部指标：<br>
+<img src="/img/599F074D-95AD-4A34-8550-481BB0FEA0C1.png" alt="Image Loading"><br>
+<img src="/img/070C6131-4123-47C6-BA2E-A012532FBA18.png" alt="Image Loading"></p>
+<h2 id="距离计算"><a class="markdownIt-Anchor" href="#距离计算"></a> 距离计算</h2>
+<p><img src="/img/A024285C-19B7-49E1-B9A9-06A815A7D6C2.png" alt="Image Loading"><br>
+<img src="/img/340F0D8C-1612-407F-9B32-651866C83E64.png" alt="Image Loading"></p>
+<p>对于有序属性 ordinal attribute，可用闵可夫斯基距离。<br>
+<img src="/img/7CBA88D8-746A-472A-9543-24D54D33DFD4.png" alt="Image Loading"></p>
+<p>对于无序属性 non-ordinal attribute，可用 VDM (Value Difference Metric)。<br>
+比较各自在总数里的比例。<br>
+<img src="/img/6C5CE195-F46F-40E4-A84A-6B12A9836B40.png" alt="Image Loading"></p>
+<p>可以将两者结合起来处理混合属性。<br>
+<img src="/img/221C63D1-7AE2-488A-9E73-71217BDE572D.png" alt="Image Loading"><br>
+注意：如果我们只是基于某种形式的距离来定义”相似度度量 similarity measure”，距离越大，相似度越小，就不必要满足所有性质尤其是直递性。此时距离称为”非度量距离 non-metric distance”。<br>
+<img src="/img/A3AF73F5-C77A-4B32-9FF1-954B0AE1E31D.png" alt="Image Loading"></p>
+<h2 id="prototype-based-clustering-原型聚类"><a class="markdownIt-Anchor" href="#prototype-based-clustering-原型聚类"></a> prototype-based clustering 原型聚类</h2>
+<p>prototype-based clustering，此类算法假设聚类结构能通过一组原型刻画。<br>
+通常情况下，算法先对原型进行初始化，然后对原型进行迭代更新求解。采用不同的原型表示、不同的求解方式，将产生不同的算法。</p>
+<h3 id="k-means-k-均值算法"><a class="markdownIt-Anchor" href="#k-means-k-均值算法"></a> k-means k 均值算法</h3>
+<p><a href="/2018/04/30/ml-k-means/">k-means k 均值算法</a></p>
+<h3 id="learning-vector-quantization-学习向量量化"><a class="markdownIt-Anchor" href="#learning-vector-quantization-学习向量量化"></a> Learning Vector Quantization 学习向量量化</h3>
+<p>与一般聚类算法不同的是，LVQ 假设数据样本带有类别标记，学习过程利用样本的这些监督信息来辅助聚类。<br>
+首先初始化 q 个原型向量 center，然后开始迭代。每轮迭代，算法随机选取一个有标记训练样本，找出与其距离最近的原型向量，并根据两者的类别标记是否一致来对原型向量进行相应的更新，靠近一点或是远离一点。直到更新量很小或到达最大迭代轮数。<br>
+<img src="/img/D226DF4E-4944-4DFD-BF32-7E6BAB465F8E.png" alt="Image Loading"><br>
+<img src="/img/D4F2CE69-F066-4D09-909F-F37C1796F6F9.png" alt="Image Loading"></p>
+<h3 id="mixture-of-gaussian-高斯混合聚类"><a class="markdownIt-Anchor" href="#mixture-of-gaussian-高斯混合聚类"></a> Mixture-of-Gaussian 高斯混合聚类</h3>
+<p>采用概率模型来表达聚类原型。假设样本由几个高斯分布给出，簇划分由原型对应后验概率确定，极大似然估计，EM 算法求解。<br>
+<img src="/img/16C9978F-1C45-4DFA-BCC9-9FCC89F4A3BD.png" alt="Image Loading"><br>
+将高斯分布的概率密度函数记为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mi mathvariant="normal">∣</mi><mi>μ</mi><mo separator="true">,</mo><mi mathvariant="normal">Σ</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">p(x|\mu, \Sigma)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mord mathrm">∣</span><span class="mord mathit">μ</span><span class="mpunct">,</span><span class="mord mathrm">Σ</span><span class="mclose">)</span></span></span></span>。<br>
+<img src="/img/DCD39306-F1EE-4B10-B4BF-61B96376FC32.png" alt="Image Loading"><br>
+假设样本的生成过程由高斯混合分布给出。首先<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.0037em;">α</span></span></span></span>是每个子高斯分布的概率，然后每个子的按照各自的分布采样。<br>
+<img src="/img/23FB797B-7196-4839-A762-8CF0FB7858AB.png" alt="Image Loading"><br>
+因此，从原型聚类的角度来看，高斯混合聚类是采用概率模型(高斯分布)对原型进行刻画，簇划分则由原型对应后验概率确定。<br>
+<img src="/img/F9F182DC-0FFF-4809-88C8-20E9B81FB3EF.png" alt="Image Loading"><br>
+<img src="/img/B00606D2-83B7-4C8A-B810-F206B6423DB0.png" alt="Image Loading"><br>
+<img src="/img/95ED235A-2FFE-4E43-875E-45F568620488.png" alt="Image Loading"><br>
+<img src="/img/65E65FBE-E695-41A4-B1B9-6E722581BB73.png" alt="Image Loading"><br>
+<img src="/img/7ACEA72E-96E4-4B9F-B69B-C98BB7785AF9.png" alt="Image Loading"><br>
+<img src="/img/1C26B2E2-7096-4A57-A30E-C70555042511.png" alt="Image Loading"></p>
+<h2 id="density-based-clustering-密度聚类"><a class="markdownIt-Anchor" href="#density-based-clustering-密度聚类"></a> density-based clustering 密度聚类</h2>
+<p>此类算法假设聚类结果能通过样本分布的紧密程度确定。通常情况下，密度聚类算法从样本密度的角度来考察样本之间的可连接性，并基于可连接样本不断扩展聚类簇已获得最终的聚类结果。</p>
+<h3 id="dbscan"><a class="markdownIt-Anchor" href="#dbscan"></a> DBSCAN</h3>
+<p>簇是密度可达关系导出的最大的密度相连样本集合。先找到所有核心对象(周围有很多点密度直达)，然后从任一核心对象触发，找到其密度可达的样本生成聚类簇，直到所有核心对象均被访问过。</p>
+<p>概念定义：<br>
+<img src="/img/A7C69336-B19C-4CF2-8403-A7424C2ADC53.png" alt="Image Loading"><br>
+<img src="/img/9C1285B0-705D-402A-A54F-E69412BEC645.png" alt="Image Loading"><br>
+<img src="/img/C4CE03B5-9C91-43F7-8E51-AF8CE2F6F315.png" alt="Image Loading"><br>
+定义簇：<br>
+<img src="/img/9884D88B-9568-4E15-8C8C-53FFB656FDAD.png" alt="Image Loading"><br>
+算法：<br>
+先找出所有的核心对象。然后以任一核心对象为出发点，找出由其密度可达的样本生成聚类簇，直到所有核心对象均被访问过为止。<br>
+<img src="/img/4144A600-6775-4712-88A4-8A0BB2CEEE4D.png" alt="Image Loading"></p>
+<h2 id="hierarchical-clustering-层次聚类"><a class="markdownIt-Anchor" href="#hierarchical-clustering-层次聚类"></a> hierarchical clustering 层次聚类</h2>
+<p>层次聚类试图在不同层次对数据集进行划分，从而形成树形的聚类结构。数据集的划分可采用自底向上的聚合策略，也可采用自顶向下的分拆策略。</p>
+<h3 id="agnes"><a class="markdownIt-Anchor" href="#agnes"></a> AGNES</h3>
+<p>自底向上聚合策略。<br>
+先将数据集中的每个样本看做一个初始聚类簇，然后在算法运行的每一步中找出距离最近的两个聚类簇进行合并，该过程不断重复，直至达到预设的聚类簇个数。<br>
+这里的关键是如何计算聚类簇之间的距离。也即集合的某种距离。<br>
+<img src="/img/4BFA3D3D-382E-41B6-AC94-EFD0089DEB6C.png" alt="Image Loading"><br>
+最小距离由两个簇的最近样本决定；最大距离由两个簇的最远样本决定；平均距离由两个簇的所有样本共同决定。分别这三种时，AGNES 算法被相应地称为 single-linkage 单链接、complete-linkage 全链接、average-linkage 均链接。<br>
+<img src="/img/077E37B4-7B83-4273-8BE7-03EA39A40BB6.png" alt="Image Loading"><br>
+<img src="/img/F6516E9E-4A90-4354-BA2C-74A3561DA295.png" alt="Image Loading"><br>
+从分割层逐步提升，可得到聚类簇逐渐减少的聚类结果。</p>
+<h2 id="ref"><a class="markdownIt-Anchor" href="#ref"></a> Ref</h2>
+<p>[1] 机器学习 - 周志华</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#性能度量"><span class="toc-number">1.</span> <span class="toc-text"> 性能度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#距离计算"><span class="toc-number">2.</span> <span class="toc-text"> 距离计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prototype-based-clustering-原型聚类"><span class="toc-number">3.</span> <span class="toc-text"> prototype-based clustering 原型聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#k-means-k-均值算法"><span class="toc-number">3.1.</span> <span class="toc-text"> k-means k 均值算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#learning-vector-quantization-学习向量量化"><span class="toc-number">3.2.</span> <span class="toc-text"> Learning Vector Quantization 学习向量量化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mixture-of-gaussian-高斯混合聚类"><span class="toc-number">3.3.</span> <span class="toc-text"> Mixture-of-Gaussian 高斯混合聚类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#density-based-clustering-密度聚类"><span class="toc-number">4.</span> <span class="toc-text"> density-based clustering 密度聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dbscan"><span class="toc-number">4.1.</span> <span class="toc-text"> DBSCAN</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hierarchical-clustering-层次聚类"><span class="toc-number">5.</span> <span class="toc-text"> hierarchical clustering 层次聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#agnes"><span class="toc-number">5.1.</span> <span class="toc-text"> AGNES</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">6.</span> <span class="toc-text"> Ref</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/04/25/ml-cluster/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/04/25/ml-cluster/&text=Cluster 聚类"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/04/25/ml-cluster/&is_video=false&description=Cluster 聚类"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cluster 聚类&body=Check out this article: http://conglang.github.io/2018/04/25/ml-cluster/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/04/25/ml-cluster/&title=Cluster 聚类"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/04/25/ml-cluster/&name=Cluster 聚类&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

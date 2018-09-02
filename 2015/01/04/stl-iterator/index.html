@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="STL标准库之迭代器。output/input/forward/bidirectional/random-access iterator各自的操作。迭代器辅助函数。几种迭代适配器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL Iterator">
+<meta property="og:url" content="http://conglang.github.io/2015/01/04/stl-iterator/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="STL标准库之迭代器。output/input/forward/bidirectional/random-access iterator各自的操作。迭代器辅助函数。几种迭代适配器。">
+<meta property="og:image" content="http://conglang.github.io/img/iterator_categories.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/abilities_of_iterator_categories.jpg">
+<meta property="og:image" content="http://conglang.github.io/img/position_and_value_of_reverse_iterators.png">
+<meta property="og:image" content="http://conglang.github.io/img/conversion_between_iterator_pos_and_reverse_iterator_rpos.png">
+<meta property="og:image" content="http://conglang.github.io/img/kinds_of_insert_iterators.png">
+<meta property="og:updated_time" content="2018-07-03T15:49:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STL Iterator">
+<meta name="twitter:description" content="STL标准库之迭代器。output/input/forward/bidirectional/random-access iterator各自的操作。迭代器辅助函数。几种迭代适配器。">
+<meta name="twitter:image" content="http://conglang.github.io/img/iterator_categories.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>STL Iterator</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2015/01/05/visual-leak-detector-for-visual-c/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2015/01/03/visitor/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/04/stl-iterator/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/04/stl-iterator/&text=STL Iterator"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/04/stl-iterator/&is_video=false&description=STL Iterator"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Iterator&body=Check out this article: http://conglang.github.io/2015/01/04/stl-iterator/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/04/stl-iterator/&name=STL Iterator&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#stl-iterator"><span class="toc-number">1.</span> <span class="toc-text"> STL Iterator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iterator-categories"><span class="toc-number">1.1.</span> <span class="toc-text"> Iterator Categories</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#output-iterators"><span class="toc-number">1.1.1.</span> <span class="toc-text"> Output Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#input-iterators"><span class="toc-number">1.1.2.</span> <span class="toc-text"> Input Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#forward-iterators"><span class="toc-number">1.1.3.</span> <span class="toc-text"> Forward Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bidirectional-iterators"><span class="toc-number">1.1.4.</span> <span class="toc-text"> Bidirectional Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#random-access-iterators"><span class="toc-number">1.1.5.</span> <span class="toc-text"> Random-Access Iterators</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auxiliary-iterator-functions"><span class="toc-number">1.2.</span> <span class="toc-text"> Auxiliary Iterator Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#advance"><span class="toc-number">1.2.1.</span> <span class="toc-text"> advance()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#next-and-prev"><span class="toc-number">1.2.2.</span> <span class="toc-text"> next() and prev()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#distance"><span class="toc-number">1.2.3.</span> <span class="toc-text"> distance()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iter_swap"><span class="toc-number">1.2.4.</span> <span class="toc-text"> iter_swap()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iterator-adapters"><span class="toc-number">1.3.</span> <span class="toc-text"> Iterator Adapters</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#reverse-iterators"><span class="toc-number">1.3.1.</span> <span class="toc-text"> Reverse Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#insert-iterators"><span class="toc-number">1.3.2.</span> <span class="toc-text"> Insert Iterators</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#back-inserters"><span class="toc-number">1.3.2.1.</span> <span class="toc-text"> Back Inserters</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#front-inserters"><span class="toc-number">1.3.2.2.</span> <span class="toc-text"> Front Inserters</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#general-inserters"><span class="toc-number">1.3.2.3.</span> <span class="toc-text"> General Inserters</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stream-iterators"><span class="toc-number">1.3.3.</span> <span class="toc-text"> Stream Iterators</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ostream-iterators"><span class="toc-number">1.3.3.1.</span> <span class="toc-text"> Ostream Iterators</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#istream-iterators"><span class="toc-number">1.3.3.2.</span> <span class="toc-text"> Istream Iterators</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#example-of-stream-iterators-and-advance"><span class="toc-number">1.3.3.3.</span> <span class="toc-text"> Example of Stream Iterators and advance()</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        STL Iterator
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2015-01-04T12:08:26.000Z" itemprop="datePublished">2015-01-04</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Iterator/">Iterator</a>, <a class="tag-link" href="/tags/STL/">STL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="stl-iterator"><a class="markdownIt-Anchor" href="#stl-iterator"></a> STL Iterator</h2>
+<p>每个容器定义自己的iterator类型，所以不用包含额外的头文件。<br>
+一些特殊类型的iterator和一些关于iterator的辅助操作需要头文件<code>&lt;iterator&gt;</code>。</p>
+<blockquote>
+<p>Iterators are objects that can iterate over elements of a sequence via a common interface that is adapted from ordinary pointers.</p>
+</blockquote>
+<h3 id="iterator-categories"><a class="markdownIt-Anchor" href="#iterator-categories"></a> Iterator Categories</h3>
+<p><img src="/img/iterator_categories.jpg" alt="Iterator Categories"><br>
+<img src="/img/abilities_of_iterator_categories.jpg" alt="Abilities of Iterator Categories"></p>
+<h4 id="output-iterators"><a class="markdownIt-Anchor" href="#output-iterators"></a> Output Iterators</h4>
+<blockquote>
+<p>Output iterators can only step forward with write access.</p>
+</blockquote>
+<p>不能为同一个位置赋值两次。</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*iter = val</td>
+<td>Writes val to where the iterator refers</td>
+</tr>
+<tr>
+<td>++iter</td>
+<td>Steps forward (returns new position)</td>
+</tr>
+<tr>
+<td>iter++</td>
+<td>Steps forward (returns old position)</td>
+</tr>
+<tr>
+<td>TYPE(iter)</td>
+<td>Copies iterator (copy constructor)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">OutputIterator pos;</span><br><span class="line"><span class="keyword">while</span> (...) &#123;</span><br><span class="line">	*pos = ...;	<span class="comment">// assign a value</span></span><br><span class="line">	++pos;		<span class="comment">// advance (prepare for the next assignment)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="input-iterators"><a class="markdownIt-Anchor" href="#input-iterators"></a> Input Iterators</h4>
+<blockquote>
+<p>Input iterators can only step forward element-by-element with read access.</p>
+</blockquote>
+<p>不能读同一个位置两次。<br>
+==操作只能用于判断是否到末尾，指向不同位置的iterator也可能相等。</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*<strong>iter</strong></td>
+<td>Provides read access to the actual element</td>
+</tr>
+<tr>
+<td><strong>iter-&gt;member</strong></td>
+<td>Provides read access to a member of the actual element</td>
+</tr>
+<tr>
+<td>++iter</td>
+<td>Steps forward (returns new position)</td>
+</tr>
+<tr>
+<td>iter++</td>
+<td>Steps forward</td>
+</tr>
+<tr>
+<td><strong>iter1 == iter2</strong></td>
+<td>Returns whether two iterators are equal</td>
+</tr>
+<tr>
+<td><strong>iter1 != iter2</strong></td>
+<td>Returns whether two iterators are not equal</td>
+</tr>
+<tr>
+<td>TYPE(iter)</td>
+<td>Copies iterator (copy constructor)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">InputIterator pos, end;</span><br><span class="line"><span class="keyword">while</span> (pos != end) &#123;</span><br><span class="line">	...	<span class="comment">// read-only access using *pos</span></span><br><span class="line">	++pos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="forward-iterators"><a class="markdownIt-Anchor" href="#forward-iterators"></a> Forward Iterators</h4>
+<blockquote>
+<p>Forward iterators are input iterators that provide additional guarantees while reading forward.</p>
+</blockquote>
+<p>保证了两个指向同一个元素的iterator相等。</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*iter</td>
+<td>Provides access to the actual element</td>
+</tr>
+<tr>
+<td>iter-&gt;member</td>
+<td>Provides access to a member of the actual element</td>
+</tr>
+<tr>
+<td>++iter</td>
+<td>Steps forward (returns new position)</td>
+</tr>
+<tr>
+<td>iter++</td>
+<td>Steps forward (returns old position)</td>
+</tr>
+<tr>
+<td>iter1 == iter2</td>
+<td>Returns whether two iterators are equal</td>
+</tr>
+<tr>
+<td>iter1 != iter2</td>
+<td>Returns whether two iterators are not equal</td>
+</tr>
+<tr>
+<td><strong>TYPE()</strong></td>
+<td>Creates iterator (default constructor)</td>
+</tr>
+<tr>
+<td>TYPE(iter)</td>
+<td>Copies iterator (copy constructor)</td>
+</tr>
+<tr>
+<td><strong>iter1 = iter2</strong></td>
+<td>Assigns an iterator</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ForwardIterator pos1, pos2;</span><br><span class="line">pos1 = pos2 = begin;	<span class="comment">// both iterators refer to the same element</span></span><br><span class="line"><span class="keyword">if</span> (pos1 != end) &#123;</span><br><span class="line">	++pos1;	<span class="comment">// pos1 is one element ahead</span></span><br><span class="line">	<span class="keyword">while</span> (pos1 != end) &#123;</span><br><span class="line">		<span class="keyword">if</span> (*pos1 == *pos2) &#123;</span><br><span class="line">			...	<span class="comment">// process adjacent duplicates</span></span><br><span class="line">			++pos1;</span><br><span class="line">			++pos2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="bidirectional-iterators"><a class="markdownIt-Anchor" href="#bidirectional-iterators"></a> Bidirectional Iterators</h4>
+<blockquote>
+<p>Bidirectional iterators are forward iterators that provide the additional ability to iterate backward over the elements.</p>
+</blockquote>
+<p>可以反向移动。</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*iter</td>
+<td>Provides access to the actual element</td>
+</tr>
+<tr>
+<td>iter-&gt;member</td>
+<td>Provides access to a member of the actual element</td>
+</tr>
+<tr>
+<td>++iter</td>
+<td>Steps forward (returns new position)</td>
+</tr>
+<tr>
+<td>iter++</td>
+<td>Steps forward (returns old position)</td>
+</tr>
+<tr>
+<td>iter1 == iter2</td>
+<td>Returns whether two iterators are equal</td>
+</tr>
+<tr>
+<td>iter1 != iter2</td>
+<td>Returns whether two iterators are not equal</td>
+</tr>
+<tr>
+<td>TYPE()</td>
+<td>Creates iterator (default constructor)</td>
+</tr>
+<tr>
+<td>TYPE(iter)</td>
+<td>Copies iterator (copy constructor)</td>
+</tr>
+<tr>
+<td>iter1 = iter2</td>
+<td>Assigns an iterator</td>
+</tr>
+<tr>
+<td><strong>–iter</strong></td>
+<td>Steps backward (returns new position)</td>
+</tr>
+<tr>
+<td><strong>iter–</strong></td>
+<td>Steps backward (returns old position)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="random-access-iterators"><a class="markdownIt-Anchor" href="#random-access-iterators"></a> Random-Access Iterators</h4>
+<blockquote>
+<p>Random-access iterators provide all the abilities of bidirectional iterators plus random access.</p>
+</blockquote>
+<p>可以对iterator进行算数操作，增减位移，计算差值，比较iterator。</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*iter</td>
+<td>Provides access to the actual element</td>
+</tr>
+<tr>
+<td>iter-&gt;member</td>
+<td>Provides access to a member of the actual element</td>
+</tr>
+<tr>
+<td>++iter</td>
+<td>Steps forward (returns new position)</td>
+</tr>
+<tr>
+<td>iter++</td>
+<td>Steps forward (returns old position)</td>
+</tr>
+<tr>
+<td>iter1 == iter2</td>
+<td>Returns whether two iterators are equal</td>
+</tr>
+<tr>
+<td>iter1 != iter2</td>
+<td>Returns whether two iterators are not equal</td>
+</tr>
+<tr>
+<td>TYPE()</td>
+<td>Creates iterator (default constructor)</td>
+</tr>
+<tr>
+<td>TYPE(iter)</td>
+<td>Copies iterator (copy constructor)</td>
+</tr>
+<tr>
+<td>iter1 = iter2</td>
+<td>Assigns an iterator</td>
+</tr>
+<tr>
+<td>–iter</td>
+<td>Steps backward (returns new position)</td>
+</tr>
+<tr>
+<td>iter–</td>
+<td>Steps backward (returns old position)</td>
+</tr>
+<tr>
+<td><strong>iter[n]</strong></td>
+<td>Provides access to the element that has index n</td>
+</tr>
+<tr>
+<td><strong>iter+=n</strong></td>
+<td>Steps n elements forward (or backward, if n is negative)</td>
+</tr>
+<tr>
+<td><strong>iter-=n</strong></td>
+<td>Steps n elements backward (or forward, if n is negative)</td>
+</tr>
+<tr>
+<td><strong>iter+n</strong></td>
+<td>Returns the iterator of the nth next element</td>
+</tr>
+<tr>
+<td><strong>n+iter</strong></td>
+<td>Returns the iterator of the nth next element</td>
+</tr>
+<tr>
+<td><strong>iter-n</strong></td>
+<td>Returns the iterator of the nth previous element</td>
+</tr>
+<tr>
+<td><strong>iter1-iter2</strong></td>
+<td>Returns the distance between iter1 and iter2</td>
+</tr>
+<tr>
+<td><strong>iter1&lt;iter2</strong></td>
+<td>Returns whether iter1 is before iter2</td>
+</tr>
+<tr>
+<td><strong>iter1&gt;iter2</strong></td>
+<td>Returns whether iter1 is after iter2</td>
+</tr>
+<tr>
+<td><strong>iter1&lt;=iter2</strong></td>
+<td>Returns whether iter1 is not after iter2</td>
+</tr>
+<tr>
+<td><strong>iter1&gt;=iter2</strong></td>
+<td>Returns whether iter1 is not before iter2</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; coll;</span><br><span class="line">	<span class="comment">// insert elements from -3 to 9</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">-3</span>; i &lt;= <span class="number">9</span>; ++i) &#123;</span><br><span class="line">		coll.push_back(i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// print number of elements by processing the distance between beginning and end</span></span><br><span class="line">	<span class="comment">// <span class="doctag">NOTE:</span> uses operator - for iterators</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"number/distance: "</span> &lt;&lt; coll.end() - coll.begin() &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// print all elements</span></span><br><span class="line">	<span class="comment">// <span class="doctag">NOTE:</span> uses operator &lt; instead of operator !=</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator pos;</span><br><span class="line">	<span class="keyword">for</span> (pos = coll.begin(); pos &lt; coll.end(); ++pos) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; *pos &lt;&lt; <span class="string">' '</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// print every second element</span></span><br><span class="line">	<span class="comment">// <span class="doctag">NOTE:</span> uses operator +=</span></span><br><span class="line">	<span class="comment">// ATTENTION: coll.end() - 1 may lead to undefined behavior if coll is empty.</span></span><br><span class="line">	<span class="keyword">for</span> (pos = coll.begin(); pos &lt; coll.end() - <span class="number">1</span>; pos += <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; *pos &lt;&lt; <span class="string">' '</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="auxiliary-iterator-functions"><a class="markdownIt-Anchor" href="#auxiliary-iterator-functions"></a> Auxiliary Iterator Functions</h3>
+<p><code>advance(); next(); prev(); distance(); iter_swap();</code><br>
+给其他一些类型的iterator一些random-access iterator才有的功能。</p>
+<h4 id="advance"><a class="markdownIt-Anchor" href="#advance"></a> advance()</h4>
+<blockquote>
+<p>The function advance() increments the position of an iterator passed as the argument.</p>
+</blockquote>
+<p>让iterator向前或向后移动几个元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">advance</span> <span class="params">(InputIterator&amp; pos, Dist n)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>让input iterator可以向前（或向后）移动n个元素。</li>
+<li>对于bidirectional和random-access的iterator，n可以是负值，从而向后移动。</li>
+<li>Dist是一个模板类型。一般都是整型。</li>
+<li>advance()不检查是否越过序列结尾。因为迭代器不知道容器里的情况。</li>
+<li>一般应该用advance()而不是+=，方便修改容器。不过要注意可能的效率降低，以及返回值的不同（advance没有返回值，+=返回新位置）。</li>
+</ul>
+<h4 id="next-and-prev"><a class="markdownIt-Anchor" href="#next-and-prev"></a> next() and prev()</h4>
+<p>C++11后才有。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="function">ForwardIterator <span class="title">next</span> <span class="params">(ForwardIterator pos)</span></span><br><span class="line">ForwardIterator <span class="title">next</span> <span class="params">(ForwardIterator pos, Dist n)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Dist的类型是std::iterator_traits<forwarditerator>::difference_type。</forwarditerator></li>
+<li>内部调用advance(pos, n)。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="function">BidirectionIterator <span class="title">prev</span> <span class="params">(BidirectionalIterator pos)</span></span><br><span class="line">BidirectionIterator <span class="title">prev</span> <span class="params">(BidirectionalIterator pos, Dist n)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Dist的类型是std::iterator_traits<bidirectioniterator>::difference_type。</bidirectioniterator></li>
+<li>内部调用advance(pos, -n)。</li>
+</ul>
+<h4 id="distance"><a class="markdownIt-Anchor" href="#distance"></a> distance()</h4>
+<blockquote>
+<p>The distance() function is provided to process the difference between two iterators.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="function">Dist <span class="title">distance</span> <span class="params">(InputIterator pos1, InputIterator pos2)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>两个迭代器需指向同一个容器。</li>
+<li>如果不是random-access迭代器，pos2必须等于或大于pos1，即从pos1可以到达pos2。</li>
+<li>Dist的类型是iterator_traits<inputiterator>::difference_type。</inputiterator></li>
+</ul>
+<h4 id="iter_swap"><a class="markdownIt-Anchor" href="#iter_swap"></a> iter_swap()</h4>
+<blockquote>
+<p>The iter_swap() function is provided to swap the values to which two iterators refer.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">iter_swap</span> <span class="params">(ForwardIterator1 pos1, ForwardIterator2 pos2)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>交换pos1和pos2所指向的值。</li>
+<li>两个迭代器可以是不同类型，只要所指向的元素是可以修改的。</li>
+</ul>
+<hr>
+<h3 id="iterator-adapters"><a class="markdownIt-Anchor" href="#iterator-adapters"></a> Iterator Adapters</h3>
+<h4 id="reverse-iterators"><a class="markdownIt-Anchor" href="#reverse-iterators"></a> Reverse Iterators</h4>
+<p>只有Forward List和Unordered Container不提供。</p>
+<blockquote>
+<p><img src="/img/position_and_value_of_reverse_iterators.png" alt="Position and Value of Reverse Iterators"><br>
+<strong>rbegin()</strong> 返回反向的第一个元素的位置。<br>
+<strong>rend()</strong> 返回反向的最后一个元素之后的位置。</p>
+</blockquote>
+<p>当普通iterator和reverse iterator相互转换时要注意，iterator需要是bidirectional iterator，并且他们的逻辑位置并不是对应的。<br>
+<img src="/img/conversion_between_iterator_pos_and_reverse_iterator_rpos.png" alt="Conversion between Iterator pos and Reverse Iterator rpos"><br>
+如{1,2,3,4,5,6,7}：<br>
+iter指向5，值也是5；riter指向5，值是4。物理位置相同，逻辑值不同。<br>
+如果iter1, iter2表示[2,5)的区间，即2,3,4。<br>
+如果riter1, riter2表示[4,1)的区间，即4,3,2。<br>
+区间还是相同的。<br>
+相互转化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator pos;</span><br><span class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::<span class="function">reverse_iterator <span class="title">rpos</span><span class="params">(pos)</span></span>;		<span class="comment">// iterator to reverse iterator</span></span><br><span class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator rrpos = rpos.base();	<span class="comment">// reverse iterator to iterator</span></span><br></pre></td></tr></table></figure>
+<p>pos: 5; rpos: 4; rrpos: 5;</p>
+<h4 id="insert-iterators"><a class="markdownIt-Anchor" href="#insert-iterators"></a> Insert Iterators</h4>
+<blockquote>
+<p>把对当前位置的赋值变成在当前位置插入。从而可以插入而不是覆盖。</p>
+</blockquote>
+<p>三种类型。<code>back inserter, front inserter, general inserter</code>。<br>
+<img src="/img/kinds_of_insert_iterators.png" alt="Kinds of Insert Iterators"><br>
+容器必须提供called function，所以：</p>
+<ul>
+<li>back inserter只能用于vector, deque, list, string。</li>
+<li>front inserter只能用于deque, list。</li>
+<li>general inserter除了array和forward list都可以用。因为需要insert()成员函数。</li>
+</ul>
+<h5 id="back-inserters"><a class="markdownIt-Anchor" href="#back-inserters"></a> Back Inserters</h5>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; coll;</span><br><span class="line">back_inserter(coll) = <span class="number">1</span>;	<span class="comment">// 在尾部插入1</span></span><br><span class="line">back_inserter(coll) = <span class="number">2</span>;	<span class="comment">// 在尾部插入2，coll变成1,2</span></span><br><span class="line"><span class="comment">// 注意如果同数组copy的话要预先留好空间，因为插入操作可能会迭代器失效。</span></span><br><span class="line">coll.reserve(<span class="number">2</span>*coll.size());</span><br><span class="line">copy(coll.begin(), coll.end(), back_inserter(coll));	<span class="comment">// coll变成1,2,1,2</span></span><br></pre></td></tr></table></figure>
+<h5 id="front-inserters"><a class="markdownIt-Anchor" href="#front-inserters"></a> Front Inserters</h5>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; coll;</span><br><span class="line">front_inserter(coll) = <span class="number">1</span>;</span><br><span class="line">front_inserter(coll) = <span class="number">2</span>;	<span class="comment">// coll变成2,1</span></span><br><span class="line"><span class="comment">// List的插入操作不用担心迭代器失效。</span></span><br><span class="line">copy(coll.begin(), coll.end(), front_inserter(coll));	<span class="comment">// coll变成1,2,2,1</span></span><br></pre></td></tr></table></figure>
+<p>注意front inserter插入后顺序是反向的。</p>
+<h5 id="general-inserters"><a class="markdownIt-Anchor" href="#general-inserters"></a> General Inserters</h5>
+<p>每次插入完成后，insert会自动++。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; coll;</span><br><span class="line">inserter(coll, coll.end()) = <span class="number">1</span>;	<span class="comment">// 在coll.end()的位置插入1</span></span><br><span class="line">inserter(coll, coll.end()) = <span class="number">2</span>;	<span class="comment">// coll变成1,2</span></span><br><span class="line"><span class="comment">// 把coll的元素插入到一个list里。</span></span><br><span class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; coll2;</span><br><span class="line">copy(coll.begin(), coll.end(), inserter(coll2, coll2.begin()));	<span class="comment">// 在初始位置插入。插入的第一个元素说放哪儿就是哪儿。coll2变成1,2</span></span><br><span class="line"><span class="comment">// 把coll里的元素再次插入到list第二个元素的位置上。</span></span><br><span class="line">copy(coll.begin(), coll.end(), inserter(coll2, ++coll2.begin()));	<span class="comment">// coll2变成1,1,2,2。</span></span><br></pre></td></tr></table></figure>
+<h4 id="stream-iterators"><a class="markdownIt-Anchor" href="#stream-iterators"></a> Stream Iterators</h4>
+<blockquote>
+<p>A stream iterator is an iterator adapter that allows you to use a stream as a source of destination of algorithms.</p>
+</blockquote>
+<h5 id="ostream-iterators"><a class="markdownIt-Anchor" href="#ostream-iterators"></a> Ostream Iterators</h5>
+<blockquote>
+<p>Ostream iterators write assigned values to an output stream.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">delim</span><span class="params">(<span class="string">"|"</span>)</span></span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; coll = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;;</span><br><span class="line">copy(coll.cbegin(), coll.cend(), ostream_iterator&lt;<span class="keyword">int</span>&gt;(<span class="built_in">cout</span>, delim.c_str()));</span><br></pre></td></tr></table></figure>
+<p>输出1|2|3|4|5|6|7|</p>
+<h5 id="istream-iterators"><a class="markdownIt-Anchor" href="#istream-iterators"></a> Istream Iterators</h5>
+<blockquote>
+<p>Istream iterators reads elements from an input stream.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create istream iterator that reads integers from cin</span></span><br><span class="line">istream_iterator&lt;<span class="keyword">int</span>&gt; intReader(<span class="built_in">cin</span>);</span><br><span class="line"><span class="comment">// create end-of-stream iterator</span></span><br><span class="line">istream_iterator&lt;<span class="keyword">int</span>&gt; intReaderEOF;</span><br><span class="line"><span class="comment">// while able to read tokens with istream iterator write them</span></span><br><span class="line"><span class="keyword">while</span> (intReader != intReaderEOF)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"Element: "</span> &lt;&lt; *intReader &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="example-of-stream-iterators-and-advance"><a class="markdownIt-Anchor" href="#example-of-stream-iterators-and-advance"></a> Example of Stream Iterators and advance()</h5>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	istream_iterator&lt;<span class="built_in">string</span>&gt; cinPos(<span class="built_in">cin</span>);</span><br><span class="line">	ostream_iterator&lt;<span class="built_in">string</span>&gt; coutPos(<span class="built_in">cout</span>,<span class="string">" "</span>);</span><br><span class="line">	<span class="comment">// while input is not at the end ofthe file</span></span><br><span class="line">	<span class="comment">// - write every third string</span></span><br><span class="line">	<span class="keyword">while</span> (cinPos != istream_iterator&lt;<span class="built_in">string</span>&gt;()) &#123;</span><br><span class="line">		<span class="comment">// ignore the following two strings</span></span><br><span class="line">		advance (cinPos, <span class="number">2</span>);</span><br><span class="line">		<span class="comment">// read and write the third string</span></span><br><span class="line">		<span class="keyword">if</span> (cinPos != istream_iterator&lt;<span class="built_in">string</span>&gt;()) &#123;</span><br><span class="line">			*coutPos++ = *cinPos++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果输入：No one objects if you are doing a good programming job for someone whom you respect.<br>
+会输出：objects are good for you</p>
+<p>[1] The C++ Standard Library 2nd Edition</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#stl-iterator"><span class="toc-number">1.</span> <span class="toc-text"> STL Iterator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iterator-categories"><span class="toc-number">1.1.</span> <span class="toc-text"> Iterator Categories</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#output-iterators"><span class="toc-number">1.1.1.</span> <span class="toc-text"> Output Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#input-iterators"><span class="toc-number">1.1.2.</span> <span class="toc-text"> Input Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#forward-iterators"><span class="toc-number">1.1.3.</span> <span class="toc-text"> Forward Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bidirectional-iterators"><span class="toc-number">1.1.4.</span> <span class="toc-text"> Bidirectional Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#random-access-iterators"><span class="toc-number">1.1.5.</span> <span class="toc-text"> Random-Access Iterators</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#auxiliary-iterator-functions"><span class="toc-number">1.2.</span> <span class="toc-text"> Auxiliary Iterator Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#advance"><span class="toc-number">1.2.1.</span> <span class="toc-text"> advance()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#next-and-prev"><span class="toc-number">1.2.2.</span> <span class="toc-text"> next() and prev()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#distance"><span class="toc-number">1.2.3.</span> <span class="toc-text"> distance()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iter_swap"><span class="toc-number">1.2.4.</span> <span class="toc-text"> iter_swap()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iterator-adapters"><span class="toc-number">1.3.</span> <span class="toc-text"> Iterator Adapters</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#reverse-iterators"><span class="toc-number">1.3.1.</span> <span class="toc-text"> Reverse Iterators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#insert-iterators"><span class="toc-number">1.3.2.</span> <span class="toc-text"> Insert Iterators</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#back-inserters"><span class="toc-number">1.3.2.1.</span> <span class="toc-text"> Back Inserters</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#front-inserters"><span class="toc-number">1.3.2.2.</span> <span class="toc-text"> Front Inserters</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#general-inserters"><span class="toc-number">1.3.2.3.</span> <span class="toc-text"> General Inserters</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stream-iterators"><span class="toc-number">1.3.3.</span> <span class="toc-text"> Stream Iterators</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#ostream-iterators"><span class="toc-number">1.3.3.1.</span> <span class="toc-text"> Ostream Iterators</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#istream-iterators"><span class="toc-number">1.3.3.2.</span> <span class="toc-text"> Istream Iterators</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#example-of-stream-iterators-and-advance"><span class="toc-number">1.3.3.3.</span> <span class="toc-text"> Example of Stream Iterators and advance()</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2015/01/04/stl-iterator/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2015/01/04/stl-iterator/&text=STL Iterator"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2015/01/04/stl-iterator/&is_video=false&description=STL Iterator"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=STL Iterator&body=Check out this article: http://conglang.github.io/2015/01/04/stl-iterator/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2015/01/04/stl-iterator/&title=STL Iterator"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2015/01/04/stl-iterator/&name=STL Iterator&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+

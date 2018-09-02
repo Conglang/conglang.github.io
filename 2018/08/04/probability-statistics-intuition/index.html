@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="概率论与统计学直觉。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="概率与统计直觉">
+<meta property="og:url" content="http://conglang.github.io/2018/08/04/probability-statistics-intuition/index.html">
+<meta property="og:site_name" content="A Stellar Hiker">
+<meta property="og:description" content="概率论与统计学直觉。">
+<meta property="og:image" content="http://conglang.github.io/img/stat_softplus.png">
+<meta property="og:image" content="http://conglang.github.io/img/stat_ss_property.png">
+<meta property="og:image" content="http://conglang.github.io/img/stat_shannon_entropy.png">
+<meta property="og:image" content="http://conglang.github.io/img/stat_kl.png">
+<meta property="og:image" content="http://conglang.github.io/img/stat_struct_directed.png">
+<meta property="og:image" content="http://conglang.github.io/img/stat_struct_undirected.png">
+<meta property="og:updated_time" content="2018-08-05T12:56:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="概率与统计直觉">
+<meta name="twitter:description" content="概率论与统计学直觉。">
+<meta name="twitter:image" content="http://conglang.github.io/img/stat_softplus.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/astro.png">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/astro.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/astro.png">
+          
+        
+    
+    <!-- title -->
+    <title>概率与统计直觉</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+  	<link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/08/05/calculus-intuition/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/08/01/essay-deepid/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/08/04/probability-statistics-intuition/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&text=概率与统计直觉"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&is_video=false&description=概率与统计直觉"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=概率与统计直觉&body=Check out this article: http://conglang.github.io/2018/08/04/probability-statistics-intuition/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&name=概率与统计直觉&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cs229-review-of-probability-theory"><span class="toc-number">1.</span> <span class="toc-text"> cs229 - Review of Probability Theory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件"><span class="toc-number">1.2.</span> <span class="toc-text"> 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#microsoft-statistical-insights"><span class="toc-number">2.</span> <span class="toc-text"> Microsoft - Statistical Insights</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录-2"><span class="toc-number">2.1.</span> <span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件-2"><span class="toc-number">2.2.</span> <span class="toc-text"> 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习-第3章-概率与信息论"><span class="toc-number">3.</span> <span class="toc-text"> 深度学习 - 第3章 概率与信息论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要使用概率"><span class="toc-number">3.1.</span> <span class="toc-text"> 为什么要使用概率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机变量-概率分布-边缘概率-条件概率-条件概率的链式法则-独立性和条件独立性-期望方差和协方差"><span class="toc-number">3.2.</span> <span class="toc-text"> 随机变量、概率分布、边缘概率、条件概率、条件概率的链式法则、独立性和条件独立性 、期望方差和协方差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用概率分布"><span class="toc-number">3.3.</span> <span class="toc-text"> 常用概率分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用函数的有用性质-贝叶斯规则"><span class="toc-number">3.4.</span> <span class="toc-text"> 常用函数的有用性质、贝叶斯规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息论"><span class="toc-number">3.5.</span> <span class="toc-text"> 信息论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构化概率模型"><span class="toc-number">3.6.</span> <span class="toc-text"> 结构化概率模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概率导论"><span class="toc-number">4.</span> <span class="toc-text"> 概率导论</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        概率与统计直觉
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">A Stellar Hiker</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-04T11:36:29.000Z" itemprop="datePublished">2018-08-04</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Math/">Math</a>, <a class="tag-link" href="/tags/Probability/">Probability</a>, <a class="tag-link" href="/tags/Statistics/">Statistics</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>整理 cs229 与微软在 Edx 上课程 Data Science Orientation 的笔记，深度学习花书第3章，还有概率导论里的一些内容。</p>
+<h2 id="cs229-review-of-probability-theory"><a class="markdownIt-Anchor" href="#cs229-review-of-probability-theory"></a> cs229 - Review of Probability Theory</h2>
+<p>概率论重要知识点。</p>
+<h3 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h3>
+<ol>
+<li>Elements of probability<br>
+a. Conditional probability and independence</li>
+<li>Random variables<br>
+a. Cumulative distribution functions<br>
+b. Probability mass functions<br>
+c. Probability density functions<br>
+d. Expectation<br>
+e. Variance<br>
+f. Some common random variables</li>
+<li>Two random variables<br>
+a. Joint and marginal distributions<br>
+b. Joint and marginal probability mass functions<br>
+c. Joint and marginal probability density functions<br>
+d. Conditional distributions<br>
+e. Bayes’s rule<br>
+f. Independence<br>
+g. Expectation and covariance</li>
+<li>Multiple random variables<br>
+a. Basic properties<br>
+b. Random vectors<br>
+c. The multivariate Gaussian distribution</li>
+</ol>
+<h3 id="文件"><a class="markdownIt-Anchor" href="#文件"></a> 文件</h3>
+<p><a href="/img/cs229-prob.pdf">Review of Probability Theory</a></p>
+<h2 id="microsoft-statistical-insights"><a class="markdownIt-Anchor" href="#microsoft-statistical-insights"></a> Microsoft - Statistical Insights</h2>
+<p>统计学相关知识点。</p>
+<h3 id="目录-2"><a class="markdownIt-Anchor" href="#目录-2"></a> 目录</h3>
+<ol>
+<li>What is a Variable?<br>
+Why is this important?</li>
+<li>Population vs. Sample<br>
+Why is this important?</li>
+<li>Measures of Central Tendency</li>
+<li>Measures of Variability<br>
+Why is this important?</li>
+<li>Hypothesis Testing<br>
+Why Don’t We “Accept” the Null Hypothesis?</li>
+<li>Measures of Association: Correlation Coefficients<br>
+How to Interpret a Correlation Coefficient<br>
+How to Calculate a Correlation Coefficient<br>
+Rules of Thumb for Correlations</li>
+<li>Comparative Measures: One Sample t-Test<br>
+How to Calculate a One Sample t-Test Statistic</li>
+<li>Comparative Measures: Two Sample t-Test<br>
+How to Calculate a Two Sample t-Test Statistic</li>
+<li>Comparative Measures: Paired Sample t-Test<br>
+How to Calculate a Paired Sample t-Test Statistic</li>
+<li>Comparative Measures: Analysis of Variance (ANOVA)<br>
+Why You Shouldn’t Run Multiple t-Tests<br>
+How to Calculate a One-Way ANOVA<br>
+How to Calculate a Two-Way ANOVA</li>
+<li>Predictive Measures: Linear Regression<br>
+How to Calculate a Regression</li>
+</ol>
+<h3 id="文件-2"><a class="markdownIt-Anchor" href="#文件-2"></a> 文件</h3>
+<p>[Statistical Insights](/img/Data Science 101 Statistics Overview.pdf)</p>
+<h2 id="深度学习-第3章-概率与信息论"><a class="markdownIt-Anchor" href="#深度学习-第3章-概率与信息论"></a> 深度学习 - 第3章 概率与信息论</h2>
+<p>针对深度学习中所需要的概率论。</p>
+<h3 id="为什么要使用概率"><a class="markdownIt-Anchor" href="#为什么要使用概率"></a> 为什么要使用概率</h3>
+<p>因为机器学习通常必须处理不确定量，有时也可能需要处理随机(非确定性的)量。<br>
+不确定性有3种可能的来源：</p>
+<ul>
+<li>被建模系统内在的随机性。</li>
+<li>不完全观测。</li>
+<li>不完全建模。</li>
+</ul>
+<p>概率直接与事件发生的频率相联系，是频率派概率；涉及确定性水平，是贝叶斯概率。</p>
+<h3 id="随机变量-概率分布-边缘概率-条件概率-条件概率的链式法则-独立性和条件独立性-期望方差和协方差"><a class="markdownIt-Anchor" href="#随机变量-概率分布-边缘概率-条件概率-条件概率的链式法则-独立性和条件独立性-期望方差和协方差"></a> 随机变量、概率分布、边缘概率、条件概率、条件概率的链式法则、独立性和条件独立性 、期望方差和协方差</h3>
+<p>一个随机变量只是对可能的状态的描述，它必须伴随着一个概率分布来指定每个状态的可能性。<br>
+协方差在某种意义上给出了两个变量线性相关性的强度以及这些变量的尺度。协方差矩阵的对角元是方差。</p>
+<h3 id="常用概率分布"><a class="markdownIt-Anchor" href="#常用概率分布"></a> 常用概率分布</h3>
+<p>当我们由于缺乏关于某个实数上分布的先验知识而不知道该选择怎样的形式时，正态分布是默认的比较好的选择。有两个原因：</p>
+<ul>
+<li>我们想要建模的很多分布的真实情况是比较接近正态分布的。中心极限定理说明很多独立随机变量和近似服从正态分布。这意味着在实际中，很多复杂系统都可以被成功地建模成正态分布的噪声，即使系统可以被分解成一些更结构化的部分。</li>
+<li>在具有相同方差的所有可能的概率分布中，正态分布在实数上具有最大的不确定性。因此，我们可以认为正态分布是对模型加入的先验知识量最少的分布。</li>
+</ul>
+<p>高斯混合模型是概率密度的万能近似器，任何平滑的概率密度都可以用具有足够多组件的高斯混合模型以任意精度来逼近。</p>
+<h3 id="常用函数的有用性质-贝叶斯规则"><a class="markdownIt-Anchor" href="#常用函数的有用性质-贝叶斯规则"></a> 常用函数的有用性质、贝叶斯规则</h3>
+<blockquote>
+<p>logistic sigmoid</p>
+</blockquote>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>σ</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>1</mn><mo>+</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mo>−</mo><mi>x</mi><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\sigma(x) = \frac{1}{1 + exp(-x)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.32144em;"></span><span class="strut bottom" style="height:2.25744em;vertical-align:-0.936em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathit">e</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span><span style="top:-0.2300000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span></span></p>
+<p>通常用来产生 Bernouilli 分布中的参数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">ϕ</span></span></span></span>，因为其值域是(0,1)，在其有效取值范围内。</p>
+<blockquote>
+<p>softplus</p>
+</blockquote>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ζ</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo>(</mo><mn>1</mn><mo>+</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">\zeta(x) = log(1 + exp(x))
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.07378em;">ζ</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathit">e</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
+<p>用来产生正态分布的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05278em;">β</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.0037em;">α</span></span></span></span>参数，因为它的范围是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mn>0</mn><mo separator="true">,</mo><mi mathvariant="normal">∞</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">(0, \infty)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathrm">∞</span><span class="mclose">)</span></span></span></span>。<br>
+<img src="/img/stat_softplus.png" alt="softplus 函数"></p>
+<blockquote>
+<p>一些有用的性质</p>
+</blockquote>
+<p><img src="/img/stat_ss_property.png" alt="一些有用的性质"></p>
+<h3 id="信息论"><a class="markdownIt-Anchor" href="#信息论"></a> 信息论</h3>
+<p>信息论是应用数学的一个分支，主要研究的是对一个信号包含信息的多少进行量化。本书主要是用信息论的一些关键思想来描述概率分布或者量化概率分布之间的相似性。<br>
+信息论的基本想法是一个不太可能的事件居然发生了，要比一个非常可能的事件发生，能提供更多的信息。</p>
+<p>一个事件<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">x = x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathit">x</span></span></span></span>的自信息 self-information 为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>I</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>−</mo><mi>log</mi><mi>P</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">I(x) = -\log P(x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord">−</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span></p>
+<blockquote>
+<p>香农熵 Snannkon entropy</p>
+</blockquote>
+<p>对整个概率分布中的不确定性总量进行量化。是指遵循这个分布的时间所产生的期望信息总量。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>H</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msub><mi>E</mi><mrow><mo>∼</mo><mi>P</mi></mrow></msub><mo>[</mo><mi>I</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>]</mo><mo>=</mo><mo>−</mo><msub><mi>E</mi><mrow><mi>x</mi><mo>∼</mo><mi>P</mi></mrow></msub><mo>[</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>P</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>]</mo></mrow><annotation encoding="application/x-tex">H(x) = E_{\sim P}[I(x)] = -E_{x \sim P}[log P(x)]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mrel">∼</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">[</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose">]</span><span class="mrel">=</span><span class="mord">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">x</span><span class="mrel">∼</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">[</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span></p>
+<p>接近确定性的分布 (输出几乎可以确定) 具有较低的熵，接近均匀分布的概率分布有较高的熵。<br>
+<img src="/img/stat_shannon_entropy.png" alt="香农熵"></p>
+<blockquote>
+<p>KL 散度 Kullback-Leibler (KL) divergence</p>
+</blockquote>
+<p>对于同一个随机变量 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span></span></span></span> 有两个单独的概率分布 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>X</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P(X)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.07847em;">X</span><span class="mclose">)</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Q(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">Q</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span>，可以使用 KL 散度来衡量这两个分布的差异。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub><mo>(</mo><mi>P</mi><mo>∥</mo><mi>Q</mi><mo>)</mo><mo>=</mo><msub><mi>E</mi><mrow><mi>x</mi><mo>∼</mo><mi>P</mi></mrow></msub><mo>[</mo><mi>log</mi><mfrac><mrow><mi>P</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><mi>Q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac><mo>]</mo><mo>=</mo><msub><mi>E</mi><mrow><mi>x</mi><mo>∼</mo><mi>P</mi></mrow></msub><mo>[</mo><mi>log</mi><mi>P</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>−</mo><mi>log</mi><mi>Q</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>]</mo></mrow><annotation encoding="application/x-tex">D_{KL}(P \parallel Q) = E_{x \sim P} [\log \frac{P(x)}{Q(x)}] = E_{x \sim P} [\log P(x) - \log Q(x)]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.427em;"></span><span class="strut bottom" style="height:2.363em;vertical-align:-0.936em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">D</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mord mathit">L</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mrel">∥</span><span class="mord mathit">Q</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">x</span><span class="mrel">∼</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">[</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit">Q</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span><span style="top:-0.2300000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mclose">]</span><span class="mrel">=</span><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">x</span><span class="mrel">∼</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">[</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mbin">−</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord mathit">Q</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span></p>
+<p>在离散型变量情况下，KL 散度衡量的是，当我们使用一种被设计成能够使得概率分布 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">Q</span></span></span></span> 产生的消息的长度最小的编码，发送包含由概率分布 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span> 产生的符号的消息时，所需要的额外信息量。</p>
+<p>KL 散度的性质：<br>
+非负。如果为0，当且仅当 P 和 Q 在离散型变量的情况下是相同的分布，或者在连续性变量的情况下是几乎处处相同的。<br>
+KL 散度是不对称的。<br>
+<img src="/img/stat_kl.png" alt="KL 散度"></p>
+<blockquote>
+<p>交叉熵 cross-entropy</p>
+</blockquote>
+<p>与 KL 散度很像。针对 Q 最小化交叉熵等价于最小化 KL 散度。todo</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>H</mi><mo>(</mo><mi>P</mi><mo separator="true">,</mo><mi>Q</mi><mo>)</mo><mo>=</mo><mi>H</mi><mo>(</mo><mi>P</mi><mo>)</mo><mo>+</mo><msub><mi>D</mi><mrow><mi>K</mi><mi>L</mi></mrow></msub><mo>(</mo><mi>P</mi><mo>∥</mo><mi>Q</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">H(P,Q) = H(P) + D_{KL}(P \parallel Q)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mpunct">,</span><span class="mord mathit">Q</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathit" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mclose">)</span><span class="mbin">+</span><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">D</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.02778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit" style="margin-right:0.07153em;">K</span><span class="mord mathit">L</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mrel">∥</span><span class="mord mathit">Q</span><span class="mclose">)</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>H</mi><mo>(</mo><mi>P</mi><mo separator="true">,</mo><mi>Q</mi><mo>)</mo><mo>=</mo><mo>−</mo><msub><mi>E</mi><mrow><mi>x</mi><mo>∼</mo><mi>P</mi></mrow></msub><mi>log</mi><mi>Q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">H(P,Q) = - E_{x \sim P} \log Q(x)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mpunct">,</span><span class="mord mathit">Q</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord">−</span><span class="mord"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.05764em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">x</span><span class="mrel">∼</span><span class="mord mathit" style="margin-right:0.13889em;">P</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mord mathit">Q</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span></p>
+<h3 id="结构化概率模型"><a class="markdownIt-Anchor" href="#结构化概率模型"></a> 结构化概率模型</h3>
+<p>用图表示概率分布的分解。只是概率分布的一种特殊描述。<br>
+有向或无向，图的每个节点对应这一个随机变量，连接两个随机变量的边意味着概率分布可以表示为这两个随机变量之间的直接作用。<br>
+有向：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msub><mo>∏</mo><mi>i</mi></msub><mi>p</mi><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>P</mi><mrow><mi>a</mi><mi>G</mi></mrow></msub><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">p(x) = \prod_i p(x_i | P_{aG}(x_i))
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.0500050000000003em;"></span><span class="strut bottom" style="height:2.327674em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∏</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord"><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.13889em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">a</span><span class="mord mathit">G</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit">x</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
+<p><img src="/img/stat_struct_directed.png" alt=""></p>
+<p>无向：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>Z</mi></mrow></mfrac><msub><mo>∏</mo><mi>i</mi></msub><msup><mi>ϕ</mi><mrow><mo>(</mo><mi>i</mi><mo>)</mo></mrow></msup><mo>(</mo><msup><mi>C</mi><mrow><mo>(</mo><mi>i</mi><mo>)</mo></mrow></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">p(x) = \frac{1}{Z} \prod_i \phi^{(i)} (C^{(i)})
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.32144em;"></span><span class="strut bottom" style="height:2.599109em;vertical-align:-1.277669em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">p</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.07153em;">Z</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span><span class="mop op-limits"><span class="vlist"><span style="top:1.1776689999999999em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span style="top:-0.000005000000000143778em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span><span class="op-symbol large-op mop">∏</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">ϕ</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mopen">(</span><span class="mord mathit">i</span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mopen">(</span><span class="mord mathit">i</span><span class="mclose">)</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span></span></p>
+<p><img src="/img/stat_struct_undirected.png" alt=""></p>
+<h2 id="概率导论"><a class="markdownIt-Anchor" href="#概率导论"></a> 概率导论</h2>
+<p>doing</p>
+<p>Ref:<br>
+[1] cs229<br>
+[2] Edx - Microsoft Professional Program Certificate in Data Science = Data Sciencae Orientation<br>
+[3] 概率导论</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cs229-review-of-probability-theory"><span class="toc-number">1.</span> <span class="toc-text"> cs229 - Review of Probability Theory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件"><span class="toc-number">1.2.</span> <span class="toc-text"> 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#microsoft-statistical-insights"><span class="toc-number">2.</span> <span class="toc-text"> Microsoft - Statistical Insights</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录-2"><span class="toc-number">2.1.</span> <span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件-2"><span class="toc-number">2.2.</span> <span class="toc-text"> 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习-第3章-概率与信息论"><span class="toc-number">3.</span> <span class="toc-text"> 深度学习 - 第3章 概率与信息论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要使用概率"><span class="toc-number">3.1.</span> <span class="toc-text"> 为什么要使用概率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机变量-概率分布-边缘概率-条件概率-条件概率的链式法则-独立性和条件独立性-期望方差和协方差"><span class="toc-number">3.2.</span> <span class="toc-text"> 随机变量、概率分布、边缘概率、条件概率、条件概率的链式法则、独立性和条件独立性 、期望方差和协方差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用概率分布"><span class="toc-number">3.3.</span> <span class="toc-text"> 常用概率分布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用函数的有用性质-贝叶斯规则"><span class="toc-number">3.4.</span> <span class="toc-text"> 常用函数的有用性质、贝叶斯规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息论"><span class="toc-number">3.5.</span> <span class="toc-text"> 信息论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构化概率模型"><span class="toc-number">3.6.</span> <span class="toc-text"> 结构化概率模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概率导论"><span class="toc-number">4.</span> <span class="toc-text"> 概率导论</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://conglang.github.io/2018/08/04/probability-statistics-intuition/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&text=概率与统计直觉"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&is_video=false&description=概率与统计直觉"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=概率与统计直觉&body=Check out this article: http://conglang.github.io/2018/08/04/probability-statistics-intuition/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&title=概率与统计直觉"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://conglang.github.io/2018/08/04/probability-statistics-intuition/&name=概率与统计直觉&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 聪
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/archives/">博文</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a href="/tags/">标签</a></li>
+         
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
+
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-74786593-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?4e074986ce7bd4c6c94338ce1a49c4be";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+
