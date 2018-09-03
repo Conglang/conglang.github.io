@@ -14,7 +14,11 @@
 <meta property="og:description" content="论文，Low Resolution Face Recognition Using a Two-Branch Deep Convolutional Neural Network Architecture">
 <meta property="og:image" content="http://conglang.github.io/img/lr_3_methods.png">
 <meta property="og:image" content="http://conglang.github.io/img/arch_two_branch_dcnn.png">
-<meta property="og:updated_time" content="2018-09-02T16:43:28.545Z">
+<meta property="og:image" content="http://conglang.github.io/img/srfecnn_weights.png">
+<meta property="og:image" content="http://conglang.github.io/img/srfecnn_config.png">
+<meta property="og:image" content="http://conglang.github.io/img/face_diff_config.png">
+<meta property="og:image" content="http://conglang.github.io/img/srfecnn_datasets.png">
+<meta property="og:updated_time" content="2018-09-03T15:10:30.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文 Low Resolution Face Recognition Using a Two-Branch Deep Convolutional Neural Network Architecture">
 <meta name="twitter:description" content="论文，Low Resolution Face Recognition Using a Two-Branch Deep Convolutional Neural Network Architecture">
@@ -104,7 +108,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#method"><span class="toc-number">2.</span> <span class="toc-text"> Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#networks-architecture"><span class="toc-number">2.1.</span> <span class="toc-text"> Networks Architecture</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">3.</span> <span class="toc-text"> Ref</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#method"><span class="toc-number">2.</span> <span class="toc-text"> Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#networks-architecture"><span class="toc-number">2.1.</span> <span class="toc-text"> Networks Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#common-subspace-learning"><span class="toc-number">2.2.</span> <span class="toc-text"> Common Subspace Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reconstruct-input-image"><span class="toc-number">2.3.</span> <span class="toc-text"> Reconstruct Input Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#datasets"><span class="toc-number">2.4.</span> <span class="toc-text"> Datasets</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">3.</span> <span class="toc-text"> Ref</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -143,8 +147,7 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>doing</p>
-<h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h2>
+    <h2 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> Introduction</h2>
 <p><img src="/img/lr_3_methods.png" alt="Three general approaches for low resolution face recognition"><br>
 对于待识别人脸图像为低像素 LR probe image，训练数据为高像素 HR gallary image 的情况，常见的处理方式：</p>
 <ol>
@@ -161,6 +164,29 @@ Dataset 是 FERET。<br>
 <p><img src="/img/arch_two_branch_dcnn.png" alt="Architecture of two deep convolutional neural networks in two branches"><br>
 Training set: pairs of LR and HR of same person on different conditions.</p>
 <h3 id="networks-architecture"><a class="markdownIt-Anchor" href="#networks-architecture"></a> Networks Architecture</h3>
+<p>VGGnet: 13 CONV + 3 FC</p>
+<ul>
+<li>HR images -&gt; common space: FECNN(feature extraction onvolutional neural network). 224x224 image -&gt; 4096 feature vector. VGGnet - 2 FC</li>
+<li>LR images -&gt; common space: SRFECNN = SRnet(super-resolution net) + FECNN. 224x224 -&gt; 4096 feature vector</li>
+</ul>
+<p>由于去掉两层 FC，比 VGGnet parameter 少，可以放进内存。<br>
+<img src="/img/srfecnn_weights.png" alt="SRFECNN weights"></p>
+<h3 id="common-subspace-learning"><a class="markdownIt-Anchor" href="#common-subspace-learning"></a> Common Subspace Learning</h3>
+<p>3 steps:</p>
+<ol>
+<li>Use trained VGGnet on face dataset and then dropped the last two FC. 因为这两层是为 classification task 特别起作用的。称为 pre-trained FECNN。</li>
+<li>Train the SRnet of the bottom branch with a dataset of high and low resolution face image pairs.</li>
+<li>Merge SRnet and FECNN and a training dataset that contains pairs of LR and HR of same persons was fed into the brached.</li>
+</ol>
+<p>HR 所在上层固定，只训练 LR 所在下层的 FECNN 和 SRnet。<br>
+Distance between LR and HR images of the same subjects is the error, backpropagated into the bottom branch net (both FECNN and SRnet).</p>
+<p><img src="/img/srfecnn_config.png" alt="Configurations with different super-resolution modules"></p>
+<h3 id="reconstruct-input-image"><a class="markdownIt-Anchor" href="#reconstruct-input-image"></a> Reconstruct Input Image</h3>
+<p>SRnet 输出。SRnet 的主要作用看上去是让极低分辨率的图片不至于表现太坏。<br>
+生成图片的效果并不是很好，为 better recognition performance 做出了牺牲。<br>
+<img src="/img/face_diff_config.png" alt="Reconstructed Faces by different configurations"></p>
+<h3 id="datasets"><a class="markdownIt-Anchor" href="#datasets"></a> Datasets</h3>
+<p><img src="/img/srfecnn_datasets.png" alt="Datasets Used"></p>
 <h2 id="ref"><a class="markdownIt-Anchor" href="#ref"></a> Ref</h2>
 <p><a href="https://arxiv.org/abs/1706.06247" target="_blank" rel="external">https://arxiv.org/abs/1706.06247</a></p>
 
@@ -191,7 +217,7 @@ Training set: pairs of LR and HR of same person on different conditions.</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#method"><span class="toc-number">2.</span> <span class="toc-text"> Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#networks-architecture"><span class="toc-number">2.1.</span> <span class="toc-text"> Networks Architecture</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">3.</span> <span class="toc-text"> Ref</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">1.</span> <span class="toc-text"> Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#method"><span class="toc-number">2.</span> <span class="toc-text"> Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#networks-architecture"><span class="toc-number">2.1.</span> <span class="toc-text"> Networks Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#common-subspace-learning"><span class="toc-number">2.2.</span> <span class="toc-text"> Common Subspace Learning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reconstruct-input-image"><span class="toc-number">2.3.</span> <span class="toc-text"> Reconstruct Input Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#datasets"><span class="toc-number">2.4.</span> <span class="toc-text"> Datasets</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ref"><span class="toc-number">3.</span> <span class="toc-text"> Ref</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

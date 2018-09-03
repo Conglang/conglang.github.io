@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://conglang.github.io/"/>
-  <updated>2018-09-02T16:43:28.545Z</updated>
+  <updated>2018-09-03T15:10:30.108Z</updated>
   <id>http://conglang.github.io/</id>
   
   <author>
@@ -20,10 +20,9 @@
     <link href="http://conglang.github.io/2018/09/02/essay-two-branch-dcnn/"/>
     <id>http://conglang.github.io/2018/09/02/essay-two-branch-dcnn/</id>
     <published>2018-09-01T16:09:45.000Z</published>
-    <updated>2018-09-02T16:43:28.545Z</updated>
+    <updated>2018-09-03T15:10:30.108Z</updated>
     
-    <content type="html">&lt;p&gt;doing&lt;/p&gt;
-&lt;h2 id=&quot;introduction&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#introduction&quot;&gt;&lt;/a&gt; Introduction&lt;/h2&gt;
+    <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#introduction&quot;&gt;&lt;/a&gt; Introduction&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&quot;/img/lr_3_methods.png&quot; alt=&quot;Three general approaches for low resolution face recognition&quot;&gt;&lt;br&gt;
 对于待识别人脸图像为低像素 LR probe image，训练数据为高像素 HR gallary image 的情况，常见的处理方式：&lt;/p&gt;
 &lt;ol&gt;
@@ -40,6 +39,29 @@ Dataset 是 FERET。&lt;br&gt;
 &lt;p&gt;&lt;img src=&quot;/img/arch_two_branch_dcnn.png&quot; alt=&quot;Architecture of two deep convolutional neural networks in two branches&quot;&gt;&lt;br&gt;
 Training set: pairs of LR and HR of same person on different conditions.&lt;/p&gt;
 &lt;h3 id=&quot;networks-architecture&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#networks-architecture&quot;&gt;&lt;/a&gt; Networks Architecture&lt;/h3&gt;
+&lt;p&gt;VGGnet: 13 CONV + 3 FC&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HR images -&amp;gt; common space: FECNN(feature extraction onvolutional neural network). 224x224 image -&amp;gt; 4096 feature vector. VGGnet - 2 FC&lt;/li&gt;
+&lt;li&gt;LR images -&amp;gt; common space: SRFECNN = SRnet(super-resolution net) + FECNN. 224x224 -&amp;gt; 4096 feature vector&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由于去掉两层 FC，比 VGGnet parameter 少，可以放进内存。&lt;br&gt;
+&lt;img src=&quot;/img/srfecnn_weights.png&quot; alt=&quot;SRFECNN weights&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;common-subspace-learning&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#common-subspace-learning&quot;&gt;&lt;/a&gt; Common Subspace Learning&lt;/h3&gt;
+&lt;p&gt;3 steps:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use trained VGGnet on face dataset and then dropped the last two FC. 因为这两层是为 classification task 特别起作用的。称为 pre-trained FECNN。&lt;/li&gt;
+&lt;li&gt;Train the SRnet of the bottom branch with a dataset of high and low resolution face image pairs.&lt;/li&gt;
+&lt;li&gt;Merge SRnet and FECNN and a training dataset that contains pairs of LR and HR of same persons was fed into the brached.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;HR 所在上层固定，只训练 LR 所在下层的 FECNN 和 SRnet。&lt;br&gt;
+Distance between LR and HR images of the same subjects is the error, backpropagated into the bottom branch net (both FECNN and SRnet).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/srfecnn_config.png&quot; alt=&quot;Configurations with different super-resolution modules&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;reconstruct-input-image&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#reconstruct-input-image&quot;&gt;&lt;/a&gt; Reconstruct Input Image&lt;/h3&gt;
+&lt;p&gt;SRnet 输出。SRnet 的主要作用看上去是让极低分辨率的图片不至于表现太坏。&lt;br&gt;
+生成图片的效果并不是很好，为 better recognition performance 做出了牺牲。&lt;br&gt;
+&lt;img src=&quot;/img/face_diff_config.png&quot; alt=&quot;Reconstructed Faces by different configurations&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;datasets&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#datasets&quot;&gt;&lt;/a&gt; Datasets&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;/img/srfecnn_datasets.png&quot; alt=&quot;Datasets Used&quot;&gt;&lt;/p&gt;
 &lt;h2 id=&quot;ref&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#ref&quot;&gt;&lt;/a&gt; Ref&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1706.06247&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://arxiv.org/abs/1706.06247&lt;/a&gt;&lt;/p&gt;
 </content>
