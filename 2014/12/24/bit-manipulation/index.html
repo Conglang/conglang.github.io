@@ -14,7 +14,7 @@
 <meta property="og:description" content="二进制计算概念介绍、常见操作与示例。STL标准库之bitset。">
 <meta property="og:image" content="http://conglang.github.io/img/bit_manipulation_sample.jpg">
 <meta property="og:image" content="http://conglang.github.io/img/bit_manipulation_tricks.jpg">
-<meta property="og:updated_time" content="2018-07-03T15:42:17.000Z">
+<meta property="og:updated_time" content="2018-09-13T14:09:12.960Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Bit Manipulation">
 <meta name="twitter:description" content="二进制计算概念介绍、常见操作与示例。STL标准库之bitset。">
@@ -114,7 +114,9 @@
     
     <div class="content index my4">
         
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        
+        
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
@@ -195,18 +197,13 @@
 <h2 id="一个手动计算的示例"><a class="markdownIt-Anchor" href="#一个手动计算的示例"></a> 一个手动计算的示例</h2>
 <p><img src="/img/bit_manipulation_sample.jpg" alt="手动二进制计算示例"><br>
 <strong>二进制乘法</strong>：</p>
-0011\*0101
-= 0011 \* 1 \* 2^0 + 0011 \* 0 \* 2^1 + 0011 \* 1 \* 2^2 + 0011 \* 0 \* 2^3
-= 0011 + 0011 << 2
-= 0011 + 1100
-= 1111
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0011 * 0101</span><br><span class="line">= 0011 * 1 * 2^0 + 0011 * 0 * 2^1 + 0011 * 1 * 2^2 + 0011 * 0 * 2^3</span><br><span class="line">= 0011 + 0011 &lt;&lt; 2</span><br><span class="line">= 0011 + 1100</span><br><span class="line">= 1111</span><br></pre></td></tr></table></figure>
 <p>其中第三列的可以用<strong>一些技巧</strong>计算：</p>
 <ol>
 <li>0110 + 0110等价于0110 * 2，也等价于把0110左移一位。</li>
 <li>因为0100等价于4，也就是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">2^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>。凡是乘以<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.664392em;"></span><span class="strut bottom" style="height:0.664392em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathit">n</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>的操作都可以通过左移n位来计算。所以将0011左移2位得到1100。</li>
-<li>每一位和自己的取非值进行XOR操作都是1。所以a^(~a)的结果永远是一列1。</li>
-<li>一个像x&amp;(<sub>0&lt;&lt;n)的操作会将x最右边的n位清0。通过进行</sub>0&lt;&lt;n操作，我们得到一个1右面跟着n个0。再与x进行AND操作，会将x的最右n位清0。<strong>注意<sub>0和1可不一样哦。</sub>0是11111111,1是00000001。</strong></li>
+<li>每一位和自己的取非值进行XOR操作都是1。所以<code>a^(~a)</code>的结果永远是一列1。</li>
+<li>一个像<code>x&amp;(~0&lt;&lt;n)</code>的操作会将x最右边的n位清0。通过进行<code>~0&lt;&lt;n</code>操作，我们得到一个1右面跟着n个0。再与x进行AND操作，会将x的最右n位清0。<strong>注意<code>~0</code>和<code>1</code>可不一样哦。<code>~0</code>是11111111,<code>1</code>是00000001。</strong></li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">// 12 is 1100</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">bitset</span>&lt;<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>)*8&gt;(<span class="number">12</span> &amp; (~<span class="number">0</span> &lt;&lt; <span class="number">2</span>)) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;	<span class="comment">// 00000000000000000000000000001100</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">bitset</span>&lt;<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>)*8&gt;(<span class="number">12</span> &amp; (<span class="number">1</span> &lt;&lt; <span class="number">2</span>)) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;	<span class="comment">// 00000000000000000000000000000100</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">bitset</span>&lt;<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>)*8&gt;(<span class="number">1</span> &lt;&lt; <span class="number">2</span>) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;	<span class="comment">// 00000000000000000000000000000100</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">bitset</span>&lt;<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>)*8&gt;(~<span class="number">0</span> &lt;&lt; <span class="number">2</span>) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;	<span class="comment">// 11111111111111111111111111111100</span></span><br><span class="line">	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>位操作相关的运算符优先级</strong></p>
@@ -408,7 +405,7 @@
 <h4 id="访问bitset对象中的位"><a class="markdownIt-Anchor" href="#访问bitset对象中的位"></a> 访问bitset对象中的位</h4>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// assign 1 to even numbered bits</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index != <span class="number">32</span>; index += <span class="number">2</span>)</span><br><span class="line">	bitvec[index] = <span class="number">1</span>;</span><br><span class="line"><span class="comment">// equivalent loop using set operation</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index != <span class="number">32</span>; index += <span class="number">2</span>)</span><br><span class="line">	bitvec.<span class="built_in">set</span>(index);</span><br><span class="line"><span class="comment">// test if a bit is 1</span></span><br><span class="line"><span class="keyword">if</span> (bitvec.test(i)) &#123;&#125;</span><br><span class="line"><span class="keyword">if</span> (bitvec[i]) &#123;&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="对整个bitset对象进行设置"><a class="markdownIt-Anchor" href="#对整个bitset对象进行设置"></a> 对整个bitset对象进行设置</h4>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bitvec.reset();	<span class="comment">// set all the bits to 0</span></span><br><span class="line">bitvec.<span class="built_in">set</span>();	<span class="comment">// set all the bits to 1</span></span><br><span class="line">bitvec. flip(<span class="number">0</span>);	<span class="comment">// reverse value of first bit</span></span><br><span class="line">bitvec[<span class="number">0</span>].flip();	<span class="comment">// also reverse the first bit</span></span><br><span class="line">bitvec.flip();	<span class="comment">// reverses value of all bits</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bitvec.reset();	<span class="comment">// set all the bits to 0</span></span><br><span class="line">bitvec.<span class="built_in">set</span>();	<span class="comment">// set all the bits to 1</span></span><br><span class="line">bitvec.flip(<span class="number">0</span>);	<span class="comment">// reverse value of first bit</span></span><br><span class="line">bitvec[<span class="number">0</span>].flip();	<span class="comment">// also reverse the first bit</span></span><br><span class="line">bitvec.flip();	<span class="comment">// reverses value of all bits</span></span><br></pre></td></tr></table></figure>
 <h4 id="获取bitset对象的值"><a class="markdownIt-Anchor" href="#获取bitset对象的值"></a> 获取bitset对象的值</h4>
 <p>仅当bitset类型的长度小于或等于unsigned long的长度时，才可以使用to_ulong操作：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usigned <span class="keyword">long</span> ulong = bitvec3.to_ulong();</span><br></pre></td></tr></table></figure>
@@ -437,6 +434,7 @@
 
 
 
+        
     </div>
     
       <div id="footer-post-container">
@@ -491,7 +489,7 @@
     
     <footer id="footer">
   <div class="footer-left">
-    Copyright &copy; 2018 聪
+    Copyright &copy; 2019 聪
   </div>
   <div class="footer-right">
     <nav>
@@ -512,21 +510,6 @@
   </div>
 </footer>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

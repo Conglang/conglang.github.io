@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://conglang.github.io/img/392px-HuffmanCodeAlg.png">
 <meta property="og:image" content="http://conglang.github.io/img/huffman_decision_tree.jpg">
 <meta property="og:image" content="http://conglang.github.io/img/Heap-as-an-Array.png">
-<meta property="og:updated_time" content="2018-07-03T15:42:51.000Z">
+<meta property="og:updated_time" content="2018-09-15T10:42:10.925Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tree">
 <meta name="twitter:description" content="数据结构之树。树的几种常见概念如二叉树、二叉查找树、平衡二叉树、满二叉树、完全二叉树，以及它们的常用操作。几种特殊的树如字典树、哈夫曼树、堆。树相关的题目。">
@@ -136,7 +136,9 @@
     
     <div class="content index my4">
         
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        
+        
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
@@ -269,11 +271,11 @@
 <p>首先以二叉查找树的方法增加节点并标记为红色。之后注意要保持红黑树的特性：</p>
 <ul>
 <li>情形1：新节点N位于树的根上，没有父节点。此时把它重绘为黑色满足性质2。因为它在每个路径上对黑节点数目+1，性质5符合。</li>
-<li>情形2：新节点的父节点P是黑色，所以性质4没有失效。此时，树仍是有效的。</li>
-<li>注意：在下列情形下我们假定新节点的父节点为红色，所以它有祖父节点；因为如果父节点是根节点，那父节点就应当是黑色。所以新节点总有一个叔父节点，尽管在情形4和5下它可能是叶子节点。</li>
+<li>情形2：新节点的父节点P是黑色，所以性质4没有失效。此时，树仍是有效的。<br>
+注意：在下列情形下我们假定新节点的父节点为红色，所以它有祖父节点；因为如果父节点是根节点，那父节点就应当是黑色。所以新节点总有一个叔父节点，尽管在情形4和5下它可能是叶子节点。</li>
 <li>情形3：如果父节点P和叔父节点U也是红色，那么可以把它们两个重绘为黑色并重绘爷爷节点G为红色。爷爷节点G的父节点也可能是红色的，不符合性质4，所以此时需要从头开始整个过程，把G当成新加入的节点进行各种情形的检查。<br>
-<img src="/img/Red-black_tree_insert_case_3.png" alt="情形3，假定N是P左子节点，如果是右子节点也可以"></li>
-<li>注意：在余下的情形下，我们假定父节点P是其父亲G的左子节点。如果它是右子节点，情形4和情形5中的左和右应当对调。</li>
+<img src="/img/Red-black_tree_insert_case_3.png" alt="情形3，假定N是P左子节点，如果是右子节点也可以"><br>
+注意：在余下的情形下，我们假定父节点P是其父亲G的左子节点。如果它是右子节点，情形4和情形5中的左和右应当对调。</li>
 <li>情形4：父节点P是红色而叔父节点U是黑色或缺少，并且新节点N是其父节点P的右子节点而父节点P又是其父节点的左子节点。在这种情形下，我们进行一次左旋转调换新节点和其父节点的角色; 接着，我们按情形5处理以前的父节点P以解决仍然失效的性质4。<br>
 <img src="/img/Red-black_tree_insert_case_4.png" alt="情形4"></li>
 <li>情形5：父节点P是红色而叔父节点U是黑色或缺少，新节点N是其父节点的左子节点，而父节点P又是其父节点G的左子节点。在这种情形下，我们进行针对祖父节点G的一次右旋转; 在旋转产生的树中，以前的父节点P现在是新节点N和以前的祖父节点G的父节点。我们知道以前的祖父节点G是黑色，否则父节点P就不可能是红色(如果P和G都是红色就违反了性质4，所以G必须是黑色)。我们切换以前的父节点P和祖父节点G的颜色，结果的树满足性质4。<br>
@@ -288,8 +290,8 @@
 如果N和它初始的父亲是黑色，则删除它的父亲导致通过N的路径都比不通过它的路径少了一个黑色节点。因为这违反了性质5，树需要被重新平衡。</p>
 <p>比较复杂，有多种情形：</p>
 <ul>
-<li>情形1：N是新的根。此时所有性质都保持着，完成。</li>
-<li>注意：在情形2、5和6下，我们假定N是它父亲的左儿子。如果它是右儿子，则在这些情形下的左和右应当对调。</li>
+<li>情形1：N是新的根。此时所有性质都保持着，完成。<br>
+注意：在情形2、5和6下，我们假定N是它父亲的左儿子。如果它是右儿子，则在这些情形下的左和右应当对调。</li>
 <li>情形2：S是红色。在这种情形下我们在N的父亲上做左旋转，把红色兄弟转换成N的祖父，我们接着对调N的父亲和祖父的颜色。完成这两个操作后，尽管所有路径上黑色节点的数目没有改变，但现在N有了一个黑色的兄弟和一个红色的父亲（它的新兄弟是黑色因为它是红色S的一个儿子），所以我们可以接下去按情形4、情形5或情形6来处理。<br>
 <img src="/img/Red-black_tree_delete_case_2_as_svg.png" alt="情形2"></li>
 <li>情形3: N的父亲、S和S的儿子都是黑色的。在这种情形下，我们简单的重绘S为红色。结果是通过S的所有路径，它们就是以前不通过N的那些路径，都少了一个黑色节点。因为删除N的初始的父亲使通过N的所有路径少了一个黑色节点，这使事情都平衡了起来。但是，通过P的所有路径现在比不通过P的路径少了一个黑色节点，所以仍然违反性质5。要修正这个问题，我们要从头开始，在P上做重新平衡处理。<br>
@@ -504,6 +506,7 @@ trie的实现进行了改良。有两种方式Double-Array Trie、Tripple-Array 
 
 
 
+        
     </div>
     
       <div id="footer-post-container">
@@ -558,7 +561,7 @@ trie的实现进行了改良。有两种方式Double-Array Trie、Tripple-Array 
     
     <footer id="footer">
   <div class="footer-left">
-    Copyright &copy; 2018 聪
+    Copyright &copy; 2019 聪
   </div>
   <div class="footer-right">
     <nav>
@@ -579,21 +582,6 @@ trie的实现进行了改良。有两种方式Double-Array Trie、Tripple-Array 
   </div>
 </footer>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

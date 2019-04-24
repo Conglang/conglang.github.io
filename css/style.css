@@ -322,8 +322,7 @@
   margin-top: 3rem;
   margin-bottom: 1rem;
   color: #2bbc8a;
-  letter-spacing: 0.01em;
-  font-weight: 700;
+  letter-spacing: -0.01em;
   font-style: normal;
   font-size: 2.5em;
   -moz-osx-font-smoothing: grayscale;
@@ -333,29 +332,31 @@
 .content .h2 {
   position: relative;
   display: block;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-  color: #eee;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  color: #383838;
   text-transform: none;
   letter-spacing: normal;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.8rem;
 }
 .content h3 {
-  color: #eee;
-  text-decoration: underline;
-  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #383838;
+  text-decoration: none;
+  font-weight: normal;
   font-size: 1.5rem;
 }
 .content h4,
 .content h5,
 .content h6 {
   display: inline;
-  border-bottom: 1px dashed #ccc;
-  color: #ccc;
+  border-bottom: 1px dashed #8c8c8c;
+  color: #8c8c8c;
   text-decoration: none;
   font-weight: normal;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 .content h3,
 .content h4,
@@ -365,7 +366,7 @@
   margin-bottom: 0.5rem;
 }
 .content hr {
-  border: 1px dashed #ccc;
+  border: 1px dashed #8c8c8c;
 }
 .content strong {
   font-weight: bold;
@@ -421,7 +422,7 @@
 .content th {
   padding: 8px;
   border-bottom: 1px solid #666;
-  color: #eee;
+  color: #383838;
   font-weight: bold;
   font-size: 13px;
 }
@@ -456,18 +457,18 @@
 }
 html {
   height: 100%;
-  border-top: 2px solid #c9cacc;
+  border-top: 2px solid #383838;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
 body {
   display: flex;
   flex-direction: column;
-  background-color: #1d1f21;
-  color: #c9cacc;
+  background-color: #e2e0de;
+  color: #383838;
   font-weight: 400;
   font-size: 14px;
-  font-family: "PingFang SC", "Monda", "Microsoft YaHei", sans-serif;
+  font-family: "PingFang SCL", "Microsoft YaHei", sans-serif;
   line-height: 1.725;
   text-rendering: geometricPrecision;
   -moz-osx-font-smoothing: grayscale;
@@ -489,9 +490,9 @@ body {
   -webkit-hyphens: manual;
 }
 .content a {
-  color: #c9cacc;
+  color: #383838;
   text-decoration: none;
-  background-image: linear-gradient(transparent, transparent 5px, #c9cacc 5px, #c9cacc);
+  background-image: linear-gradient(transparent, transparent 5px, #383838 5px, #383838);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
@@ -511,7 +512,7 @@ body {
 .content h4,
 .content h5,
 .content h6 {
-  font-family: "Calibri", "PingFang SCL", "Microsoft YaHei", sans-serif;
+  font-family: "PingFang SCL", "Microsoft YaHei", sans-serif;
 }
 .content h1 a,
 .content .h1 a,
@@ -561,7 +562,7 @@ body {
   }
 }
 .max-width {
-  max-width: 48rem;
+  max-width: 49rem;
 }
 @media (max-width: 480px) {
   .px3 {
@@ -627,7 +628,7 @@ body {
 }
 #header #nav ul a {
   margin-right: 15px;
-  color: color-accent-1;
+  color: #2bbc8a;
 }
 #header #nav ul a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
@@ -826,7 +827,7 @@ body {
   display: none;
 }
 #header-post #toc .toc-level-2 {
-  color: #c9cacc;
+  color: #383838;
   font-size: 0.8rem;
 }
 #header-post #toc .toc-level-2:before {
@@ -834,15 +835,15 @@ body {
   content: "#";
 }
 #header-post #toc .toc-level-3 {
-  color: #888;
+  color: #666;
   font-size: 0.7rem;
 }
 #header-post #toc .toc-level-4 {
-  color: #6d6d6d;
+  color: #525252;
   font-size: 0.4rem;
 }
 #header-post #toc .toc-level-5 {
-  color: #525252;
+  color: #3d3d3d;
   font-size: 0.4rem;
 }
 #header-post #toc .toc-level-6 {
@@ -900,7 +901,7 @@ body {
   z-index: 5000000;
   width: 100%;
   border-top: 1px solid #666;
-  background: #212326;
+  background: #dedcd9;
   transition: opacity 0.2s;
 }
 #footer-post a {
@@ -917,7 +918,7 @@ body {
 #footer-post #nav-footer {
   padding-right: 1rem;
   padding-left: 1rem;
-  background: #323539;
+  background: #cdcac6;
   text-align: center;
 }
 #footer-post #nav-footer a {
@@ -961,7 +962,7 @@ body {
 #footer-post #share-footer {
   padding-right: 1rem;
   padding-left: 1rem;
-  background: #323539;
+  background: #cdcac6;
   text-align: center;
 }
 #footer-post #share-footer ul {
@@ -981,7 +982,7 @@ body {
   clear: both;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  background: #323539;
+  background: #cdcac6;
   text-align: left;
 }
 #footer-post #toc-footer ol {
@@ -999,7 +1000,7 @@ body {
   display: none;
 }
 #footer-post #toc-footer .toc-level-2 {
-  color: #c9cacc;
+  color: #383838;
   font-size: 0.8rem;
 }
 #footer-post #toc-footer .toc-level-2:before {
@@ -1007,17 +1008,17 @@ body {
   content: "#";
 }
 #footer-post #toc-footer .toc-level-3 {
-  color: #888;
+  color: #666;
   font-size: 0.7rem;
   line-height: 15px;
 }
 #footer-post #toc-footer .toc-level-4 {
-  color: #6d6d6d;
+  color: #525252;
   font-size: 0.4rem;
   line-height: 15px;
 }
 #footer-post #toc-footer .toc-level-5 {
-  color: #525252;
+  color: #3d3d3d;
   display: none;
   line-height: 15px;
 }
@@ -1044,8 +1045,11 @@ body {
   display: block;
   margin-right: 16px;
   min-width: 100px;
-  color: #888;
+  color: #666;
   font-size: 14px;
+}
+.landingpage .post-list .post-item .meta {
+  color: #888;
 }
 @media (min-width: 480px) {
   .post-list .post-item {
@@ -1071,58 +1075,45 @@ article header .posttitle {
   margin-bottom: 0;
   text-transform: none;
   font-size: 2.5em;
-  line-height: 1.25;
+  font-weight: normal;
 }
 article header .meta {
   margin-top: 0;
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
 }
 article header .meta * {
-  color: #ccc;
+  color: #8c8c8c;
   font-size: 0.85rem;
 }
 article header .author {
-  text-transform: uppercase;
   letter-spacing: 0.01em;
-  font-weight: 700;
 }
 article header .postdate {
   display: inline;
 }
 article .content h2:before {
-  position: absolute;
-  top: -4px;
-  left: -1rem;
   color: #2bbc8a;
   content: "#";
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.8rem;
 }
 article .content h3:before {
-  position: relative;
-  top: -4px;
-  left: -1rem;
   color: #2bbc8a;
   content: "##";
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.5rem;
 }
 article .content h4:before {
-  position: relative;
-  top: -4px;
-  left: -1rem;
   color: #2bbc8a;
   content: "###";
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.2rem;
 }
 article .content h5:before {
   position: relative;
-  top: -4px;
-  left: -1rem;
   color: #2bbc8a;
   content: "####";
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.2rem;
 }
 article .content img,
@@ -1148,36 +1139,32 @@ article .content .video-container embed {
   width: 100%;
   height: 100%;
 }
+article .content blockquote:before {
+  content: "> ";
+  position: relative;
+}
 article .content blockquote {
   margin: 1rem 10px;
   padding: 0.5em 10px;
   background: inherit;
-  color: #99cc9b;
+  color: #2bbc8a;
   quotes: "\201C" "\201D" "\2018" "\2019";
 }
 article .content blockquote p {
   margin: 0;
 }
-article .content blockquote:before {
-  margin-right: 0.25em;
-  color: #99cc9b;
-  content: "\201C";
-  vertical-align: -0.4em;
-  font-size: 2em;
-  line-height: 0.1em;
-}
 article .content blockquote footer {
   margin: line-height 0;
-  color: #888;
+  color: #666;
   font-size: 11px;
 }
 article .content blockquote footer a {
-  background-image: linear-gradient(transparent, transparent 5px, #888 5px, #888);
-  color: #888;
+  background-image: linear-gradient(transparent, transparent 5px, #666 5px, #666);
+  color: #666;
 }
 article .content blockquote footer a:hover {
-  background-image: linear-gradient(transparent, transparent 4px, #a0a0a0 4px, #a0a0a0);
-  color: #a0a0a0;
+  background-image: linear-gradient(transparent, transparent 4px, #858585 4px, #858585);
+  color: #858585;
 }
 article .content blockquote footer cite:before {
   padding: 0 0.5em;
@@ -1226,6 +1213,9 @@ article .content .caption {
     content: "|";
   }
 }
+#archive h2 {
+  color: #c9cacc;
+}
 #archive .post-list {
   padding: 0;
 }
@@ -1256,7 +1246,7 @@ article .content .caption {
 }
 #footer {
   margin-bottom: 10px;
-  color: #888;
+  color: #757575;
   vertical-align: top;
   text-align: center;
   font-size: 11px;
@@ -1283,10 +1273,10 @@ article .content .caption {
   margin-right: 0;
 }
 #footer a {
-  color: #888;
+  color: #757575;
 }
 #footer a:hover {
-  color: #a0a0a0;
+  color: #949494;
 }
 #footer .footer-left {
   height: 20px;
@@ -1317,30 +1307,39 @@ article .content .caption {
   text-align: center;
 }
 .pagination .page-number {
-  color: #c9cacc;
+  color: #383838;
   font-size: 0.8rem;
 }
 .pagination a {
   padding: 4px 6px;
   border-radius: 5px;
   background-image: none;
-  color: #c9cacc;
+  color: #383838;
   text-decoration: none;
 }
 .pagination a:hover {
   background-image: none;
 }
 .pagination a:hover:not(.active) {
+  color: #383838;
+}
+.landingpage .pagination .page-number {
+  color: #c9cacc;
+}
+.landingpage .pagination a {
+  color: #c9cacc;
+}
+.landingpage .pagination a:hover:not(.active) {
   color: #eee;
 }
 .search-input {
   padding: 4px 7px;
   width: 100%;
   outline: none;
-  border: solid 1px #ccc;
+  border: solid 1px #8c8c8c;
   border-radius: 5px;
-  background-color: #1d1f21;
-  color: #c9cacc;
+  background-color: #e2e0de;
+  color: #383838;
   font-size: 1.2rem;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -1445,7 +1444,7 @@ pre {
   border: 1px dotted #666;
   border-radius: 4px;
   font-size: 13px;
-  font-family: "Menlo", "Meslo LG", monospace;
+  font-family: "Meslo LG", monospace;
   line-height: 22px;
   -webkit-border-radius: 4px;
 }
@@ -1453,33 +1452,33 @@ pre code {
   display: block;
   padding: 0;
   border: none;
-  font-family: "Menlo", "Meslo LG", monospace;
+  font-family: "Meslo LG", monospace;
 }
 code {
   padding: 0 5px;
   border: 1px dotted #666;
   border-radius: 2px;
   -webkit-border-radius: 2px;
-  font-family: "Menlo", "Meslo LG", monospace;
+  font-family: "Meslo LG", monospace;
 }
 .highlight {
   overflow-x: auto;
   margin: 1rem 0;
   padding: 10px 15px;
   border-radius: 4px;
-  background: #212326;
-  font-family: "Menlo", "Meslo LG", monospace;
+  background: #dedcd9;
+  font-family: "Meslo LG", monospace;
   -webkit-border-radius: 4px;
 }
 .highlight figcaption {
   margin: -5px 0 5px;
-  color: #666;
+  color: #757575;
   font-size: 0.9em;
   zoom: 1;
 }
 .highlight figcaption a {
   float: right;
-  color: #666;
+  color: #757575;
   font-style: italic;
   font-size: 0.8em;
   background-image: linear-gradient(transparent, transparent 10px, #ff80aa 10px, #ff80aa);
@@ -1488,7 +1487,7 @@ code {
   background-repeat: repeat-x;
 }
 .highlight figcaption a:hover {
-  color: #858585;
+  color: #919191;
 }
 .highlight figcaption:before,
 .highlight figcaption content: "" {
@@ -1510,4 +1509,14 @@ code {
 }
 .highlight .line {
   height: 22px;
+}
+.landingpage {
+  color: #c9cacc;
+}
+.landingpage a {
+  color: #c9cacc;
+  background-image: linear-gradient(transparent, transparent 5px, #c9cacc 5px, #c9cacc);
+  background-position: bottom;
+  background-size: 100% 6px;
+  background-repeat: repeat-x;
 }
